@@ -22,12 +22,16 @@ php artisan migrate
 php artisan key:generate
 ```
 
-Once installed you can access the dev site on port 8000. e.g. localhost:8000 or
+Once installed you can access the dev site on
 sita-membership.docker.localhost:8000
 
-Click "Register" and register a new account.
+Click "Register" and register a new account then use it to log in.
 
-Use it to log in.
+## Resources
+
+* [Jet stream (inertia-vue)](https://jetstream.laravel.com/2.x/introduction.html#inertia-vue)
+* [Laravel vite](https://laravel.com/docs/10.x/vite)
+* [Github Project](https://github.com/orgs/sita-samoa/projects/1)
 
 **Common commands**
 
@@ -49,8 +53,6 @@ docker compose logs -f php
 
 # log into php container (this will allow use php artisan)
 docker compose exec php sh
-
-
 ```
 
 **Tips**
