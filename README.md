@@ -8,29 +8,59 @@ This repository has been set up to work with docker compose. You need docker
 and docker compose to use the commands below.
 
 ```
-docker-compose up -d
+# start up containers
+docker compose up -d
+
+# log in to php container
+docker compose exec php sh
+
+# switch to laravel folder
+cd laravel
+
+# run initialisation commands
+php artisan migrate
+php artisan key:generate
 ```
 
 Once installed you can access the dev site on port 8000. e.g. localhost:8000 or
 sita-membership.docker.localhost:8000
 
+Click "Register" and register a new account.
+
+Use it to log in.
+
 **Common commands**
 
 ```
 # start up dev environment
-docker-compose up -d
+docker compose up -d
 
 # stop environment
-docker-compose stop
+docker compose stop
 
 # delete everything and start in a clean environment
-docker-compose down -v
+docker compose down -v
 
 # check logs
-docker-compose logs -f
+docker compose logs -f
 
 # check logs for specific container
-docker-compose logs -f php
+docker compose logs -f php
 
-# log into php container (this will allow use of drush and composer)
-docker-compose exec php sh
+# log into php container (this will allow use php artisan)
+docker compose exec php sh
+
+
+```
+
+**Tips**
+
+Use aliases
+
+```
+# docker compose aliases
+alias dc="docker compose"
+alias dup="docker compose up -d && docker compose logs php"
+alias dphp="docker compose exec php sh"
+alias dnode="docker compose exec node bash"
+alias dstop="docker compose stop"
