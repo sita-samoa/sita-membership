@@ -32,7 +32,7 @@ services:
       PHP_FPM_USER: wodby
       PHP_FPM_GROUP: wodby
       APP_URL: "http://${PROJECT_BASE_URL}:${PROJECT_PORT}"
-      FRONTEND_URL: "http://node.${PROJECT_BASE_URL}:3000"
+      MAIL_HOST: mailhog
 #      DB_DRIVER: $DB_DRIVER
 #      DRUSH_OPTIONS_URI: "http://${PROJECT_BASE_URL}:${PROJECT_PORT}"
 #      PHP_FPM_USER: wodby
@@ -89,12 +89,12 @@ services:
     labels:
     - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
 
-#  mailhog:
-#    image: mailhog/mailhog
-#    container_name: "${PROJECT_NAME}_mailhog"
-#    labels:
-#    - "traefik.http.services.${PROJECT_NAME}_mailhog.loadbalancer.server.port=8025"
-#    - "traefik.http.routers.${PROJECT_NAME}_mailhog.rule=Host(`mailhog.${PROJECT_BASE_URL}`)"
+  mailhog:
+    image: mailhog/mailhog
+    container_name: "${PROJECT_NAME}_mailhog"
+    labels:
+    - "traefik.http.services.${PROJECT_NAME}_mailhog.loadbalancer.server.port=8025"
+    - "traefik.http.routers.${PROJECT_NAME}_mailhog.rule=Host(`mailhog.${PROJECT_BASE_URL}`)"
 
 #  postgres:
 #    image: wodby/postgres:$POSTGRES_TAG
@@ -298,7 +298,7 @@ services:
     container_name: "${PROJECT_NAME}_traefik"
     command: --api.insecure=true --providers.docker
     ports:
-    - '8000:80'
+    - '${PROJECT_PORT}:80'
 #    - '8080:8080' # Dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
