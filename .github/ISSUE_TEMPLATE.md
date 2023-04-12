@@ -6,6 +6,6 @@
 
 ## Acceptance Criteria
 
-* [ ] Criteria #1
-* [ ] Criteria #2
-* [ ] Criteria #3
+* [ ] Criteria 1
+* [ ] Criteria 2
+* [ ] Criteria 3
