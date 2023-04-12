@@ -7,6 +7,8 @@ SITA Membership database using Laravel 10 and Jet stream inertia (vuejs)
 This repository has been set up to work with docker compose. You need docker
 and docker compose to use the commands below.
 
+### Getting Started
+
 ```
 # start up containers
 docker compose up -d
@@ -17,13 +19,19 @@ docker compose exec php sh
 # switch to laravel folder
 cd laravel
 
+# install dependencies
+composer install
+
+# cp env and configure
+cp .env.example .env
+
 # run initialisation commands
 php artisan migrate
 php artisan key:generate
 ```
 
 Once installed you can access the dev site on
-sita-membership.docker.localhost:8000
+`sita-membership.docker.localhost:8000`
 
 Click "Register" and register a new account then use it to log in.
 
@@ -66,3 +74,4 @@ alias dup="docker compose up -d && docker compose logs php"
 alias dphp="docker compose exec php sh"
 alias dnode="docker compose exec node bash"
 alias dstop="docker compose stop"
+```
