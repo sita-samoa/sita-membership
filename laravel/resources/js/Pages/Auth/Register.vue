@@ -13,7 +13,7 @@ const form = useForm({
     username: '',
     password: '',
     password_confirmation: '',
-    terms: true,
+    terms: false,
 });
 
 const submit = () => {
