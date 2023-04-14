@@ -1,29 +1,9 @@
 <script setup>
 import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import { Link } from '@inertiajs/vue3';
-import { Button } from 'flowbite-vue';
-
 </script>
 
 <template>
     <div>
-        <!-- welcome and sign up -->
-        <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-
-            <h1 class="mt-8 text-2xl font-medium text-gray-900">
-                Welcome
-            </h1>
-
-            <p class="mt-6 text-gray-500 leading-relaxed">
-                Click the Sign up button to begin.
-            </p>
-
-            <Link href="/members/signup">
-                <Button class="p-3 mt-3">Sign Up</Button>
-            </Link>
-        </div>
-
-        <!-- old welcome -->
         <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
             <ApplicationLogo class="block h-12 w-auto" />
 
