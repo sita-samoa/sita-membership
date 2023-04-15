@@ -87,12 +87,12 @@ const submit = () => {
 
             <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
                 <InputLabel for="terms">
-                    <div class="flex items-center">
+                    <span class="pb-3">Terms and Conditions</span>
+                    <div class="flex items-center mt-2">
                         <Checkbox id="terms" class="text-primary" v-model:checked="form.terms" name="terms" required />
 
-                        <div class="ml-2">
-                            I understand and accept the <a target="_blank" :href="route('terms.show')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Terms of Service</a> and <a target="_blank" :href="route('policy.show')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">Privacy Policy</a>
-                        </div>
+                        <div class="ml-2 text-xs">
+                            <strong>Applicants Declaration:</strong> I declare that all information is true and correct, and if admitted to the Society, I understand that I am bound to the Rules, regulations and Codes of the Society as amended from time to time.                        </div>
                     </div>
                     <InputError class="mt-2" :message="form.errors.terms" />
                 </InputLabel>
