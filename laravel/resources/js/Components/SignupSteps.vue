@@ -6,6 +6,8 @@ import MemberQualifications from '@/Components/MemberQualifications.vue';
 import MemberDocuments from '@/Components/MemberDocuments.vue';
 import MemberWorkExperience from '@/Components/MemberWorkExperience.vue';
 import MemberReferees from '@/Components/MemberReferees.vue';
+import InputError from '@/Components/InputError.vue';
+import InputLabel from '@/Components/InputLabel.vue';
 
 const MIN_STEP = 1
 const MAX_STEP = 9
@@ -92,10 +94,11 @@ function nextStep() {
     <!-- class appends to content DIV for all tabs -->
     <tab name="first" title="Membership Type" :disabled="disableTabs">
 
-      <h5 class="py-3">Membership Type</h5>
+      <InputLabel for="membershipType" value="Membership Type" class="mb-4" />
+
       <div class="flex items-center mb-4" v-for="m in membershipTypeOptions">
         <input :id="m.id" type="radio" :value="m.id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-        <label :for="m.id" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ m.name }}</label>
+        <InputLabel :for="m.id" :value="m.name" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
       </div>
 
       <!-- next button -->
@@ -105,8 +108,8 @@ function nextStep() {
     </tab>
     <tab name="second" title="General" :disabled="disableTabs">
 
-      <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Title</label>
-      <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
+      <InputLabel for="title" value="Title" class="mb-4" />
+      <select id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
         <option selected>Choose a title</option>
         <option v-for="t in titleOptions" :value="t.id">{{ t.name }}</option>
       </select>
@@ -114,16 +117,15 @@ function nextStep() {
       <Input placeholder="enter your first name" label="First name" class="mb-2" />
       <Input placeholder="enter your last name" label="Last name" class="mb-2" />
 
-      <div class="my-3">Gender</div>
-
+      <InputLabel for="gender" value="Gender" class="mb-4" />
       <div class="flex items-center mb-4" v-for="g in genderOptions">
         <input :id="g.id" type="radio" :value="g.id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-        <label :for="g.id" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ g.name }}</label>
+        <InputLabel :for="g.id" :value="g.name" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
       </div>
 
-      <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of birth</label>
+      <InputLabel for="dob" value="Date of birth" class="mb-4" />
       <div class="relative max-w-sm mb-3">
-        <input type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+        <input type="date" id="dob" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
       </div>
 
       <Input placeholder="enter your job title" label="Job title" class="mb-2" />
@@ -162,7 +164,7 @@ function nextStep() {
     </tab>
     <tab name="fifth" title="Memberships" :disabled="disableTabs">
 
-      <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Other Memberships</label>
+      <InputLabel for="message" value="Other Memberships" class="mb-4" />
       <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="List each professional organisation you are a member of in a separate line..."></textarea>
 
       <!-- next button -->
@@ -203,14 +205,14 @@ function nextStep() {
     </tab>
     <tab name="ninth" title="Mailing Lists" :disabled="disableTabs">
       <div>
-        <h5>Mailing lists</h5>
+        <InputLabel value="Mailing Lists" class="mb-4" />
         <Alert type="info" class="mb-2 mt-3">Please check the mail lists you
           want to join.
         </Alert>
 
         <div class="flex items-center mb-4" v-for="m in mailingOptions">
           <input :id="m.id" type="checkbox" :value="m.id" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-          <label :for="m.id" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ m.name }}</label>
+          <InputLabel :for="m.id" :value="m.name" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
         </div>
 
       </div>

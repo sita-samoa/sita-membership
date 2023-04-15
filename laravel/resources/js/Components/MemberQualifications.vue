@@ -2,6 +2,7 @@
 import { Link } from '@inertiajs/vue3';
 import { Alert, Button, Modal, Input } from 'flowbite-vue'
 import { ref } from 'vue'
+import InputLabel from './InputLabel.vue';
 
 const countryOptions = [
   { id: 1, name: "Australia" },
@@ -39,9 +40,8 @@ function showModal() {
     <Input placeholder="enter your qualification" label="Qualification" class="mb-2" />
     <Input placeholder="enter your year attended" label="Year attended" class="mb-2" />
     <Input placeholder="enter your institution" label="Institution" class="mb-2" />
-    <Input placeholder="enter your country" label="Country" class="mb-2" />
 
-    <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Country</label>
+    <InputLabel for="countries" value="Country" class="mb-2" />
     <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
       <option selected>Choose a country</option>
       <option v-for="c in countryOptions" :value="c.id">{{ c.name }}</option>
