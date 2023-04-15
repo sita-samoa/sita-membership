@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\MemberController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -34,12 +35,19 @@ Route::middleware([
     })->name('dashboard');
 });
 
+Route::resource('members', MemberController::class)
+    ->only(['store'])
+    ->middleware([
+        'auth:sanctum',
+        config('jetstream.auth_session'),
+        'verified'
+]);
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/members/signup', function () {
-        return Inertia::render('Members/Signup');
-    })->name('members/signup');
+    Route::get('/members/signup', [MemberController::class, 'signup'])
+    ->name('members.signup');
 });
