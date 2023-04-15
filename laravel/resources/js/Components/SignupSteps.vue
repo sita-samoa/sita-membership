@@ -1,12 +1,64 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Link } from '@inertiajs/vue3';
-import { Alert, Button, Input, Tabs, Tab } from 'flowbite-vue'
+import { Alert, Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
+
+const MIN_STEP = 1
+const MAX_STEP = 9
 
 const activeTab = ref('first')
+const currentStep = ref(MIN_STEP)
+
+const progress = computed(() => {
+  let percent = currentStep.value / MAX_STEP * 100
+  return percent
+})
+
+function nextStep() {
+  currentStep.value = currentStep.value + 1
+
+  if (currentStep.value > MAX_STEP) {
+    currentStep.value = MAX_STEP
+  }
+
+  switch (currentStep.value) {
+    case 1:
+      activeTab.value = "first"
+      break
+    case 2:
+      activeTab.value = "second"
+      break
+    case 3:
+      activeTab.value = "third"
+      break
+    case 4:
+      activeTab.value = "fourth"
+      break
+    case 5:
+      activeTab.value = "fifth"
+      break
+    case 6:
+      activeTab.value = "sixth"
+      break
+    case 7:
+      activeTab.value = "seventh"
+      break
+    case 8:
+      activeTab.value = "eighth"
+      break
+    case 9:
+      activeTab.value = "ninth"
+      break
+  }
+}
+
 </script>
 <template>
-  <tabs v-model="activeTab" class="p-5"> <!-- class appends to content DIV for all tabs -->
+  <div class="mb-3">
+    <Progress :progress="progress"></Progress>
+  </div>
+  <tabs v-model="activeTab" class="p-5">
+    <!-- class appends to content DIV for all tabs -->
     <tab name="first" title="First">
 
       <h4 class="py-3">Membership Type</h4>
@@ -21,7 +73,7 @@ const activeTab = ref('first')
 
       <!-- next button -->
       <Link href="#">
-        <Button @click.prevent="activeTab = 'second'" class="p-3 mt-3">Next</Button>
+        <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </Link>
     </tab>
     <tab name="second" title="Second">
@@ -57,7 +109,7 @@ const activeTab = ref('first')
 
       <!-- next button -->
       <Link href="#">
-        <Button @click.prevent="activeTab = 'third'" class="p-3 mt-3">Next</Button>
+        <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </Link>
     </tab>
     <tab name="third" title="Third">
@@ -70,7 +122,7 @@ const activeTab = ref('first')
 
       <!-- next button -->
       <Link href="#">
-        <Button @click.prevent="activeTab = 'fourth'" class="p-3 mt-3">Next</Button>
+        <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </Link>
     </tab>
     <tab name="fourth" title="Fourth" :disabled="true">
@@ -83,7 +135,7 @@ const activeTab = ref('first')
 
       <!-- next button -->
       <Link href="#">
-        <Button @click.prevent="activeTab = 'fifth'" class="p-3 mt-3">Next</Button>
+        <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </Link>
     </tab>
     <tab name="fifth" title="Fifth">
@@ -93,7 +145,7 @@ const activeTab = ref('first')
 
       <!-- next button -->
       <Link href="#">
-        <Button @click.prevent="activeTab = 'sixth'" class="p-3 mt-3">Next</Button>
+        <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </Link>
     </tab>
     <tab name="sixth" title="Sixth">
@@ -119,7 +171,7 @@ const activeTab = ref('first')
       <!-- next button -->
       <div>
         <Link href="#">
-          <Button @click.prevent="activeTab = 'seventh'" class="p-3 mt-3">Next</Button>
+          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
         </Link>
       </div>
     </tab>
@@ -135,7 +187,7 @@ const activeTab = ref('first')
       <!-- next button -->
       <div>
         <Link href="#">
-          <Button @click.prevent="activeTab = 'eighth'" class="p-3 mt-3">Next</Button>
+          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
         </Link>
       </div>
     </tab>
@@ -154,7 +206,7 @@ const activeTab = ref('first')
       <!-- next button -->
       <div>
         <Link href="#">
-          <Button @click.prevent="activeTab = 'ninth'" class="p-3 mt-3">Next</Button>
+          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
         </Link>
       </div>
     </tab>
@@ -179,7 +231,7 @@ const activeTab = ref('first')
       <!-- next button -->
       <div>
         <Link href="#">
-          <Button @click.prevent="activeTab = 'ninth'" class="p-3 mt-3">Next</Button>
+          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
         </Link>
       </div>
     </tab>
