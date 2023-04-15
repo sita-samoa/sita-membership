@@ -13,29 +13,29 @@ function showModal() {
 }
 </script>
 <template>
-<div class="mt-3">
-  <Alert type="info" class="mb-2">Please attach certified copies of
-    Supporting documents.
+<div>
+  <h5>Referees</h5>
+  <Alert type="info" class="mb-2 mt-3">Please provide details for someone
+    how can verify roles and responsibilities.
   </Alert>
-  <h5>Supporting Documents</h5>
 
   <Link href="#">
-    <Button class="p-3 mt-3" color="alternative" @click.prevent="showModal">Add Document</Button>
+    <Button class="p-3 mt-3" color="alternative" @click.prevent="showModal" >Add Referee</Button>
   </Link>
 </div>
+
 <!-- Modal -->
 <Modal :size="size" v-if="isShowModal" @close="closeModal">
   <template #header>
     <div class="flex items-center text-lg">
-      Add Document
+      Add Referee
     </div>
   </template>
   <template #body>
-    <Input placeholder="enter your title" label="Title" class="mb-2" />
-
-    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white" for="file_input">Upload file</label>
-    <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
-
+    <Input placeholder="enter your referees name" label="Name" class="mb-2" />
+    <Input placeholder="enter your referees organisation" label="Organisation" class="mb-2" />
+    <Input placeholder="enter your referees phone" label="Phone" class="mb-2" />
+    <Input placeholder="enter your referees email" label="email" class="mb-2" />
   </template>
   <template #footer>
     <div class="flex justify-between">
@@ -43,7 +43,7 @@ function showModal() {
         Cancel
       </button>
       <button @click="closeModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-        Attach
+        Add
       </button>
     </div>
   </template>

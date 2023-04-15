@@ -5,6 +5,7 @@ import { Alert, Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
 import MemberQualifications from '@/Components/MemberQualifications.vue';
 import MemberDocuments from '@/Components/MemberDocuments.vue';
 import MemberWorkExperience from '@/Components/MemberWorkExperience.vue';
+import MemberReferees from '@/Components/MemberReferees.vue';
 
 const MIN_STEP = 1
 const MAX_STEP = 9
@@ -191,16 +192,7 @@ function nextStep() {
       </div>
     </tab>
     <tab name="eighth" title="Referees" :disabled="disableTabs">
-      <div>
-        <h5>Referees</h5>
-        <Alert type="info" class="mb-2 mt-3">Please provide details for someone
-          how can verify roles and responsibilities.
-        </Alert>
-
-        <Link href="#">
-          <Button class="p-3 mt-3" color="alternative">Add Referee</Button>
-        </Link>
-      </div>
+      <MemberReferees />
 
       <!-- next button -->
       <div>
