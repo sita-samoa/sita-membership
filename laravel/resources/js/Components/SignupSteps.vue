@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import { Link } from '@inertiajs/vue3';
-import { Button, Input, Tabs, Tab } from 'flowbite-vue'
+import { Alert, Button, Input, Tabs, Tab } from 'flowbite-vue'
 
 const activeTab = ref('first')
 </script>
@@ -19,8 +19,9 @@ const activeTab = ref('first')
         <label for="default-radio-2" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Checked state</label>
       </div>
 
-      <Link>
-        <Button class="p-3 mt-3">Next</Button>
+      <!-- next button -->
+      <Link href="#">
+        <Button @click.prevent="activeTab = 'second'" class="p-3 mt-3">Next</Button>
       </Link>
     </tab>
     <tab name="second" title="Second">
@@ -48,20 +49,139 @@ const activeTab = ref('first')
 
       <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Date of birth</label>
       <div class="relative max-w-sm">
-        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-          <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-        </div>
-        <input datepicker type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+        <input type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
       </div>
 
       <Input placeholder="enter your job title" label="Job title" />
       <Input placeholder="enter your current employer" label="Current employer" />
+
+      <!-- next button -->
+      <Link href="#">
+        <Button @click.prevent="activeTab = 'third'" class="p-3 mt-3">Next</Button>
+      </Link>
     </tab>
     <tab name="third" title="Third">
-      Lorem...3
+      <h5>Home details</h5>
+
+      <Input placeholder="enter your address" label="Address" />
+      <Input placeholder="enter your phone" label="Phone" />
+      <Input placeholder="enter your mobile" label="Mobile" />
+      <Input placeholder="enter your email" label="Email" />
+
+      <!-- next button -->
+      <Link href="#">
+        <Button @click.prevent="activeTab = 'fourth'" class="p-3 mt-3">Next</Button>
+      </Link>
     </tab>
     <tab name="fourth" title="Fourth" :disabled="true">
-      Lorem...4
+      <h5>Work details</h5>
+
+      <Input placeholder="enter your address" label="Address" />
+      <Input placeholder="enter your phone" label="Phone" />
+      <Input placeholder="enter your mobile" label="Mobile" />
+      <Input placeholder="enter your email" label="Email" />
+
+      <!-- next button -->
+      <Link href="#">
+        <Button @click.prevent="activeTab = 'fifth'" class="p-3 mt-3">Next</Button>
+      </Link>
+    </tab>
+    <tab name="fifth" title="Fifth">
+      <h5>Other Memberships</h5>
+
+      <Input placeholder="enter your memberships" label="Memberships" />
+
+      <!-- next button -->
+      <Link href="#">
+        <Button @click.prevent="activeTab = 'sixth'" class="p-3 mt-3">Next</Button>
+      </Link>
+    </tab>
+    <tab name="sixth" title="Sixth">
+      <div>
+        <h5>Academic Qualifications</h5>
+
+        <Link href="#">
+          <Button class="p-3 mt-3">Add Qualification</Button>
+        </Link>
+      </div>
+
+      <div class="mt-3">
+        <Alert type="info" class="mb-2">Please attach certified copies of
+          Supporting documents.
+        </Alert>
+        <h5>Supporting Documents</h5>
+
+        <Link href="#">
+          <Button class="p-3 mt-3">Add Document</Button>
+        </Link>
+      </div>
+
+      <!-- next button -->
+      <div>
+        <Link href="#">
+          <Button @click.prevent="activeTab = 'seventh'" class="p-3 mt-3">Next</Button>
+        </Link>
+      </div>
+    </tab>
+    <tab name="seventh" title="Seventh">
+      <div>
+        <h5>Work Experience</h5>
+
+        <Link href="#">
+          <Button class="p-3 mt-3">Add Work Experience</Button>
+        </Link>
+      </div>
+
+      <!-- next button -->
+      <div>
+        <Link href="#">
+          <Button @click.prevent="activeTab = 'eighth'" class="p-3 mt-3">Next</Button>
+        </Link>
+      </div>
+    </tab>
+    <tab name="eighth" title="Eighth">
+      <div>
+        <h5>Referees</h5>
+        <Alert type="info" class="mb-2 mt-3">Please provide details for someone
+          how can verify roles and responsibilities.
+        </Alert>
+
+        <Link href="#">
+          <Button class="p-3 mt-3">Add Referee</Button>
+        </Link>
+      </div>
+
+      <!-- next button -->
+      <div>
+        <Link href="#">
+          <Button @click.prevent="activeTab = 'ninth'" class="p-3 mt-3">Next</Button>
+        </Link>
+      </div>
+    </tab>
+    <tab name="ninth" title="Ninth">
+      <div>
+        <h5>Mailing lists</h5>
+        <Alert type="info" class="mb-2 mt-3">Please check the mail lists you
+          want to join.
+        </Alert>
+
+        <div class="flex items-center mb-4">
+          <input id="default-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+          <label for="default-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">SITA General</label>
+        </div>
+        <div class="flex items-center">
+          <input checked id="checked-checkbox" type="checkbox" value="" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+          <label for="checked-checkbox" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">SITA Members</label>
+        </div>
+
+      </div>
+
+      <!-- next button -->
+      <div>
+        <Link href="#">
+          <Button @click.prevent="activeTab = 'ninth'" class="p-3 mt-3">Next</Button>
+        </Link>
+      </div>
     </tab>
   </tabs>
 </template>
