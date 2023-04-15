@@ -2,6 +2,9 @@
 import { ref, computed } from 'vue'
 import { Link } from '@inertiajs/vue3';
 import { Alert, Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
+import MemberQualifications from '@/Components/MemberQualifications.vue';
+import MemberDocuments from '@/Components/MemberDocuments.vue';
+import MemberWorkExperience from '@/Components/MemberWorkExperience.vue';
 
 const MIN_STEP = 1
 const MAX_STEP = 9
@@ -167,24 +170,8 @@ function nextStep() {
       </Link>
     </tab>
     <tab name="sixth" title="Qualifications" :disabled="disableTabs">
-      <div>
-        <h5>Academic Qualifications</h5>
-
-        <Link href="#">
-          <Button class="p-3 mt-3" color="alternative">Add Qualification</Button>
-        </Link>
-      </div>
-
-      <div class="mt-3">
-        <Alert type="info" class="mb-2">Please attach certified copies of
-          Supporting documents.
-        </Alert>
-        <h5>Supporting Documents</h5>
-
-        <Link href="#">
-          <Button class="p-3 mt-3" color="alternative">Add Document</Button>
-        </Link>
-      </div>
+      <MemberQualifications />
+      <MemberDocuments />
 
       <!-- next button -->
       <div>
@@ -194,13 +181,7 @@ function nextStep() {
       </div>
     </tab>
     <tab name="seventh" title="Work Experience" :disabled="disableTabs">
-      <div>
-        <h5>Work Experience</h5>
-
-        <Link href="#">
-          <Button class="p-3 mt-3" color="alternative">Add Work Experience</Button>
-        </Link>
-      </div>
+      <MemberWorkExperience />
 
       <!-- next button -->
       <div>
