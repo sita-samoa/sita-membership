@@ -36,7 +36,7 @@ Route::middleware([
 });
 
 Route::resource('members', MemberController::class)
-    ->only(['store'])
+    ->only(['store', 'update'])
     ->middleware([
         'auth:sanctum',
         config('jetstream.auth_session'),

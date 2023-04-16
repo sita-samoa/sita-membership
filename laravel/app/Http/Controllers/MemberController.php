@@ -53,7 +53,7 @@ class MemberController extends Controller
 
         $member = $request->user()->members()->create($validated);
 
-        return redirect()->back()->with('member_id', $member->id);
+        return redirect()->back()->with('member_id', $member->id)->with('success', 'Member Added!');
     }
 
     /**
@@ -99,9 +99,33 @@ class MemberController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Member $member)
+    public function update(Request $request, Member $member) : RedirectResponse
     {
-        //
+        $this->authorize('update', $member);
+
+        $validated = $request->validate([
+            'first_name' => 'string|max:255',
+            'last_name' => 'string|max:255',
+            // 'title' => 'int',
+            // // 'dob' => 'string|max:255',
+            // 'membership_type_id' => 'int',
+            // 'job_title' => 'string|max:255',
+            // 'current_employer' => 'string|max:255',
+            // 'home_address' => 'string|max:255',
+            // 'home_phone' => 'string|max:255',
+            // 'home_mobile' => 'string|max:255',
+            // 'home_email' => 'string|max:255',
+            // 'work_address' => 'string|max:255',
+            // 'work_phone' => 'string|max:255',
+            // 'work_mobile' => 'string|max:255',
+            // 'work_email' => 'string|max:255',
+            // 'other_membership' => 'string|max:255',
+            // 'note' => 'string|max:255',
+        ]);
+
+        $member->update($validated);
+
+        return redirect()->back()->with('success', 'Member Updated!');
     }
 
     /**
