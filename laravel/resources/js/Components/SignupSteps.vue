@@ -215,15 +215,23 @@ watch(
       <tab name="fourth" title="Work" :disabled="disableTabs">
         <h5 class="mb-3">Work details</h5>
 
-        <Input placeholder="enter your address" label="Address" class="mb-2" />
-        <Input placeholder="enter your phone" label="Phone" class="mb-2" />
-        <Input placeholder="enter your mobile" label="Mobile" class="mb-2" />
-        <Input placeholder="enter your email" label="Email" class="mb-2" />
+        <form @submit.prevent="submit">
+          <Input v-model="form.work_address" placeholder="enter your address" label="Address" class="mb-2" />
+          <InputError class="mt-2" :message="form.errors.work_address" />
 
-        <!-- next button -->
-        <Link href="#">
-          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-        </Link>
+          <Input v-model="form.work_phone" placeholder="enter your phone" label="Phone" class="mb-2" />
+          <InputError class="mt-2" :message="form.errors.work_phone" />
+
+          <Input v-model="form.work_mobile" placeholder="enter your mobile" label="Mobile" class="mb-2" />
+          <InputError class="mt-2" :message="form.errors.work_mobile" />
+
+          <Input v-model="form.work_email" placeholder="enter your email" label="Email" class="mb-2" />
+          <InputError class="mt-2" :message="form.errors.work_email" />
+
+          <!-- next button -->
+          <Button type="submit" class="p-3 mt-3">Next</Button>
+
+        </form>
       </tab>
       <tab name="fifth" title="Memberships" :disabled="disableTabs">
 
