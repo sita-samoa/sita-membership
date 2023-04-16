@@ -11,10 +11,12 @@ class Member extends Model
     use HasFactory;
 
     protected $fillable = [
+        'title_id',
         'first_name',
         'last_name',
         'title',
-        // 'dob',
+        'dob',
+        'gender_id',
         'membership_type_id',
         'job_title',
         'current_employer',
@@ -28,7 +30,6 @@ class Member extends Model
         'work_email',
         'other_membership',
         'note',
-        'membership_type_id',
     ];
 
     public function user(): BelongsTo {

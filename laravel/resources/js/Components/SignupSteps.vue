@@ -8,7 +8,6 @@ import MemberWorkExperience from '@/Components/MemberWorkExperience.vue';
 import MemberReferees from '@/Components/MemberReferees.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const props = defineProps([
   'options',
@@ -26,9 +25,10 @@ const disableTabs = ref(false)
 const form = useForm({
   first_name: '',
   last_name: '',
-  title: '',
+  title_id: -1,
   dob: '',
-  membership_type_id: '',
+  membership_type_id: -1,
+  gender_id: -1,
   job_title: '',
   current_employer: '',
   home_address: '',
@@ -91,8 +91,8 @@ function nextStep() {
 }
 
 function submit() {
-  if (member_id.value < 0) {
-    form.post(route('members.signup'), {
+  if (member_id.value > 0) {
+    form.put(route('members.update', member_id.value), {
       preserveScroll: true,
       resetOnSuccess: false,
       onSuccess() {
@@ -101,7 +101,7 @@ function submit() {
     })
   }
   else {
-    form.put(route('members.update', member_id.value), {
+    form.post(route('members.signup'), {
       preserveScroll: true,
       resetOnSuccess: false,
       onSuccess() {
@@ -156,10 +156,11 @@ watch(
         <form @submit.prevent="submit">
 
           <InputLabel for="title" value="Title" class="mb-4" />
-          <select id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
-            <option selected>Choose a title</option>
+          <select id="title" v-model="form.title_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
+            <option selected value="null">Choose a title</option>
             <option v-for="t in props.options.title_options" :value="t.id">{{ t.title }}</option>
           </select>
+          <InputError class="mt-2" :message="form.errors.title_id" />
 
           <Input v-model="form.first_name" placeholder="enter your first name" label="First name" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.first_name" />
@@ -169,17 +170,22 @@ watch(
 
           <InputLabel for="gender" value="Gender" class="mb-4" />
           <div class="flex items-center mb-4" v-for="g in props.options.gender_options">
-            <input :id="g.id" type="radio" :value="g.id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <input :id="g.id" type="radio" :value="g.id" name="default-radio" v-model="form.gender_id" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
             <InputLabel :for="g.id" :value="g.title" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
           </div>
+          <InputError class="mt-2" :message="form.errors.gender_id" />
 
           <InputLabel for="dob" value="Date of birth" class="mb-4" />
           <div class="relative max-w-sm mb-3">
-            <input type="date" id="dob" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+            <input type="date" id="dob" v-model="form.dob" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
           </div>
+          <InputError class="mt-2" :message="form.errors.dob" />
 
-          <Input placeholder="enter your job title" label="Job title" class="mb-2" />
-          <Input placeholder="enter your current employer" label="Current employer" class="mb-2" />
+          <Input v-model="form.job_title" placeholder="enter your job title" label="Job title" class="mb-2" />
+          <InputError class="mt-2" :message="form.errors.job_title" />
+
+          <Input v-model="form.current_employer" placeholder="enter your current employer" label="Current employer" class="mb-2" />
+          <InputError class="mt-2" :message="form.errors.current_employer" />
 
           <!-- next button -->
           <Button type="submit" class="p-3 mt-3">Next</Button>

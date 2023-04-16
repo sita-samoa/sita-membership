@@ -46,9 +46,7 @@ class MemberController extends Controller
     public function storeSignup(Request $request) : RedirectResponse
     {
         $validated = $request->validate([
-
-            'membership_type_id' => 'required|int',
-
+            'membership_type_id' => 'required|int|min:1',
         ]);
 
         $member = $request->user()->members()->create($validated);
@@ -70,9 +68,7 @@ class MemberController extends Controller
     public function store(Request $request) : RedirectResponse
     {
         $validated = $request->validate([
-
-            'membership_type_id' => 'required|int',
-
+            'membership_type_id' => 'required|int|min:1',
         ]);
 
         $request->user()->members()->create($validated);
@@ -104,13 +100,14 @@ class MemberController extends Controller
         $this->authorize('update', $member);
 
         $validated = $request->validate([
-            'first_name' => 'string|max:255',
-            'last_name' => 'string|max:255',
-            // 'title' => 'int',
-            // // 'dob' => 'string|max:255',
-            // 'membership_type_id' => 'int',
-            // 'job_title' => 'string|max:255',
-            // 'current_employer' => 'string|max:255',
+            'membership_type_id' => 'required|int|min:1',
+            'first_name' => 'required_with:membership_type_id|string|max:255',
+            'last_name' => 'required_with:membership_type_id|string|max:255',
+            // 'title_id' => 'nullable|int',
+            'dob' => 'nullable|date',
+            'gender_id' => 'required_with:membership_type_id|int|min:1',
+            'job_title' => 'required_with:membership_type_id|string|max:255',
+            'current_employer' => 'required_with:membership_type_id|string|max:255',
             // 'home_address' => 'string|max:255',
             // 'home_phone' => 'string|max:255',
             // 'home_mobile' => 'string|max:255',
