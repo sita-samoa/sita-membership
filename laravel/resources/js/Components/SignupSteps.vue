@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { Link, useForm } from '@inertiajs/vue3';
+import { ref, computed, watch } from 'vue'
+import { Link, useForm, usePage } from '@inertiajs/vue3';
 import { Alert, Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
 import MemberQualifications from '@/Components/MemberQualifications.vue';
 import MemberDocuments from '@/Components/MemberDocuments.vue';
@@ -11,9 +11,10 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const props = defineProps([
-  'member_id',
   'options',
 ]);
+
+const member_id = ref(-1)
 
 const MIN_STEP = 1
 const MAX_STEP = 9
@@ -89,13 +90,27 @@ function nextStep() {
   }
 }
 
+function submit() {
+  form.post(route('members.signup'), {
+    preserveScroll: true,
+    resetOnSuccess: false,
+  })
+}
+
+watch(
+  () => usePage().props.flash.member_id,
+  (newValue) => {
+    member_id.value = newValue
+  }
+)
+
 </script>
 
 <template>
 <div>
   <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
 
-    member_id: {{ member_id }}
+    member_id: {{ member_id }} | {{  $page.props.flash.member_id }}
 
     <div class="mb-3">
       <Progress :progress="progress"></Progress>
@@ -103,7 +118,7 @@ function nextStep() {
     <tabs v-model="activeTab" class="p-5">
       <!-- class appends to content DIV for all tabs -->
       <tab name="first" title="Membership Type" :disabled="disableTabs">
-        <form @submit.prevent="form.post(route('members.store'), { onSuccess: () => form.reset() })">
+        <form @submit.prevent="submit">
 
           <InputLabel for="membershipType" value="Membership Type" class="mb-4" />
 

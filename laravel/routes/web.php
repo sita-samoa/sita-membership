@@ -51,3 +51,12 @@ Route::middleware([
     Route::get('/members/signup', [MemberController::class, 'signup'])
     ->name('members.signup');
 });
+
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::post('/members/signup', [MemberController::class, 'storeSignup'])
+    ->name('members.signup.store');
+});

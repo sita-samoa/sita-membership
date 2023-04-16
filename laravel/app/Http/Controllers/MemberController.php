@@ -31,14 +31,29 @@ class MemberController extends Controller
     public function signup() : Response
     {
         return Inertia::render('Members/Signup', [
-            'member_id' => -1,
             'options' => [
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
                 'gender_options' => Gender::all(['id', 'code', 'title']),
                 'title_options' => Title::all(['id', 'code', 'title']),
-                'membership_status_options' => MembershipStatus::all(['id', 'code', 'title']),
+                // 'membership_status_options' => MembershipStatus::all(['id', 'code', 'title']),
             ]
         ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function storeSignup(Request $request) : RedirectResponse
+    {
+        $validated = $request->validate([
+
+            'membership_type_id' => 'required|int',
+
+        ]);
+
+        $member = $request->user()->members()->create($validated);
+
+        return redirect()->back()->with('member_id', $member->id);
     }
 
     /**
