@@ -116,8 +116,8 @@ class MemberController extends Controller
             'work_phone' => 'nullable|max:255',
             'work_mobile' => 'nullable|max:255',
             'work_email' => 'nullable|email|max:255',
-            // 'other_membership' => 'string|max:255',
-            // 'note' => 'string|max:255',
+            'other_membership' => 'nullable|max:500',
+            // 'note' => 'nullable',
         ]);
 
         $member->update($validated);
