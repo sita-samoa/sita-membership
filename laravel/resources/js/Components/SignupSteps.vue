@@ -194,15 +194,23 @@ watch(
       <tab name="third" title="Home" :disabled="disableTabs">
         <h5 class="mb-3">Home details</h5>
 
-        <Input placeholder="enter your address" label="Address" class="mb-2" />
-        <Input placeholder="enter your phone" label="Phone" class="mb-2" />
-        <Input placeholder="enter your mobile" label="Mobile" class="mb-2" />
-        <Input placeholder="enter your email" label="Email" class="mb-2" />
+        <form @submit.prevent="submit">
+          <Input v-model="form.home_address" placeholder="enter your address" label="Address" class="mb-2" />
+          <InputError class="mt-2" :message="form.errors.home_address" />
 
-        <!-- next button -->
-        <Link href="#">
-          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-        </Link>
+          <Input v-model="form.home_phone" placeholder="enter your phone" label="Phone" class="mb-2" />
+          <InputError class="mt-2" :message="form.errors.home_phone" />
+
+          <Input v-model="form.home_mobile" placeholder="enter your mobile" label="Mobile" class="mb-2" />
+          <InputError class="mt-2" :message="form.errors.home_mobile" />
+
+          <Input v-model="form.home_email" placeholder="enter your email" label="Email" class="mb-2" />
+          <InputError class="mt-2" :message="form.errors.home_email" />
+
+          <!-- next button -->
+          <Button type="submit" class="p-3 mt-3">Next</Button>
+
+        </form>
       </tab>
       <tab name="fourth" title="Work" :disabled="disableTabs">
         <h5 class="mb-3">Work details</h5>
