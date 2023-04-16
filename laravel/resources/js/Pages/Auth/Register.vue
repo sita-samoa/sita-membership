@@ -24,11 +24,11 @@ const submit = () => {
 <template>
     <Head title="Register" />
 
-    <AuthenticationCard>
+    <AuthenticationCard class="pb-3">
         <template #logo>
             <AuthenticationCardLogo />
         </template>
-        <Alert type="info" class="mb-2" title="Register" :inline="false">
+        <Alert type="info" class="mb-2 py-2" title="Register" :inline="false">
             <span class="ml-2">Please register for an account to sign up.</span>
         </Alert>
         <form @submit.prevent="submit">
