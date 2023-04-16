@@ -81,7 +81,15 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
-        //
+        return Inertia::render('Members/Show', [
+            'member' => $member,
+            'options' => [
+                'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
+                'gender_options' => Gender::all(['id', 'code', 'title']),
+                'title_options' => Title::all(['id', 'code', 'title']),
+                // 'membership_status_options' => MembershipStatus::all(['id', 'code', 'title']),
+            ]
+        ]);
     }
 
     /**

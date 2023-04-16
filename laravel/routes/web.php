@@ -35,14 +35,7 @@ Route::middleware([
     })->name('dashboard');
 });
 
-Route::resource('members', MemberController::class)
-    ->only(['store', 'update'])
-    ->middleware([
-        'auth:sanctum',
-        config('jetstream.auth_session'),
-        'verified'
-]);
-
+// Sign Page
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -60,3 +53,12 @@ Route::middleware([
     Route::post('/members/signup', [MemberController::class, 'storeSignup'])
     ->name('members.signup.store');
 });
+
+// Members Pages
+Route::resource('members', MemberController::class)
+    ->only(['store', 'show', 'update'])
+    ->middleware([
+        'auth:sanctum',
+        config('jetstream.auth_session'),
+        'verified'
+]);
