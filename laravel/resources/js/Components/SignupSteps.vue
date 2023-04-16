@@ -10,6 +10,11 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 
+const props = defineProps([
+  'member_id',
+  'membership_types',
+]);
+
 const MIN_STEP = 1
 const MAX_STEP = 9
 
@@ -36,14 +41,6 @@ const form = useForm({
   // other_membership: 'a',
   // note: 'a',
 })
-
-const membershipTypeOptions = [
-  { id: 1, name: "Full" },
-  { id: 2, name: "Associate" },
-  { id: 3, name: "Affiliate" },
-  { id: 4, name: "Student" },
-  { id: 5, name: "Fellow" },
-]
 const titleOptions = [
   { id: 1, name: "Mr" },
   { id: 2, name: "Mrs" },
@@ -108,150 +105,156 @@ function nextStep() {
 </script>
 
 <template>
-  <div class="mb-3">
-    <Progress :progress="progress"></Progress>
-  </div>
-  <tabs v-model="activeTab" class="p-5">
-    <!-- class appends to content DIV for all tabs -->
-    <tab name="first" title="Membership Type" :disabled="disableTabs">
-      <form @submit.prevent="form.post(route('members.store'), { onSuccess: () => form.reset() })">
+<div>
+  <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
 
 
-        <InputLabel for="membershipType" value="Membership Type" class="mb-4" />
+    <div class="mb-3">
+      <Progress :progress="progress"></Progress>
+    </div>
+    <tabs v-model="activeTab" class="p-5">
+      <!-- class appends to content DIV for all tabs -->
+      <tab name="first" title="Membership Type" :disabled="disableTabs">
+        {{ member_id }}
+        <form @submit.prevent="form.post(route('members.store'), { onSuccess: () => form.reset() })">
 
-        <div class="mb-4">
-          <div class="flex items-center" v-for="m in membershipTypeOptions">
-            <input :id="m.id" type="radio" :value="m.id" v-model="form.membership_type_id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+          <InputLabel for="membershipType" value="Membership Type" class="mb-4" />
+
+          <div class="mb-4">
+            <div class="flex items-center" v-for="m in props.membership_types">
+              <input :id="m.id" type="radio" :value="m.id" v-model="form.membership_type_id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+              <InputLabel :for="m.id" :value="m.title" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
+            </div>
+
+            <InputError class="mt-2" :message="form.errors.membership_type_id" />
+          </div>
+
+          <!-- next button -->
+          <PrimaryButton class="mt-4">Add and Next</PrimaryButton>
+          <Link href="#">
+            <Button class="p-3 mt-3">Next</Button>
+          </Link>
+        </form>
+      </tab>
+      <tab name="second" title="General" :disabled="disableTabs">
+
+        <InputLabel for="title" value="Title" class="mb-4" />
+        <select id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
+          <option selected>Choose a title</option>
+          <option v-for="t in titleOptions" :value="t.id">{{ t.name }}</option>
+        </select>
+
+        <Input placeholder="enter your first name" label="First name" class="mb-2" />
+        <Input placeholder="enter your last name" label="Last name" class="mb-2" />
+
+        <InputLabel for="gender" value="Gender" class="mb-4" />
+        <div class="flex items-center mb-4" v-for="g in genderOptions">
+          <input :id="g.id" type="radio" :value="g.id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+          <InputLabel :for="g.id" :value="g.name" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
+        </div>
+
+        <InputLabel for="dob" value="Date of birth" class="mb-4" />
+        <div class="relative max-w-sm mb-3">
+          <input type="date" id="dob" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+        </div>
+
+        <Input placeholder="enter your job title" label="Job title" class="mb-2" />
+        <Input placeholder="enter your current employer" label="Current employer" class="mb-2" />
+
+        <!-- next button -->
+        <Link href="#">
+          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+        </Link>
+      </tab>
+      <tab name="third" title="Home" :disabled="disableTabs">
+        <h5 class="mb-3">Home details</h5>
+
+        <Input placeholder="enter your address" label="Address" class="mb-2" />
+        <Input placeholder="enter your phone" label="Phone" class="mb-2" />
+        <Input placeholder="enter your mobile" label="Mobile" class="mb-2" />
+        <Input placeholder="enter your email" label="Email" class="mb-2" />
+
+        <!-- next button -->
+        <Link href="#">
+          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+        </Link>
+      </tab>
+      <tab name="fourth" title="Work" :disabled="disableTabs">
+        <h5 class="mb-3">Work details</h5>
+
+        <Input placeholder="enter your address" label="Address" class="mb-2" />
+        <Input placeholder="enter your phone" label="Phone" class="mb-2" />
+        <Input placeholder="enter your mobile" label="Mobile" class="mb-2" />
+        <Input placeholder="enter your email" label="Email" class="mb-2" />
+
+        <!-- next button -->
+        <Link href="#">
+          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+        </Link>
+      </tab>
+      <tab name="fifth" title="Memberships" :disabled="disableTabs">
+
+        <InputLabel for="message" value="Other Memberships" class="mb-4" />
+        <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="List each professional organisation you are a member of in a separate line..."></textarea>
+
+        <!-- next button -->
+        <Link href="#">
+          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+        </Link>
+      </tab>
+      <tab name="sixth" title="Qualifications" :disabled="disableTabs">
+        <MemberQualifications />
+        <MemberDocuments />
+
+        <!-- next button -->
+        <div>
+          <Link href="#">
+            <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+          </Link>
+        </div>
+      </tab>
+      <tab name="seventh" title="Work Experience" :disabled="disableTabs">
+        <MemberWorkExperience />
+
+        <!-- next button -->
+        <div>
+          <Link href="#">
+            <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+          </Link>
+        </div>
+      </tab>
+      <tab name="eighth" title="Referees" :disabled="disableTabs">
+        <MemberReferees />
+
+        <!-- next button -->
+        <div>
+          <Link href="#">
+            <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+          </Link>
+        </div>
+      </tab>
+      <tab name="ninth" title="Mailing Lists" :disabled="disableTabs">
+        <div>
+          <InputLabel value="Mailing Lists" class="mb-4" />
+          <Alert type="info" class="mb-2 mt-3">Please check the mail lists you
+            want to join.
+          </Alert>
+
+          <div class="flex items-center mb-4" v-for="m in mailingOptions">
+            <input :id="m.id" type="checkbox" :value="m.id" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
             <InputLabel :for="m.id" :value="m.name" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
           </div>
 
-          <InputError class="mt-2" :message="form.errors.membership_type_id" />
         </div>
 
         <!-- next button -->
-        <PrimaryButton class="mt-4">Add and Next</PrimaryButton>
-        <Link href="#">
-          <Button class="p-3 mt-3">Next</Button>
-        </Link>
-      </form>
-    </tab>
-    <tab name="second" title="General" :disabled="disableTabs">
-
-      <InputLabel for="title" value="Title" class="mb-4" />
-      <select id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
-        <option selected>Choose a title</option>
-        <option v-for="t in titleOptions" :value="t.id">{{ t.name }}</option>
-      </select>
-
-      <Input placeholder="enter your first name" label="First name" class="mb-2" />
-      <Input placeholder="enter your last name" label="Last name" class="mb-2" />
-
-      <InputLabel for="gender" value="Gender" class="mb-4" />
-      <div class="flex items-center mb-4" v-for="g in genderOptions">
-        <input :id="g.id" type="radio" :value="g.id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-        <InputLabel :for="g.id" :value="g.name" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
-      </div>
-
-      <InputLabel for="dob" value="Date of birth" class="mb-4" />
-      <div class="relative max-w-sm mb-3">
-        <input type="date" id="dob" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
-      </div>
-
-      <Input placeholder="enter your job title" label="Job title" class="mb-2" />
-      <Input placeholder="enter your current employer" label="Current employer" class="mb-2" />
-
-      <!-- next button -->
-      <Link href="#">
-        <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-      </Link>
-    </tab>
-    <tab name="third" title="Home" :disabled="disableTabs">
-      <h5 class="mb-3">Home details</h5>
-
-      <Input placeholder="enter your address" label="Address" class="mb-2" />
-      <Input placeholder="enter your phone" label="Phone" class="mb-2" />
-      <Input placeholder="enter your mobile" label="Mobile" class="mb-2" />
-      <Input placeholder="enter your email" label="Email" class="mb-2" />
-
-      <!-- next button -->
-      <Link href="#">
-        <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-      </Link>
-    </tab>
-    <tab name="fourth" title="Work" :disabled="disableTabs">
-      <h5 class="mb-3">Work details</h5>
-
-      <Input placeholder="enter your address" label="Address" class="mb-2" />
-      <Input placeholder="enter your phone" label="Phone" class="mb-2" />
-      <Input placeholder="enter your mobile" label="Mobile" class="mb-2" />
-      <Input placeholder="enter your email" label="Email" class="mb-2" />
-
-      <!-- next button -->
-      <Link href="#">
-        <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-      </Link>
-    </tab>
-    <tab name="fifth" title="Memberships" :disabled="disableTabs">
-
-      <InputLabel for="message" value="Other Memberships" class="mb-4" />
-      <textarea id="message" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="List each professional organisation you are a member of in a separate line..."></textarea>
-
-      <!-- next button -->
-      <Link href="#">
-        <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-      </Link>
-    </tab>
-    <tab name="sixth" title="Qualifications" :disabled="disableTabs">
-      <MemberQualifications />
-      <MemberDocuments />
-
-      <!-- next button -->
-      <div>
-        <Link href="#">
-          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-        </Link>
-      </div>
-    </tab>
-    <tab name="seventh" title="Work Experience" :disabled="disableTabs">
-      <MemberWorkExperience />
-
-      <!-- next button -->
-      <div>
-        <Link href="#">
-          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-        </Link>
-      </div>
-    </tab>
-    <tab name="eighth" title="Referees" :disabled="disableTabs">
-      <MemberReferees />
-
-      <!-- next button -->
-      <div>
-        <Link href="#">
-          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-        </Link>
-      </div>
-    </tab>
-    <tab name="ninth" title="Mailing Lists" :disabled="disableTabs">
-      <div>
-        <InputLabel value="Mailing Lists" class="mb-4" />
-        <Alert type="info" class="mb-2 mt-3">Please check the mail lists you
-          want to join.
-        </Alert>
-
-        <div class="flex items-center mb-4" v-for="m in mailingOptions">
-          <input :id="m.id" type="checkbox" :value="m.id" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-          <InputLabel :for="m.id" :value="m.name" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
+        <div>
+          <Link href="#">
+            <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+          </Link>
         </div>
-
-      </div>
-
-      <!-- next button -->
-      <div>
-        <Link href="#">
-          <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-        </Link>
-      </div>
-    </tab>
-  </tabs>
+      </tab>
+    </tabs>
+</div>
+</div>
 </template>

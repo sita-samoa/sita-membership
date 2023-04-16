@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use App\Models\MembershipType;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -27,7 +28,8 @@ class MemberController extends Controller
     public function signup() : Response
     {
         return Inertia::render('Members/Signup', [
-            //
+            'member_id' => -1,
+            'membership_types' => MembershipType::all(['id', 'code', 'title']),
         ]);
     }
 
