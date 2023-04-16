@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('last_name')->nullable();
             $table->string('first_name')->nullable();
-            // $table->string('title');
+            $table->foreignId('title_id');
             $table->date('dob')->nullable();
-            // gender - constraint
+            $table->foreignId('gender_id');
             $table->foreignId('membership_type_id')->constrained();
             $table->string('job_title')->nullable();
             $table->string('current_employer')->nullable();
@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string('work_mobile')->nullable();
             $table->string('work_email')->nullable();
             $table->string('other_membership')->nullable();
-            // membership status - constraint
+            $table->foreignId('membership_status_id');
             $table->mediumText('note')->nullable();
             $table->timestamps();
         });

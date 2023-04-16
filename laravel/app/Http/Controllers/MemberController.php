@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gender;
 use App\Models\Member;
+use App\Models\MembershipStatus;
 use App\Models\MembershipType;
+use App\Models\Title;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -29,7 +32,12 @@ class MemberController extends Controller
     {
         return Inertia::render('Members/Signup', [
             'member_id' => -1,
-            'membership_types' => MembershipType::all(['id', 'code', 'title']),
+            'options' => [
+                'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
+                'gender_options' => Gender::all(['id', 'code', 'title']),
+                'title_options' => Title::all(['id', 'code', 'title']),
+                'membership_status_options' => MembershipStatus::all(['id', 'code', 'title']),
+            ]
         ]);
     }
 

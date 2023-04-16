@@ -12,7 +12,7 @@ import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const props = defineProps([
   'member_id',
-  'membership_types',
+  'options',
 ]);
 
 const MIN_STEP = 1
@@ -41,19 +41,6 @@ const form = useForm({
   // other_membership: 'a',
   // note: 'a',
 })
-const titleOptions = [
-  { id: 1, name: "Mr" },
-  { id: 2, name: "Mrs" },
-  { id: 3, name: "Ms" },
-  { id: 4, name: "Dr" },
-]
-const genderOptions = [
-  { id: 1, name: "Male" },
-  { id: 2, name: "Female" },
-  { id: 3, name: "Gender non-conforming" },
-  { id: 4, name: "Non binary" },
-  { id: 5, name: "Prefer not to say" },
-]
 const mailingOptions = [
   { id: 1, name: "SITA General" },
   { id: 2, name: "SITA Members" },
@@ -108,6 +95,7 @@ function nextStep() {
 <div>
   <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
 
+    member_id: {{ member_id }}
 
     <div class="mb-3">
       <Progress :progress="progress"></Progress>
@@ -115,13 +103,12 @@ function nextStep() {
     <tabs v-model="activeTab" class="p-5">
       <!-- class appends to content DIV for all tabs -->
       <tab name="first" title="Membership Type" :disabled="disableTabs">
-        {{ member_id }}
         <form @submit.prevent="form.post(route('members.store'), { onSuccess: () => form.reset() })">
 
           <InputLabel for="membershipType" value="Membership Type" class="mb-4" />
 
           <div class="mb-4">
-            <div class="flex items-center" v-for="m in props.membership_types">
+            <div class="flex items-center" v-for="m in props.options.membership_type_options">
               <input :id="m.id" type="radio" :value="m.id" v-model="form.membership_type_id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
               <InputLabel :for="m.id" :value="m.title" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
             </div>
@@ -141,16 +128,16 @@ function nextStep() {
         <InputLabel for="title" value="Title" class="mb-4" />
         <select id="title" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
           <option selected>Choose a title</option>
-          <option v-for="t in titleOptions" :value="t.id">{{ t.name }}</option>
+          <option v-for="t in props.options.title_options" :value="t.id">{{ t.title }}</option>
         </select>
 
         <Input placeholder="enter your first name" label="First name" class="mb-2" />
         <Input placeholder="enter your last name" label="Last name" class="mb-2" />
 
         <InputLabel for="gender" value="Gender" class="mb-4" />
-        <div class="flex items-center mb-4" v-for="g in genderOptions">
+        <div class="flex items-center mb-4" v-for="g in props.options.gender_options">
           <input :id="g.id" type="radio" :value="g.id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-          <InputLabel :for="g.id" :value="g.name" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
+          <InputLabel :for="g.id" :value="g.title" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
         </div>
 
         <InputLabel for="dob" value="Date of birth" class="mb-4" />
