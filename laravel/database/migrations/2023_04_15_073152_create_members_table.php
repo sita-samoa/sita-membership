@@ -13,26 +13,27 @@ return new class extends Migration
     {
         Schema::create('members', function (Blueprint $table) {
             $table->id();
+            // @todo - ensure member remains even if user is deleted
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->string('last_name');
-            $table->string('first_name');
-            $table->string('title');
-            $table->date('dob');
+            $table->string('last_name')->nullable();
+            $table->string('first_name')->nullable();
+            // $table->string('title');
+            $table->date('dob')->nullable();
             // gender - constraint
-            // member type - constraint
-            $table->string('job_title');
-            $table->string('current_employer');
-            $table->string('home_address');
-            $table->string('home_phone');
-            $table->string('home_mobile');
-            $table->string('home_email');
-            $table->string('work_address');
-            $table->string('work_phone');
-            $table->string('work_mobile');
-            $table->string('work_email');
-            $table->string('other_membership');
+            $table->foreignId('membership_type_id')->constrained();
+            $table->string('job_title')->nullable();
+            $table->string('current_employer')->nullable();
+            $table->string('home_address')->nullable();
+            $table->string('home_phone')->nullable();
+            $table->string('home_mobile')->nullable();
+            $table->string('home_email')->nullable();
+            $table->string('work_address')->nullable();
+            $table->string('work_phone')->nullable();
+            $table->string('work_mobile')->nullable();
+            $table->string('work_email')->nullable();
+            $table->string('other_membership')->nullable();
             // membership status - constraint
-            $table->mediumText('note');
+            $table->mediumText('note')->nullable();
             $table->timestamps();
         });
     }

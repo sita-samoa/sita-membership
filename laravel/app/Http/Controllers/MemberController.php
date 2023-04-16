@@ -46,11 +46,11 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
 
-            'message' => 'required|string|max:255',
+            'membership_type_id' => 'required|int',
 
         ]);
 
-        // $request->user()->members()->create($validated);
+        $request->user()->members()->create($validated);
 
         return redirect(route('members.signup'));
     }

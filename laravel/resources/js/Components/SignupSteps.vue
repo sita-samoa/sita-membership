@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { Link } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import { Alert, Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
 import MemberQualifications from '@/Components/MemberQualifications.vue';
 import MemberDocuments from '@/Components/MemberDocuments.vue';
@@ -8,6 +8,7 @@ import MemberWorkExperience from '@/Components/MemberWorkExperience.vue';
 import MemberReferees from '@/Components/MemberReferees.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 
 const MIN_STEP = 1
 const MAX_STEP = 9
@@ -15,6 +16,26 @@ const MAX_STEP = 9
 const activeTab = ref('first')
 const currentStep = ref(MIN_STEP)
 const disableTabs = ref(false)
+
+const form = useForm({
+  // last_name: 'a',
+  // first_name: 'a',
+  // title: 'a',
+  // dob: 'a',
+  membership_type_id: '',
+  // job_title: 'a',
+  // current_employer: 'a',
+  // home_address: 'a',
+  // home_phone: 'a',
+  // home_mobile: 'a',
+  // home_email: 'a',
+  // work_address: 'a',
+  // work_phone: 'a',
+  // work_mobile: 'a',
+  // work_email: 'a',
+  // other_membership: 'a',
+  // note: 'a',
+})
 
 const membershipTypeOptions = [
   { id: 1, name: "Full" },
@@ -93,18 +114,26 @@ function nextStep() {
   <tabs v-model="activeTab" class="p-5">
     <!-- class appends to content DIV for all tabs -->
     <tab name="first" title="Membership Type" :disabled="disableTabs">
+      <form @submit.prevent="form.post(route('members.store'), { onSuccess: () => form.reset() })">
 
-      <InputLabel for="membershipType" value="Membership Type" class="mb-4" />
 
-      <div class="flex items-center mb-4" v-for="m in membershipTypeOptions">
-        <input :id="m.id" type="radio" :value="m.id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-        <InputLabel :for="m.id" :value="m.name" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
-      </div>
+        <InputLabel for="membershipType" value="Membership Type" class="mb-4" />
 
-      <!-- next button -->
-      <Link href="#">
-        <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-      </Link>
+        <div class="mb-4">
+          <div class="flex items-center" v-for="m in membershipTypeOptions">
+            <input :id="m.id" type="radio" :value="m.id" v-model="form.membership_type_id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+            <InputLabel :for="m.id" :value="m.name" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
+          </div>
+
+          <InputError class="mt-2" :message="form.errors.membership_type_id" />
+        </div>
+
+        <!-- next button -->
+        <PrimaryButton class="mt-4">Add and Next</PrimaryButton>
+        <Link href="#">
+          <Button class="p-3 mt-3">Next</Button>
+        </Link>
+      </form>
     </tab>
     <tab name="second" title="General" :disabled="disableTabs">
 
