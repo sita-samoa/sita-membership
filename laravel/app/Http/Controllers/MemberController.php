@@ -46,6 +46,7 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
             'membership_type_id' => 'required|int|min:1',
+            'membership_status_id' => 'required|int|min:1',
         ]);
 
         $member = $request->user()->members()->create($validated);
@@ -66,12 +67,7 @@ class MemberController extends Controller
      */
     public function store(Request $request) : RedirectResponse
     {
-        $validated = $request->validate([
-            'membership_type_id' => 'required|int|min:1',
-        ]);
-
-        $request->user()->members()->create($validated);
-
+        // unused
         return redirect(route('members.signup'));
     }
 

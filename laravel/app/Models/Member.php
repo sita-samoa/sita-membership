@@ -14,7 +14,6 @@ class Member extends Model
         'title_id',
         'first_name',
         'last_name',
-        'title',
         'dob',
         'gender_id',
         'membership_type_id',
@@ -29,7 +28,9 @@ class Member extends Model
         'work_mobile',
         'work_email',
         'other_membership',
+        'membership_status_id',
         'note',
+        'membership_application_status_id',
     ];
 
     public function user(): BelongsTo {
