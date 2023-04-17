@@ -35,4 +35,21 @@ class Member extends Model
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }
+
+    public function title(): BelongsTo {
+        return $this->belongsTo(Title::class);
+    }
+
+    public function gender(): BelongsTo {
+        return $this->belongsTo(Gender::class);
+    }
+
+    public function membershipType(): BelongsTo {
+        return $this->belongsTo(MembershipType::class);
+    }
+
+    public function membershipStatus(): BelongsTo {
+        return $this->belongsTo(MembershipStatus::class);
+    }
+
 }
