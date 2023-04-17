@@ -10,3 +10,9 @@ INSERT INTO `genders` (`id`, `code`, `title`, `created_at`, `updated_at`) VALUES
 
 -- Add Title Options
 INSERT INTO `titles` (`id`, `code`, `title`, `created_at`, `updated_at`) VALUES (NULL, 'Mr', 'Mr', NULL, NULL), (NULL, 'Mrs', 'Mrs', NULL, NULL), (NULL, 'Ms', 'Ms', NULL, NULL), (NULL, 'Dr', 'Dr', NULL, NULL);
+
+-- Add Membership Statuses
+INSERT INTO `membership_statuses` (`id`, `code`, `title`, `created_at`, `updated_at`) VALUES (NULL, 'p', 'Pending', NULL, NULL), (NULL, 'a', 'Active', NULL, NULL), (NULL, 'e', 'Expired', NULL, NULL), (NULL, 'b', 'Banned', NULL, NULL);
+
+-- Add Membership Application Statuses
+INSERT INTO `membership_application_statuses` (`id`, `code`, `title`, `created_at`, `updated_at`) VALUES (NULL, 'draft', 'Draft', NULL, NULL), (NULL, 'submitted', 'Submitted', NULL, NULL), (NULL, 'endorsed', 'Endorsed', NULL, NULL), (NULL, 'accepted', 'Accepted', NULL, NULL);

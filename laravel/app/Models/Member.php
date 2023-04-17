@@ -52,4 +52,8 @@ class Member extends Model
         return $this->belongsTo(MembershipStatus::class);
     }
 
+    public function membershipApplicationStatus(): BelongsTo {
+        return $this->belongsTo(MembershipApplicationStatus::class);
+    }
+
 }

@@ -105,7 +105,7 @@ class MemberController extends Controller
             'membership_type_id' => 'required|int|min:1',
             'first_name' => 'required_with:membership_type_id|string|max:255',
             'last_name' => 'required_with:membership_type_id|string|max:255',
-            // 'title_id' => 'nullable|int',
+            'title_id' => 'nullable',
             'dob' => 'nullable|date',
             'gender_id' => 'required_with:membership_type_id|int|min:1',
             'job_title' => 'required_with:membership_type_id|string|max:255',
@@ -119,7 +119,9 @@ class MemberController extends Controller
             'work_mobile' => 'nullable|max:255',
             'work_email' => 'nullable|email|max:255',
             'other_membership' => 'nullable|max:500',
-            // 'note' => 'nullable',
+            'membership_status_id' => 'int',
+            'note' => 'nullable',
+            'membership_application_status_id' => 'nullable|int'
         ]);
 
         $member->update($validated);

@@ -32,8 +32,9 @@ return new class extends Migration
             $table->string('work_mobile')->nullable();
             $table->string('work_email')->nullable();
             $table->string('other_membership')->nullable();
-            $table->foreignId('membership_status_id')->nullable();
+            $table->foreignId('membership_status_id')->default(1);
             $table->mediumText('note')->nullable();
+            $table->foreignId('membership_application_status_id')->nullable();
             $table->timestamps();
         });
     }

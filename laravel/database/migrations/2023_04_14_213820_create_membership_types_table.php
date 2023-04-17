@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code');
             $table->string('title');
+            $table->float('annual_cost')->default(0);
             $table->timestamps();
         });
     }
