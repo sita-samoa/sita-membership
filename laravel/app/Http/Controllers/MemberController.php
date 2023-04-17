@@ -76,14 +76,16 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
-        // try and load the title
-        $m = $member;
+        $relations = [
+            "membershipType",
+            "membershipApplicationStatus",
+        ];
         if ($member->title_id) {
-            $m = $member->load('title');
+            $relations[] = "title";
         }
 
         return Inertia::render('Members/Show', [
-            'member' => $m,
+            'member' => $member->load($relations),
         ]);
     }
 

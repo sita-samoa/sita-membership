@@ -57,8 +57,10 @@ const member_name = computed(() => {
     </h5>
 
     <div class="flex mb-3">
-      <Badge type="green">Draft</Badge>
-      <Badge type="green">Full</Badge>
+      <Badge type="green" v-if="props.member.membership_application_status">
+        {{ props.member.membership_application_status.title }}</Badge>
+      <Badge type="green" v-else>Draft</Badge>
+      <Badge type="green">{{ props.member.membership_type.title}}</Badge>
     </div>
 
     <p class="font-normal text-gray-700 dark:text-gray-400">
@@ -77,6 +79,5 @@ const member_name = computed(() => {
   </list-group>
 
   <Button class="w-full" default @click.prevent="submit">Submit</Button>
-
 </div>
 </template>
