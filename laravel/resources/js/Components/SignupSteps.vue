@@ -131,8 +131,6 @@ watch(
 <div>
   <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
 
-    member_id: {{ member_id }} | {{  $page.props.flash.member_id }}
-
     <div class="mb-3">
       <Progress :progress="progress"></Progress>
     </div>

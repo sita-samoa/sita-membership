@@ -35,7 +35,6 @@ class MemberController extends Controller
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
                 'gender_options' => Gender::all(['id', 'code', 'title']),
                 'title_options' => Title::all(['id', 'code', 'title']),
-                // 'membership_status_options' => MembershipStatus::all(['id', 'code', 'title']),
             ]
         ]);
     }
@@ -81,8 +80,14 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
+        // try and load the title
+        $m = $member;
+        if ($member->title_id) {
+            $m = $member->load('title');
+        }
+
         return Inertia::render('Members/Show', [
-            'member' => $member->load('title'),
+            'member' => $m,
         ]);
     }
 

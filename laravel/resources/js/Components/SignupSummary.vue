@@ -39,7 +39,7 @@ function submit() {
 
 const member_name = computed(() => {
   let member = props.member;
-  return member.title.title + " " + member.first_name + " " + member.last_name
+  return member.first_name + " " + member.last_name
 })
 
 </script>
@@ -53,7 +53,7 @@ const member_name = computed(() => {
 
   <the-card href="#" class="mb-3">
     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-      {{ member_name }}
+      <span v-if="props.member.title_id">{{ props.member.title.title }}</span> {{ member_name }}
     </h5>
 
     <div class="flex mb-3">
