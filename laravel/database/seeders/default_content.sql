@@ -1,7 +1,6 @@
 -- Add Users
-INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `current_team_id`, `profile_photo_path`, `created_at`, `updated_at`) VALUES
-(1, 'Ainsof', 'ainsofs@outlook.com', NULL, '$2y$10$VuODhVO0BOLiZMehV5THOexdXUs08Jt7MkH79YToPtkDDS.rK60gy', NULL, NULL, NULL, NULL, NULL, NULL, '2023-04-16 00:57:42', '2023-04-16 00:57:42');
-
+INSERT INTO `users` (`id`, `username`, `email`, `email_verified_at`, `password`, `two_factor_secret`, `two_factor_recovery_codes`, `two_factor_confirmed_at`, `remember_token`, `current_team_id`, `profile_photo_path`, `created_at`, `updated_at`) VALUES
+(1, 'ainsofs', 'ainsofs@outlook.com', NULL, '$2y$10$sQwL9mGaZIC3aPbJNn6D8e5Lehk9a1i/bLm.BuQWoHOtqp88xv2RS', NULL, NULL, NULL, NULL, NULL, NULL, '2023-04-17 04:36:30', '2023-04-17 04:36:30');
 
 -- Add Membership Type Options
 INSERT INTO `membership_types` (`id`, `code`, `title`, `created_at`, `updated_at`) VALUES (NULL, 'Full', 'Full', NULL, NULL), (NULL, 'Associate', 'Associate', NULL, NULL), (NULL, 'Affiliate', 'Affiliate', NULL, NULL), (NULL, 'Student', 'Student', NULL, NULL), (NULL, 'Fellow', 'Fellow', NULL, NULL);
