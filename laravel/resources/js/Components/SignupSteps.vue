@@ -25,10 +25,10 @@ const disableTabs = ref(false)
 const form = useForm({
   first_name: '',
   last_name: '',
-  title_id: -1,
+  title_id: '',
   dob: '',
-  membership_type_id: -1,
-  gender_id: -1,
+  membership_type_id: 1,
+  gender_id: '',
   job_title: '',
   current_employer: '',
   home_address: '',
@@ -40,7 +40,9 @@ const form = useForm({
   work_mobile: '',
   work_email: '',
   other_membership: '',
+  membership_status_id: 1,
   note: '',
+  membership_application_status_id: '',
 })
 const mailingOptions = [
   { id: 1, name: "SITA General" },
@@ -57,6 +59,9 @@ function nextStep() {
 
   if (currentStep.value > MAX_STEP) {
     currentStep.value = MAX_STEP
+
+    // redirect to member/1
+    window.location.href = '/members/' + member_id.value
   }
 
   switch (currentStep.value) {
