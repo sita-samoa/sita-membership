@@ -17,12 +17,11 @@ module.exports = {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+            colors: {
+                'primary': '#047D95'
+            }
         },
     },
 
-    plugins: [
-        require('@tailwindcss/forms'),
-        require('@tailwindcss/typography'),
-        require('flowbite/plugin'),
-    ],
+    plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography'), require('flowbite/plugin')],
 };

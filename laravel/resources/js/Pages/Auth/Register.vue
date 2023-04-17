@@ -1,64 +1,62 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import AuthenticationCard from '@/Components/AuthenticationCard.vue';
 import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue';
 import Checkbox from '@/Components/Checkbox.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { Alert, Button } from 'flowbite-vue';
 
 const form = useForm({
-    name: '',
     email: '',
+    username: '',
     password: '',
     password_confirmation: '',
     terms: false,
 });
 
 const submit = () => {
-    form.post(route('register'), {
-        onFinish: () => form.reset('password', 'password_confirmation'),
-    });
+    form.post(route('register'));
 };
 </script>
 
 <template>
     <Head title="Register" />
 
-    <AuthenticationCard>
+    <AuthenticationCard class="pb-3">
         <template #logo>
             <AuthenticationCardLogo />
         </template>
-
+        <Alert type="info" class="mb-2 py-2" title="Register" :inline="false">
+            <span class="ml-2">Please register for an account to sign up.</span>
+        </Alert>
         <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
-                <TextInput
-                    id="name"
-                    v-model="form.name"
-                    type="text"
-                    class="mt-1 block w-full"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-                <InputError class="mt-2" :message="form.errors.name" />
-            </div>
-
             <div class="mt-4">
-                <InputLabel for="email" value="Email" />
+                <InputLabel for="email" value="Email address" />
                 <TextInput
                     id="email"
                     v-model="form.email"
                     type="email"
                     class="mt-1 block w-full"
                     required
-                    autocomplete="username"
+                    autofocus
+                    autocomplete="email"
                 />
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
-
+            <div class="mt-4">
+                <InputLabel for="username" value="Username" />
+                <TextInput
+                    id="username"
+                    v-model="form.username"
+                    type="text"
+                    class="mt-1 block w-full"
+                    required
+                    autocomplete="username"
+                />
+                <InputError class="mt-2" :message="form.errors.username" />
+            </div>
             <div class="mt-4">
                 <InputLabel for="password" value="Password" />
                 <TextInput
@@ -87,25 +85,21 @@ const submit = () => {
 
             <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
                 <InputLabel for="terms">
-                    <div class="flex items-center">
-                        <Checkbox id="terms" v-model:checked="form.terms" name="terms" required />
+                    <span class="pb-3">Terms and Conditions</span>
+                    <div class="flex items-center mt-2">
+                        <Checkbox id="terms" class="text-primary" v-model:checked="form.terms" name="terms" required />
 
-                        <div class="ml-2">
-                            I agree to the <a target="_blank" :href="route('terms.show')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Terms of Service</a> and <a target="_blank" :href="route('policy.show')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Privacy Policy</a>
-                        </div>
+                        <div class="ml-2 text-xs">
+                            <strong>Applicants Declaration:</strong> I declare that all information is true and correct, and if admitted to the Society, I understand that I am bound to the Rules, regulations and Codes of the Society as amended from time to time.                        </div>
                     </div>
                     <InputError class="mt-2" :message="form.errors.terms" />
                 </InputLabel>
             </div>
 
-            <div class="flex items-center justify-end mt-4">
-                <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    Already registered?
-                </Link>
-
-                <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+            <div class="mt-4">
+                <Button size="lg" class="bg-primary w-full" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Register
-                </PrimaryButton>
+                </Button>
             </div>
         </form>
     </AuthenticationCard>
