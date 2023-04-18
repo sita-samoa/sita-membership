@@ -30,28 +30,27 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
+
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
-});
 
-// Sign Page
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
+    // Sign up Page
     Route::get('/members/signup', [MemberController::class, 'signup'])
     ->name('members.signup');
-});
 
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
     Route::post('/members/signup', [MemberController::class, 'storeSignup'])
     ->name('members.signup.store');
+
+    // Member actions
+    Route::put('/members/{member}/submit', [MemberController::class, 'submit'])
+    ->name('members.submit');
+
+    Route::put('/members/{member}/endorse', [MemberController::class, 'endorse'])
+    ->name('members.endorse');
+
+    Route::put('/members/{member}/accept', [MemberController::class, 'accept'])
+    ->name('members.accept');
 });
 
 // Members Pages

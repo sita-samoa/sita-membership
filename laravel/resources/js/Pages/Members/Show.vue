@@ -10,10 +10,10 @@ defineProps([
 </script>
 
 <template>
-    <AppLayout title="Sign Up">
+    <AppLayout title="Summary">
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                Summary | Sign Up
+                Summary
             </h2>
         </template>
 

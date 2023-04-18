@@ -72,9 +72,46 @@ class MemberController extends Controller
     }
 
     /**
+     * Submit member application.
+     */
+    public function submit(Member $member) : RedirectResponse
+    {
+        $this->authorize('update', $member);
+
+        $member->membership_application_status_id = 2;
+        $member->save();
+
+        return redirect()->back()->with('success', 'Application Submitted!');
+    }
+    /**
+     * Endorse member application.
+     */
+    public function endorse(Member $member) : RedirectResponse
+    {
+        $this->authorize('update', $member);
+
+        $member->membership_application_status_id = 3;
+        $member->save();
+
+        return redirect()->back()->with('success', 'Application Endorsed!');
+    }
+    /**
+     * Accept member application.
+     */
+    public function accept(Member $member) : RedirectResponse
+    {
+        $this->authorize('update', $member);
+
+        $member->membership_application_status_id = 4;
+        $member->save();
+
+        return redirect()->back()->with('success', 'Application Accepted!');
+    }
+
+    /**
      * Display the specified resource.
      */
-    public function show(Member $member)
+    public function show(Member $member) : Response
     {
         // Check
         $completion = [
@@ -156,7 +193,6 @@ class MemberController extends Controller
             'member' => $member->load($relations),
             'options' => [
                 'completion' => $completion,
-                'hello' => 'world'
             ]
         ]);
     }
