@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "flowbite": "^1.6.5",
-        "flowbite-vue": "^0.0.10"
+        "flowbite-vue": "^0.0.10",
+        "vue-material-design-icons": "^5.2.0"
     }
 }

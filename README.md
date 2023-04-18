@@ -27,6 +27,7 @@ cp .env.example .env
 
 # run initialisation commands
 php artisan migrate
+php artisan db:seed --class=DatabaseSeeder
 php artisan key:generate
 ```
 
@@ -44,6 +45,12 @@ Click "Register" and register a new account then use it to log in.
 **Common commands**
 
 ```
+# clear database and re-run migrations
+php artisan migration:fresh
+
+# create a new model, controller and migration called Member
+php artisan make:model -mrc Member
+
 # start up dev environment
 docker compose up -d
 
