@@ -76,6 +76,74 @@ class MemberController extends Controller
      */
     public function show(Member $member)
     {
+        // Check
+        $completion = [
+            'part1' => [
+                'status' => false,
+                'title' => 'Membership Type',
+            ],
+            'part2' => [
+                'status' => false,
+                'title' => 'General',
+            ],
+            'part3' => [
+                'status' => false,
+                'title' => 'Home Address',
+            ],
+            'part4' => [
+                'status' => false,
+                'title' => 'Work Address',
+            ],
+            'part5' => [
+                'status' => true,
+                'title' => 'Other Memberships',
+            ],
+            'part6' => [
+                'status' => false,
+                'title' => 'Academic Qualifications',
+            ],
+            'part7' => [
+                'status' => false,
+                'title' => 'Work Experience',
+            ],
+            'part8' => [
+                'status' => false,
+                'title' => 'Referees',
+            ],
+            'part9' => [
+                'status' => true,
+                'title' => 'Mailing Lists',
+            ],
+        ];
+
+        if ($member->membership_type_id) {
+            $completion['part1']['status'] = true;
+        }
+        if ($member->first_name &&
+            $member->last_name &&
+            $member->gender_id &&
+            $member->job_title &&
+            $member->current_employer
+        ) {
+            $completion['part2']['status'] = true;
+        }
+        if ($member->home_address ||
+            $member->home_phone ||
+            $member->home_mobile ||
+            $member->home_email
+        ) {
+            $completion['part3']['status'] = true;
+        }
+        if ($member->work_address ||
+            $member->work_phone ||
+            $member->work_mobile ||
+            $member->work_email
+        ) {
+            $completion['part4']['status'] = true;
+        }
+        // @todo Part 6,7,8
+
+        // Load title if exists.
         $relations = [
             "membershipType",
             "membershipApplicationStatus",
@@ -86,6 +154,10 @@ class MemberController extends Controller
 
         return Inertia::render('Members/Show', [
             'member' => $member->load($relations),
+            'options' => [
+                'completion' => $completion,
+                'hello' => 'world'
+            ]
         ]);
     }
 

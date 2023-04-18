@@ -16,22 +16,7 @@ const props = defineProps([
   'options',
 ]);
 
-
-const form = useForm({
-  first_name: '',
-})
-
-const completion = ref([
-  { part: 1, status: 1, title: "Membership Type" },
-  { part: 2, status: 1, title: "General" },
-  { part: 3, status: 0, title: "Home Address" },
-  { part: 4, status: 0, title: "Work Address" },
-  { part: 5, status: 1, title: "Other Memberships" },
-  { part: 6, status: 1, title: "Academic Qualifications" },
-  { part: 7, status: 1, title: "Work Experience" },
-  { part: 8, status: 1, title: "Referees" },
-  { part: 9, status: 0, title: "Mailing Lists" },
-])
+const completion = props.options.completion
 
 function submit() {
   console.log('submitted')
@@ -79,5 +64,6 @@ const member_name = computed(() => {
   </list-group>
 
   <Button class="w-full" default @click.prevent="submit">Submit</Button>
+
 </div>
 </template>
