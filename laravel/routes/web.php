@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemberQualificationController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -52,6 +53,15 @@ Route::middleware([
     Route::put('/members/{member}/accept', [MemberController::class, 'accept'])
     ->name('members.accept');
 });
+
+// Academic Qualifications
+Route::resource('members.qualifications', MemberQualificationController::class)
+    ->only(['store', 'update'])
+    ->middleware([
+        'auth:sanctum',
+        config('jetstream.auth_session'),
+        'verified'
+]);
 
 // Members Pages
 Route::resource('members', MemberController::class)

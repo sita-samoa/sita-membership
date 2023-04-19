@@ -44,6 +44,7 @@ const form = useForm({
   note: '',
   membership_application_status_id: '',
 })
+
 const mailingOptions = [
   { id: 1, name: "SITA General" },
   { id: 2, name: "SITA Members" },
@@ -249,7 +250,7 @@ watch(
         </form>
       </tab>
       <tab name="sixth" title="Qualifications" :disabled="disableTabs">
-        <MemberQualifications />
+        <MemberQualifications :member_id="member_id" :list="props.options.qualifications" />
         <MemberDocuments />
 
         <!-- next button -->

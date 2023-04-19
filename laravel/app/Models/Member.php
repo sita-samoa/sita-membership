@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Member extends Model
 {
@@ -28,9 +29,9 @@ class Member extends Model
         'work_mobile',
         'work_email',
         'other_membership',
-        'membership_status_id',
+        // 'membership_status_id',
         'note',
-        'membership_application_status_id',
+        // 'membership_application_status_id',
     ];
 
     public function user(): BelongsTo {
@@ -55,6 +56,10 @@ class Member extends Model
 
     public function membershipApplicationStatus(): BelongsTo {
         return $this->belongsTo(MembershipApplicationStatus::class);
+    }
+
+    public function qualifications() : HasMany {
+        return $this->hasMany(MemberQualification::class);
     }
 
 }
