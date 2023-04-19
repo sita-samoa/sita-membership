@@ -46,7 +46,7 @@ Click "Register" and register a new account then use it to log in.
 
 ```
 # clear database and re-run migrations
-php artisan migration:fresh
+php artisan migrate:fresh
 
 # create a new model, controller and migration called Member
 php artisan make:model -mrc Member
