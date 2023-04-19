@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Gender;
 use App\Models\Member;
+use App\Models\MemberQualification;
 use App\Models\MembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Title;
@@ -35,7 +36,8 @@ class MemberController extends Controller
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
                 'gender_options' => Gender::all(['id', 'code', 'title']),
                 'title_options' => Title::all(['id', 'code', 'title']),
-            ]
+            ],
+            'qualifications' => MemberQualification::get()
         ]);
     }
 
@@ -51,7 +53,7 @@ class MemberController extends Controller
 
         $member = $request->user()->members()->create($validated);
 
-        return redirect()->back()->with('member_id', $member->id)->with('success', 'Member Added!');
+        return redirect()->back()->with('member_id', $member->id)->with('success', 'Member Added');
     }
 
     /**
@@ -81,7 +83,7 @@ class MemberController extends Controller
         $member->membership_application_status_id = 2;
         $member->save();
 
-        return redirect()->back()->with('success', 'Application Submitted!');
+        return redirect()->back()->with('success', 'Application Submitted');
     }
     /**
      * Endorse member application.
@@ -93,7 +95,7 @@ class MemberController extends Controller
         $member->membership_application_status_id = 3;
         $member->save();
 
-        return redirect()->back()->with('success', 'Application Endorsed!');
+        return redirect()->back()->with('success', 'Application Endorsed');
     }
     /**
      * Accept member application.
@@ -105,7 +107,7 @@ class MemberController extends Controller
         $member->membership_application_status_id = 4;
         $member->save();
 
-        return redirect()->back()->with('success', 'Application Accepted!');
+        return redirect()->back()->with('success', 'Application Accepted');
     }
 
     /**
@@ -237,7 +239,7 @@ class MemberController extends Controller
 
         $member->update($validated);
 
-        return redirect()->back()->with('success', 'Member Updated!');
+        return redirect()->back()->with('success', 'Member Updated');
     }
 
     /**

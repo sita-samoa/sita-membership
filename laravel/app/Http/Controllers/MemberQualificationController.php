@@ -12,9 +12,9 @@ class MemberQualificationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Member $member)
     {
-        //
+        return $member->qualifications()->get();
     }
 
     /**

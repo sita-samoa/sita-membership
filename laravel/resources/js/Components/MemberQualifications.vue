@@ -4,6 +4,7 @@ import { Button, Modal, Input } from 'flowbite-vue'
 import { ref } from 'vue'
 import InputLabel from './InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
+import MemberQualificationsList from './MemberQualificationsList.vue';
 
 const props = defineProps([
   'member_id',
@@ -16,6 +17,11 @@ const form = useForm({
   'year_attained': '',
   'institution': '',
 })
+
+const listData = ref([
+  { country_id: '', qualification: 'Bachelor of Computing Systems', year_attained: '2006', institution: 'Unitec' },
+  { country_id: '', qualification: 'Master of Information Technology (Software Architecture)', year_attained: '2012', institution: 'QUT' }
+])
 
 const countryOptions = [
   { id: 1, name: "Australia" },
@@ -34,11 +40,10 @@ function showModal() {
 }
 function submit() {
   form.post(route('members.qualifications.store', props.member_id), {
-    preserveScroll: true,
-    resetOnSuccess: false,
     onSuccess() {
-      console.log('success')
       closeModal()
+      listData.value.push(Object.assign({}, form))
+      form.reset()
     }
   })
 }
@@ -46,15 +51,11 @@ function submit() {
 <template>
 <div>
   <h5>Academic Qualifications</h5>
-  member_id: {{  props.member_id }}
-  <Link href="#">
-    <Button class="p-3 mt-3" color="alternative" @click.prevent="showModal" >Add Qualification</Button>
 
-    <!-- Member qualifications list -->
-    <div v-for="l in props.list">
-      {{ l.id }}
-    </div>
-  </Link>
+  <Button class="p-3 my-3" color="alternative" @click.prevent="showModal" >Add Qualification</Button>
+
+  <!-- Member qualifications list -->
+  <MemberQualificationsList :list="listData" />
 </div>
 
 <!-- Modal -->
