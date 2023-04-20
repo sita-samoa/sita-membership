@@ -34,6 +34,17 @@ class Member extends Model
         // 'membership_application_status_id',
     ];
 
+    /**
+     * Set the user's title.
+     *
+     * @param  int  $value
+     * @return void
+     */
+    public function setTitleIdAttribute($value)
+    {
+        $this->attributes['title_id'] = $value < 1 ? null : $value;
+    }
+
     public function user(): BelongsTo {
         return $this->belongsTo(User::class);
     }

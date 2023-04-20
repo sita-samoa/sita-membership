@@ -27,7 +27,7 @@ const disableTabs = ref(false)
 const form = useForm({
   first_name: '',
   last_name: '',
-  title_id: '',
+  title_id: -1,
   dob: '',
   membership_type_id: 1,
   gender_id: '',
@@ -125,7 +125,7 @@ function submit() {
 <template>
 <div>
   <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-    id: {{  member_id }}
+
     <div class="mb-3">
       <Progress :progress="progress"></Progress>
     </div>
@@ -155,7 +155,7 @@ function submit() {
 
           <InputLabel for="title" value="Title" class="mb-4" />
           <select id="title" v-model="form.title_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
-            <option selected value="null">Choose a title</option>
+            <option selected value="-1">Choose a title</option>
             <option v-for="t in props.options.title_options" :value="t.id">{{ t.title }}</option>
           </select>
           <InputError class="mt-2" :message="form.errors.title_id" />
@@ -202,7 +202,7 @@ function submit() {
           <Input v-model="form.home_mobile" placeholder="enter your mobile" label="Mobile" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.home_mobile" />
 
-          <Input v-model="form.home_email" placeholder="enter your email" label="Email" class="mb-2" />
+          <Input name="home_email" v-model="form.home_email" placeholder="enter your email" label="Email" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.home_email" />
 
           <!-- next button -->
@@ -223,7 +223,7 @@ function submit() {
           <Input v-model="form.work_mobile" placeholder="enter your mobile" label="Mobile" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.work_mobile" />
 
-          <Input v-model="form.work_email" placeholder="enter your email" label="Email" class="mb-2" />
+          <Input name="work_email" v-model="form.work_email" placeholder="enter your email" label="Email" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.work_email" />
 
           <!-- next button -->

@@ -230,7 +230,7 @@ class MemberController extends Controller
             'membership_type_id' => 'required|int|min:1',
             'first_name' => 'required_with:membership_type_id|string|max:255',
             'last_name' => 'required_with:membership_type_id|string|max:255',
-            'title_id' => 'nullable',
+            'title_id' => 'nullable|int',
             'dob' => 'nullable|date',
             'gender_id' => 'required_with:membership_type_id|int|min:1',
             'job_title' => 'required_with:membership_type_id|string|max:255',
