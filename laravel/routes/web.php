@@ -66,7 +66,7 @@ Route::resource('members.signup', SignupController::class)
 
 // Academic Qualifications
 Route::resource('members.qualifications', MemberQualificationController::class)
-    ->only(['store', 'update'])
+    ->only(['store', 'update', 'destroy'])
     ->middleware([
         'auth:sanctum',
         config('jetstream.auth_session'),

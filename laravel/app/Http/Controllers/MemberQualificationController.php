@@ -18,14 +18,6 @@ class MemberQualificationController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Member $member, Request $request) : RedirectResponse
@@ -47,28 +39,12 @@ class MemberQualificationController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(MemberQualification $memberQualification)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(MemberQualification $memberQualification)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MemberQualification $memberQualification, Member $member, $qualification) : RedirectResponse
+    public function update(Request $request, Member $member, MemberQualification $qualification) : RedirectResponse
     {
         // @todo - Implement authorization here
-        $this->authorize('update', $memberQualification);
+        $this->authorize('update', $qualification);
 
         $validated = $request->validate([
             'qualification' => 'required|string',
@@ -77,9 +53,7 @@ class MemberQualificationController extends Controller
             // 'country_id' => 'required|string',
         ]);
 
-        // @todo - Check why this line doesnt work
-        // $memberQualification->update($validated);
-        MemberQualification::where('id', $qualification)->update($validated);
+        $qualification->update($validated);
 
         return redirect()->back()->with('success', 'Qualification updated.');
     }
@@ -87,8 +61,13 @@ class MemberQualificationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MemberQualification $memberQualification)
+    public function destroy(Member $member, MemberQualification $qualification) : RedirectResponse
     {
-        //
+        // @todo - Implement authorization here
+        $this->authorize('update', $qualification);
+
+        $qualification->delete();
+
+        return redirect()->back()->with('success', 'Qualification deleted.');
     }
 }

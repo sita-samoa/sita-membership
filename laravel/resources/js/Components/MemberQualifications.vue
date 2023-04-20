@@ -70,13 +70,27 @@ function update() {
       item.year_attained = form.year_attained
       item.institution = form.institution
       item.country_id = form.country_id
-      // let formCopy = Object.assign({}, form)
-      // formCopy.id = res.props.flash.data.id
-      // listData.value.push(formCopy)
 
-      itemId.value = -1
       // reset form
       form.reset()
+      itemId.value = -1
+    }
+  })
+}
+function deleteItem() {
+  form.delete(route('members.qualifications.destroy', { member: props.member_id, qualification: itemId.value }), {
+    onSuccess() {
+      closeModal()
+
+      for (var i=0; i< listData.length; i++) {
+        if (listData[i].id === itemId.value) {
+          listData.splice(i, 1)
+        }
+      }
+
+      // reset form
+      form.reset()
+      itemId.value = -1
     }
   })
 }
@@ -95,7 +109,12 @@ function update() {
 <Modal :size="size" v-if="isShowModal" @close="closeModal">
   <template #header>
     <div class="flex items-center text-lg">
-      Add Qualification
+      <span v-if="itemId < 0">
+        Add Qualification
+      </span>
+      <span v-else>
+        Edit Qualification
+      </span>
     </div>
   </template>
   <template #body>
@@ -122,7 +141,10 @@ function update() {
       <button v-if="itemId < 0" @click="submit" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         Add
       </button>
-      <button v-else @click="update" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+      <button v-if="itemId > 0" @click="deleteItem" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        Delete
+      </button>
+      <button v-if="itemId > 0" @click="update" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         Update
       </button>
     </div>
