@@ -3,6 +3,7 @@
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberQualificationController;
 use App\Http\Controllers\SignupController;
+use App\Http\Controllers\MemberRefereeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -66,7 +67,10 @@ Route::resource('members.signup', SignupController::class)
 
 // Academic Qualifications
 Route::resource('members.qualifications', MemberQualificationController::class)
-    ->only(['store', 'update', 'destroy'])
+    ->only(['store', 'update', 'destroy']);
+
+Route::resource('members.referees', MemberRefereeController::class)
+    ->only(['store', 'update'])
     ->middleware([
         'auth:sanctum',
         config('jetstream.auth_session'),

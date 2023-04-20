@@ -270,7 +270,7 @@ function submit() {
         </div>
       </tab>
       <tab name="eighth" title="Referees" :disabled="disableTabs">
-        <MemberReferees />
+        <MemberReferees :member_id="member_id" :list="props.referees" />
 
         <!-- next button -->
         <div>

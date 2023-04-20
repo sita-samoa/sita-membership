@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Gender;
 use App\Models\Member;
 use App\Models\MemberQualification;
+use App\Models\MemberReferee;
 use App\Models\MembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Title;
