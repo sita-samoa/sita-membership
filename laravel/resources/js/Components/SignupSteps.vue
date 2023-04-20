@@ -8,14 +8,20 @@ import MemberWorkExperience from '@/Components/MemberWorkExperience.vue';
 import MemberReferees from '@/Components/MemberReferees.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
+import { def } from '@vue/shared';
 
-const props = defineProps([
-  'options',
-  'member_id',
-  'qualifications'
-]);
+const props = defineProps({
+  options: Object,
+  member: {
+    type: Object,
+    default: {
+      id: 0
+    }
+  },
+  qualifications:Object
+});
 
-const member_id = ref(props.member_id)
+const member_id = ref(props.member.id)
 
 const MIN_STEP = 1
 const MAX_STEP = 9
@@ -25,26 +31,26 @@ const currentStep = ref(MIN_STEP)
 const disableTabs = ref(false)
 
 const form = useForm({
-  first_name: '',
-  last_name: '',
-  title_id: -1,
-  dob: '',
-  membership_type_id: 1,
-  gender_id: '',
-  job_title: '',
-  current_employer: '',
-  home_address: '',
-  home_phone: '',
-  home_mobile: '',
-  home_email: '',
-  work_address: '',
-  work_phone: '',
-  work_mobile: '',
-  work_email: '',
-  other_membership: '',
-  membership_status_id: 1,
-  note: '',
-  membership_application_status_id: '',
+  first_name: props.member.first_name ?? '',
+  last_name: props.member.last_name ?? '',
+  title_id: props.member.title_id ?? -1,
+  dob: props.member.dob ?? '',
+  membership_type_id: props.member.membership_type_id ?? 1,
+  gender_id: props.member.gender_id ?? '',
+  job_title: props.member.job_title ?? '',
+  current_employer: props.member.current_employer ?? '',
+  home_address: props.member.home_address ?? '',
+  home_phone: props.member.home_phone ?? '',
+  home_mobile: props.member.home_mobile ?? '',
+  home_email: props.member.home_email ?? '',
+  work_address: props.member.work_address ?? '',
+  work_phone: props.member.work_phone ?? '',
+  work_mobile: props.member.work_mobile ?? '',
+  work_email: props.member.work_email ?? '',
+  other_membership: props.member.other_membership ?? '',
+  membership_status_id: props.member.membership_status_id ?? 1,
+  note: props.member.note ?? '',
+  membership_application_status_id: props.member.membership_application_status_id ?? '',
 })
 
 const mailingOptions = [

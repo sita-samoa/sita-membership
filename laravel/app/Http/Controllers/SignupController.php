@@ -17,7 +17,7 @@ class SignupController extends Controller
     public function index(Member $member) : Response
     {
         return Inertia::render('Members/Signup', [
-            'member_id' => $member->id,
+            'member' => $member,
             'options' => [
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
                 'gender_options' => Gender::all(['id', 'code', 'title']),
