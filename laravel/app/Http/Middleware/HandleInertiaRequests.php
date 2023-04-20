@@ -41,6 +41,7 @@ class HandleInertiaRequests extends Middleware
                 return [
                     'success' => $request->session()->get('success'),
                     'error' => $request->session()->get('error'),
+                    // @todo remove member_id and use the data field
                     'member_id' => $request->session()->get('member_id'),
                     'data' => $request->session()->get('data'),
                 ];

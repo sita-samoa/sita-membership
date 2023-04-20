@@ -11,9 +11,11 @@ import InputLabel from '@/Components/InputLabel.vue';
 
 const props = defineProps([
   'options',
+  'member_id',
+  'qualifications'
 ]);
 
-const member_id = ref(-1)
+const member_id = ref(props.member_id)
 
 const MIN_STEP = 1
 const MAX_STEP = 9
@@ -131,7 +133,7 @@ watch(
 <template>
 <div>
   <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-
+    id: {{  member_id }}
     <div class="mb-3">
       <Progress :progress="progress"></Progress>
     </div>
@@ -250,7 +252,7 @@ watch(
         </form>
       </tab>
       <tab name="sixth" title="Qualifications" :disabled="disableTabs">
-        <MemberQualifications :member_id="member_id" :list="props.options.qualifications" />
+        <MemberQualifications :member_id="member_id" :list="props.qualifications" />
         <MemberDocuments />
 
         <!-- next button -->

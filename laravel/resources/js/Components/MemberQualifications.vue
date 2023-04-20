@@ -18,10 +18,8 @@ const form = useForm({
   'institution': '',
 })
 
-const listData = ref([
-  { country_id: '', qualification: 'Bachelor of Computing Systems', year_attained: '2006', institution: 'Unitec' },
-  { country_id: '', qualification: 'Master of Information Technology (Software Architecture)', year_attained: '2012', institution: 'QUT' }
-])
+const listData = props.list
+const itemId = ref(-1)
 
 const countryOptions = [
   { id: 1, name: "Australia" },
@@ -38,6 +36,18 @@ function closeModal() {
 function showModal() {
   isShowModal.value = true
 }
+function edit(id) {
+  itemId.value = id
+  let item = listData.find(i => i.id === id)
+
+  form.qualification = item.qualification
+  form.year_attained = item.year_attained
+  form.institution = item.institution
+  form.country_id = item.country_id
+  showModal()
+  // console.log(form)
+  // console.log(item)
+}
 function submit() {
   form.post(route('members.qualifications.store', props.member_id), {
     onSuccess(res) {
@@ -51,15 +61,35 @@ function submit() {
     }
   })
 }
+function update() {
+  form.put(route('members.qualifications.update', { member: props.member_id, qualification: itemId.value }), {
+    onSuccess() {
+      closeModal()
+      let item = listData.find(i => i.id === itemId.value)
+      item.qualification = form.qualification
+      item.year_attained = form.year_attained
+      item.institution = form.institution
+      item.country_id = form.country_id
+      // let formCopy = Object.assign({}, form)
+      // formCopy.id = res.props.flash.data.id
+      // listData.value.push(formCopy)
+
+      itemId.value = -1
+      // reset form
+      form.reset()
+    }
+  })
+}
 </script>
 <template>
 <div>
   <h5>Academic Qualifications</h5>
 
   <Button class="p-3 my-3" color="alternative" @click.prevent="showModal" >Add Qualification</Button>
-
+  item id: {{ itemId }}
   <!-- Member qualifications list -->
-  <MemberQualificationsList :list="listData" />
+  <MemberQualificationsList :list="listData" @edit-item="edit" />
+  {{  listData }}
 </div>
 
 <!-- Modal -->
@@ -90,8 +120,11 @@ function submit() {
       <button @click="closeModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
         Cancel
       </button>
-      <button @click="submit" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+      <button v-if="itemId < 0" @click="submit" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         Add
+      </button>
+      <button v-else @click="update" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        Update
       </button>
     </div>
   </template>

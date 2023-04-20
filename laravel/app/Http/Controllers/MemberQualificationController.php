@@ -67,7 +67,18 @@ class MemberQualificationController extends Controller
      */
     public function update(Request $request, MemberQualification $memberQualification)
     {
-        //
+        // $this->authorize('update', $memberQualification);
+
+        $validated = $request->validate([
+            'qualification' => 'required|string',
+            'year_attained' => 'required|int|min:1900|max:3000',
+            'institution' => 'required|string',
+            // 'country_id' => 'required|string',
+        ]);
+
+        $memberQualification->update($validated);
+
+        return redirect()->back()->with('success', 'Qualification updated.');
     }
 
     /**

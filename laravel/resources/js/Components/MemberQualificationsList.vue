@@ -6,11 +6,11 @@ defineProps(["list"])
 </script>
 <template>
 <list-group class="w-full">
-  <list-group-item v-for="l in list" >
+  <list-group-item v-for="item in list" @click="$emit('editItem', item.id)">
     <template #prefix>
       <CheckCircleOutlineIcon fillColor="green" />
     </template>
-    {{ l.qualification }}
+    {{ item.qualification }}
   </list-group-item>
 </list-group>
 </template>

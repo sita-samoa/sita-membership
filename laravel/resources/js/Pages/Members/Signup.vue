@@ -5,6 +5,7 @@ import SignupSteps from '../../Components/SignupSteps.vue';
 defineProps([
   'member_id',
   'options',
+  'qualifications'
 ]);
 
 </script>
@@ -20,7 +21,11 @@ defineProps([
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <SignupSteps :member_id="member_id" :options="options" />
+                    <SignupSteps
+                        :member_id="member_id"
+                        :options="options"
+                        :qualifications="qualifications"
+                    />
                 </div>
             </div>
         </div>
