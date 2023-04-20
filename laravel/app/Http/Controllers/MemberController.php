@@ -34,10 +34,10 @@ class MemberController extends Controller
         return Inertia::render('Members/Signup', [
             'options' => [
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
-                'gender_options' => Gender::all(['id', 'code', 'title']),
-                'title_options' => Title::all(['id', 'code', 'title']),
+                // 'gender_options' => Gender::all(['id', 'code', 'title']),
+                // 'title_options' => Title::all(['id', 'code', 'title']),
             ],
-            'qualifications' => MemberQualification::get()
+            // 'qualifications' => MemberQualification::get()
         ]);
     }
 
@@ -48,12 +48,21 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
             'membership_type_id' => 'required|int|min:1',
-            'membership_status_id' => 'required|int|min:1',
+            // 'membership_status_id' => 'required|int|min:1',
         ]);
 
-        $member = $request->user()->members()->create($validated);
+        $member = new Member();
+        $member->fill($validated);
+        // set not fillable fields
+        $member->membership_status_id = 1;
+        $member->user_id = $request->user()->id;
+        $member->save();
 
-        return redirect()->back()->with('member_id', $member->id)->with('success', 'Member Added');
+        return redirect()->route('members.signup.index', $member->id)
+            ->with('data', [
+                'id' => $member->id,
+            ])
+            ->with('success', 'Member Added');
     }
 
     /**
@@ -180,7 +189,10 @@ class MemberController extends Controller
         ) {
             $completion['part4']['status'] = true;
         }
-        // @todo Part 6,7,8
+        if ($member->qualifications()->count()) {
+            $completion['part6']['status'] = true;
+        }
+        // @todo Part 7,8
 
         // Load title if exists.
         $relations = [
@@ -232,7 +244,7 @@ class MemberController extends Controller
             'work_mobile' => 'nullable|max:255',
             'work_email' => 'nullable|email|max:255',
             'other_membership' => 'nullable|max:500',
-            'membership_status_id' => 'int',
+            // 'membership_status_id' => 'int',
             'note' => 'nullable',
             'membership_application_status_id' => 'nullable|int'
         ]);

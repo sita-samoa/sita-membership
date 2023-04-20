@@ -109,24 +109,16 @@ function submit() {
     })
   }
   else {
-    form.post(route('members.signup'), {
+    form.post(route('members.signup.store'), {
       preserveScroll: true,
       resetOnSuccess: false,
-      onSuccess() {
+      onSuccess(res) {
+        member_id.value = res.props.flash.data.id
         nextStep()
       }
     })
   }
 }
-
-watch(
-  () => usePage().props.flash.member_id,
-  (newValue) => {
-    if (newValue > 0) {
-      member_id.value = newValue
-    }
-  }
-)
 
 </script>
 

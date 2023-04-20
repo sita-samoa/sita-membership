@@ -39,10 +39,10 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'flash' => function () use ($request) {
                 return [
+                    // custom flash objects for displaying alert messages
                     'success' => $request->session()->get('success'),
                     'error' => $request->session()->get('error'),
-                    // @todo remove member_id and use the data field
-                    'member_id' => $request->session()->get('member_id'),
+                    // custom flash object for passing data back to inertia
                     'data' => $request->session()->get('data'),
                 ];
             },

@@ -1,15 +1,18 @@
 <script setup>
-import { Link, useForm } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import { Button, Modal, Input } from 'flowbite-vue'
 import { ref } from 'vue'
 import InputLabel from './InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import MemberQualificationsList from './MemberQualificationsList.vue';
 
-const props = defineProps([
-  'member_id',
-  'list'
-])
+const props = defineProps({
+  member_id: Number,
+  list: {
+    type: Object,
+    default: []
+  }
+})
 
 const form = useForm({
   'country_id': '',
@@ -54,7 +57,7 @@ function submit() {
       closeModal()
       let formCopy = Object.assign({}, form)
       formCopy.id = res.props.flash.data.id
-      listData.value.push(formCopy)
+      listData.push(formCopy)
 
       // reset form
       form.reset()
