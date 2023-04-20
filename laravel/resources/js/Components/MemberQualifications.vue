@@ -2,9 +2,10 @@
 import { useForm } from '@inertiajs/vue3';
 import { Button, Modal, Input } from 'flowbite-vue'
 import { ref } from 'vue'
-import InputLabel from './InputLabel.vue';
+import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
-import MemberQualificationsList from './MemberQualificationsList.vue';
+import MemberQualificationsList from '@/Components/MemberQualificationsList.vue';
+import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
 
 const props = defineProps({
   member_id: Number,
@@ -31,10 +32,11 @@ const countryOptions = [
   { id: 4, name: "Samoa" },
   { id: 5, name: "United States of America" },
 ]
-const isShowModal = ref(false)
+const showFormModal = ref(false)
+const showConfirmationModal = ref(false)
 
 function closeModal() {
-  isShowModal.value = false
+  showFormModal.value = false
 }
 function closeModalAndResetForm() {
   closeModal()
@@ -42,7 +44,7 @@ function closeModalAndResetForm() {
   form.reset()
 }
 function showModal() {
-  isShowModal.value = true
+  showFormModal.value = true
 }
 function edit(id) {
   itemId.value = id
@@ -96,6 +98,7 @@ function deleteItem() {
 
       // reset form
       closeModalAndResetForm()
+      showConfirmationModal.value = false
     }
   })
 }
@@ -111,7 +114,7 @@ function deleteItem() {
 </div>
 
 <!-- Modal -->
-<Modal :size="size" v-if="isShowModal" @close="closeModalAndResetForm">
+<Modal :size="size" v-if="showFormModal" @close="closeModalAndResetForm">
   <template #header>
     <div class="flex items-center text-lg">
       <span v-if="itemId < 0">
@@ -146,7 +149,7 @@ function deleteItem() {
       <button v-if="itemId < 0" @click="submit" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         Add
       </button>
-      <button v-if="itemId > 0" @click="deleteItem" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+      <button v-if="itemId > 0" @click="showConfirmationModal = true" type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
         Delete
       </button>
       <button v-if="itemId > 0" @click="update" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -155,4 +158,5 @@ function deleteItem() {
     </div>
   </template>
 </Modal>
+<DeleteConfirmationModal :show="showConfirmationModal" @delete="deleteItem" @close="showConfirmationModal=false" />
 </template>
