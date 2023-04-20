@@ -36,6 +36,11 @@ const isShowModal = ref(false)
 function closeModal() {
   isShowModal.value = false
 }
+function closeModalAndResetForm() {
+  closeModal()
+  itemId.value = -1
+  form.reset()
+}
 function showModal() {
   isShowModal.value = true
 }
@@ -48,26 +53,24 @@ function edit(id) {
   form.institution = item.institution
   form.country_id = item.country_id
   showModal()
-  // console.log(form)
-  // console.log(item)
 }
 function submit() {
   form.post(route('members.qualifications.store', props.member_id), {
     onSuccess(res) {
-      closeModal()
       let formCopy = Object.assign({}, form)
       formCopy.id = res.props.flash.data.id
       listData.push(formCopy)
 
       // reset form
-      form.reset()
+      closeModalAndResetForm()
     }
   })
 }
 function update() {
   form.put(route('members.qualifications.update', { member: props.member_id, qualification: itemId.value }), {
+    preserveScroll: true,
+    resetOnSuccess: false,
     onSuccess() {
-      closeModal()
       let item = listData.find(i => i.id === itemId.value)
       item.qualification = form.qualification
       item.year_attained = form.year_attained
@@ -75,15 +78,15 @@ function update() {
       item.country_id = form.country_id
 
       // reset form
-      form.reset()
-      itemId.value = -1
+      closeModalAndResetForm()
     }
   })
 }
 function deleteItem() {
   form.delete(route('members.qualifications.destroy', { member: props.member_id, qualification: itemId.value }), {
+    preserveScroll: true,
+    resetOnSuccess: false,
     onSuccess() {
-      closeModal()
 
       for (var i=0; i< listData.length; i++) {
         if (listData[i].id === itemId.value) {
@@ -92,8 +95,7 @@ function deleteItem() {
       }
 
       // reset form
-      form.reset()
-      itemId.value = -1
+      closeModalAndResetForm()
     }
   })
 }
@@ -109,7 +111,7 @@ function deleteItem() {
 </div>
 
 <!-- Modal -->
-<Modal :size="size" v-if="isShowModal" @close="closeModal">
+<Modal :size="size" v-if="isShowModal" @close="closeModalAndResetForm">
   <template #header>
     <div class="flex items-center text-lg">
       <span v-if="itemId < 0">
@@ -124,7 +126,7 @@ function deleteItem() {
     <Input v-model="form.qualification" placeholder="enter your qualification" label="Qualification" class="mb-2" />
     <InputError class="mt-2" :message="form.errors.qualification" />
 
-    <Input v-model="form.year_attained" placeholder="enter your year attended" label="Year attended" class="mb-2" />
+    <Input name="year_attained" v-model="form.year_attained" placeholder="enter your year attended" label="Year attended" class="mb-2" />
     <InputError class="mt-2" :message="form.errors.year_attained" />
 
     <Input v-model="form.institution" placeholder="enter your institution" label="Institution" class="mb-2" />
@@ -138,7 +140,7 @@ function deleteItem() {
   </template>
   <template #footer>
     <div class="flex justify-between">
-      <button @click="closeModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+      <button @click="closeModalAndResetForm" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
         Cancel
       </button>
       <button v-if="itemId < 0" @click="submit" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
