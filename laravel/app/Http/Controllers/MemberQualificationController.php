@@ -37,9 +37,13 @@ class MemberQualificationController extends Controller
             // 'country_id' => 'required|string',
         ]);
 
-        $member->qualifications()->create($validated);
+        $member_qualification = $member->qualifications()->create($validated);
 
-        return redirect()->back()->with('success', 'Qualification added.');
+        return redirect()->back()
+            ->with('success', 'Qualification added.')
+            ->with('data', [
+                'id' => $member_qualification->id,
+            ]);
     }
 
     /**

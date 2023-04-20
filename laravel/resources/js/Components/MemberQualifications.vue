@@ -40,9 +40,13 @@ function showModal() {
 }
 function submit() {
   form.post(route('members.qualifications.store', props.member_id), {
-    onSuccess() {
+    onSuccess(res) {
       closeModal()
-      listData.value.push(Object.assign({}, form))
+      let formCopy = Object.assign({}, form)
+      formCopy.id = res.props.flash.data.id
+      listData.value.push(formCopy)
+
+      // reset form
       form.reset()
     }
   })
