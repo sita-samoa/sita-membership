@@ -86,10 +86,9 @@ function update() {
   <h5>Academic Qualifications</h5>
 
   <Button class="p-3 my-3" color="alternative" @click.prevent="showModal" >Add Qualification</Button>
-  item id: {{ itemId }}
+
   <!-- Member qualifications list -->
   <MemberQualificationsList :list="listData" @edit-item="edit" />
-  {{  listData }}
 </div>
 
 <!-- Modal -->

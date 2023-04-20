@@ -65,9 +65,10 @@ class MemberQualificationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MemberQualification $memberQualification)
+    public function update(Request $request, MemberQualification $memberQualification, Member $member, $qualification) : RedirectResponse
     {
-        // $this->authorize('update', $memberQualification);
+        // @todo - Implement authorization here
+        $this->authorize('update', $memberQualification);
 
         $validated = $request->validate([
             'qualification' => 'required|string',
@@ -76,7 +77,9 @@ class MemberQualificationController extends Controller
             // 'country_id' => 'required|string',
         ]);
 
-        $memberQualification->update($validated);
+        // @todo - Check why this line doesnt work
+        // $memberQualification->update($validated);
+        MemberQualification::where('id', $qualification)->update($validated);
 
         return redirect()->back()->with('success', 'Qualification updated.');
     }
