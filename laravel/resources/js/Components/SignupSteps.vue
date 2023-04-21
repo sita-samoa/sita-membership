@@ -18,9 +18,12 @@ const props = defineProps({
     }
   },
   qualifications:Object,
-  referees:Object
+  referees:Object,
+  memberWorkExperiences: Object,
 });
+
 const member_id = ref(props.member.id)
+
 const MIN_STEP = 1
 const MAX_STEP = 9
 
@@ -128,7 +131,7 @@ function submit() {
 
 <template>
 <div>
-  <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+  <div class="p-6 bg-white border-b border-gray-200 lg:p-8">
 
     <div class="mb-3">
       <Progress :progress="progress"></Progress>
@@ -259,7 +262,7 @@ function submit() {
         </div>
       </tab>
       <tab name="seventh" title="Work Experience" :disabled="disableTabs">
-        <MemberWorkExperience />
+        <MemberWorkExperience :member-work-experiences="memberWorkExperiences" />
 
         <!-- next button -->
         <div>
@@ -281,7 +284,7 @@ function submit() {
       <tab name="ninth" title="Mailing Lists" :disabled="disableTabs">
         <div>
           <InputLabel value="Mailing Lists" class="mb-4" />
-          <Alert type="info" class="mb-2 mt-3">Please check the mail lists you
+          <Alert type="info" class="mt-3 mb-2">Please check the mail lists you
             want to join.
           </Alert>
 
