@@ -22,6 +22,8 @@ class MemberQualificationController extends Controller
      */
     public function store(Member $member, Request $request) : RedirectResponse
     {
+        $this->authorize('view', $member);
+
         $validated = $request->validate([
             'qualification' => 'required|string',
             'year_attained' => 'required|int|min:1900|max:3000',

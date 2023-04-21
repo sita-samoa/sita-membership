@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { ref, computed } from 'vue'
+import { Link, useForm } from '@inertiajs/vue3';
 import { Alert, Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
 import MemberQualifications from '@/Components/MemberQualifications.vue';
 import MemberDocuments from '@/Components/MemberDocuments.vue';
@@ -8,7 +8,6 @@ import MemberWorkExperience from '@/Components/MemberWorkExperience.vue';
 import MemberReferees from '@/Components/MemberReferees.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
-import { def } from '@vue/shared';
 
 const props = defineProps({
   options: Object,

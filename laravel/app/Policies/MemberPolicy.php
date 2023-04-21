@@ -21,7 +21,7 @@ class MemberPolicy
      */
     public function view(User $user, Member $member): bool
     {
-        //
+        return $member->user()->is($user);
     }
 
     /**

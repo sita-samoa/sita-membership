@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Models\Member;
 use App\Models\MemberQualification;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
@@ -37,8 +38,10 @@ class MemberQualificationPolicy
      */
     public function update(User $user, MemberQualification $memberQualification): bool
     {
-        // @todo
-        return true;
+        $member = Member::where('id', $memberQualification
+            ->member_id)->first();
+
+        return $member->user()->is($user);
     }
 
     /**
@@ -46,8 +49,7 @@ class MemberQualificationPolicy
      */
     public function delete(User $user, MemberQualification $memberQualification): bool
     {
-        // @todo
-        return true;
+        return $this->update($user, $memberQualification);
     }
 
     /**

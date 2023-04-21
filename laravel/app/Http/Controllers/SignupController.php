@@ -16,6 +16,8 @@ class SignupController extends Controller
      */
     public function index(Member $member) : Response
     {
+        $this->authorize('view', $member);
+
         return Inertia::render('Members/Signup', [
             'member' => $member,
             'options' => [
