@@ -25,7 +25,8 @@ class SignupController extends Controller
                 'gender_options' => Gender::all(['id', 'code', 'title']),
                 'title_options' => Title::all(['id', 'code', 'title']),
             ],
-            'qualifications' => $member->qualifications()->get()
+            'qualifications' => $member->qualifications()->get(),
+            'referees' => $member->referees()->get()
         ]);
     }
 
