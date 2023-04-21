@@ -16,10 +16,10 @@ import { ref, nextTick, onMounted } from "vue";
 import InputLabel from "./InputLabel.vue";
 import Input from "./Input.vue";
 
-defineProps({
-    workExperiences: Object,
+const props = defineProps({
+    memberId: Number,
+    memberWorkExperiences: Object,
 });
-
 const countryOptions = [
     { id: 1, name: "Australia" },
     { id: 2, name: "Fiji" },
@@ -31,14 +31,13 @@ const isShowModal = ref(false);
 const organisation = ref(null);
 
 const form = useForm({
+    member_id: props.memberId,
     organisation: null,
     position: null,
     responsibilities: null,
     from_date: null,
     to_date: null,
 });
-
-
 
 function closeModal() {
     isShowModal.value = false;
@@ -57,6 +56,12 @@ function addWorkExperience() {
     });
     closeModal();
 }
+
+function deleteWorkExperience(id){
+    form.delete("/member-work-experiences/" + id, {
+        preserveScroll: true,
+    });
+}
 </script>
 <template>
     <div>
@@ -71,7 +76,7 @@ function addWorkExperience() {
             >
         </Link>
 
-        <div class="relative mt-3 overflow-x-auto shadow-md sm:rounded-lg">
+        <div v-if="(memberWorkExperiences) ? memberWorkExperiences.length : false" class="relative mt-3 overflow-x-auto shadow-md sm:rounded-lg">
             <table
                 class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
             >
@@ -90,60 +95,24 @@ function addWorkExperience() {
                 </thead>
                 <tbody>
                     <tr
+                        v-for="workExperience in memberWorkExperiences"
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                     >
                         <th
                             scope="row"
                             class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
                         >
-                            Apple MacBook Pro 17"
+                            {{ workExperience.organisation }}
                         </th>
-                        <td class="px-6 py-4">Sliver</td>
-                        <td class="px-6 py-4">Laptop</td>
-                        <td class="px-6 py-4">$2999</td>
+                        <td class="px-6 py-4">{{ workExperience.position }}</td>
+                        <td class="px-6 py-4">{{ workExperience.responsibilities }}</td>
+                        <td class="px-6 py-4">{{ workExperience.from_date }} to {{ workExperience.to_date }}</td>
                         <td class="px-6 py-4 text-right">
-                            <a
-                                href="#"
+                            <button
+                                type="button"
+                                @click="deleteWorkExperience(workExperience.id)"
                                 class="font-medium text-red-600 dark:text-red-500 hover:underline"
-                                >Delete</a
-                            >
-                        </td>
-                    </tr>
-                    <tr
-                        class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                    >
-                        <th
-                            scope="row"
-                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
-                        >
-                            Microsoft Surface Pro
-                        </th>
-                        <td class="px-6 py-4">White</td>
-                        <td class="px-6 py-4">Laptop PC</td>
-                        <td class="px-6 py-4">$1999</td>
-                        <td class="px-6 py-4 text-right">
-                            <a
-                                href="#"
-                                class="font-medium text-red-600 dark:text-red-500 hover:underline"
-                                >Delete</a
-                            >
-                        </td>
-                    </tr>
-                    <tr class="bg-white dark:bg-gray-800">
-                        <th
-                            scope="row"
-                            class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
-                        >
-                            Magic Mouse 2
-                        </th>
-                        <td class="px-6 py-4">Black</td>
-                        <td class="px-6 py-4">Accessories</td>
-                        <td class="px-6 py-4">$99</td>
-                        <td class="px-6 py-4 text-right">
-                            <a
-                                href="#"
-                                class="font-medium text-red-600 dark:text-red-500 hover:underline"
-                                >Delete</a
+                                >Delete</button
                             >
                         </td>
                     </tr>

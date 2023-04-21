@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class MemberWorkExperience extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'member_id',
+        'organisation',
+        'position',
+        'responsibilities',
+        'from_date',
+        'to_date',
+    ];
 }

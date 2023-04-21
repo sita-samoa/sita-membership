@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MemberWorkExperience;
 use Illuminate\Http\Request;
 
 class MemberWorkExperienceController extends Controller
@@ -27,13 +28,19 @@ class MemberWorkExperienceController extends Controller
      */
     public function store(Request $request)
     {
-        request()->validate([
+        $attributes = request()->validate([
+            'member_id' => ['required', 'numeric'],
             'organisation' => ['required', 'max:255'],
             'position' => ['required', 'max:255'],
             'responsibilities' => ['required', 'max:255'],
             'from_date' => ['required', 'date'],
             'to_date' => ['required', 'date'],
         ]);
+
+        MemberWorkExperience::create($attributes);
+
+        return redirect()->back()
+            ->with('success', 'Work experience added.');
     }
 
     /**
@@ -63,8 +70,10 @@ class MemberWorkExperienceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(MemberWorkExperience $memberWorkExperience)
     {
-        //
+        $memberWorkExperience->delete();
+        return redirect()->back()
+            ->with('success', 'Work experience deleted.');
     }
 }

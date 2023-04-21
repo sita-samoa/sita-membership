@@ -3,25 +3,18 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use App\Models\Title;
 use Inertia\Response;
 use App\Models\Gender;
 use App\Models\Member;
-<<<<<<< HEAD
 use App\Models\MemberQualification;
 use App\Models\MemberReferee;
-use App\Models\MembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Title;
 use Illuminate\Http\RedirectResponse;
-=======
->>>>>>> 7d13e98 (Update MemberWorkExperience component)
 use Illuminate\Http\Request;
-use App\Models\MembershipType;
 use App\Models\MembershipStatus;
 use App\Models\MemberWorkExperience;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\RedirectResponse;
 
 class MemberController extends Controller
 {
@@ -41,25 +34,13 @@ class MemberController extends Controller
      */
     public function signup() : Response
     {
-        // Get currently authenticated user's ID
-        $userId = Auth::id();
-
-        // dd(request());
-
         return Inertia::render('Members/Signup', [
             'options' => [
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
-<<<<<<< HEAD
-                // 'gender_options' => Gender::all(['id', 'code', 'title']),
-                // 'title_options' => Title::all(['id', 'code', 'title']),
-            ],
-            // 'qualifications' => MemberQualification::get()
-=======
                 'gender_options' => Gender::all(['id', 'code', 'title']),
                 'title_options' => Title::all(['id', 'code', 'title']),
             ],
             'memberWorkExperiences' => MemberWorkExperience::all(['organisation', 'position', 'responsibilities', 'from_date', 'to_date']),
->>>>>>> 7d13e98 (Update MemberWorkExperience component)
         ]);
     }
 

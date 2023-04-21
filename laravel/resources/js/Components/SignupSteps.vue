@@ -262,7 +262,7 @@ function submit() {
         </div>
       </tab>
       <tab name="seventh" title="Work Experience" :disabled="disableTabs">
-        <MemberWorkExperience :member-work-experiences="memberWorkExperiences" />
+        <MemberWorkExperience :member-id="member.id" :member-work-experiences="memberWorkExperiences" />
 
         <!-- next button -->
         <div>
