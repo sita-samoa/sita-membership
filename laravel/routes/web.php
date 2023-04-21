@@ -1,12 +1,13 @@
 <?php
 
+use Inertia\Inertia;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberQualificationController;
 use App\Http\Controllers\SignupController;
 use App\Http\Controllers\MemberRefereeController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\MemberWorkExperienceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,11 @@ Route::middleware([
 
     Route::put('/members/{member}/accept', [MemberController::class, 'accept'])
     ->name('members.accept');
+
+    // Member work experience
+    Route::resource('member-work-experiences', MemberWorkExperienceController::class)->only([
+        'store', 'destroy'
+    ]);
 });
 
 // Signup
