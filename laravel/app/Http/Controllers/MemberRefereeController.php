@@ -30,6 +30,8 @@ class MemberRefereeController extends Controller
      */
     public function store(Member $member, Request $request) : RedirectResponse
     {
+        $this->authorize('view', $member);
+
         $validated = $request->validate([
             'name' => 'required|string',
             'organisation' => 'required|string',
@@ -37,9 +39,12 @@ class MemberRefereeController extends Controller
             'email' => 'required|email|string'
         ]);
 
-        $member->referees()->create($validated);
+        $member_referee = $member->referees()->create($validated);
 
-        return redirect()->back()->with('success', 'Referee added.');
+        return redirect()
+            ->back()
+            ->with('success', 'Referee added.')
+            ->with('data', [ "id" => $member_referee->id]);
     }
 
     /**
@@ -61,16 +66,31 @@ class MemberRefereeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MemberReferee $referee)
+    public function update(Request $request, Member $member, MemberReferee $referee) : RedirectResponse
     {
-        //
+        $this->authorize('update', $member);
+
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'organisation' => 'required|string',
+            'phone' => 'required|string|min:5',
+            'email' => 'required|email|string'
+        ]);
+
+        $referee->update($validated);
+
+        return redirect()->back()->with('success', 'Referee updated.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MemberReferee $referee)
+    public function destroy(Member $member, MemberReferee $referee)
     {
-        //
+        $this->authorize('delete', $member);
+
+        $referee->delete();
+
+        return redirect()->back()->with('success', 'Referee deleted.');
     }
 }
