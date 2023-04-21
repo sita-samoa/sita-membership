@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
-import { Link, useForm, usePage } from '@inertiajs/vue3';
+import { ref, computed } from 'vue'
+import { Link, useForm } from '@inertiajs/vue3';
 import { Alert, Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
 import MemberQualifications from '@/Components/MemberQualifications.vue';
 import MemberDocuments from '@/Components/MemberDocuments.vue';
@@ -9,11 +9,18 @@ import MemberReferees from '@/Components/MemberReferees.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 
-const props = defineProps([
-  'options',
-]);
+const props = defineProps({
+  options: Object,
+  member: {
+    type: Object,
+    default: {
+      id: 0
+    }
+  },
+  qualifications:Object
+});
 
-const member_id = ref(-1)
+const member_id = ref(props.member.id)
 
 const MIN_STEP = 1
 const MAX_STEP = 9
@@ -23,27 +30,28 @@ const currentStep = ref(MIN_STEP)
 const disableTabs = ref(false)
 
 const form = useForm({
-  first_name: '',
-  last_name: '',
-  title_id: '',
-  dob: '',
-  membership_type_id: 1,
-  gender_id: '',
-  job_title: '',
-  current_employer: '',
-  home_address: '',
-  home_phone: '',
-  home_mobile: '',
-  home_email: '',
-  work_address: '',
-  work_phone: '',
-  work_mobile: '',
-  work_email: '',
-  other_membership: '',
-  membership_status_id: 1,
-  note: '',
-  membership_application_status_id: '',
+  first_name: props.member.first_name ?? '',
+  last_name: props.member.last_name ?? '',
+  title_id: props.member.title_id ?? -1,
+  dob: props.member.dob ?? '',
+  membership_type_id: props.member.membership_type_id ?? 1,
+  gender_id: props.member.gender_id ?? '',
+  job_title: props.member.job_title ?? '',
+  current_employer: props.member.current_employer ?? '',
+  home_address: props.member.home_address ?? '',
+  home_phone: props.member.home_phone ?? '',
+  home_mobile: props.member.home_mobile ?? '',
+  home_email: props.member.home_email ?? '',
+  work_address: props.member.work_address ?? '',
+  work_phone: props.member.work_phone ?? '',
+  work_mobile: props.member.work_mobile ?? '',
+  work_email: props.member.work_email ?? '',
+  other_membership: props.member.other_membership ?? '',
+  membership_status_id: props.member.membership_status_id ?? 1,
+  note: props.member.note ?? '',
+  membership_application_status_id: props.member.membership_application_status_id ?? '',
 })
+
 const mailingOptions = [
   { id: 1, name: "SITA General" },
   { id: 2, name: "SITA Members" },
@@ -106,24 +114,16 @@ function submit() {
     })
   }
   else {
-    form.post(route('members.signup'), {
+    form.post(route('members.signup.store'), {
       preserveScroll: true,
       resetOnSuccess: false,
-      onSuccess() {
+      onSuccess(res) {
+        member_id.value = res.props.flash.data.id
         nextStep()
       }
     })
   }
 }
-
-watch(
-  () => usePage().props.flash.member_id,
-  (newValue) => {
-    if (newValue > 0) {
-      member_id.value = newValue
-    }
-  }
-)
 
 </script>
 
@@ -160,7 +160,7 @@ watch(
 
           <InputLabel for="title" value="Title" class="mb-4" />
           <select id="title" v-model="form.title_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
-            <option selected value="null">Choose a title</option>
+            <option selected value="-1">Choose a title</option>
             <option v-for="t in props.options.title_options" :value="t.id">{{ t.title }}</option>
           </select>
           <InputError class="mt-2" :message="form.errors.title_id" />
@@ -207,7 +207,7 @@ watch(
           <Input v-model="form.home_mobile" placeholder="enter your mobile" label="Mobile" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.home_mobile" />
 
-          <Input v-model="form.home_email" placeholder="enter your email" label="Email" class="mb-2" />
+          <Input name="home_email" v-model="form.home_email" placeholder="enter your email" label="Email" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.home_email" />
 
           <!-- next button -->
@@ -228,7 +228,7 @@ watch(
           <Input v-model="form.work_mobile" placeholder="enter your mobile" label="Mobile" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.work_mobile" />
 
-          <Input v-model="form.work_email" placeholder="enter your email" label="Email" class="mb-2" />
+          <Input name="work_email" v-model="form.work_email" placeholder="enter your email" label="Email" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.work_email" />
 
           <!-- next button -->
@@ -249,7 +249,7 @@ watch(
         </form>
       </tab>
       <tab name="sixth" title="Qualifications" :disabled="disableTabs">
-        <MemberQualifications />
+        <MemberQualifications :member_id="member_id" :list="props.qualifications" />
         <MemberDocuments />
 
         <!-- next button -->

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Gender;
 use App\Models\Member;
+use App\Models\MemberQualification;
 use App\Models\MembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Title;
@@ -33,9 +34,10 @@ class MemberController extends Controller
         return Inertia::render('Members/Signup', [
             'options' => [
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
-                'gender_options' => Gender::all(['id', 'code', 'title']),
-                'title_options' => Title::all(['id', 'code', 'title']),
-            ]
+                // 'gender_options' => Gender::all(['id', 'code', 'title']),
+                // 'title_options' => Title::all(['id', 'code', 'title']),
+            ],
+            // 'qualifications' => MemberQualification::get()
         ]);
     }
 
@@ -46,12 +48,21 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
             'membership_type_id' => 'required|int|min:1',
-            'membership_status_id' => 'required|int|min:1',
+            // 'membership_status_id' => 'required|int|min:1',
         ]);
 
-        $member = $request->user()->members()->create($validated);
+        $member = new Member();
+        $member->fill($validated);
+        // set not fillable fields
+        $member->membership_status_id = 1;
+        $member->user_id = $request->user()->id;
+        $member->save();
 
-        return redirect()->back()->with('member_id', $member->id)->with('success', 'Member Added!');
+        return redirect()->route('members.signup.index', $member->id)
+            ->with('data', [
+                'id' => $member->id,
+            ])
+            ->with('success', 'Member Added');
     }
 
     /**
@@ -81,7 +92,7 @@ class MemberController extends Controller
         $member->membership_application_status_id = 2;
         $member->save();
 
-        return redirect()->back()->with('success', 'Application Submitted!');
+        return redirect()->back()->with('success', 'Application Submitted');
     }
     /**
      * Endorse member application.
@@ -93,7 +104,7 @@ class MemberController extends Controller
         $member->membership_application_status_id = 3;
         $member->save();
 
-        return redirect()->back()->with('success', 'Application Endorsed!');
+        return redirect()->back()->with('success', 'Application Endorsed');
     }
     /**
      * Accept member application.
@@ -105,7 +116,7 @@ class MemberController extends Controller
         $member->membership_application_status_id = 4;
         $member->save();
 
-        return redirect()->back()->with('success', 'Application Accepted!');
+        return redirect()->back()->with('success', 'Application Accepted');
     }
 
     /**
@@ -178,7 +189,10 @@ class MemberController extends Controller
         ) {
             $completion['part4']['status'] = true;
         }
-        // @todo Part 6,7,8
+        if ($member->qualifications()->count()) {
+            $completion['part6']['status'] = true;
+        }
+        // @todo Part 7,8
 
         // Load title if exists.
         $relations = [
@@ -216,7 +230,7 @@ class MemberController extends Controller
             'membership_type_id' => 'required|int|min:1',
             'first_name' => 'required_with:membership_type_id|string|max:255',
             'last_name' => 'required_with:membership_type_id|string|max:255',
-            'title_id' => 'nullable',
+            'title_id' => 'nullable|int',
             'dob' => 'nullable|date',
             'gender_id' => 'required_with:membership_type_id|int|min:1',
             'job_title' => 'required_with:membership_type_id|string|max:255',
@@ -230,14 +244,14 @@ class MemberController extends Controller
             'work_mobile' => 'nullable|max:255',
             'work_email' => 'nullable|email|max:255',
             'other_membership' => 'nullable|max:500',
-            'membership_status_id' => 'int',
+            // 'membership_status_id' => 'int',
             'note' => 'nullable',
             'membership_application_status_id' => 'nullable|int'
         ]);
 
         $member->update($validated);
 
-        return redirect()->back()->with('success', 'Member Updated!');
+        return redirect()->back()->with('success', 'Member Updated');
     }
 
     /**
