@@ -17,11 +17,10 @@ const props = defineProps({
       id: 0
     }
   },
-  qualifications:Object
+  qualifications:Object,
+  referees:Object
 });
-
 const member_id = ref(props.member.id)
-
 const MIN_STEP = 1
 const MAX_STEP = 9
 
