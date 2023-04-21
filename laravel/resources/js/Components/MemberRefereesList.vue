@@ -1,16 +1,16 @@
 <script setup>
 import { ListGroup, ListGroupItem } from 'flowbite-vue'
-import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue';
+import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue';
 
 defineProps(["list"])
 </script>
 <template>
-<list-group class="w-full mt-5">
-  <list-group-item v-for="referee in list" >
+<list-group class="w-full mt-5" v-show="list.length">
+  <list-group-item v-for="item in list" @click="$emit('editItem', item.id)">
     <template #prefix>
-      <CheckCircleOutlineIcon fillColor="green" />
+      <PencilOutlineIcon fillColor="green" />
     </template>
-    {{ referee.name }} | {{ referee.organisation }} | {{ referee.email }} (+685 {{ referee.phone }})
+    {{ item.name }} | {{ item.organisation }}
   </list-group-item>
 </list-group>
 </template>
