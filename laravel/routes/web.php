@@ -69,13 +69,9 @@ Route::resource('members.signup', SignupController::class)
 Route::resource('members.qualifications', MemberQualificationController::class)
     ->only(['store', 'update', 'destroy']);
 
+// Referees
 Route::resource('members.referees', MemberRefereeController::class)
-    ->only(['store', 'update'])
-    ->middleware([
-        'auth:sanctum',
-        config('jetstream.auth_session'),
-        'verified'
-]);
+    ->only(['store', 'update', 'destroy']);
 
 // Members Pages
 Route::resource('members', MemberController::class)
