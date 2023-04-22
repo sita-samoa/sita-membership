@@ -35,13 +35,15 @@ class MemberSupportingDocumentController extends Controller
                     // ->max(12 * 1024),
             ],
         ]);
+        $file = $request->file('file');
+        $path = $file ? $file->store('supportingDocuments') : null;
 
         $member_supporting_document = new MemberSupportingDocument();
         $member_supporting_document->fill($validated);
         $member_supporting_document->member_id = $member->id;
-        $path = $request->file('file') ? $request->file('file')->store('supportingDocuments') : null;
+        $member_supporting_document->file_name = $file ? $file->getClientOriginalName() : null;
         $member_supporting_document->file_path = $path;
-        $member_supporting_document->file_size = Storage::size($path);
+        $member_supporting_document->file_size = $path ? Storage::size($path) : null;
         $member_supporting_document->save();
 
         // @todo do this on a queue for orphaneded files
