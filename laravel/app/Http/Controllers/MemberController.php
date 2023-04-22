@@ -202,6 +202,10 @@ class MemberController extends Controller
             $completion['part8']['status'] = true;
         }
 
+        if ($member->workExperiences()->count()) {
+            $completion['part7']['status'] = true;
+        }
+        // @todo Part 8
         // Load title if exists.
         $relations = [
             "membershipType",
