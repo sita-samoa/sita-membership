@@ -2,6 +2,7 @@
 import { useForm } from '@inertiajs/vue3';
 import { Alert, Button, Input, Progress } from 'flowbite-vue'
 import { computed, ref } from 'vue'
+import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import MemberDocumentsList from '@/Components/MemberDocumentsList.vue';
 import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
@@ -131,7 +132,8 @@ function deleteItem() {
     <Input v-model="form.title" :placeholder="form.file_name ? form.file_name : 'enter your title'" label="Title" class="mb-2" />
     <InputError class="mt-2" :message="form.errors.title" />
 
-    <input v-if="canAdd" type="file" @input="form.file = $event.target.files[0]" />
+    <InputLabel for="file" value="File Upload" class="mb-4" />
+    <input v-if="canAdd" type="file" id="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" @input="form.file = $event.target.files[0]" />
     <InputError class="mt-2" :message="form.errors.file" />
 
     <Progress v-if="form.progress" :progress="form.progress.percentage">
