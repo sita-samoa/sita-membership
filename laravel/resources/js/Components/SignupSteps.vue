@@ -135,7 +135,7 @@ function submit() {
   <div class="p-6 bg-white border-b border-gray-200 lg:p-8">
 
     <div class="mb-3">
-      <Progress :progress="progress"></Progress>
+      <Progress :progress="progress" />
     </div>
     <tabs v-model="activeTab" class="p-5">
       <!-- class appends to content DIV for all tabs -->

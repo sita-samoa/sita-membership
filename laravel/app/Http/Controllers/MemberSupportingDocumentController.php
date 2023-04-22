@@ -46,9 +46,6 @@ class MemberSupportingDocumentController extends Controller
         $document->file_size = $path ? Storage::size($path) : null;
         $document->save();
 
-        // @todo do this on a queue for orphaneded files
-        // Storage::delete('file.jpg');
-
         return redirect()->back()
             ->with('success', 'Supporting Document added.')
             ->with('data', [
@@ -63,7 +60,6 @@ class MemberSupportingDocumentController extends Controller
      */
     public function update(Request $request, Member $member, MemberSupportingDocument $document) : RedirectResponse
     {
-        // @todo - Implement authorization here
         $this->authorize('update', $document);
 
         $validated = $request->validate([
@@ -102,10 +98,11 @@ class MemberSupportingDocumentController extends Controller
      */
     public function destroy(Member $member, MemberSupportingDocument $document) : RedirectResponse
     {
-        // @todo - Implement authorization here
         $this->authorize('update', $document);
 
-        // $document->delete();
+        // Dont delete the document but mark as deleted so that it
+        //   can be deleted with the file during a background process @todo.
+        // Storage::delete('file.jpg');
         $document->to_delete = true;
         $document->save();
 

@@ -1,6 +1,6 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
-import { Alert, Button, Input } from 'flowbite-vue'
+import { Alert, Button, Input, Progress } from 'flowbite-vue'
 import { computed, ref } from 'vue'
 import InputError from '@/Components/InputError.vue';
 import MemberDocumentsList from '@/Components/MemberDocumentsList.vue';
@@ -134,9 +134,9 @@ function deleteItem() {
     <input v-if="canAdd" type="file" @input="form.file = $event.target.files[0]" />
     <InputError class="mt-2" :message="form.errors.file" />
 
-    <progress v-if="form.progress" :value="form.progress.percentage" max="100">
+    <Progress v-if="form.progress" :progress="form.progress.percentage">
       {{ form.progress.percentage }}%
-    </progress>
+    </Progress>
 
   </template>
   <template #footer>

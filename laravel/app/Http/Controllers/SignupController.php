@@ -30,8 +30,8 @@ class SignupController extends Controller
             'referees' => $member->referees()->get(),
             'memberWorkExperiences' => MemberWorkExperience::select('id', 'organisation', 'position', 'responsibilities', 'from_date', 'to_date')->where('member_id', $member->id)->get(),
             'supportingDocuments' => $member->supportingDocuments()
-                ->get(['id','title', 'file_name', 'file_size'])
-                ->where('to_delete', false),
+                ->where('to_delete', false)
+                ->get(['id','title', 'file_name', 'file_size']),
         ]);
     }
 
