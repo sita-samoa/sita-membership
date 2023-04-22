@@ -27,8 +27,12 @@ class SignupController extends Controller
                 'title_options' => Title::all(['id', 'code', 'title']),
             ],
             'qualifications' => $member->qualifications()->get(),
+<<<<<<< HEAD
             'referees' => $member->referees()->get(),
             'memberWorkExperiences' => MemberWorkExperience::select('id', 'organisation', 'position', 'responsibilities', 'from_date', 'to_date')->where('member_id', $member->id)->get(),
+=======
+            'supportingDocuments' => $member->supportingDocuments()->get(),
+>>>>>>> 0e0c041 (add supporting document model, controller, policy and CRUD minus file upload)
         ]);
     }
 

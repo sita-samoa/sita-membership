@@ -1,52 +1,140 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
-import { Alert, Button, Modal, Input } from 'flowbite-vue'
+import { useForm } from '@inertiajs/vue3';
+import { Alert, Button, Input } from 'flowbite-vue'
 import { ref } from 'vue'
 import InputLabel from '@/Components/InputLabel.vue';
+import InputError from '@/Components/InputError.vue';
+import MemberDocumentsList from '@/Components/MemberDocumentsList.vue';
+import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
+import DialogModal from './DialogModal.vue';
 
-const isShowModal = ref(false)
+const props = defineProps({
+  member_id: Number,
+  list: {
+    type: Object,
+    default: []
+  }
+})
+
+const form = useForm({
+  'title': '',
+})
+
+const listData = props.list
+const itemId = ref(-1)
+
+const showFormModal = ref(false)
+const showConfirmationModal = ref(false)
 
 function closeModal() {
-  isShowModal.value = false
+  showFormModal.value = false
+}
+function closeModalAndResetForm() {
+  closeModal()
+  itemId.value = -1
+  form.reset()
 }
 function showModal() {
-  isShowModal.value = true
+  showFormModal.value = true
+}
+function edit(id) {
+  itemId.value = id
+  let item = listData.find(i => i.id === id)
+
+  form.title = item.title
+  showModal()
+}
+function submit() {
+  form.post(route('members.documents.store', props.member_id), {
+    onSuccess(res) {
+      let formCopy = Object.assign({}, form)
+      formCopy.id = res.props.flash.data.id
+      listData.push(formCopy)
+
+      // reset form
+      closeModalAndResetForm()
+    }
+  })
+}
+function update() {
+  form.put(route('members.documents.update', { member: props.member_id, document: itemId.value }), {
+    preserveScroll: true,
+    resetOnSuccess: false,
+    onSuccess() {
+      let item = listData.find(i => i.id === itemId.value)
+      item.title = form.title
+
+      // reset form
+      closeModalAndResetForm()
+    }
+  })
+}
+function deleteItem() {
+  form.delete(route('members.documents.destroy', { member: props.member_id, document: itemId.value }), {
+    preserveScroll: true,
+    resetOnSuccess: false,
+    onSuccess() {
+
+      for (var i=0; i< listData.length; i++) {
+        if (listData[i].id === itemId.value) {
+          listData.splice(i, 1)
+        }
+      }
+
+      // reset form
+      closeModalAndResetForm()
+      showConfirmationModal.value = false
+    }
+  })
 }
 </script>
 <template>
-<div class="mt-3">
-  <Alert type="info" class="mb-2">Please attach certified copies of
+<div>
+  <Alert type="info" class="my-2">Please attach certified copies of
     Supporting documents.
   </Alert>
   <h5>Supporting Documents</h5>
 
-  <Link href="#">
-    <Button class="p-3 mt-3" color="alternative" @click.prevent="showModal">Add Document</Button>
-  </Link>
+  <Button class="p-3 my-3" color="alternative" @click.prevent="showModal" >Add Qualification</Button>
+
+  <!-- Member supporting documents list -->
+  <MemberDocumentsList :list="listData" @edit-item="edit" />
 </div>
+
 <!-- Modal -->
-<Modal :size="size" v-if="isShowModal" @close="closeModal">
-  <template #header>
+<DialogModal :show="showFormModal" @close="closeModalAndResetForm">
+  <template #title>
     <div class="flex items-center text-lg">
-      Add Document
+      <span v-if="itemId < 0">
+        Add Supporting Document
+      </span>
+      <span v-else>
+        Edit Supporting Document
+      </span>
     </div>
   </template>
-  <template #body>
-    <Input placeholder="enter your title" label="Title" class="mb-2" />
-
-    <InputLabel for="file_input" value="Upload file" class="mb-4" />
-    <input class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" id="file_input" type="file">
+  <template #content>
+    <Input v-model="form.title" placeholder="enter your title" label="Title" class="mb-2" />
+    <InputError class="mt-2" :message="form.errors.title" />
 
   </template>
   <template #footer>
-    <div class="flex justify-between">
-      <button @click="closeModal" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
+      <button @click="closeModalAndResetForm" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
         Cancel
       </button>
-      <button @click="closeModal" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-        Attach
-      </button>
+
+      <div>
+        <button v-if="itemId < 0" @click="submit" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          Add
+        </button>
+        <button v-if="itemId > 0" @click="showConfirmationModal = true" type="button" class="mr-3 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+          Delete
+        </button>
+        <button v-if="itemId > 0" @click="update" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+          Update
+        </button>
     </div>
   </template>
-</Modal>
+</DialogModal>
+<DeleteConfirmationModal :show="showConfirmationModal" @delete="deleteItem" @close="showConfirmationModal=false" />
 </template>

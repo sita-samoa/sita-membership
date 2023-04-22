@@ -20,6 +20,7 @@ const props = defineProps({
   qualifications:Object,
   referees:Object,
   memberWorkExperiences: Object,
+  supportingDocuments: Object,
 });
 
 const member_id = ref(props.member.id)
@@ -252,7 +253,7 @@ function submit() {
       </tab>
       <tab name="sixth" title="Qualifications" :disabled="disableTabs">
         <MemberQualifications :member_id="member_id" :list="props.qualifications" />
-        <MemberDocuments />
+        <MemberDocuments :member_id="member_id" :list="props.supportingDocuments" />
 
         <!-- next button -->
         <div>
