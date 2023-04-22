@@ -62,9 +62,21 @@ class MemberWorkExperienceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, MemberWorkExperience $memberWorkExperience)
     {
-        //
+        $attributes = request()->validate([
+            'member_id' => ['required', 'numeric'],
+            'organisation' => ['required', 'max:255'],
+            'position' => ['required', 'max:255'],
+            'responsibilities' => ['required', 'max:255'],
+            'from_date' => ['required', 'date'],
+            'to_date' => ['required', 'date'],
+        ]);
+
+        $memberWorkExperience->update($attributes);
+
+        return redirect()->back()
+            ->with('success', 'Work experience saved.');
     }
 
     /**

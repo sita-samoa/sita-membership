@@ -58,7 +58,7 @@ Route::middleware([
 
     // Member work experience
     Route::resource('member-work-experiences', MemberWorkExperienceController::class)->only([
-        'store', 'destroy'
+        'store', 'update', 'destroy'
     ]);
 });
 

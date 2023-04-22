@@ -31,6 +31,7 @@ const isShowModal = ref(false);
 const organisation = ref(null);
 
 const form = useForm({
+    id: null,
     member_id: props.memberId,
     organisation: null,
     position: null,
@@ -42,25 +43,53 @@ const form = useForm({
 function closeModal() {
     isShowModal.value = false;
 }
-function showModal() {
+function showModal(workExperience) {
     isShowModal.value = true;
 
     nextTick(() => {
+        form.id = workExperience.id;
+        form.member_id = props.memberId;
+        form.organisation = workExperience.organisation;
+        form.position = workExperience.position;
+        form.responsibilities = workExperience.responsibilities;
+        form.from_date = workExperience.from_date;
+        form.to_date = workExperience.to_date;
         organisation.value.focus();
     });
 }
-function addWorkExperience() {
-    form.post("/member-work-experiences", {
-        preserveScroll: true,
-        onSuccess: () => form.reset(),
-    });
+function addSaveWorkExperience() {
+    if (!form.id){
+        form.post("/member-work-experiences", {
+            preserveScroll: true,
+            onSuccess: () => form.reset(),
+        });
+    } else {
+        form.put("/member-work-experiences/" + form.id, {
+            preserveScroll: true,
+            onSuccess: () => form.reset(),
+        });
+    }
+    
     closeModal();
 }
 
+// function saveWorkExperience() {
+//     form.put("/member-work-experiences/" + form.id, {
+//         preserveScroll: true,
+//         onSuccess: () => form.reset(),
+//     });
+//     closeModal();
+// }
+
 function deleteWorkExperience(id){
-    form.delete("/member-work-experiences/" + id, {
-        preserveScroll: true,
-    });
+    var response = confirm('Are you sure you want to delete this Work Experience?');
+
+    if (response){
+        form.delete("/member-work-experiences/" + id, {
+            preserveScroll: true,
+        });
+        closeModal();
+    }
 }
 </script>
 <template>
@@ -106,14 +135,21 @@ function deleteWorkExperience(id){
                         </th>
                         <td class="px-6 py-4">{{ workExperience.position }}</td>
                         <td class="px-6 py-4">{{ workExperience.responsibilities }}</td>
-                        <td class="px-6 py-4">{{ workExperience.from_date }} to {{ workExperience.to_date }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">{{ workExperience.from_date }} to {{ workExperience.to_date }}</td>
                         <td class="px-6 py-4 text-right">
                             <button
                                 type="button"
-                                @click="deleteWorkExperience(workExperience.id)"
-                                class="font-medium text-red-600 dark:text-red-500 hover:underline"
-                                >Delete</button
+                                @click="showModal(workExperience)"
+                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                >Edit</button
                             >
+                            <!-- <button
+                                type="button"
+                                @click="deleteWorkExperience(workExperience.id)"
+                                class="ml-2 font-medium text-red-600 dark:text-red-500 hover:underline"
+                                >Delete</button
+                            > -->
+                            
                         </td>
                     </tr>
                 </tbody>
@@ -122,10 +158,11 @@ function deleteWorkExperience(id){
     </div>
 
     <!-- Modal -->
-    <form @submit.prevent="addWorkExperience">
+    <form @submit.prevent="addSaveWorkExperience">
         <Modal v-if="isShowModal" @close="closeModal">
             <template #header>
-                <div class="flex items-center text-lg">Add Work Experience</div>
+                <div v-if="!form.id" class="flex items-center text-lg">Add Work Experience</div>
+                <div v-else class="flex items-center text-lg">Edit Work Experience</div>
             </template>
             <template #body>
                 <!-- Organisation -->
@@ -220,19 +257,31 @@ function deleteWorkExperience(id){
             </template>
             <template #footer>
                 <div class="flex justify-between">
-                    <button
-                        @click="closeModal"
-                        type="button"
-                        class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        type="submit"
-                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                        Add
-                    </button>
+                    <div>
+                        <button
+                            @click="closeModal"
+                            type="button"
+                            class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                        >
+                            Cancel
+                        </button>
+                    </div>
+                    <div>
+                        <button
+                            v-if="form.id"
+                            type="button"
+                            @click="deleteWorkExperience(form.id)"
+                            class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
+                        >
+                            Delete
+                        </button>
+                        <button
+                            type="submit"
+                            class="ml-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        >
+                            {{ (!form.id) ? 'Add' : 'Save' }}
+                        </button>
+                    </div>
                 </div>
             </template>
         </Modal>
