@@ -1,8 +1,7 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { useForm, router } from '@inertiajs/vue3';
 import { Alert, Button, Input } from 'flowbite-vue'
-import { ref } from 'vue'
-import InputLabel from '@/Components/InputLabel.vue';
+import { computed, ref } from 'vue'
 import InputError from '@/Components/InputError.vue';
 import MemberDocumentsList from '@/Components/MemberDocumentsList.vue';
 import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
@@ -17,8 +16,8 @@ const props = defineProps({
 })
 
 const form = useForm({
-  'title': '',
-  'file': null,
+  title: '',
+  file: null,
 })
 
 const listData = props.list
@@ -26,6 +25,9 @@ const itemId = ref(-1)
 
 const showFormModal = ref(false)
 const showConfirmationModal = ref(false)
+const canAdd = computed(() => {
+  return itemId.value < 0
+})
 
 function closeModal() {
   showFormModal.value = false
@@ -58,13 +60,14 @@ function submit() {
   })
 }
 function update() {
-  form.post(route('members.documents.update', { member: props.member_id, document: itemId.value }), {
-    _method: 'put',
+  form.put(route('members.documents.update', { member: props.member_id, document: itemId.value }), {
     preserveScroll: true,
     resetOnSuccess: false,
-    onSuccess() {
+    onSuccess(res) {
       let item = listData.find(i => i.id === itemId.value)
       item.title = form.title
+      item.file_name = res.props.flash.data.file_name
+      item.file_size = res.props.flash.data.file_size
 
       // reset form
       closeModalAndResetForm()
@@ -107,7 +110,7 @@ function deleteItem() {
 <DialogModal :show="showFormModal" @close="closeModalAndResetForm">
   <template #title>
     <div class="flex items-center text-lg">
-      <span v-if="itemId < 0">
+      <span v-if="canAdd">
         Add Supporting Document
       </span>
       <span v-else>
@@ -119,7 +122,7 @@ function deleteItem() {
     <Input v-model="form.title" placeholder="enter your title" label="Title" class="mb-2" />
     <InputError class="mt-2" :message="form.errors.title" />
 
-    <input type="file" @input="form.file = $event.target.files[0]" />
+    <input v-if="canAdd" type="file" @input="form.file = $event.target.files[0]" />
     <InputError class="mt-2" :message="form.errors.file" />
 
     <progress v-if="form.progress" :value="form.progress.percentage" max="100">
@@ -133,13 +136,13 @@ function deleteItem() {
       </button>
 
       <div>
-        <button v-if="itemId < 0" @click="submit" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <button v-if="canAdd" @click="submit" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           Add
         </button>
-        <button v-if="itemId > 0" @click="showConfirmationModal = true" type="button" class="mr-3 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+        <button v-if="!canAdd" @click="showConfirmationModal = true" type="button" class="mr-3 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
           Delete
         </button>
-        <button v-if="itemId > 0" @click="update" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <button v-if="!canAdd" @click="update" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           Update
         </button>
     </div>

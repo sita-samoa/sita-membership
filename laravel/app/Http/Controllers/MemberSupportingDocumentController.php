@@ -27,12 +27,12 @@ class MemberSupportingDocumentController extends Controller
         $this->authorize('view', $member);
 
         $validated = $request->validate([
-            'title' => 'required|string',
+            'title' => 'nullable|string',
             'file' => [
                 'required',
                 File::types(['doc', 'docx', 'pdf', 'png', 'jpg'])
                     // ->min(1024)
-                    // ->max(12 * 1024),
+                    ->max(20 * 1024),
             ],
         ]);
         $file = $request->file('file');
@@ -65,22 +65,34 @@ class MemberSupportingDocumentController extends Controller
         $this->authorize('update', $document);
 
         $validated = $request->validate([
-            'title' => 'required|string',
+            'title' => 'nullable|string',
             'file' => [
-                'required',
+                'nullable',
                 File::types(['doc', 'docx', 'pdf', 'png', 'jpg'])
                     // ->min(1024)
-                    // ->max(12 * 1024),
+                    ->max(20 * 1024),
             ],
         ]);
 
         $document->update($validated);
 
-        if ($request->file('file')) {
-            $document->update(['file_path' => $request->file('file')->store('supportingDocuments')]);
+        $file = $request->file('file');
+
+        if ($file) {
+            $path = $file ? $file->store('supportingDocuments') : null;
+
+            $document->file_name = $file ? $file->getClientOriginalName() : null;
+            $document->file_path = $path;
+            $document->file_size = $path ? Storage::size($path) : null;
+            $document->save();
         }
 
-        return redirect()->back()->with('success', 'Supporting Document updated.');
+        return redirect()->back()
+            ->with('data', [
+                'file_name' => $document->file_name,
+                'file_size' => $document->file_size,
+            ])
+            ->with('success', 'Supporting Document updated.');
     }
 
     /**
