@@ -38,13 +38,13 @@ class MemberSupportingDocumentController extends Controller
         $file = $request->file('file');
         $path = $file ? $file->store('supportingDocuments') : null;
 
-        $member_supporting_document = new MemberSupportingDocument();
-        $member_supporting_document->fill($validated);
-        $member_supporting_document->member_id = $member->id;
-        $member_supporting_document->file_name = $file ? $file->getClientOriginalName() : null;
-        $member_supporting_document->file_path = $path;
-        $member_supporting_document->file_size = $path ? Storage::size($path) : null;
-        $member_supporting_document->save();
+        $document = new MemberSupportingDocument();
+        $document->fill($validated);
+        $document->member_id = $member->id;
+        $document->file_name = $file ? $file->getClientOriginalName() : null;
+        $document->file_path = $path;
+        $document->file_size = $path ? Storage::size($path) : null;
+        $document->save();
 
         // @todo do this on a queue for orphaneded files
         // Storage::delete('file.jpg');
@@ -52,7 +52,9 @@ class MemberSupportingDocumentController extends Controller
         return redirect()->back()
             ->with('success', 'Supporting Document added.')
             ->with('data', [
-                'id' => $member_supporting_document->id,
+                'id' => $document->id,
+                'file_name' => $document->file_name,
+                'file_size' => $document->file_size,
             ]);
     }
 
@@ -103,7 +105,9 @@ class MemberSupportingDocumentController extends Controller
         // @todo - Implement authorization here
         $this->authorize('update', $document);
 
-        $document->delete();
+        // $document->delete();
+        $document->to_delete = true;
+        $document->save();
 
         return redirect()->back()->with('success', 'Supporting Document deleted.');
     }

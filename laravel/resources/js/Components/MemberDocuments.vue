@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, router } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import { Alert, Button, Input } from 'flowbite-vue'
 import { computed, ref } from 'vue'
 import InputError from '@/Components/InputError.vue';
@@ -18,6 +18,7 @@ const props = defineProps({
 const form = useForm({
   title: '',
   file: null,
+  file_name: null,
 })
 
 const listData = props.list
@@ -25,8 +26,13 @@ const itemId = ref(-1)
 
 const showFormModal = ref(false)
 const showConfirmationModal = ref(false)
+
 const canAdd = computed(() => {
   return itemId.value < 0
+})
+
+const canEdit = computed(() => {
+  return !canAdd.value
 })
 
 function closeModal() {
@@ -43,16 +49,19 @@ function showModal() {
 function edit(id) {
   itemId.value = id
   let item = listData.find(i => i.id === id)
-
   form.title = item.title
+  form.file_name = item.file_name
+
   showModal()
 }
 function submit() {
   form.post(route('members.documents.store', props.member_id), {
     onSuccess(res) {
-      let formCopy = Object.assign({}, form)
-      formCopy.id = res.props.flash.data.id
-      listData.push(formCopy)
+      let item = Object.assign({}, form)
+      item.id = res.props.flash.data.id
+      item.file_name = res.props.flash.data.file_name
+      item.file_size = res.props.flash.data.file_size
+      listData.push(item)
 
       // reset form
       closeModalAndResetForm()
@@ -119,7 +128,7 @@ function deleteItem() {
     </div>
   </template>
   <template #content>
-    <Input v-model="form.title" placeholder="enter your title" label="Title" class="mb-2" />
+    <Input v-model="form.title" :placeholder="form.file_name ? form.file_name : 'enter your title'" label="Title" class="mb-2" />
     <InputError class="mt-2" :message="form.errors.title" />
 
     <input v-if="canAdd" type="file" @input="form.file = $event.target.files[0]" />
@@ -139,10 +148,10 @@ function deleteItem() {
         <button v-if="canAdd" @click="submit" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           Add
         </button>
-        <button v-if="!canAdd" @click="showConfirmationModal = true" type="button" class="mr-3 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+        <button v-if="canEdit" @click="showConfirmationModal = true" type="button" class="mr-3 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
           Delete
         </button>
-        <button v-if="!canAdd" @click="update" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <button v-if="canEdit" @click="update" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           Update
         </button>
     </div>

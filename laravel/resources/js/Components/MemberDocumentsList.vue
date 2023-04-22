@@ -10,7 +10,7 @@ defineProps(["list"])
     <template #prefix>
       <PencilOutlineIcon fillColor="green" />
     </template>
-    <span v-show="item.title">{{ item.title }} |&nbsp;</span>{{ item.file_name }}
+    {{ item.title }} <span v-show="!item.title">{{ item.file_name }}</span>
   </list-group-item>
 </list-group>
 </template>
