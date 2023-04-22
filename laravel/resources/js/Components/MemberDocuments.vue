@@ -18,6 +18,7 @@ const props = defineProps({
 
 const form = useForm({
   'title': '',
+  'file': null,
 })
 
 const listData = props.list
@@ -57,7 +58,8 @@ function submit() {
   })
 }
 function update() {
-  form.put(route('members.documents.update', { member: props.member_id, document: itemId.value }), {
+  form.post(route('members.documents.update', { member: props.member_id, document: itemId.value }), {
+    _method: 'put',
     preserveScroll: true,
     resetOnSuccess: false,
     onSuccess() {
@@ -116,6 +118,13 @@ function deleteItem() {
   <template #content>
     <Input v-model="form.title" placeholder="enter your title" label="Title" class="mb-2" />
     <InputError class="mt-2" :message="form.errors.title" />
+
+    <input type="file" @input="form.file = $event.target.files[0]" />
+    <InputError class="mt-2" :message="form.errors.file" />
+
+    <progress v-if="form.progress" :value="form.progress.percentage" max="100">
+      {{ form.progress.percentage }}%
+    </progress>
 
   </template>
   <template #footer>
