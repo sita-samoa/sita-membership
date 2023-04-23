@@ -39,7 +39,8 @@ class MemberPolicy
      */
     public function update(User $user, Member $member): bool
     {
-        return $member->user()->is($user);
+        $team = Team::first();
+        return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:update_any');
     }
 
     /**
@@ -47,7 +48,10 @@ class MemberPolicy
      */
     public function delete(User $user, Member $member): bool
     {
-        return $this->update($user, $member);
+        // @todo Uncomment this when needed
+        return false;
+        // $team = Team::first();
+        // return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:delete_any');
     }
 
     /**
