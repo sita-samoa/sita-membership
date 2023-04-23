@@ -253,19 +253,19 @@ function submit() {
         <MemberDocuments />
 
         <!-- next button -->
-        <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+        <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
       <tab name="seventh" title="Work Experience" :disabled="disableTabs">
         <MemberWorkExperience />
 
         <!-- next button -->
-        <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+        <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
       <tab name="eighth" title="Referees" :disabled="disableTabs">
         <MemberReferees />
 
         <!-- next button -->
-        <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+        <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
       <tab name="ninth" title="Mailing Lists" :disabled="disableTabs">
         <div>
@@ -282,7 +282,7 @@ function submit() {
         </div>
 
         <!-- next button -->
-        <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+        <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
     </tabs>
 </div>
