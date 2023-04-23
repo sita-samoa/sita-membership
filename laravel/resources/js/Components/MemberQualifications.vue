@@ -13,7 +13,11 @@ const props = defineProps({
   list: {
     type: Object,
     default: []
-  }
+  },
+  editable: {
+    type: Boolean,
+    default: true
+  },
 })
 
 const form = useForm({
@@ -106,9 +110,9 @@ function deleteItem() {
 </script>
 <template>
 <div>
-  <h5>Academic Qualifications</h5>
+  <h5 class="mb-3">Academic Qualifications</h5>
 
-  <Button class="p-3 my-3" color="alternative" @click.prevent="showModal" >Add Qualification</Button>
+  <Button v-show="props.editable" class="p-3 mb-3" color="alternative" @click.prevent="showModal" >Add Qualification</Button>
 
   <!-- Member qualifications list -->
   <MemberQualificationsList :list="listData" @edit-item="edit" />
@@ -148,13 +152,13 @@ function deleteItem() {
       </button>
 
       <div>
-        <button v-if="itemId < 0" @click="submit" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <button v-show="props.editable" v-if="itemId < 0" @click="submit" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           Add
         </button>
-        <button v-if="itemId > 0" @click="showConfirmationModal = true" type="button" class="mr-3 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+        <button v-show="props.editable" v-if="itemId > 0" @click="showConfirmationModal = true" type="button" class="mr-3 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
           Delete
         </button>
-        <button v-if="itemId > 0" @click="update" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <button v-show="props.editable" v-if="itemId > 0" @click="update" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
           Update
         </button>
     </div>

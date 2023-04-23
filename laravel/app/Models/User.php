@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -62,5 +61,31 @@ class User extends Authenticatable
 
     public function members() : HasMany {
         return $this->hasMany(Member::class);
+    }
+
+    public function getPermissionsAttribute() {
+        $request = request();
+        $member = $request->member;
+
+        if ($member) {
+            return [
+                'canRead' => $this->can('view', $member),
+                'canUpdate' => $this->can('update', $member),
+                'canDelete' => $this->can('delete', $member),
+                'canSubmit' => $this->can('submit', $member),
+                'canEndorse' => $this->can('endorse', $member),
+                'canAccept' => $this->can('accept', $member),
+            ];
+        }
+
+        return [
+            'canRead' => false,
+            'canUpdate' => false,
+            'canDelete' => false,
+            'canSubmit' => false,
+            'canEndorse' => false,
+            'canAccept' => false,
+        ];
+
     }
 }

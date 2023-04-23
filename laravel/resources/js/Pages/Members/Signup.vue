@@ -5,7 +5,8 @@ import SignupSteps from '../../Components/SignupSteps.vue';
 defineProps([
   'member',
   'options',
-  'qualifications'
+  'qualifications',
+  'permissions',
 ]);
 
 </script>
@@ -25,6 +26,7 @@ defineProps([
                         :member="member"
                         :options="options"
                         :qualifications="qualifications"
+                        :permissions="permissions"
                     />
                 </div>
             </div>
