@@ -79,10 +79,10 @@ class User extends Authenticatable
         }
 
         return [
-            'canRead' => false,
-            'canUpdate' => false,
-            'canDelete' => false,
-            'canSubmit' => false,
+            'canRead' => true,
+            'canUpdate' => true,
+            'canDelete' => true,
+            'canSubmit' => true,
             'canEndorse' => false,
             'canAccept' => false,
         ];
