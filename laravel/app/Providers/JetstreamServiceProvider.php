@@ -50,29 +50,25 @@ class JetstreamServiceProvider extends ServiceProvider
             'read',
             'update',
             'delete',
-            'member:create',
-            'member:read_own',
             'member:read_any',
-            'member:update_own',
+            'member:endorse',
+            'member:read_any',
             'member:update_any',
-            'member:delete_own',
             'member:delete_any',
+            'member:accept'
         ])->description('Administrator users can perform any action.');
 
-        Jetstream::role('editor', 'Editor', [
-            'read',
-            'create',
-            'update',
-        ])->description('Editor users have the ability to read, create, and update.');
-
-        Jetstream::role('executive', 'SITA Executive', [
-            'read',
+        Jetstream::role('executive', 'Executive', [
+            'member:read_any',
+            'member:endorse',
         ])->description('SITA Executive users have the ability to read, create, and update.');
 
-        Jetstream::role('coordinator', 'SITA Coordinator', [
-            'read',
-            'create',
-            'update',
+        Jetstream::role('coordinator', 'Coordinator', [
+            'member:create_many',
+            'member:read_any',
+            'member:update_any',
+            'member:delete_any',
+            'member:accept'
         ])->description('SITA Coordinator users have the ability to read, create, and update.');
     }
 }

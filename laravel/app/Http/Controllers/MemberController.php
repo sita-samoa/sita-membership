@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Gender;
 use App\Models\Member;
-use App\Models\MemberQualification;
-use App\Models\MembershipStatus;
 use App\Models\MembershipType;
-use App\Models\Title;
+use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Response;
@@ -29,15 +26,24 @@ class MemberController extends Controller
     /**
      * Show the form for sign up of new member.
      */
-    public function signup() : Response
+    public function signup(Request $request)
     {
+        // If already had a member, redirect - unless they have a permission.
+        $user = $request->user();
+        $team = Team::first();
+
+        if (!$user->hasTeamPermission($team, 'member:create_many')) {
+            $member = Member::where('user_id', $user->id)->first();
+
+            if ($member) {
+                return redirect()->route('members.signup.index', $member->id);
+            }
+        }
+
         return Inertia::render('Members/Signup', [
             'options' => [
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
-                // 'gender_options' => Gender::all(['id', 'code', 'title']),
-                // 'title_options' => Title::all(['id', 'code', 'title']),
             ],
-            // 'qualifications' => MemberQualification::get()
         ]);
     }
 
