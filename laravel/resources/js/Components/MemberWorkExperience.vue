@@ -15,6 +15,7 @@ import {
 import { ref, nextTick, onMounted } from "vue";
 import InputLabel from "./InputLabel.vue";
 import Input from "./Input.vue";
+import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue';
 
 const props = defineProps({
     memberId: Number,
@@ -113,13 +114,13 @@ function deleteWorkExperience(id){
                     class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
                 >
                     <tr>
+                        <th scope="col" class="px-6 py-3">
+                            <span class="sr-only">Edit</span>
+                        </th>
                         <th scope="col" class="px-6 py-3">Organisation</th>
                         <th scope="col" class="px-6 py-3">Position</th>
                         <th scope="col" class="px-6 py-3">Responsibilities</th>
                         <th scope="col" class="px-6 py-3">Date</th>
-                        <th scope="col" class="px-6 py-3">
-                            <span class="sr-only">Edit</span>
-                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -127,6 +128,14 @@ function deleteWorkExperience(id){
                         v-for="workExperience in memberWorkExperiences"
                         class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                     >
+                        <td class="px-6 py-4 text-right">
+                            <button
+                                type="button"
+                                @click="showModal(workExperience)"
+                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                                ><PencilOutlineIcon fillColor="green" /></button
+                            >
+                        </td>
                         <th
                             scope="row"
                             class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap"
@@ -136,21 +145,6 @@ function deleteWorkExperience(id){
                         <td class="px-6 py-4">{{ workExperience.position }}</td>
                         <td class="px-6 py-4">{{ workExperience.responsibilities }}</td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ workExperience.from_date }} to {{ workExperience.to_date }}</td>
-                        <td class="px-6 py-4 text-right">
-                            <button
-                                type="button"
-                                @click="showModal(workExperience)"
-                                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
-                                >Edit</button
-                            >
-                            <!-- <button
-                                type="button"
-                                @click="deleteWorkExperience(workExperience.id)"
-                                class="ml-2 font-medium text-red-600 dark:text-red-500 hover:underline"
-                                >Delete</button
-                            > -->
-                            
-                        </td>
                     </tr>
                 </tbody>
             </table>
