@@ -93,7 +93,7 @@ class MemberController extends Controller
      */
     public function submit(Member $member) : RedirectResponse
     {
-        $this->authorize('update', $member);
+        $this->authorize('submit', $member);
 
         $member->membership_application_status_id = 2;
         $member->save();
@@ -105,7 +105,7 @@ class MemberController extends Controller
      */
     public function endorse(Member $member) : RedirectResponse
     {
-        $this->authorize('update', $member);
+        $this->authorize('endorse', $member);
 
         $member->membership_application_status_id = 3;
         $member->save();
@@ -117,7 +117,7 @@ class MemberController extends Controller
      */
     public function accept(Member $member) : RedirectResponse
     {
-        $this->authorize('update', $member);
+        $this->authorize('accept', $member);
 
         $member->membership_application_status_id = 4;
         $member->save();
@@ -130,6 +130,8 @@ class MemberController extends Controller
      */
     public function show(Member $member) : Response
     {
+        $this->authorize('view', $member);
+
         // Check
         $completion = [
             'part1' => [

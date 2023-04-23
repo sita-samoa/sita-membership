@@ -37,6 +37,33 @@ class MemberPolicy
     /**
      * Determine whether the user can update the model.
      */
+    public function submit(User $user, Member $member): bool
+    {
+        $team = Team::first();
+        return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:submit_any');
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function endorse(User $user, Member $member): bool
+    {
+        $team = Team::first();
+        return $user->hasTeamPermission($team, 'member:endorse');
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
+    public function accept(User $user, Member $member): bool
+    {
+        $team = Team::first();
+        return $user->hasTeamPermission($team, 'member:accept');
+    }
+
+    /**
+     * Determine whether the user can update the model.
+     */
     public function update(User $user, Member $member): bool
     {
         $team = Team::first();

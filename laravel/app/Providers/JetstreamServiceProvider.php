@@ -55,7 +55,8 @@ class JetstreamServiceProvider extends ServiceProvider
             'member:read_any',
             'member:update_any',
             'member:delete_any',
-            'member:accept'
+            'member:accept',
+            'member:submit_any',
         ])->description('Administrator users can perform any action.');
 
         Jetstream::role('executive', 'Executive', [
@@ -68,7 +69,8 @@ class JetstreamServiceProvider extends ServiceProvider
             'member:read_any',
             'member:update_any',
             'member:delete_any',
-            'member:accept'
+            'member:accept',
+            'member:submit_any',
         ])->description('SITA Coordinator users have the ability to read, create, and update.');
     }
 }
