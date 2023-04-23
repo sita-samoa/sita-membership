@@ -16,6 +16,7 @@ import { ref, nextTick, onMounted } from "vue";
 import InputLabel from "./InputLabel.vue";
 import Input from "./Input.vue";
 import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue';
+import InputError from '@/Components/InputError.vue';
 
 const props = defineProps({
     memberId: Number,
@@ -172,9 +173,7 @@ function deleteWorkExperience(id){
                     placeholder="enter your organisation"
                     v-model="form.organisation"
                 />
-                <div v-if="form.errors.organisation">
-                    <p class="mb-4 text-sm text-red-600">{{ form.errors.organisation }}</p>
-                </div>
+                <InputError class="mt-2" :message="form.errors.organisation" />
 
                 <!-- Position -->
                 <InputLabel
