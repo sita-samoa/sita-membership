@@ -31,10 +31,9 @@ watch(
         <div v-else class="py-4 text-sm font-medium text-white">
           <span v-if="Object.keys($page.props.errors).length === 1">There is one form error.</span>
           <span v-else>There are {{ Object.keys($page.props.errors).length }} form errors.</span>
-          <ol class="mt-2 list-decimal list-inside">
-
+          <!-- <ol class="mt-2 list-decimal list-inside">
             <li v-for="error in $page.props.errors">{{ error }}</li>
-          </ol>
+          </ol> -->
         </div>
       </div>
       <button type="button" class="p-2 mr-2 group" @click="show = false">
