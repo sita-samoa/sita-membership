@@ -62,7 +62,7 @@ class JetstreamServiceProvider extends ServiceProvider
         Jetstream::role('executive', 'Executive', [
             'member:read_any',
             'member:endorse',
-        ])->description('SITA Executive users have the ability to read, create, and update.');
+        ])->description('SITA Executive users have the ability to read member details and endorse applications.');
 
         Jetstream::role('coordinator', 'Coordinator', [
             'member:create_many',
@@ -71,6 +71,6 @@ class JetstreamServiceProvider extends ServiceProvider
             'member:delete_any',
             'member:accept',
             'member:submit_any',
-        ])->description('SITA Coordinator users have the ability to read, create, and update.');
+        ])->description('SITA Coordinator users have the ability to read, create, update and accept member applications.');
     }
 }
