@@ -22,13 +22,6 @@ const props = defineProps({
     memberId: Number,
     memberWorkExperiences: Object,
 });
-const countryOptions = [
-    { id: 1, name: "Australia" },
-    { id: 2, name: "Fiji" },
-    { id: 3, name: "New Zealand" },
-    { id: 4, name: "Samoa" },
-    { id: 5, name: "United States of America" },
-];
 const isShowModal = ref(false);
 const organisation = ref(null);
 
