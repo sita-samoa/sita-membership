@@ -190,10 +190,15 @@ class MemberController extends Controller
         ) {
             $completion['part4']['status'] = true;
         }
+
         if ($member->qualifications()->count()) {
             $completion['part6']['status'] = true;
         }
-        // @todo Part 7,8
+        // @todo Part 7
+
+        if($member->referees()->count() > 0){
+            $completion['part8']['status'] = true;
+        }
 
         // Load title if exists.
         $relations = [
