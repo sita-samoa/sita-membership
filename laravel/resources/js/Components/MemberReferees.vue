@@ -130,7 +130,7 @@ function submit(){
     <Input v-model="form.phone" placeholder="enter your referees phone" label="Phone" class="mb-2" />
     <InputError class="mt-2" :message="form.errors.phone" />
 
-    <Input v-model="form.email" placeholder="enter your referees email" label="email" class="mb-2" />
+    <Input v-model="form.email" placeholder="enter your referees email" label="Email" class="mb-2" />
     <InputError class="mt-2" :message="form.errors.email" />
 
   </template>
