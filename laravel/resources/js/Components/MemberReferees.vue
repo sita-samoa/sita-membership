@@ -25,7 +25,7 @@ function closeModal() {
 function closeModalAndResetForm(){
   closeModal();
   itemId.value = -1
-  clearFormErrors();
+  form.clearErrors()
   form.reset();
 }
 
@@ -44,13 +44,6 @@ const form = useForm({
   'phone': '',
   'email': ''
 });
-
-function clearFormErrors(){
-  form.errors.email = ''
-  form.errors.organisation = ''
-  form.errors.phone = ''
-  form.errors.name = ''
-}
 
 function edit(id){
   itemId.value = id;
@@ -138,7 +131,7 @@ function submit(){
     <Input v-model="form.phone" placeholder="enter your referees phone" label="Phone" class="mb-2" required/>
     <InputError class="mt-2" :message="form.errors.phone" />
 
-    <Input v-model="form.email" placeholder="enter your referees email" label="Email" class="mb-2" required/>
+    <Input v-model="form.email" name="referee_email" placeholder="enter your referees email" label="Email" class="mb-2" required/>
     <InputError class="mt-2" :message="form.errors.email" />
 
   </template>
