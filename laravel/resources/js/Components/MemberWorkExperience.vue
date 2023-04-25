@@ -62,16 +62,14 @@ function addSaveWorkExperience() {
     if (!form.id){
         form.post("/member-work-experiences", {
             preserveScroll: true,
-            onSuccess: () => form.reset(),
+            onSuccess: () => { form.reset(); closeModal(); },
         });
     } else {
         form.put("/member-work-experiences/" + form.id, {
             preserveScroll: true,
-            onSuccess: () => form.reset(),
+            onSuccess: () => { form.reset(); closeModal();},
         });
     }
-    
-    closeModal();
 }
 
 // function saveWorkExperience() {
@@ -171,7 +169,6 @@ function deleteWorkExperience(id){
                     type="text"
                     placeholder="enter your organisation"
                     v-model="form.organisation"
-                    required
                 />
                 <div v-if="form.errors.organisation">
                     <p class="mb-4 text-sm text-red-600">{{ form.errors.organisation }}</p>
@@ -189,7 +186,6 @@ function deleteWorkExperience(id){
                     label="Position"
                     class="mb-2"
                     v-model="form.position"
-                    required
                 />
                 <div v-if="form.errors.position">
                     <p class="mb-4 text-sm text-red-600">{{ form.errors.position }}</p>
@@ -211,7 +207,6 @@ function deleteWorkExperience(id){
                     class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2"
                     placeholder="Please provide only a brief summary of roles and responsibilities..."
                     v-model="form.responsibilities"
-                    required
                 ></textarea>
                 <div v-if="form.errors.responsibilities">
                     <p class="mb-4 text-sm text-red-600">{{ form.errors.responsibilities }}</p>
@@ -226,7 +221,6 @@ function deleteWorkExperience(id){
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Select date"
                         v-model="form.from_date"
-                        required
                     />
                 </div>
                 <div v-if="form.errors.from_date">
@@ -242,7 +236,6 @@ function deleteWorkExperience(id){
                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Select date"
                         v-model="form.to_date"
-                        required
                     />
                 </div>
                 <div v-if="form.errors.to_date">
