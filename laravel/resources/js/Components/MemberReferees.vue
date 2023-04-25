@@ -1,11 +1,11 @@
 <script setup>
-import { Link, useForm } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3'
 import { Alert, Button, Input } from 'flowbite-vue'
-import DialogModal from './DialogModal.vue';
-import DeleteConfirmationModal from './DeleteConfirmationModal.vue';
+import DialogModal from './DialogModal.vue'
+import DeleteConfirmationModal from './DeleteConfirmationModal.vue'
 import InputError from './InputError.vue'
 import { ref } from 'vue'
-import MemberRefereesList from './MemberRefereesList.vue';
+import MemberRefereesList from './MemberRefereesList.vue'
 
 const props = defineProps({
   member_id: Number,
@@ -23,10 +23,10 @@ function closeModal() {
 }
 
 function closeModalAndResetForm(){
-  closeModal();
+  closeModal()
   itemId.value = -1
   form.clearErrors()
-  form.reset();
+  form.reset()
 }
 
 function showModal() {
@@ -34,35 +34,35 @@ function showModal() {
 }
 
 
-const refereesList = props.list;
+const refereesList = props.list
 console.log(refereesList)
-const itemId = ref(-1);
+const itemId = ref(-1)
 
 const form = useForm({
   'name': '',
   'organisation': '',
   'phone': '',
   'email': ''
-});
+})
 
 function edit(id){
-  itemId.value = id;
-  const item = refereesList.find(x => x.id === id);
-  form.name = item.name;
-  form.organisation = item.organisation;
-  form.phone = item.phone;
-  form.email = item.email;
-  showModal();
+  itemId.value = id
+  const item = refereesList.find(x => x.id === id)
+  form.name = item.name
+  form.organisation = item.organisation
+  form.phone = item.phone
+  form.email = item.email
+  showModal()
 }
 
 function update(id){
   form.put(route('members.referees.update', { member: props.member_id, referee: itemId.value}), {
     onSuccess(res) {
-      let item = refereesList.find(x => x.id === itemId.value);
-      item.name = form.name;
-      item.organisation = form.organisation;
-      item.phone = form.phone;
-      item.email = form.email;
+      let item = refereesList.find(x => x.id === itemId.value)
+      item.name = form.name
+      item.organisation = form.organisation
+      item.phone = form.phone
+      item.email = form.email
 
       // reset form
       closeModalAndResetForm()
@@ -75,10 +75,10 @@ function deleteReferee(id){
     preserveScroll: true,
     resetOnSuccess: false,
     onSuccess: function(){
-      let item = refereesList.find(x => x.id === itemId.value);
+      let item = refereesList.find(x => x.id === itemId.value)
       refereesList.splice(refereesList.indexOf(item),1)
-      closeModalAndResetForm();
-      showConfirmationModal.value = false;
+      closeModalAndResetForm()
+      showConfirmationModal.value = false
     }
   })
 }
