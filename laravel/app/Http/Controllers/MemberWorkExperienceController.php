@@ -29,12 +29,12 @@ class MemberWorkExperienceController extends Controller
     public function store(Request $request)
     {
         $attributes = request()->validate([
-            'member_id' => ['required', 'numeric'],
-            'organisation' => ['required', 'max:255'],
-            'position' => ['required', 'max:255'],
-            'responsibilities' => ['required', 'max:255'],
-            'from_date' => ['required', 'date'],
-            'to_date' => ['required', 'date'],
+            'member_id' => 'required|numeric',
+            'organisation' => 'required|max:255',
+            'position' => 'required|max:255',
+            'responsibilities' => 'required|max:255',
+            'from_date' => 'required|date|before:to_date',
+            'to_date' => 'required|date',
         ]);
 
         MemberWorkExperience::create($attributes);
