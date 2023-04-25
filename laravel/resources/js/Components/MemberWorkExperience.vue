@@ -17,12 +17,14 @@ import InputLabel from "./InputLabel.vue";
 import Input from "./Input.vue";
 import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue';
 import InputError from '@/Components/InputError.vue';
+import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
 
 const props = defineProps({
     memberId: Number,
     memberWorkExperiences: Object,
 });
 const isShowModal = ref(false);
+const showConfirmationModal = ref(false)
 const organisation = ref(null);
 
 const form = useForm({
@@ -68,23 +70,12 @@ function addSaveWorkExperience() {
     closeModal();
 }
 
-// function saveWorkExperience() {
-//     form.put("/member-work-experiences/" + form.id, {
-//         preserveScroll: true,
-//         onSuccess: () => form.reset(),
-//     });
-//     closeModal();
-// }
-
-function deleteWorkExperience(id){
-    var response = confirm('Are you sure you want to delete this Work Experience?');
-
-    if (response){
-        form.delete("/member-work-experiences/" + id, {
-            preserveScroll: true,
-        });
-        closeModal();
-    }
+function deleteItem() {
+    form.delete("/member-work-experiences/" + form.id, {
+        preserveScroll: true,
+    });
+    showConfirmationModal.value = false
+    closeModal();
 }
 </script>
 <template>
@@ -243,7 +234,7 @@ function deleteWorkExperience(id){
                         <button
                             v-if="form.id"
                             type="button"
-                            @click="deleteWorkExperience(form.id)"
+                            @click="showConfirmationModal = true"
                             class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
                         >
                             Delete
@@ -259,4 +250,5 @@ function deleteWorkExperience(id){
             </template>
         </Modal>
     </form>
+    <DeleteConfirmationModal :show="showConfirmationModal" @delete="deleteItem" @close="showConfirmationModal = false" />
 </template>
