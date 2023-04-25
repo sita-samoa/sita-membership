@@ -45,10 +45,15 @@ jobs:
         working-directory: ./laravel
         run: php artisan key:generate
 
-      - name: Initialise db
+      - name: Create Database
         working-directory: ./laravel
-        run: php artisan migrate
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
 
       - name: Execute tests
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
         working-directory: ./laravel
         run: vendor/bin/pest
