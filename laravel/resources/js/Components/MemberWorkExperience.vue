@@ -166,7 +166,7 @@ function deleteWorkExperience(id){
                     placeholder="enter your organisation"
                     v-model="form.organisation"
                 />
-                <InputError class="mt-2" :message="form.errors.organisation" />
+                <InputError class="mt-2 mb-4" :message="form.errors.organisation" />
 
                 <!-- Position -->
                 <InputLabel
@@ -181,9 +181,7 @@ function deleteWorkExperience(id){
                     class="mb-2"
                     v-model="form.position"
                 />
-                <div v-if="form.errors.position">
-                    <p class="mb-4 text-sm text-red-600">{{ form.errors.position }}</p>
-                </div>
+                <InputError class="mt-2 mb-4" :message="form.errors.position" />
 
                 <!-- Responsibilities -->
                 <Alert type="info" class="mt-3 mb-2"
@@ -202,9 +200,7 @@ function deleteWorkExperience(id){
                     placeholder="Please provide only a brief summary of roles and responsibilities..."
                     v-model="form.responsibilities"
                 ></textarea>
-                <div v-if="form.errors.responsibilities">
-                    <p class="mb-4 text-sm text-red-600">{{ form.errors.responsibilities }}</p>
-                </div>
+                <InputError class="mt-2 mb-4" :message="form.errors.responsibilities" />
 
                 <!-- From Date -->
                 <InputLabel for="from_date" value="From Date" class="mb-2 required" />
@@ -217,9 +213,7 @@ function deleteWorkExperience(id){
                         v-model="form.from_date"
                     />
                 </div>
-                <div v-if="form.errors.from_date">
-                    <p class="mb-4 text-sm text-red-600">{{ form.errors.from_date }}</p>
-                </div>
+                <InputError class="mt-2 mb-4" :message="form.errors.from_date" />
 
                 <!-- To Date -->
                 <InputLabel for="to_date" value="To Date" class="mb-2 required" />
@@ -232,9 +226,7 @@ function deleteWorkExperience(id){
                         v-model="form.to_date"
                     />
                 </div>
-                <div v-if="form.errors.to_date">
-                    <p class="mb-4 text-sm text-red-600">{{ form.errors.to_date }}</p>
-                </div>
+                <InputError class="mt-2 mb-4" :message="form.errors.to_date" />
             </template>
             <template #footer>
                 <div class="flex justify-between">
