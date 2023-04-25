@@ -45,6 +45,10 @@ jobs:
         working-directory: ./laravel
         run: php artisan key:generate
 
+      - name: Initialise db
+        working-directory: ./laravel
+        run: php artisan migrate
+
       - name: Execute tests
         working-directory: ./laravel
         run: vendor/bin/pest
