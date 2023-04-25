@@ -59,6 +59,12 @@ class JetstreamServiceProvider extends ServiceProvider
             'member:submit_any',
         ])->description('Administrator users can perform any action.');
 
+        // If you remove this role make sure to update the Pest tests
+        Jetstream::role('editor', 'Editor', [
+            'member:read_any',
+            'member:update_any',
+        ])->description('Editor users have the ability to read and update member details.');
+
         Jetstream::role('executive', 'Executive', [
             'member:read_any',
             'member:endorse',
