@@ -1,14 +1,18 @@
-name: Laravel
+name: Tests
 
 on:
   push:
-    branches: [ "12-ci-tests" ]
+    branches:
+      - '12-ci-tests'
   pull_request:
-    branches: [ "12-ci-tests" ]
+  schedule:
+    - cron: '0 0 * * *'
+
+permissions:
+  contents: read
 
 jobs:
-  laravel-tests:
-
+  tests:
     runs-on: ubuntu-latest
 
     strategy:
@@ -19,40 +23,28 @@ jobs:
     name: PHP ${{ matrix.php }}
 
     steps:
-    - name: Checkout code
-    - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup PHP
-    - uses: shivammathur/setup-php@v2
-      with:
-        php-version: ${{ matrix.php }}
-        extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+          coverage: none
 
-    - name: Copy .env
-      working-directory: ./laravel
-      run: php -r "file_exists('.env') || copy('.env.example', '.env');"
+      - name: Install Composer dependencies
+        working-directory: ./laravel
+        run: composer install --prefer-dist --no-interaction --no-progress
 
-    - name: Install Dependencies
-      working-directory: ./laravel
-      run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
+      - name: Copy environment file
+        working-directory: ./laravel
+        run: cp .env.example .env
 
-    - name: Generate key
-      working-directory: ./laravel
-      run: php artisan key:generate
+      - name: Generate app key
+        working-directory: ./laravel
+        run: php artisan key:generate
 
-    - name: Directory Permissions
-      working-directory: ./laravel
-      run: chmod -R 777 storage bootstrap/cache
-
-    - name: Create Database
-      working-directory: ./laravel
-      run: |
-        mkdir -p database
-        touch database/database.sqlite
-
-    - name: Execute tests (Unit and Feature tests) via PHPUnit
-      working-directory: ./laravel
-      env:
-        DB_CONNECTION: sqlite
-        DB_DATABASE: database/database.sqlite
-      run: vendor/bin/pest
+      - name: Execute tests
+        working-directory: ./laravel
+        run: vendor/bin/phpunit
