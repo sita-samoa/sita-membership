@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+use Inertia\Response;
 use App\Models\Gender;
 use App\Models\Member;
 use App\Models\MemberQualification;
 use App\Models\MemberReferee;
-use App\Models\MembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Title;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Inertia\Response;
-use Inertia\Inertia;
+use App\Models\MembershipStatus;
+use App\Models\MemberWorkExperience;
+use Illuminate\Support\Facades\Auth;
 
 class MemberController extends Controller
 {
@@ -35,10 +37,10 @@ class MemberController extends Controller
         return Inertia::render('Members/Signup', [
             'options' => [
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
-                // 'gender_options' => Gender::all(['id', 'code', 'title']),
-                // 'title_options' => Title::all(['id', 'code', 'title']),
+                'gender_options' => Gender::all(['id', 'code', 'title']),
+                'title_options' => Title::all(['id', 'code', 'title']),
             ],
-            // 'qualifications' => MemberQualification::get()
+            'memberWorkExperiences' => MemberWorkExperience::all(['organisation', 'position', 'responsibilities', 'from_date', 'to_date']),
         ]);
     }
 
@@ -200,6 +202,10 @@ class MemberController extends Controller
             $completion['part8']['status'] = true;
         }
 
+        if ($member->workExperiences()->count()) {
+            $completion['part7']['status'] = true;
+        }
+        // @todo Part 8
         // Load title if exists.
         $relations = [
             "membershipType",

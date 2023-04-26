@@ -1,6 +1,6 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
-import { Button, Modal, Input } from 'flowbite-vue'
+import { Button, Input } from 'flowbite-vue'
 import { ref } from 'vue'
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
