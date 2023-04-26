@@ -76,4 +76,11 @@ class Member extends Model
     public function referees(): HasMany {
         return $this->hasMany(MemberReferee::class);
     }
+    public function workExperiences() : HasMany {
+        return $this->hasMany(MemberWorkExperience::class);
+    }
+    public function supportingDocuments() : HasMany {
+        return $this->hasMany(MemberSupportingDocument::class);
+    }
+
 }

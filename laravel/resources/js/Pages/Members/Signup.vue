@@ -8,6 +8,8 @@ defineProps([
   'qualifications',
   'permissions',
   'referees',
+  'memberWorkExperiences',
+  'supportingDocuments',
 ]);
 
 </script>
@@ -15,7 +17,7 @@ defineProps([
 <template>
     <AppLayout title="Sign Up">
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            <h2 class="text-xl font-semibold leading-tight text-gray-800">
                 Sign Up
             </h2>
         </template>
@@ -29,6 +31,8 @@ defineProps([
                         :qualifications="qualifications"
                         :permissions="permissions"
                         :referees="referees"
+                        :member-work-experiences="memberWorkExperiences"
+                        :supportingDocuments="supportingDocuments"
                     />
                 </div>
             </div>

@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+use Inertia\Response;
 use App\Models\Member;
-use App\Models\MemberQualification;
-use App\Models\MemberReferee;
-use App\Models\MembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Inertia\Response;
-use Inertia\Inertia;
 
 class MemberController extends Controller
 {
@@ -62,7 +59,7 @@ class MemberController extends Controller
 
         $member = new Member();
         $member->fill($validated);
-        // set not fillable fields
+        // set none fillable fields
         $member->membership_status_id = 1;
         $member->user_id = $request->user()->id;
         $member->save();
@@ -200,8 +197,8 @@ class MemberController extends Controller
         ) {
             $completion['part4']['status'] = true;
         }
-
-        if ($member->qualifications()->count()) {
+        if ($member->qualifications()->count() &&
+            $member->supportingDocuments()->where('to_delete', false)->count()) {
             $completion['part6']['status'] = true;
         }
         // @todo Part 7
@@ -210,6 +207,10 @@ class MemberController extends Controller
             $completion['part8']['status'] = true;
         }
 
+        if ($member->workExperiences()->count()) {
+            $completion['part7']['status'] = true;
+        }
+        // @todo Part 8
         // Load title if exists.
         $relations = [
             "membershipType",

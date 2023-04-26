@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+use App\Models\Title;
+use Inertia\Response;
 use App\Models\Gender;
 use App\Models\Member;
 use App\Models\MembershipType;
-use App\Models\Title;
-use Inertia\Response;
-use Inertia\Inertia;
+use App\Models\MemberWorkExperience;
 
 class SignupController extends Controller
 {
@@ -26,7 +27,11 @@ class SignupController extends Controller
                 'title_options' => Title::all(['id', 'code', 'title']),
             ],
             'qualifications' => $member->qualifications()->get(),
-            'referees' => $member->referees()->get()
+            'referees' => $member->referees()->get(),
+            'memberWorkExperiences' => MemberWorkExperience::select('id', 'organisation', 'position', 'responsibilities', 'from_date', 'to_date')->where('member_id', $member->id)->get(),
+            'supportingDocuments' => $member->supportingDocuments()
+                ->where('to_delete', false)
+                ->get(['id','title', 'file_name', 'file_size']),
         ]);
     }
 
