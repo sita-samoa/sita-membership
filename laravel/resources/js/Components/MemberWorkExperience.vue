@@ -66,8 +66,6 @@ function addSaveWorkExperience() {
             onSuccess: () => { form.reset(); closeModal();},
         });
     }
-
-    closeModal();
 }
 
 function deleteItem() {
