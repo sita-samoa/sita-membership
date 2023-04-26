@@ -114,7 +114,7 @@ function deleteItem() {
   </Alert>
   <h5>Supporting Documents</h5>
 
-  <Button class="p-3 my-3" color="alternative" @click.prevent="showModal" >Add Qualification</Button>
+  <Button class="p-3 my-3" color="alternative" @click.prevent="showModal" >Add Document</Button>
 
   <!-- Member supporting documents list -->
   <MemberDocumentsList :list="listData" @edit-item="edit" />
