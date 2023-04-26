@@ -18,6 +18,8 @@ import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue';
 import InputError from '@/Components/InputError.vue';
 import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
 import DialogModal from '@/Components/DialogModal.vue';
+import DeleteButton from '@/Components/DeleteButton.vue';
+import CancelButton from '@/Components/CancelButton.vue';
 
 const props = defineProps({
     memberId: Number,
@@ -218,23 +220,10 @@ function deleteItem() {
         </template>
         <template #footer>
             <div>
-                <button
-                    @click="closeModal"
-                    type="button"
-                    class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
-                >
-                    Cancel
-                </button>
+                <CancelButton @click="closeModal" />
             </div>
             <div>
-                <button
-                    v-if="form.id"
-                    type="button"
-                    @click="showConfirmationModal = true"
-                    class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800"
-                >
-                    Delete
-                </button>
+                <DeleteButton v-if="form.id" @click="showConfirmationModal = true" />
                 <button
                     type="submit"
                     @click="addSaveWorkExperience"

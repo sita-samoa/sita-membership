@@ -4,8 +4,12 @@ import { Alert, Button, Input } from 'flowbite-vue'
 import DialogModal from './DialogModal.vue'
 import DeleteConfirmationModal from './DeleteConfirmationModal.vue'
 import InputError from './InputError.vue'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import MemberRefereesList from './MemberRefereesList.vue'
+import AddButton from '@/Components/AddButton.vue';
+import DeleteButton from '@/Components/DeleteButton.vue';
+import UpdateButton from '@/Components/UpdateButton.vue';
+import CancelButton from '@/Components/CancelButton.vue';
 
 const props = defineProps({
   member_id: Number,
@@ -33,6 +37,13 @@ function showModal() {
   showFormModal.value = true
 }
 
+const canAdd = computed(() => {
+  return itemId.value < 0
+})
+
+const canEdit = computed(() => {
+  return !canAdd.value
+})
 
 const refereesList = props.list
 console.log(refereesList)
@@ -136,19 +147,11 @@ function submit(){
 
   </template>
   <template #footer>
-      <button @click="closeModalAndResetForm" type="button" class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">
-        Cancel
-      </button>
+      <CancelButton @click="closeModalAndResetForm" />
       <div>
-        <button v-if="itemId < 0" @click="submit" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-          Add
-        </button>
-        <button v-if="itemId > 0" @click="showConfirmationModal = true" type="button" class="mr-3 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
-          Delete
-        </button>
-        <button v-if="itemId > 0" @click="update" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-          Update
-        </button>
+        <AddButton v-if="canAdd" @click="submit" />
+        <DeleteButton v-if="canEdit" @click="showConfirmationModal = true" />
+        <UpdateButton v-if="canEdit" @click="update" />
     </div>
   </template>
 </DialogModal>
