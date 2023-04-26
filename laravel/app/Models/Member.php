@@ -73,4 +73,7 @@ class Member extends Model
         return $this->hasMany(MemberQualification::class);
     }
 
+    public function referees(): HasMany {
+        return $this->hasMany(MemberReferee::class);
+    }
 }
