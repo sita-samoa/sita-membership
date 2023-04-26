@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Member;
+use App\Models\MemberQualification;
+use App\Models\MemberReferee;
+use App\Models\MembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
@@ -197,10 +200,15 @@ class MemberController extends Controller
         ) {
             $completion['part4']['status'] = true;
         }
+
         if ($member->qualifications()->count()) {
             $completion['part6']['status'] = true;
         }
-        // @todo Part 7,8
+        // @todo Part 7
+
+        if($member->referees()->count() > 0){
+            $completion['part8']['status'] = true;
+        }
 
         // Load title if exists.
         $relations = [

@@ -19,10 +19,9 @@ const props = defineProps({
   },
   qualifications:Object,
   permissions:Object,
+  referees:Object,
 });
-
 const member_id = ref(props.member.id)
-
 const MIN_STEP = 1
 const MAX_STEP = 9
 
@@ -262,7 +261,7 @@ function submit() {
         <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
       <tab name="eighth" title="Referees" :disabled="disableTabs">
-        <MemberReferees />
+        <MemberReferees :member_id="member_id" :list="props.referees" />
 
         <!-- next button -->
         <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>

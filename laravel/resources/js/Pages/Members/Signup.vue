@@ -7,6 +7,7 @@ defineProps([
   'options',
   'qualifications',
   'permissions',
+  'referees',
 ]);
 
 </script>
@@ -27,6 +28,7 @@ defineProps([
                         :options="options"
                         :qualifications="qualifications"
                         :permissions="permissions"
+                        :referees="referees"
                     />
                 </div>
             </div>
