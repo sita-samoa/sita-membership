@@ -4,17 +4,11 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Models\Gender;
 use App\Models\Member;
-use App\Models\MemberQualification;
-use App\Models\MemberReferee;
 use App\Models\MembershipType;
-use App\Models\Title;
+use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Models\MembershipStatus;
-use App\Models\MemberWorkExperience;
-use Illuminate\Support\Facades\Auth;
 
 class MemberController extends Controller
 {
@@ -32,14 +26,23 @@ class MemberController extends Controller
     /**
      * Show the form for sign up of new member.
      */
-    public function signup() : Response
+    public function signup(Request $request)
     {
+        // If already had a member, redirect - unless they have a permission.
+        $user = $request->user();
+        $team = Team::first();
+
+        if (!$user->hasTeamPermission($team, 'member:create_many')) {
+            $member = Member::where('user_id', $user->id)->first();
+
+            if ($member) {
+                return redirect()->route('members.signup.index', $member->id);
+            }
+        }
+
         return Inertia::render('Members/Signup', [
             'options' => [
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
-                'gender_options' => Gender::all(['id', 'code', 'title']),
-                'title_options' => Title::all(['id', 'code', 'title']),
-                'memberWorkExperiences' => MemberWorkExperience::all(['organisation', 'position', 'responsibilities', 'from_date', 'to_date']),
             ],
         ]);
     }
@@ -90,7 +93,7 @@ class MemberController extends Controller
      */
     public function submit(Member $member) : RedirectResponse
     {
-        $this->authorize('update', $member);
+        $this->authorize('submit', $member);
 
         $member->membership_application_status_id = 2;
         $member->save();
@@ -102,7 +105,7 @@ class MemberController extends Controller
      */
     public function endorse(Member $member) : RedirectResponse
     {
-        $this->authorize('update', $member);
+        $this->authorize('endorse', $member);
 
         $member->membership_application_status_id = 3;
         $member->save();
@@ -114,7 +117,7 @@ class MemberController extends Controller
      */
     public function accept(Member $member) : RedirectResponse
     {
-        $this->authorize('update', $member);
+        $this->authorize('accept', $member);
 
         $member->membership_application_status_id = 4;
         $member->save();
@@ -127,6 +130,8 @@ class MemberController extends Controller
      */
     public function show(Member $member) : Response
     {
+        $this->authorize('view', $member);
+
         // Check
         $completion = [
             'part1' => [

@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+[x-cloak] {
+    display: none;
+}
 .required:after {
     content:" *";
     color: red;

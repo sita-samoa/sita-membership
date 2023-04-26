@@ -18,6 +18,7 @@ const props = defineProps({
     }
   },
   qualifications:Object,
+  permissions:Object,
   referees:Object,
   memberWorkExperiences: Object,
   supportingDocuments: Object,
@@ -71,8 +72,7 @@ function nextStep() {
   if (currentStep.value > MAX_STEP) {
     currentStep.value = MAX_STEP
 
-    // redirect to member/1
-    window.location.href = '/members/' + member_id.value
+    window.location.href = route('members.show', member_id.value)
   }
 
   switch (currentStep.value) {
@@ -154,7 +154,7 @@ function submit() {
           </div>
 
           <!-- next button -->
-          <Button type="submit" class="p-3 mt-3">Next</Button>
+          <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
         </form>
       </tab>
       <tab name="second" title="General" :disabled="disableTabs">
@@ -194,7 +194,7 @@ function submit() {
           <InputError class="mt-2" :message="form.errors.current_employer" />
 
           <!-- next button -->
-          <Button type="submit" class="p-3 mt-3">Next</Button>
+          <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
         </form>
       </tab>
       <tab name="third" title="Home" :disabled="disableTabs">
@@ -214,7 +214,7 @@ function submit() {
           <InputError class="mt-2" :message="form.errors.home_email" />
 
           <!-- next button -->
-          <Button type="submit" class="p-3 mt-3">Next</Button>
+          <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
 
         </form>
       </tab>
@@ -235,7 +235,7 @@ function submit() {
           <InputError class="mt-2" :message="form.errors.work_email" />
 
           <!-- next button -->
-          <Button type="submit" class="p-3 mt-3">Next</Button>
+          <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
 
         </form>
       </tab>
@@ -247,40 +247,28 @@ function submit() {
           <InputError class="mt-2" :message="form.errors.other_membership" />
 
           <!-- next button -->
-          <Button type="submit" class="p-3 mt-3">Next</Button>
+          <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
 
         </form>
       </tab>
       <tab name="sixth" title="Qualifications" :disabled="disableTabs">
-        <MemberQualifications :member_id="member_id" :list="props.qualifications" />
+        <MemberQualifications :member_id="member_id" :list="props.qualifications" :editable="props.permissions.canUpdate" />
         <MemberDocuments :member_id="member_id" :list="props.supportingDocuments" />
 
         <!-- next button -->
-        <div>
-          <Link href="#">
-            <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-          </Link>
-        </div>
+        <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
       <tab name="seventh" title="Work Experience" :disabled="disableTabs">
         <MemberWorkExperience :member-id="member.id" :member-work-experiences="memberWorkExperiences" />
 
         <!-- next button -->
-        <div>
-          <Link href="#">
-            <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-          </Link>
-        </div>
+        <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
       <tab name="eighth" title="Referees" :disabled="disableTabs">
         <MemberReferees :member_id="member_id" :list="props.referees" />
 
         <!-- next button -->
-        <div>
-          <Link href="#">
-            <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-          </Link>
-        </div>
+        <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
       <tab name="ninth" title="Mailing Lists" :disabled="disableTabs">
         <div>
@@ -297,11 +285,7 @@ function submit() {
         </div>
 
         <!-- next button -->
-        <div>
-          <Link href="#">
-            <Button @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-          </Link>
-        </div>
+        <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
     </tabs>
 </div>

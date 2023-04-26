@@ -17,7 +17,11 @@ const props = defineProps({
   list: {
     type: Object,
     default: []
-  }
+  },
+  editable: {
+    type: Boolean,
+    default: true
+  },
 })
 
 const form = useForm({
@@ -118,9 +122,9 @@ function deleteItem() {
 </script>
 <template>
 <div>
-  <h5>Academic Qualifications</h5>
+  <h5 class="mb-3">Academic Qualifications</h5>
 
-  <Button class="p-3 my-3" color="alternative" @click.prevent="showModal" >Add Qualification</Button>
+  <Button v-show="props.editable" class="p-3 mb-3" color="alternative" @click.prevent="showModal" >Add Qualification</Button>
 
   <!-- Member qualifications list -->
   <MemberQualificationsList :list="listData" @edit-item="edit" />

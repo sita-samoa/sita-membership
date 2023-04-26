@@ -11,9 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        //
-        Schema::table('users', function(Blueprint $table){
-            $table->renameColumn('name', 'username');
+        Schema::create('teams', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->index();
+            $table->string('name');
+            $table->boolean('personal_team');
+            $table->timestamps();
         });
     }
 
@@ -22,9 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        //
-        Schema::table('users', function(Blueprint $table){
-            $table->renameColumn('username', 'name');
-        });
+        Schema::dropIfExists('teams');
     }
 };

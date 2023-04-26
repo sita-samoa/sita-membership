@@ -6,6 +6,7 @@ defineProps([
   'member',
   'options',
   'qualifications',
+  'permissions',
   'referees',
   'memberWorkExperiences',
   'supportingDocuments',
@@ -28,6 +29,7 @@ defineProps([
                         :member="member"
                         :options="options"
                         :qualifications="qualifications"
+                        :permissions="permissions"
                         :referees="referees"
                         :member-work-experiences="memberWorkExperiences"
                         :supportingDocuments="supportingDocuments"

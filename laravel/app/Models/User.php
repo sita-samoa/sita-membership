@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
+use Laravel\Jetstream\HasTeams;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -16,6 +16,7 @@ class User extends Authenticatable
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
+    use HasTeams;
     use Notifiable;
     use TwoFactorAuthenticatable;
 
@@ -25,9 +26,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'username',
-        'email',
-        'password',
+        'name', 'email', 'password',
     ];
 
     /**
@@ -62,5 +61,31 @@ class User extends Authenticatable
 
     public function members() : HasMany {
         return $this->hasMany(Member::class);
+    }
+
+    public function getPermissionsAttribute() {
+        $request = request();
+        $member = $request->member;
+
+        if ($member) {
+            return [
+                'canRead' => $this->can('view', $member),
+                'canUpdate' => $this->can('update', $member),
+                'canDelete' => $this->can('delete', $member),
+                'canSubmit' => $this->can('submit', $member),
+                'canEndorse' => $this->can('endorse', $member),
+                'canAccept' => $this->can('accept', $member),
+            ];
+        }
+
+        return [
+            'canRead' => true,
+            'canUpdate' => true,
+            'canDelete' => true,
+            'canSubmit' => true,
+            'canEndorse' => false,
+            'canAccept' => false,
+        ];
+
     }
 }

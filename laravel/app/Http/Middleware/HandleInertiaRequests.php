@@ -46,6 +46,7 @@ class HandleInertiaRequests extends Middleware
                     'data' => $request->session()->get('data'),
                 ];
             },
+            'permissions' => auth()->user()->permissions ?? [],
         ]);
     }
 }
