@@ -41,6 +41,7 @@ const form = useForm({
 
 function closeModal() {
     isShowModal.value = false;
+    form.clearErrors()
 }
 function showModal(workExperience) {
     isShowModal.value = true;
