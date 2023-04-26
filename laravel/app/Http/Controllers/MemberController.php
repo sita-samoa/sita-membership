@@ -39,8 +39,8 @@ class MemberController extends Controller
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
                 'gender_options' => Gender::all(['id', 'code', 'title']),
                 'title_options' => Title::all(['id', 'code', 'title']),
+                'memberWorkExperiences' => MemberWorkExperience::all(['organisation', 'position', 'responsibilities', 'from_date', 'to_date']),
             ],
-            'memberWorkExperiences' => MemberWorkExperience::all(['organisation', 'position', 'responsibilities', 'from_date', 'to_date']),
         ]);
     }
 
@@ -56,7 +56,7 @@ class MemberController extends Controller
 
         $member = new Member();
         $member->fill($validated);
-        // set not fillable fields
+        // set none fillable fields
         $member->membership_status_id = 1;
         $member->user_id = $request->user()->id;
         $member->save();
@@ -192,8 +192,8 @@ class MemberController extends Controller
         ) {
             $completion['part4']['status'] = true;
         }
-
-        if ($member->qualifications()->count()) {
+        if ($member->qualifications()->count() &&
+            $member->supportingDocuments()->where('to_delete', false)->count()) {
             $completion['part6']['status'] = true;
         }
         // @todo Part 7

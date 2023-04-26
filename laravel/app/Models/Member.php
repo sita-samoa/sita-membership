@@ -79,5 +79,8 @@ class Member extends Model
     public function workExperiences() : HasMany {
         return $this->hasMany(MemberWorkExperience::class);
     }
+    public function supportingDocuments() : HasMany {
+        return $this->hasMany(MemberSupportingDocument::class);
+    }
 
 }

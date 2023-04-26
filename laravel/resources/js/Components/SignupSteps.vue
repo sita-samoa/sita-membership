@@ -20,6 +20,7 @@ const props = defineProps({
   qualifications:Object,
   referees:Object,
   memberWorkExperiences: Object,
+  supportingDocuments: Object,
 });
 
 const member_id = ref(props.member.id)
@@ -134,7 +135,7 @@ function submit() {
   <div class="p-6 bg-white border-b border-gray-200 lg:p-8">
 
     <div class="mb-3">
-      <Progress :progress="progress"></Progress>
+      <Progress :progress="progress" />
     </div>
     <tabs v-model="activeTab" class="p-5">
       <!-- class appends to content DIV for all tabs -->
@@ -252,7 +253,7 @@ function submit() {
       </tab>
       <tab name="sixth" title="Qualifications" :disabled="disableTabs">
         <MemberQualifications :member_id="member_id" :list="props.qualifications" />
-        <MemberDocuments />
+        <MemberDocuments :member_id="member_id" :list="props.supportingDocuments" />
 
         <!-- next button -->
         <div>

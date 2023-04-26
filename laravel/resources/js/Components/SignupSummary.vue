@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue'
-import { useForm } from '@inertiajs/vue3';
+import { useForm, Link } from '@inertiajs/vue3';
 import { Alert, TheCard, ListGroup, ListGroupItem, Button, Badge, } from 'flowbite-vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue';
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue';
@@ -64,7 +64,7 @@ const application_status_id = computed(() => {
     Your application has been endorsed and is awaiting settlement.
   </Alert>
 
-  <the-card href="#" class="mb-3">
+  <the-card :ref="route('members.signup.index', props.member.id)" class="mb-3">
     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
       <span v-if="props.member.title_id">{{ props.member.title.title }}</span> {{ member_name }}
     </h5>
@@ -82,13 +82,15 @@ const application_status_id = computed(() => {
   </the-card>
 
   <list-group class="w-full mb-3">
-    <list-group-item v-for="c in completion">
-      <template #prefix>
-        <CheckCircleOutlineIcon fillColor="green" v-if="c.status" />
-        <AlertCircleOutlineIcon fillColor="blue" v-else />
-      </template>
-      {{ c.title }}
-    </list-group-item>
+    <Link :href="route('members.signup.index', props.member.id)">
+      <list-group-item v-for="c in completion">
+        <template #prefix>
+          <CheckCircleOutlineIcon fillColor="green" v-if="c.status" />
+          <AlertCircleOutlineIcon fillColor="blue" v-else />
+        </template>
+        {{ c.title }}
+      </list-group-item>
+    </Link>
   </list-group>
 
   <!-- Action buttons -->
