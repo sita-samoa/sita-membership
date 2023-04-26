@@ -1,6 +1,6 @@
 <script setup>
 import { ListGroup, ListGroupItem } from 'flowbite-vue'
-import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue';
+import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
 
 defineProps(["list"])
 </script>

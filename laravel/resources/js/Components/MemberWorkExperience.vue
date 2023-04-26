@@ -1,5 +1,5 @@
 <script setup>
-import { Link, useForm } from "@inertiajs/vue3";
+import { Link, useForm } from "@inertiajs/vue3"
 import {
     Alert,
     Button,
@@ -10,24 +10,24 @@ import {
     // TableHeadCell,
     // TableRow,
     // TableCell,
-} from "flowbite-vue";
-import { ref, nextTick, onMounted } from "vue";
-import InputLabel from "./InputLabel.vue";
-import Input from "./Input.vue";
-import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue';
-import InputError from '@/Components/InputError.vue';
-import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue';
-import DialogModal from '@/Components/DialogModal.vue';
-import DeleteButton from '@/Components/DeleteButton.vue';
-import CancelButton from '@/Components/CancelButton.vue';
+} from "flowbite-vue"
+import { ref, nextTick, onMounted } from "vue"
+import InputLabel from "./InputLabel.vue"
+import Input from "./Input.vue"
+import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
+import InputError from '@/Components/InputError.vue'
+import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue'
+import DialogModal from '@/Components/DialogModal.vue'
+import DeleteButton from '@/Components/DeleteButton.vue'
+import CancelButton from '@/Components/CancelButton.vue'
 
 const props = defineProps({
     memberId: Number,
     memberWorkExperiences: Object,
-});
-const isShowModal = ref(false);
+})
+const isShowModal = ref(false)
 const showConfirmationModal = ref(false)
-const organisation = ref(null);
+const organisation = ref(null)
 
 const form = useForm({
     id: null,
@@ -37,46 +37,52 @@ const form = useForm({
     responsibilities: null,
     from_date: null,
     to_date: null,
-});
+})
 
 function closeModal() {
-    isShowModal.value = false;
+    isShowModal.value = false
     form.clearErrors()
 }
 function showModal(workExperience) {
-    isShowModal.value = true;
+    isShowModal.value = true
 
     nextTick(() => {
-        form.id = workExperience.id;
-        form.member_id = props.memberId;
-        form.organisation = workExperience.organisation;
-        form.position = workExperience.position;
-        form.responsibilities = workExperience.responsibilities;
-        form.from_date = workExperience.from_date;
-        form.to_date = workExperience.to_date;
-        organisation.value.focus();
-    });
+        form.id = workExperience.id
+        form.member_id = props.memberId
+        form.organisation = workExperience.organisation
+        form.position = workExperience.position
+        form.responsibilities = workExperience.responsibilities
+        form.from_date = workExperience.from_date
+        form.to_date = workExperience.to_date
+        organisation.value.focus()
+    })
 }
 function addSaveWorkExperience() {
     if (!form.id){
         form.post("/member-work-experiences", {
             preserveScroll: true,
-            onSuccess: () => { form.reset(); closeModal(); },
-        });
+            onSuccess: () => {
+                form.reset()
+                closeModal()
+            },
+        })
     } else {
         form.put("/member-work-experiences/" + form.id, {
             preserveScroll: true,
-            onSuccess: () => { form.reset(); closeModal();},
-        });
+            onSuccess: () => {
+                form.reset()
+                closeModal()
+            },
+        })
     }
 }
 
 function deleteItem() {
     form.delete("/member-work-experiences/" + form.id, {
         preserveScroll: true,
-    });
+    })
     showConfirmationModal.value = false
-    closeModal();
+    closeModal()
 }
 </script>
 <template>

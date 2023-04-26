@@ -6,10 +6,10 @@ import DeleteConfirmationModal from './DeleteConfirmationModal.vue'
 import InputError from './InputError.vue'
 import { computed, ref } from 'vue'
 import MemberRefereesList from './MemberRefereesList.vue'
-import AddButton from '@/Components/AddButton.vue';
-import DeleteButton from '@/Components/DeleteButton.vue';
-import UpdateButton from '@/Components/UpdateButton.vue';
-import CancelButton from '@/Components/CancelButton.vue';
+import AddButton from '@/Components/AddButton.vue'
+import DeleteButton from '@/Components/DeleteButton.vue'
+import UpdateButton from '@/Components/UpdateButton.vue'
+import CancelButton from '@/Components/CancelButton.vue'
 
 const props = defineProps({
   member_id: Number,
