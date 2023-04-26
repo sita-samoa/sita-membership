@@ -59,6 +59,7 @@ function closeModalAndResetForm() {
   closeModal()
   itemId.value = -1
   form.reset()
+  form.clearErrors()
 }
 function showModal() {
   showFormModal.value = true

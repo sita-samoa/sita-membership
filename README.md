@@ -68,6 +68,9 @@ docker compose logs -f php
 
 # log into php container (this will allow use php artisan)
 docker compose exec php sh
+
+# run tests
+./vendor/bin/pest
 ```
 
 **Tips**

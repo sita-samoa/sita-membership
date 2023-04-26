@@ -1,14 +1,14 @@
 <script setup>
 import { computed } from 'vue'
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, Link } from '@inertiajs/vue3'
 import { Alert, TheCard, ListGroup, ListGroupItem, Button, Badge, } from 'flowbite-vue'
-import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue';
-import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue';
+import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
+import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 
 const props = defineProps([
   'member',
   'options',
-]);
+])
 
 const completion = props.options.completion
 
@@ -32,7 +32,7 @@ function accept() {
 }
 
 const member_name = computed(() => {
-  let member = props.member;
+  let member = props.member
   return member.first_name + " " + member.last_name
 })
 
