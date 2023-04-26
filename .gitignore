@@ -23,6 +23,7 @@ ehthumbs.db
 # Ignore docker files
 docker-compose.override.yml
 docker-init/files
+mariadb-init/
 
 # and some random server stuff
 .bash_history
