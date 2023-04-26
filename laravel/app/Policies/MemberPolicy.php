@@ -75,10 +75,8 @@ class MemberPolicy
      */
     public function delete(User $user, Member $member): bool
     {
-        // @todo Uncomment this when needed
-        return false;
-        // $team = Team::first();
-        // return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:delete_any');
+        $team = Team::first();
+        return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:delete_any');
     }
 
     /**
