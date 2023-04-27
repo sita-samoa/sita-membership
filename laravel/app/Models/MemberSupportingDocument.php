@@ -14,7 +14,8 @@ class MemberSupportingDocument extends Model
         'title',
     ];
 
-    public function member(): BelongsTo {
+    public function member(): BelongsTo
+    {
         return $this->belongsTo(Member::class);
     }
 }

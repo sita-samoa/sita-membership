@@ -14,11 +14,11 @@ class MemberQualification extends Model
         'qualification',
         'year_attained',
         'institution',
-        'country_id'
+        'country_id',
     ];
 
-    public function member(): BelongsTo {
+    public function member(): BelongsTo
+    {
         return $this->belongsTo(Member::class);
     }
-
 }

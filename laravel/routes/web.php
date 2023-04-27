@@ -1,14 +1,14 @@
 <?php
 
-use Inertia\Inertia;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberQualificationController;
-use App\Http\Controllers\MemberSupportingDocumentController;
-use App\Http\Controllers\SignupController;
 use App\Http\Controllers\MemberRefereeController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\MemberSupportingDocumentController;
 use App\Http\Controllers\MemberWorkExperienceController;
+use App\Http\Controllers\SignupController;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,24 +42,24 @@ Route::middleware([
 
     // Sign up Page
     Route::get('/members/signup', [MemberController::class, 'signup'])
-    ->name('members.signup');
+        ->name('members.signup');
 
     Route::post('/members/signup', [MemberController::class, 'storeSignup'])
-    ->name('members.signup.store');
+        ->name('members.signup.store');
 
     // Member actions
     Route::put('/members/{member}/submit', [MemberController::class, 'submit'])
-    ->name('members.submit');
+        ->name('members.submit');
 
     Route::put('/members/{member}/endorse', [MemberController::class, 'endorse'])
-    ->name('members.endorse');
+        ->name('members.endorse');
 
     Route::put('/members/{member}/accept', [MemberController::class, 'accept'])
-    ->name('members.accept');
+        ->name('members.accept');
 
     // Member work experience
     Route::resource('member-work-experiences', MemberWorkExperienceController::class)->only([
-        'store', 'update', 'destroy'
+        'store', 'update', 'destroy',
     ]);
 });
 
@@ -69,8 +69,8 @@ Route::resource('members.signup', SignupController::class)
     ->middleware([
         'auth:sanctum',
         config('jetstream.auth_session'),
-        'verified'
-]);
+        'verified',
+    ]);
 
 // Academic Qualifications
 Route::resource('members.qualifications', MemberQualificationController::class)
@@ -86,8 +86,8 @@ Route::resource('members.documents', MemberSupportingDocumentController::class)
     ->middleware([
         'auth:sanctum',
         config('jetstream.auth_session'),
-        'verified'
-]);
+        'verified',
+    ]);
 
 // Members Pages
 Route::resource('members', MemberController::class)
@@ -95,5 +95,5 @@ Route::resource('members', MemberController::class)
     ->middleware([
         'auth:sanctum',
         config('jetstream.auth_session'),
-        'verified'
-]);
+        'verified',
+    ]);

@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-use App\Models\Title;
-use Inertia\Response;
 use App\Models\Gender;
 use App\Models\Member;
 use App\Models\MembershipType;
 use App\Models\MemberWorkExperience;
+use App\Models\Title;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class SignupController extends Controller
 {
     /**
      * Show the form for sign up of new member.
      */
-    public function index(Member $member) : Response
+    public function index(Member $member): Response
     {
         $this->authorize('view', $member);
 
@@ -31,8 +31,7 @@ class SignupController extends Controller
             'memberWorkExperiences' => MemberWorkExperience::select('id', 'organisation', 'position', 'responsibilities', 'from_date', 'to_date')->where('member_id', $member->id)->get(),
             'supportingDocuments' => $member->supportingDocuments()
                 ->where('to_delete', false)
-                ->get(['id','title', 'file_name', 'file_size']),
+                ->get(['id', 'title', 'file_name', 'file_size']),
         ]);
     }
-
 }

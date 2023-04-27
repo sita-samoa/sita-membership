@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\Member;
 use App\Models\MemberQualification;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class MemberQualificationPolicy
 {

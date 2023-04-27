@@ -22,7 +22,7 @@ class MemberSupportingDocumentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Member $member, Request $request) : RedirectResponse
+    public function store(Member $member, Request $request): RedirectResponse
     {
         $this->authorize('view', $member);
 
@@ -58,7 +58,7 @@ class MemberSupportingDocumentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Member $member, MemberSupportingDocument $document) : RedirectResponse
+    public function update(Request $request, Member $member, MemberSupportingDocument $document): RedirectResponse
     {
         $this->authorize('update', $document);
 
@@ -96,7 +96,7 @@ class MemberSupportingDocumentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Member $member, MemberSupportingDocument $document) : RedirectResponse
+    public function destroy(Member $member, MemberSupportingDocument $document): RedirectResponse
     {
         $this->authorize('update', $document);
 

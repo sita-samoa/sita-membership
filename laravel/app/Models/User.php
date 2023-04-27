@@ -59,11 +59,13 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    public function members() : HasMany {
+    public function members(): HasMany
+    {
         return $this->hasMany(Member::class);
     }
 
-    public function getPermissionsAttribute() {
+    public function getPermissionsAttribute()
+    {
         $request = request();
         $member = $request->member;
 

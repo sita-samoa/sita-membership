@@ -5,7 +5,6 @@ namespace App\Policies;
 use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
 
 class MemberPolicy
 {
@@ -23,6 +22,7 @@ class MemberPolicy
     public function view(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:read_any');
     }
 
@@ -40,6 +40,7 @@ class MemberPolicy
     public function submit(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:submit_any');
     }
 
@@ -49,6 +50,7 @@ class MemberPolicy
     public function endorse(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $user->hasTeamPermission($team, 'member:endorse');
     }
 
@@ -58,6 +60,7 @@ class MemberPolicy
     public function accept(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $user->hasTeamPermission($team, 'member:accept');
     }
 
@@ -67,6 +70,7 @@ class MemberPolicy
     public function update(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:update_any');
     }
 
@@ -76,6 +80,7 @@ class MemberPolicy
     public function delete(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:delete_any');
     }
 

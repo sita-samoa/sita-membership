@@ -2,20 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-use Inertia\Response;
 use App\Models\Member;
 use App\Models\MembershipType;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class MemberController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index() : Response
+    public function index(): Response
     {
         // @todo - remove this in prod
         return Inertia::render('Dashboard', [
@@ -32,7 +32,7 @@ class MemberController extends Controller
         $user = $request->user();
         $team = Team::first();
 
-        if (!$user->hasTeamPermission($team, 'member:create_many')) {
+        if (! $user->hasTeamPermission($team, 'member:create_many')) {
             $member = Member::where('user_id', $user->id)->first();
 
             if ($member) {
@@ -50,7 +50,7 @@ class MemberController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function storeSignup(Request $request) : RedirectResponse
+    public function storeSignup(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'membership_type_id' => 'required|int|min:1',
@@ -82,7 +82,7 @@ class MemberController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
         // unused
         return redirect(route('members.signup'));
@@ -91,7 +91,7 @@ class MemberController extends Controller
     /**
      * Submit member application.
      */
-    public function submit(Member $member) : RedirectResponse
+    public function submit(Member $member): RedirectResponse
     {
         $this->authorize('submit', $member);
 
@@ -100,10 +100,11 @@ class MemberController extends Controller
 
         return redirect()->back()->with('success', 'Application Submitted');
     }
+
     /**
      * Endorse member application.
      */
-    public function endorse(Member $member) : RedirectResponse
+    public function endorse(Member $member): RedirectResponse
     {
         $this->authorize('endorse', $member);
 
@@ -112,10 +113,11 @@ class MemberController extends Controller
 
         return redirect()->back()->with('success', 'Application Endorsed');
     }
+
     /**
      * Accept member application.
      */
-    public function accept(Member $member) : RedirectResponse
+    public function accept(Member $member): RedirectResponse
     {
         $this->authorize('accept', $member);
 
@@ -128,7 +130,7 @@ class MemberController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Member $member) : Response
+    public function show(Member $member): Response
     {
         $this->authorize('view', $member);
 
@@ -203,7 +205,7 @@ class MemberController extends Controller
         }
         // @todo Part 7
 
-        if($member->referees()->count() > 0){
+        if ($member->referees()->count() > 0) {
             $completion['part8']['status'] = true;
         }
 
@@ -213,18 +215,18 @@ class MemberController extends Controller
         // @todo Part 8
         // Load title if exists.
         $relations = [
-            "membershipType",
-            "membershipApplicationStatus",
+            'membershipType',
+            'membershipApplicationStatus',
         ];
         if ($member->title_id) {
-            $relations[] = "title";
+            $relations[] = 'title';
         }
 
         return Inertia::render('Members/Show', [
             'member' => $member->load($relations),
             'options' => [
                 'completion' => $completion,
-            ]
+            ],
         ]);
     }
 
@@ -239,7 +241,7 @@ class MemberController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Member $member) : RedirectResponse
+    public function update(Request $request, Member $member): RedirectResponse
     {
         $this->authorize('update', $member);
 
@@ -263,7 +265,7 @@ class MemberController extends Controller
             'other_membership' => 'nullable|max:500',
             // 'membership_status_id' => 'int',
             'note' => 'nullable',
-            'membership_application_status_id' => 'nullable|int'
+            'membership_application_status_id' => 'nullable|int',
         ]);
 
         $member->update($validated);

@@ -15,10 +15,11 @@ class MemberReferee extends Model
         'organisation',
         'phone',
         'email',
-        'member_id'
+        'member_id',
     ];
 
-    public function member(): BelongsTo {
+    public function member(): BelongsTo
+    {
         return $this->belongsTo(Member::class);
     }
 }

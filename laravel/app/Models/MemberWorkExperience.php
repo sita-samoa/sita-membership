@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class MemberWorkExperience extends Model
 {
@@ -19,7 +19,8 @@ class MemberWorkExperience extends Model
         'to_date',
     ];
 
-    public function member(): BelongsTo {
+    public function member(): BelongsTo
+    {
         return $this->belongsTo(Member::class);
     }
 }
