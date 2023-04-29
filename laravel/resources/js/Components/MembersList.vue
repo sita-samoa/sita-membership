@@ -67,8 +67,11 @@ const filteredList = computed(() => {
   </list-group>
 </dropdown>
 
-<!-- Member list-->
 <div class="flex flex-wrap">
+  <!-- No results message -->
+  <div v-show="!filteredList.length">No matches found. Try changing the filter.</div>
+
+  <!-- Member list-->
   <MemberSummary class="mb-3 mr-3" v-for="member in filteredList" :member="member" />
 </div>
 
