@@ -19,7 +19,7 @@ class MemberController extends Controller
     {
         // @todo - remove this in prod
         return Inertia::render('Members/Index', [
-            'members' => Member::all(),
+            'members' => Member::with('membershipType', 'title')->get(),
         ]);
     }
 
