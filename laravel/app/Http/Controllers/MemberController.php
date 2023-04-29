@@ -9,6 +9,7 @@ use App\Models\MembershipType;
 use App\Models\Team;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class MemberController extends Controller
 {
@@ -17,9 +18,19 @@ class MemberController extends Controller
      */
     public function index() : Response
     {
-        // @todo - remove this in prod
+        // @todo add authorise
+        // $this->authorize('view_any', )
         return Inertia::render('Members/Index', [
-            'members' => Member::with('membershipType', 'title', 'membershipApplicationStatus')->get(),
+            'filters' => FacadesRequest::all('membership_application_status_id'),
+            'members' => Member::orderBy('first_name')
+                ->when(FacadesRequest::input('membership_application_status_id'),
+                    function($query) {
+                        $query->where(FacadesRequest::only('membership_application_status_id'));
+                    }
+                )
+                ->with('membershipType', 'title', 'membershipApplicationStatus')
+                ->paginate(10)
+                ->withQueryString()
         ]);
     }
 

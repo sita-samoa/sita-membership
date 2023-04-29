@@ -1,33 +1,47 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { Dropdown, ListGroup, ListGroupItem, Pagination } from 'flowbite-vue'
 import MemberSummary from './MemberSummary.vue';
+import { router } from '@inertiajs/vue3'
 
 const props = defineProps({
   list: {
-    Type: Array,
-    Default: [],
+    Type: Object,
+    Default: {},
   }
 })
 
 const currentPage = ref(1)
 const filterStatus = ref()
 
-const filteredList = computed(() => {
-  let filtered = []
+const totalPages = computed(() => {
+  return filterStatus.length / 10
+})
 
-  if (filterStatus.value) {
-    props.list.forEach((m) => {
-      if (m.membership_application_status_id === filterStatus.value) {
-        filtered.push(m)
-      }
-    })
-    return filtered
-  }
-  return props.list
+const filteredList = computed(() => {
+  // let filtered = []
+
+  // if (filterStatus.value) {
+  //   props.list.data.forEach((m) => {
+  //     if (m.membership_application_status_id === filterStatus.value) {
+  //       filtered.push(m)
+  //     }
+  //   })
+  //   return filtered
+  // }
+  return props.list.data
 })
 
 
+watch(filterStatus, (value) => {
+  router.get(
+    route('members.index'),
+    { membership_application_status_id: value },
+    {
+      preserveState: true,
+    }
+  );
+});
 
 </script>
 <template>
@@ -67,14 +81,17 @@ const filteredList = computed(() => {
   </list-group>
 </dropdown>
 
-<div class="flex flex-wrap">
-  <!-- No results message -->
-  <div v-show="!filteredList.length">No matches found. Try changing the filter.</div>
+<!-- No results message -->
+<div v-if="!props.list.total">No matches found. Try changing the filter.</div>
+<div v-else class="mb-3">
+  Showing {{ props.list.from }} to {{ props.list.to }} of {{ props.list.total }} results.
+</div>
 
+<div class="flex flex-wrap">
   <!-- Member list-->
-  <MemberSummary class="mb-3 mr-3" v-for="member in filteredList" :member="member" />
+  <MemberSummary class="mb-3 mr-3" v-for="member in filteredList" :key="member.id" :member="member" />
 </div>
 
 <!-- Pagination -->
-<Pagination class="my-3" v-model="currentPage" :total-pages="100"></Pagination>
+<Pagination class="my-3" v-model="currentPage" :total-pages="totalPages"></Pagination>
 </template>
