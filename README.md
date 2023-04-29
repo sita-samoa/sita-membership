@@ -28,7 +28,11 @@ cp .env.example .env
 # run initialisation commands
 php artisan migrate
 php artisan db:seed --class=DatabaseSeeder
+php artisan db:seed --class=UsersTableSeeder
 php artisan key:generate
+
+# or you can run this (it will recreate the database each time)
+composer build
 ```
 
 Once installed you can access the dev site on
