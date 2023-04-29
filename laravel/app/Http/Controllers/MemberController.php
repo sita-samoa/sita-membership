@@ -18,8 +18,8 @@ class MemberController extends Controller
     public function index() : Response
     {
         // @todo - remove this in prod
-        return Inertia::render('Dashboard', [
-            //...
+        return Inertia::render('Members/Index', [
+            'members' => Member::all(),
         ]);
     }
 

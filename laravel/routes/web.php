@@ -91,7 +91,7 @@ Route::resource('members.documents', MemberSupportingDocumentController::class)
 
 // Members Pages
 Route::resource('members', MemberController::class)
-    ->only(['store', 'show', 'update'])
+    ->only(['store', 'show', 'update', 'index'])
     ->middleware([
         'auth:sanctum',
         config('jetstream.auth_session'),
