@@ -5,6 +5,10 @@ import { TheCard, Badge, } from 'flowbite-vue'
 const props = defineProps({
   member: {
     type: Object
+  },
+  linkRoute: {
+    type: String,
+    default: 'members.show',
   }
 })
 
@@ -15,7 +19,7 @@ const member_name = computed(() => {
 
 </script>
 <template>
-<the-card :ref="route('members.signup.index', props.member.id)" variant="image">
+<the-card :href="route(props.linkRoute, props.member.id)">
     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
       <span v-if="props.member.title_id">{{ props.member.title.title }}</span> {{ member_name }}
     </h5>
