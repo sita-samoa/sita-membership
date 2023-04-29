@@ -1,8 +1,9 @@
 <script setup>
-import { computed, ref, watch } from 'vue'
-import { Dropdown, ListGroup, ListGroupItem, Pagination } from 'flowbite-vue'
-import MemberSummary from './MemberSummary.vue';
 import { router } from '@inertiajs/vue3'
+import { computed, ref, watch } from 'vue'
+import { Dropdown, ListGroup, ListGroupItem } from 'flowbite-vue'
+import MemberSummary from '@/Components/MemberSummary.vue';
+import Pagination from '@/Components/Pagination.vue';
 
 const props = defineProps({
   list: {
@@ -93,5 +94,6 @@ watch(filterStatus, (value) => {
 </div>
 
 <!-- Pagination -->
-<Pagination class="my-3" v-model="currentPage" :total-pages="totalPages"></Pagination>
+<!-- <Pagination class="my-3" v-model="currentPage" :total-pages="totalPages"></Pagination> -->
+<Pagination :links="props.list.links" />
 </template>
