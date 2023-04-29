@@ -2,7 +2,7 @@
 import { router } from '@inertiajs/vue3'
 import { computed, ref, watch } from 'vue'
 import { Dropdown, ListGroup, ListGroupItem } from 'flowbite-vue'
-import MemberSummary from '@/Components/MemberSummary.vue';
+import MemberSummaryCard from '@/Components/MemberSummaryCard.vue';
 import Pagination from '@/Components/Pagination.vue';
 
 const props = defineProps({
@@ -12,42 +12,38 @@ const props = defineProps({
   }
 })
 
-const currentPage = ref(1)
+const filterName = computed(() => {
+  switch(filterStatus.value) {
+    case 1:
+      return "Draft"
+    case 2:
+      return "Submitted"
+    case 3:
+      return "Endorsed"
+    case 4:
+      return "Accepted"
+  }
+  return "All"
+})
+
 const filterStatus = ref()
-
-const totalPages = computed(() => {
-  return filterStatus.length / 10
-})
-
-const filteredList = computed(() => {
-  // let filtered = []
-
-  // if (filterStatus.value) {
-  //   props.list.data.forEach((m) => {
-  //     if (m.membership_application_status_id === filterStatus.value) {
-  //       filtered.push(m)
-  //     }
-  //   })
-  //   return filtered
-  // }
-  return props.list.data
-})
-
 
 watch(filterStatus, (value) => {
   router.get(
     route('members.index'),
-    { membership_application_status_id: value },
+    {
+      membership_application_status_id: value
+    },
     {
       preserveState: true,
     }
-  );
-});
+  )
+})
 
 </script>
 <template>
 <!-- Filter dropdown -->
-<dropdown text="Show" class="mb-3">
+<dropdown :text="'Show - ' + filterName" class="mb-3">
   <list-group>
     <list-group-item @click="filterStatus = ''">
       <template #prefix>
@@ -90,10 +86,9 @@ watch(filterStatus, (value) => {
 
 <div class="flex flex-wrap">
   <!-- Member list-->
-  <MemberSummary class="mb-3 mr-3" v-for="member in filteredList" :key="member.id" :member="member" />
+  <MemberSummaryCard class="mb-3 mr-3" v-for="member in props.list.data" :key="member.id" :member="member" />
 </div>
 
 <!-- Pagination -->
-<!-- <Pagination class="my-3" v-model="currentPage" :total-pages="totalPages"></Pagination> -->
 <Pagination :links="props.list.links" />
 </template>

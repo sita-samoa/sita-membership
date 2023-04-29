@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { useForm, Link } from '@inertiajs/vue3'
 import { Alert, ListGroup, ListGroupItem, Button } from 'flowbite-vue'
-import MemberSummary from './MemberSummary.vue'
+import MemberSummaryCard from './MemberSummaryCard.vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 
@@ -60,7 +60,7 @@ const application_status_id = computed(() => {
     Your application has been endorsed and is awaiting settlement.
   </Alert>
 
-  <MemberSummary :member="props.member" link-route="members.signup.index" class="mb-3" />
+  <MemberSummaryCard :member="props.member" link-route="members.signup.index" class="mb-3" />
 
   <list-group class="w-full mb-3">
     <Link :href="route('members.signup.index', props.member.id)">
