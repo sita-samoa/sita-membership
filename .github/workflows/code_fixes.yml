@@ -36,10 +36,5 @@ jobs:
 
       - name: Install dependencies
         run: cd laravel && npm ci
-      - name: Format code
-        run: cd laravel && npm run format
-
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: Fix styling
+      - name: Lint code
+        run: cd laravel && npm run lint

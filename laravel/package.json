@@ -4,7 +4,7 @@
     "prepare": "cd .. && husky install",
     "dev": "vite",
     "build": "vite build",
-    "lint": "eslint --fix .",
+    "lint": "eslint .",
     "format": "prettier 'resources/{js,vue}/**/*.{js,vue}' --write",
     "pre-commit": "npm run format && lint-staged && pretty-quick --staged"
   },

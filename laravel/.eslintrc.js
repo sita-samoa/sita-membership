@@ -2,11 +2,11 @@ module.exports = {
   root: true,
   parserOptions: {
     ecmaVersion: 2020, // Use the latest ecmascript standard
-    sourceType: 'module', // Allows using import/export statements
+    sourceType: "module", // Allows using import/export statements
   },
   settings: {
     react: {
-      version: 'detect',
+      version: "detect",
     },
   },
   env: {
@@ -15,19 +15,20 @@ module.exports = {
     node: true,
   },
   extends: [
-    'eslint:recommended',
-    'plugin:vue/vue3-recommended',
-    'plugin:prettier/recommended',
+    "eslint:recommended",
+    "plugin:vue/vue3-recommended",
+    "plugin:prettier/recommended",
   ],
-  plugins: ['prettier'],
+  plugins: ["prettier"],
+  ignorePatterns: ["**/build/**", "**/vendor/**"],
   rules: {
-    'prettier/prettier': [
-      'error',
+    "prettier/prettier": [
+      "error",
       {},
       {
         usePrettierrc: true,
       },
     ],
-    'no-console': 2,
+    "no-console": 2,
   },
 };
