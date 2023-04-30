@@ -14,7 +14,7 @@ class MembersTableSeeder extends Seeder
     public function run(): void
     {
         Member::factory()
-            ->count(50)
+            ->count(500)
             ->create();
     }
 }
