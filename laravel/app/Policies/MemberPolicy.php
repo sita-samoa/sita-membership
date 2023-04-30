@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
-use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Log;
 
 class MemberPolicy
 {
@@ -14,7 +14,8 @@ class MemberPolicy
      */
     public function viewAny(User $user): bool
     {
-        //
+        $team = Team::first();
+        return $user->hasTeamPermission($team, 'member:read_any');
     }
 
     /**
