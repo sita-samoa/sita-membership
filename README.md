@@ -75,6 +75,10 @@ docker compose exec php sh
 
 # run tests
 ./vendor/bin/pest
+
+# create pest test
+php artisan make:test UserTest --pest
+
 ```
 
 **Tips**
