@@ -1,5 +1,5 @@
 <script setup>
-import { router } from '@inertiajs/vue3'
+import { router, usePage } from '@inertiajs/vue3'
 import { computed, ref, watch } from 'vue'
 import { Dropdown, ListGroup, ListGroupItem } from 'flowbite-vue'
 import MemberSummaryCard from '@/Components/MemberSummaryCard.vue';
@@ -13,7 +13,8 @@ const props = defineProps({
 })
 
 const filterName = computed(() => {
-  switch(filterStatus.value) {
+  const status = parseInt(filterStatus.value)
+  switch(status) {
     case 1:
       return "Draft"
     case 2:
@@ -26,7 +27,7 @@ const filterName = computed(() => {
   return "All"
 })
 
-const filterStatus = ref()
+const filterStatus = ref(usePage().props.filters.membership_application_status_id)
 
 watch(filterStatus, (value) => {
   router.get(
