@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import { ref, computed, onMounted } from 'vue'
+import { Link, useForm } from '@inertiajs/vue3'
 import { Alert, Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
 import MemberQualifications from '@/Components/MemberQualifications.vue'
 import MemberDocuments from '@/Components/MemberDocuments.vue'
@@ -22,6 +22,7 @@ const props = defineProps({
   referees:Object,
   memberWorkExperiences: Object,
   supportingDocuments: Object,
+  tab: Number,
 })
 
 const member_id = ref(props.member.id)
@@ -29,8 +30,8 @@ const member_id = ref(props.member.id)
 const MIN_STEP = 1
 const MAX_STEP = 9
 
-const activeTab = ref('first')
 const currentStep = ref(MIN_STEP)
+const activeTab = ref(getActiveTab(currentStep.value))
 const disableTabs = ref(false)
 
 const form = useForm({
@@ -66,6 +67,31 @@ const progress = computed(() => {
   return percent
 })
 
+function getActiveTab(currentStep) {
+    switch (currentStep.value) {
+        case 1:
+            return "first"
+        case 2:
+            return "second"
+        case 3:
+            return "third"
+        case 4:
+            return "fourth"
+        case 5:
+            return "fifth"
+        case 6:
+            return "sixth"
+        case 7:
+            return "seventh"
+        case 8:
+            return "eighth"
+        case 9:
+            return "ninth"
+        default:
+            return "first"
+    }
+}
+
 function nextStep() {
   currentStep.value = currentStep.value + 1
 
@@ -73,36 +99,6 @@ function nextStep() {
     currentStep.value = MAX_STEP
 
     window.location.href = route('members.show', member_id.value)
-  }
-
-  switch (currentStep.value) {
-    case 1:
-      activeTab.value = "first"
-      break
-    case 2:
-      activeTab.value = "second"
-      break
-    case 3:
-      activeTab.value = "third"
-      break
-    case 4:
-      activeTab.value = "fourth"
-      break
-    case 5:
-      activeTab.value = "fifth"
-      break
-    case 6:
-      activeTab.value = "sixth"
-      break
-    case 7:
-      activeTab.value = "seventh"
-      break
-    case 8:
-      activeTab.value = "eighth"
-      break
-    case 9:
-      activeTab.value = "ninth"
-      break
   }
 }
 
@@ -128,6 +124,12 @@ function submit() {
   }
 }
 
+onMounted(() => {
+    if (props.tab) {
+        currentStep.value = Number(props.tab);
+        activeTab.value = getActiveTab(currentStep)
+    }
+})
 </script>
 
 <template>

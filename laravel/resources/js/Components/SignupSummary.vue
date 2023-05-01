@@ -7,8 +7,8 @@ import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 
 const props = defineProps([
-  'member',
-  'options',
+    'member',
+    'options',
 ])
 
 const completion = props.options.completion
@@ -17,54 +17,54 @@ const form = useForm({
 })
 
 function submit() {
-  form.put(route('members.submit', props.member.id), {
-    resetOnSuccess: false,
-  })
+    form.put(route('members.submit', props.member.id), {
+        resetOnSuccess: false,
+    })
 }
 function endorse() {
-  form.put(route('members.endorse', props.member.id), {
-    resetOnSuccess: false,
-  })
+    form.put(route('members.endorse', props.member.id), {
+        resetOnSuccess: false,
+    })
 }
 function accept() {
-  form.put(route('members.accept', props.member.id), {
-    resetOnSuccess: false,
-  })
+    form.put(route('members.accept', props.member.id), {
+        resetOnSuccess: false,
+    })
 }
 
 const application_status_id = computed(() => {
-  let m = props.member
-  if (m.membership_application_status_id) {
-    return m.membership_application_status_id
-  }
-  return 0
+    let m = props.member
+    if (m.membership_application_status_id) {
+        return m.membership_application_status_id
+    }
+    return 0
 })
 
 </script>
 
 <template>
-<div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-  <!-- Alerts -->
-  <Alert type="info" class="mb-2" v-if="application_status_id === 0">
-    <strong>Draft</strong><br/>
-    Complete your signup and press Submit.
-  </Alert>
+    <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+        <!-- Alerts -->
+        <Alert type="info" class="mb-2" v-if="application_status_id === 0">
+            <strong>Draft</strong><br />
+            Complete your signup and press Submit.
+        </Alert>
 
-  <Alert type="info" class="mb-2" v-if="application_status_id === 2">
-    <strong>Submitted</strong><br/>
-    Your application has been submitted and is under review.
-  </Alert>
+        <Alert type="info" class="mb-2" v-if="application_status_id === 2">
+            <strong>Submitted</strong><br />
+            Your application has been submitted and is under review.
+        </Alert>
 
-  <Alert type="info" class="mb-2" v-if="application_status_id === 3">
-    <strong>Endorsed</strong><br/>
-    Your application has been endorsed and is awaiting settlement.
-  </Alert>
+        <Alert type="info" class="mb-2" v-if="application_status_id === 3">
+            <strong>Endorsed</strong><br />
+            Your application has been endorsed and is awaiting settlement.
+        </Alert>
 
   <MemberSummaryCard :member="props.member" link-route="members.signup.index" class="mb-3" />
 
   <list-group class="w-full mb-3">
-    <Link :href="route('members.signup.index', props.member.id)">
-      <list-group-item v-for="c in completion">
+    <Link v-for="(c,index) in completion" :href="route('members.signup.index', { member: props.member.id, tab: index.replace('part','')})">
+      <list-group-item>
         <template #prefix>
           <CheckCircleOutlineIcon fillColor="green" v-if="c.status" />
           <AlertCircleOutlineIcon fillColor="blue" v-else />
