@@ -124,6 +124,19 @@ class MemberController extends Controller
 
         return redirect()->back()->with('success', 'Application Accepted');
     }
+    /**
+     * Send a sub reminder to member.
+     */
+    public function sendSubReminder(Member $member) : RedirectResponse
+    {
+        $this->authorize('sendSubReminder', $member);
+
+        dd('hello');
+        // $member->membership_application_status_id = 4;
+        // $member->save();
+
+        return redirect()->back()->with('success', 'Application Accepted');
+    }
 
     /**
      * Display the specified resource.

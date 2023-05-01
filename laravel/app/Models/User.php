@@ -75,6 +75,7 @@ class User extends Authenticatable
                 'canSubmit' => $this->can('submit', $member),
                 'canEndorse' => $this->can('endorse', $member),
                 'canAccept' => $this->can('accept', $member),
+                'canSendSubReminder' => $this->can('sendSubReminder', $member),
             ];
         }
 
@@ -85,6 +86,7 @@ class User extends Authenticatable
             'canSubmit' => true,
             'canEndorse' => false,
             'canAccept' => false,
+            'canSendSubReminder' => false,
         ];
 
     }

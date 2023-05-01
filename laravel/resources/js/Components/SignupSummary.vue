@@ -30,6 +30,11 @@ function accept() {
     resetOnSuccess: false,
   })
 }
+function sendSubReminder() {
+  form.put(route('members.send-sub-reminder', props.member.id), {
+    resetOnSuccess: false,
+  })
+}
 
 const member_name = computed(() => {
   let member = props.member
@@ -100,7 +105,7 @@ const application_status_id = computed(() => {
 
   <Button class="w-full mb-3" v-if="application_status_id === 3" default @click.prevent="accept">Accept</Button>
 
-  <Button class="w-full mb-3" v-if="application_status_id === 4" default @click.prevent="sendSubReminder">Send Sub Reminder</Button>
+  <Button class="w-full mb-3" v-if="application_status_id === 4 && $page.props.permissions.canSendSubReminder" default @click.prevent="sendSubReminder">Send Sub Reminder</Button>
 
 </div>
 </template>

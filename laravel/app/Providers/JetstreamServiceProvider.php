@@ -46,10 +46,6 @@ class JetstreamServiceProvider extends ServiceProvider
         Jetstream::defaultApiTokenPermissions(['read']);
 
         Jetstream::role('admin', 'Administrator', [
-            // 'create',
-            // 'read',
-            // 'update',
-            // 'delete',
             'member:read_any',
             'member:endorse',
             'member:read_any',
@@ -57,6 +53,7 @@ class JetstreamServiceProvider extends ServiceProvider
             'member:delete_any',
             'member:accept',
             'member:submit_any',
+            'member:send_sub_reminder',
         ])->description('Administrator users can perform any action.');
 
         // If you remove this role make sure to update the Pest tests
@@ -77,6 +74,7 @@ class JetstreamServiceProvider extends ServiceProvider
             'member:delete_any',
             'member:accept',
             'member:submit_any',
+            'member:send_sub_reminder',
         ])->description('SITA Coordinator users have the ability to read, create, update and accept member applications.');
     }
 }
