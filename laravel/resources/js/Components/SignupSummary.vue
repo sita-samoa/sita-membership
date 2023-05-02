@@ -40,6 +40,14 @@ const application_status_id = computed(() => {
     return 0
 })
 
+
+const application_ready_for_submission = computed(() => {
+    const { part1, part2, part3, part4, part5, part6, part7, part8, part9 } = completion;
+    return part1.status && part2.status && part3.status
+    && part4.status && part5.status && part6.status
+    && part7.status && part8.status && part9.status
+})
+
 </script>
 
 <template>
@@ -75,7 +83,7 @@ const application_status_id = computed(() => {
   </list-group>
 
   <!-- Action buttons -->
-  <Button class="w-full mb-3" v-if="application_status_id === 0" default @click.prevent="submit">Submit</Button>
+  <Button class="w-full mb-3" :disabled="!application_ready_for_submission" v-if="application_status_id === 0" default @click.prevent="submit">Submit</Button>
 
   <Button class="w-full mb-3" v-if="application_status_id === 2" default @click.prevent="endorse">Endorse</Button>
 
