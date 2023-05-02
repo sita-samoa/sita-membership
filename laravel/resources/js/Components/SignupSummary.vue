@@ -42,10 +42,7 @@ const application_status_id = computed(() => {
 
 
 const application_ready_for_submission = computed(() => {
-    const { part1, part2, part3, part4, part5, part6, part7, part8, part9 } = completion;
-    return part1.status && part2.status && part3.status
-    && part4.status && part5.status && part6.status
-    && part7.status && part8.status && part9.status
+    return completion.overall.status
 })
 
 </script>
