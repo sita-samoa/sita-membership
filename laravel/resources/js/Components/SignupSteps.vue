@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { Link, useForm } from '@inertiajs/vue3'
+import { Link, useForm, router } from '@inertiajs/vue3'
 import { Alert, Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
 import MemberQualifications from '@/Components/MemberQualifications.vue'
 import MemberDocuments from '@/Components/MemberDocuments.vue'
@@ -100,6 +100,8 @@ function nextStep() {
 
     window.location.href = route('members.show', member_id.value)
   }
+
+  activeTab.value = getActiveTab(currentStep)
 }
 
 function submit() {
@@ -125,8 +127,12 @@ function submit() {
 }
 
 onMounted(() => {
-    if (props.tab) {
-        currentStep.value = Number(props.tab);
+    if(member_id.value !== 0 && !props.tab){
+        // check if user have already started their membership application, then go to summary
+        router.replace(route('members.show', member_id.value))
+    } else if(props.tab) {
+        // check if user selected a tab from summary
+        currentStep.value = Number(props.tab)
         activeTab.value = getActiveTab(currentStep)
     }
 })
