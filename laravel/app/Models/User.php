@@ -69,6 +69,7 @@ class User extends Authenticatable
 
         if ($member) {
             return [
+                'canReadAny' => $this->can('viewAny', Member::class),
                 'canRead' => $this->can('view', $member),
                 'canUpdate' => $this->can('update', $member),
                 'canDelete' => $this->can('delete', $member),
@@ -79,6 +80,7 @@ class User extends Authenticatable
         }
 
         return [
+            'canReadAny' => $this->can('viewAny', Member::class),
             'canRead' => true,
             'canUpdate' => true,
             'canDelete' => true,
