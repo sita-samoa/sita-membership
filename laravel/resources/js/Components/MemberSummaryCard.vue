@@ -22,7 +22,7 @@ const member_name = computed(() => {
 })
 
 let badgeType = "default";
-switch(props.member.membership_application_status.id){
+switch(props.member.membership_status_id){
     case 1:
         // draft
         badgeType = 'yellow';
