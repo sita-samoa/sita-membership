@@ -295,6 +295,9 @@ onMounted(() => {
         <!-- next button -->
         <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
+      <div v-show="props.tab" class="w-full flex justify-end">
+          <Link class="underline text-indigo-500 text-sm" :href="route('members.show', member_id)">View Application Summary</Link>
+      </div>
     </tabs>
 </div>
 </div>
