@@ -21,6 +21,26 @@ const member_name = computed(() => {
   return member.first_name + " " + member.last_name
 })
 
+let badgeType = "default";
+switch(props.member.membership_application_status.id){
+    case 1:
+        // draft
+        badgeType = 'yellow';
+        break;
+    case 2:
+        // submitted
+        badgeType = 'pink';
+        break;
+    case 3:
+        // endorsed
+        badgeType = 'dark';
+        break;
+    case 4:
+        // accepted
+        badgeType = 'green';
+        break;
+}
+
 </script>
 <template>
 <the-card :href="route(props.linkRoute, props.member.id)" class="sm:w-full">
@@ -29,10 +49,10 @@ const member_name = computed(() => {
     </h5>
 
     <div class="flex mb-3">
-      <Badge type="green" v-if="props.member.membership_application_status">
+      <Badge :type="badgeType" v-if="props.member.membership_application_status">
         {{ props.member.membership_application_status.title }}</Badge>
-      <Badge type="green" v-else>Draft</Badge>
-      <Badge type="green">{{ props.member.membership_type.title }}</Badge>
+      <Badge type="yellow" v-else>Draft</Badge>
+      <Badge type="default">{{ props.member.membership_type.title }}</Badge>
     </div>
 
     <p class="font-normal text-gray-700 dark:text-gray-400">
