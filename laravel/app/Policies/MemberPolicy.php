@@ -41,7 +41,12 @@ class MemberPolicy
     public function submit(User $user, Member $member): bool
     {
         $team = Team::first();
-        return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:submit_any');
+
+        if ($member->completions['overall']['status']) {
+            return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:submit_any');
+        }
+
+        return $user->hasTeamPermission($team, 'member:submit_incomplete');
     }
 
     /**

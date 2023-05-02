@@ -22,7 +22,7 @@ const member_name = computed(() => {
 })
 
 let badgeType = "default";
-switch(props.member.membership_application_status.id){
+switch(props.member.membership_status_id){
     case 1:
         // draft
         badgeType = 'yellow';
@@ -41,9 +41,11 @@ switch(props.member.membership_application_status.id){
         break;
 }
 
+const linkData = { member: props.member.id, tab: 1 }
+
 </script>
 <template>
-<the-card :href="route(props.linkRoute, props.member.id)" class="sm:w-full">
+<the-card :href="route(props.linkRoute, linkData)" class="sm:w-full">
     <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
       <span v-if="props.member.title_id">{{ props.member.title.title }}</span> {{ member_name }}
     </h5>

@@ -145,84 +145,6 @@ class MemberController extends Controller
     {
         $this->authorize('view', $member);
 
-        // Check
-        $completion = [
-            'part1' => [
-                'status' => false,
-                'title' => 'Membership Type',
-            ],
-            'part2' => [
-                'status' => false,
-                'title' => 'General',
-            ],
-            'part3' => [
-                'status' => false,
-                'title' => 'Home Address',
-            ],
-            'part4' => [
-                'status' => false,
-                'title' => 'Work Address',
-            ],
-            'part5' => [
-                'status' => true,
-                'title' => 'Other Memberships',
-            ],
-            'part6' => [
-                'status' => false,
-                'title' => 'Academic Qualifications',
-            ],
-            'part7' => [
-                'status' => false,
-                'title' => 'Work Experience',
-            ],
-            'part8' => [
-                'status' => false,
-                'title' => 'Referees',
-            ],
-            'part9' => [
-                'status' => true,
-                'title' => 'Mailing Lists',
-            ],
-        ];
-
-        if ($member->membership_type_id) {
-            $completion['part1']['status'] = true;
-        }
-        if ($member->first_name &&
-            $member->last_name &&
-            $member->gender_id &&
-            $member->job_title &&
-            $member->current_employer
-        ) {
-            $completion['part2']['status'] = true;
-        }
-        if ($member->home_address ||
-            $member->home_phone ||
-            $member->home_mobile ||
-            $member->home_email
-        ) {
-            $completion['part3']['status'] = true;
-        }
-        if ($member->work_address ||
-            $member->work_phone ||
-            $member->work_mobile ||
-            $member->work_email
-        ) {
-            $completion['part4']['status'] = true;
-        }
-        if ($member->qualifications()->count() &&
-            $member->supportingDocuments()->where('to_delete', false)->count()) {
-            $completion['part6']['status'] = true;
-        }
-        // @todo Part 7
-
-        if($member->referees()->count() > 0){
-            $completion['part8']['status'] = true;
-        }
-
-        if ($member->workExperiences()->count()) {
-            $completion['part7']['status'] = true;
-        }
         // @todo Part 8
         // Load title if exists.
         $relations = [
@@ -236,7 +158,7 @@ class MemberController extends Controller
         return Inertia::render('Members/Show', [
             'member' => $member->load($relations),
             'options' => [
-                'completion' => $completion,
+                'completion' => $member->completions,
             ]
         ]);
     }

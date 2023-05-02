@@ -10,6 +10,7 @@ defineProps([
   'referees',
   'memberWorkExperiences',
   'supportingDocuments',
+  'tab',
 ]);
 
 </script>
@@ -33,6 +34,7 @@ defineProps([
                         :referees="referees"
                         :member-work-experiences="memberWorkExperiences"
                         :supportingDocuments="supportingDocuments"
+                        :tab="tab"
                     />
                 </div>
             </div>

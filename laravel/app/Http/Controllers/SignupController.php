@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Title;
 use Inertia\Response;
@@ -15,7 +16,7 @@ class SignupController extends Controller
     /**
      * Show the form for sign up of new member.
      */
-    public function index(Member $member) : Response
+    public function index(Request $request, Member $member) : Response
     {
         $this->authorize('view', $member);
 
@@ -32,6 +33,7 @@ class SignupController extends Controller
             'supportingDocuments' => $member->supportingDocuments()
                 ->where('to_delete', false)
                 ->get(['id','title', 'file_name', 'file_size']),
+            'tab' => $request->get('tab'),
         ]);
     }
 
