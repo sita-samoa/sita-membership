@@ -7,19 +7,32 @@ use Inertia\Response;
 use App\Models\Member;
 use App\Models\MembershipType;
 use App\Models\Team;
+use App\Policies\MemberPolicy;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class MemberController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index() : Response
+    public function index(Request $request) : Response
     {
-        // @todo - remove this in prod
-        return Inertia::render('Dashboard', [
-            //...
+        $this->authorize('viewAny', Member::class);
+
+        return Inertia::render('Members/Index', [
+            'filters' => FacadesRequest::all('membership_application_status_id'),
+            'members' => Member::orderBy('first_name')
+                ->when(FacadesRequest::input('membership_application_status_id'),
+                    function($query) {
+                        $query->where(FacadesRequest::only('membership_application_status_id'));
+                    }
+                )
+                ->with('membershipType', 'title', 'membershipApplicationStatus')
+                ->paginate(10)
+                ->withQueryString()
         ]);
     }
 
@@ -145,84 +158,6 @@ class MemberController extends Controller
     {
         $this->authorize('view', $member);
 
-        // Check
-        $completion = [
-            'part1' => [
-                'status' => false,
-                'title' => 'Membership Type',
-            ],
-            'part2' => [
-                'status' => false,
-                'title' => 'General',
-            ],
-            'part3' => [
-                'status' => false,
-                'title' => 'Home Address',
-            ],
-            'part4' => [
-                'status' => false,
-                'title' => 'Work Address',
-            ],
-            'part5' => [
-                'status' => true,
-                'title' => 'Other Memberships',
-            ],
-            'part6' => [
-                'status' => false,
-                'title' => 'Academic Qualifications',
-            ],
-            'part7' => [
-                'status' => false,
-                'title' => 'Work Experience',
-            ],
-            'part8' => [
-                'status' => false,
-                'title' => 'Referees',
-            ],
-            'part9' => [
-                'status' => true,
-                'title' => 'Mailing Lists',
-            ],
-        ];
-
-        if ($member->membership_type_id) {
-            $completion['part1']['status'] = true;
-        }
-        if ($member->first_name &&
-            $member->last_name &&
-            $member->gender_id &&
-            $member->job_title &&
-            $member->current_employer
-        ) {
-            $completion['part2']['status'] = true;
-        }
-        if ($member->home_address ||
-            $member->home_phone ||
-            $member->home_mobile ||
-            $member->home_email
-        ) {
-            $completion['part3']['status'] = true;
-        }
-        if ($member->work_address ||
-            $member->work_phone ||
-            $member->work_mobile ||
-            $member->work_email
-        ) {
-            $completion['part4']['status'] = true;
-        }
-        if ($member->qualifications()->count() &&
-            $member->supportingDocuments()->where('to_delete', false)->count()) {
-            $completion['part6']['status'] = true;
-        }
-        // @todo Part 7
-
-        if($member->referees()->count() > 0){
-            $completion['part8']['status'] = true;
-        }
-
-        if ($member->workExperiences()->count()) {
-            $completion['part7']['status'] = true;
-        }
         // @todo Part 8
         // Load title if exists.
         $relations = [
@@ -236,7 +171,7 @@ class MemberController extends Controller
         return Inertia::render('Members/Show', [
             'member' => $member->load($relations),
             'options' => [
-                'completion' => $completion,
+                'completion' => $member->completions,
             ]
         ]);
     }
