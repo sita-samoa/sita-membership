@@ -145,11 +145,10 @@ class MemberController extends Controller
     {
         $this->authorize('sendSubReminder', $member);
 
-        // event(new SubReminderRequested($member));
-        // SubReminderRequested::dispatch($member);
+        // Email will be sent in a queue.
         $member->user->notify(new SubReminder($member));
 
-        return redirect()->back()->with('success', 'Reminder sent.');
+        return redirect()->back()->with('success', 'Reminder scheduled.');
     }
 
     /**
