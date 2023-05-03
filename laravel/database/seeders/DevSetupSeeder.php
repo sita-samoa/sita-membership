@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -18,7 +19,7 @@ class DevSetupSeeder extends Seeder
         $user = User::firstOrCreate(
             ['email' => 'editor@example.com'], [
                 'name' => 'Demo Editor',
-                'password' => bcrypt('editor'),
+                'password' => bcrypt('password'),
             ]
         );
         $user->ownedTeams()->save(Team::forceCreate([
@@ -31,7 +32,7 @@ class DevSetupSeeder extends Seeder
         $user = User::firstOrCreate(
             ['email' => 'executive@example.com'], [
                 'name' => 'Demo executive',
-                'password' => bcrypt('executive'),
+                'password' => bcrypt('password'),
             ]
         );
         $user->ownedTeams()->save(Team::forceCreate([
@@ -44,7 +45,7 @@ class DevSetupSeeder extends Seeder
         $user = User::firstOrCreate(
             ['email' => 'coordinator@example.com'], [
                 'name' => 'Demo coordinator',
-                'password' => bcrypt('coordinator'),
+                'password' => bcrypt('password'),
             ]
         );
         $user->ownedTeams()->save(Team::forceCreate([
@@ -54,8 +55,9 @@ class DevSetupSeeder extends Seeder
         ]));
         $user->teams()->attach($team, ['role' => 'coordinator']);
 
-        // Member::factory()
-        //     ->count(500)
-        //     ->create();
+        // Create dummy members
+        Member::factory()
+            ->count(500)
+            ->create();
     }
 }
