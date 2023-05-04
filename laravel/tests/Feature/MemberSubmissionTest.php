@@ -3,9 +3,13 @@
 use App\Models\Member;
 use App\Models\User;
 
-test('test cannot submit application when incomplete', function () {
+beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
+});
+
+test('test cannot submit application when incomplete', function () {
     $this->actingAs($user = User::factory()->create());
+
     $member = Member::factory()->create();
 
     $response = $this->put('/members/' . $member->id . '/submit');
