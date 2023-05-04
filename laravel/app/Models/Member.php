@@ -52,41 +52,43 @@ class Member extends Model
      */
     public function getCompletionsAttribute() {
         $completion = [
-            'part1' => [
-                'status' => false,
-                'title' => 'Membership Type',
-            ],
-            'part2' => [
-                'status' => false,
-                'title' => 'General',
-            ],
-            'part3' => [
-                'status' => false,
-                'title' => 'Home Address',
-            ],
-            'part4' => [
-                'status' => false,
-                'title' => 'Work Address',
-            ],
-            'part5' => [
-                'status' => true,
-                'title' => 'Other Memberships',
-            ],
-            'part6' => [
-                'status' => false,
-                'title' => 'Academic Qualifications',
-            ],
-            'part7' => [
-                'status' => false,
-                'title' => 'Work Experience',
-            ],
-            'part8' => [
-                'status' => false,
-                'title' => 'Referees',
-            ],
-            'part9' => [
-                'status' => true,
-                'title' => 'Mailing Lists',
+            'data' => [
+                'part1' => [
+                    'status' => false,
+                    'title' => 'Membership Type',
+                ],
+                'part2' => [
+                    'status' => false,
+                    'title' => 'General',
+                ],
+                'part3' => [
+                    'status' => false,
+                    'title' => 'Home Address',
+                ],
+                'part4' => [
+                    'status' => false,
+                    'title' => 'Work Address',
+                ],
+                'part5' => [
+                    'status' => true,
+                    'title' => 'Other Memberships',
+                ],
+                'part6' => [
+                    'status' => false,
+                    'title' => 'Academic Qualifications',
+                ],
+                'part7' => [
+                    'status' => false,
+                    'title' => 'Work Experience',
+                ],
+                'part8' => [
+                    'status' => false,
+                    'title' => 'Referees',
+                ],
+                'part9' => [
+                    'status' => true,
+                    'title' => 'Mailing Lists',
+                ],
             ],
             'overall' => [
                 'status' => false,
@@ -95,7 +97,7 @@ class Member extends Model
         ];
 
         if ($this->membership_type_id) {
-            $completion['part1']['status'] = true;
+            $completion['data']['part1']['status'] = true;
         }
         if ($this->first_name &&
             $this->last_name &&
@@ -103,43 +105,41 @@ class Member extends Model
             $this->job_title &&
             $this->current_employer
         ) {
-            $completion['part2']['status'] = true;
+            $completion['data']['part2']['status'] = true;
         }
         if ($this->home_address ||
             $this->home_phone ||
             $this->home_mobile ||
             $this->home_email
         ) {
-            $completion['part3']['status'] = true;
+            $completion['data']['part3']['status'] = true;
         }
         if ($this->work_address ||
             $this->work_phone ||
             $this->work_mobile ||
             $this->work_email
         ) {
-            $completion['part4']['status'] = true;
+            $completion['data']['part4']['status'] = true;
         }
         if ($this->qualifications()->count() &&
             $this->supportingDocuments()->where('to_delete', false)->count()) {
-            $completion['part6']['status'] = true;
+            $completion['data']['part6']['status'] = true;
         }
         // @todo Part 7
 
         if($this->referees()->count() > 0){
-            $completion['part8']['status'] = true;
+            $completion['data']['part8']['status'] = true;
         }
 
         if ($this->workExperiences()->count()) {
-            $completion['part7']['status'] = true;
+            $completion['data']['part7']['status'] = true;
         }
 
         $overall = true;
-        foreach($completion as $key => $value) {
-            if ($key !== 'overall') {
-                if (!$value['status']) {
-                    $overall = false;
-                    break;
-                }
+        foreach($completion['data'] as $key => $value) {
+            if (!$value['status']) {
+                $overall = false;
+                break;
             }
         }
 

@@ -11,7 +11,7 @@ const props = defineProps([
     'options',
 ])
 
-const completion = props.options.completion
+const completion = props.options.completion.data
 
 const form = useForm({
 })
@@ -45,10 +45,7 @@ const application_status_id = computed(() => {
     return 0
 })
 
-
-const application_ready_for_submission = computed(() => {
-    return completion.overall.status
-})
+const application_ready_for_submission = props.options.completion.overall.status
 
 </script>
 
