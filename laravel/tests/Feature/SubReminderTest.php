@@ -19,3 +19,5 @@ test('test that sub reminder sent', function () {
     $response->assertStatus(302);
     Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 1);
 });
+
+// @todo test only coordinator can send a reminder

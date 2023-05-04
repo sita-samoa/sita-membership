@@ -16,6 +16,6 @@ test('test cannot submit application when incomplete', function () {
     $response->assertStatus(403);
 });
 
-// test that user can submit their own application
-// test that another user cannot submit another users application
-// test that editor and executive cannot submit application
+// @todo test that user can submit their own application
+// @todo test that another user cannot submit another users application
+// @todo test that editor and executive cannot submit application
