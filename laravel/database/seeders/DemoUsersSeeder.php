@@ -7,7 +7,7 @@ use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
-class DevSetupSeeder extends Seeder
+class DemoUsersSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -54,10 +54,5 @@ class DevSetupSeeder extends Seeder
             'personal_team' => true,
         ]));
         $user->teams()->attach($team, ['role' => 'coordinator']);
-
-        // Create dummy members
-        Member::factory()
-            ->count(500)
-            ->create();
     }
 }

@@ -43,7 +43,8 @@
             "php artisan db:seed --class=DatabaseSeeder"
         ],
         "dev": [
-            "php artisan db:seed --class=DevSetupSeeder"
+            "php artisan db:seed --class=DemoUsersSeeder",
+            "php artisan db:seed --class=MembersTableSeeder"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
