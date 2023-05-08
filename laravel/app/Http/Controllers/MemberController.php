@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\SubReminderRequested;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Member;
 use App\Models\MembershipType;
 use App\Models\Team;
 use App\Policies\MemberPolicy;
+use App\Notifications\SubReminder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -72,7 +74,7 @@ class MemberController extends Controller
 
         $member = new Member();
         $member->fill($validated);
-        // set none fillable fields
+        // set non fillable fields
         $member->membership_status_id = 1;
         $member->user_id = $request->user()->id;
         $member->save();
@@ -98,7 +100,6 @@ class MemberController extends Controller
     public function store(Request $request) : RedirectResponse
     {
         // unused
-        return redirect(route('members.signup'));
     }
 
     /**
@@ -136,6 +137,18 @@ class MemberController extends Controller
         $member->save();
 
         return redirect()->back()->with('success', 'Application Accepted');
+    }
+    /**
+     * Send a sub reminder to member.
+     */
+    public function sendSubReminder(Member $member) : RedirectResponse
+    {
+        $this->authorize('sendSubReminder', $member);
+
+        // Email will be sent in a queue.
+        $member->user->notify(new SubReminder($member));
+
+        return redirect()->back()->with('success', 'Reminder scheduled.');
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Ramsey\Uuid\Type\Integer;
 
@@ -37,7 +38,7 @@ class MemberFactory extends Factory
 
             'membership_type_id' => rand(1,5),
             'membership_application_status_id' => rand(1,4),
-            'user_id' => 1,
+            'user_id' => User::factory(),
             'membership_status_id' => rand(1,4),
         ];
     }

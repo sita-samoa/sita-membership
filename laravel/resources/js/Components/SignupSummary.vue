@@ -11,7 +11,7 @@ const props = defineProps([
     'options',
 ])
 
-const completion = props.options.completion
+const completion = props.options.completion.data
 
 const form = useForm({
 })
@@ -31,6 +31,11 @@ function accept() {
         resetOnSuccess: false,
     })
 }
+function sendSubReminder() {
+  form.put(route('members.send-sub-reminder', props.member.id), {
+    resetOnSuccess: false,
+  })
+}
 
 const application_status_id = computed(() => {
     let m = props.member
@@ -40,10 +45,7 @@ const application_status_id = computed(() => {
     return 0
 })
 
-
-const application_ready_for_submission = computed(() => {
-    return completion.overall.status
-})
+const application_ready_for_submission = props.options.completion.overall.status
 
 </script>
 
@@ -86,6 +88,8 @@ const application_ready_for_submission = computed(() => {
   <Button class="w-full mb-3" v-if="application_status_id === 2" default @click.prevent="endorse">Endorse</Button>
 
   <Button class="w-full mb-3" v-if="application_status_id === 3" default @click.prevent="accept">Accept</Button>
+
+  <Button class="w-full mb-3" v-if="application_status_id === 4 && $page.props.permissions.canSendSubReminder" default @click.prevent="sendSubReminder">Send Sub Reminder</Button>
 
 </div>
 </template>

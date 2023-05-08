@@ -33,6 +33,12 @@ php artisan key:generate
 
 # or you can run this (it will recreate the database each time)
 composer build
+
+# and this command to setup demo users and members for dev
+composer dev
+
+# on prod you need to run this on a cron to process the queue
+php artisan queue:work database --tries=1
 ```
 
 Once installed you can access the dev site on
