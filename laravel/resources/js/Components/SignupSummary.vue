@@ -83,7 +83,7 @@ const application_ready_for_submission = props.options.completion.overall.status
 
   <!-- Action buttons -->
   <p class="w-full my-3 ml-2 text-sm text-gray-500" v-show="!application_ready_for_submission">Please ensure all sections are completed before submitting</p>
-  <Button class="w-full mb-3" :disabled="!application_ready_for_submission" v-if="application_status_id === 0" default @click.prevent="submit">Submit</Button>
+  <Button class="w-full mb-3" :disabled="!application_ready_for_submission" v-if="application_status_id === 0 || application_status_id === 1" default @click.prevent="submit">Submit</Button>
 
   <Button class="w-full mb-3" v-if="application_status_id === 2" default @click.prevent="endorse">Endorse</Button>
 
