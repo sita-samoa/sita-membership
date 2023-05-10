@@ -68,12 +68,27 @@ class MemberPolicy
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Determine whether the user can send reminder.
+     *
+     * Must have the permission and status must be Accepted
      */
     public function sendSubReminder(User $user, Member $member): bool
     {
         $team = Team::first();
-        return $user->hasTeamPermission($team, 'member:send_sub_reminder');
+        return $user->hasTeamPermission($team, 'member:send_sub_reminder') &&
+         $member->membership_status_id == 3;
+    }
+
+    /**
+     * Determine whether the user can send reminder.
+     *
+     * Must have the permission and status must be Lapsed
+     */
+    public function sendPastDueSubReminder(User $user, Member $member): bool
+    {
+        $team = Team::first();
+        return $user->hasTeamPermission($team, 'member:send_sub_reminder') &&
+         $member->membership_status_id == 4;
     }
 
     /**

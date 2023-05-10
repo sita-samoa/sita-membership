@@ -9,12 +9,11 @@ use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Team;
-use App\Policies\MemberPolicy;
+use App\Notifications\PastDueSubReminder;
 use App\Notifications\SubReminder;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class MemberController extends Controller
@@ -168,6 +167,18 @@ class MemberController extends Controller
 
         // Email will be sent in a queue.
         $member->user->notify(new SubReminder($member));
+
+        return redirect()->back()->with('success', 'Reminder scheduled.');
+    }
+    /**
+     * Send a sub reminder to member.
+     */
+    public function sendPastDueSubReminder(Member $member) : RedirectResponse
+    {
+        $this->authorize('sendPastDueSubReminder', $member);
+
+        // Email will be sent in a queue.
+        $member->user->notify(new PastDueSubReminder($member));
 
         return redirect()->back()->with('success', 'Reminder scheduled.');
     }
