@@ -6,10 +6,12 @@ use App\Events\SubReminderRequested;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Member;
+use App\Models\MemberMembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Team;
 use App\Policies\MemberPolicy;
 use App\Notifications\SubReminder;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -105,12 +107,21 @@ class MemberController extends Controller
     /**
      * Submit member application.
      */
-    public function submit(Member $member) : RedirectResponse
+    public function submit(Member $member, Request $request) : RedirectResponse
     {
         $this->authorize('submit', $member);
 
         $member->membership_status_id = 2;
         $member->save();
+
+        // add record to member membership status
+        $memberMembershipStatus = new MemberMembershipStatus([
+            'member_id' => $member->id,
+            'membership_status_id' => $member->membership_status_id,
+            'user_id' => $request->user()->id,
+            'from_date' => Carbon::now()->toDateTimeString(),
+        ]);
+        $memberMembershipStatus->save();
 
         return redirect()->back()->with('success', 'Application Submitted');
     }
