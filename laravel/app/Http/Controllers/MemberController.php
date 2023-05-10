@@ -115,37 +115,47 @@ class MemberController extends Controller
         $member->save();
 
         // add record to member membership status
-        $memberMembershipStatus = new MemberMembershipStatus([
-            'member_id' => $member->id,
-            'membership_status_id' => $member->membership_status_id,
-            'user_id' => $request->user()->id,
-            'from_date' => Carbon::now()->toDateTimeString(),
-        ]);
-        $memberMembershipStatus->save();
+        $this->recordAction($member, $request->user()->id);
 
         return redirect()->back()->with('success', 'Application Submitted');
     }
     /**
      * Endorse member application.
      */
-    public function endorse(Member $member) : RedirectResponse
+    public function endorse(Member $member, Request $request) : RedirectResponse
     {
         $this->authorize('endorse', $member);
 
         $member->membership_status_id = 3;
         $member->save();
 
+        // add record to member membership status
+        $this->recordAction($member, $request->user()->id);
+
         return redirect()->back()->with('success', 'Application Endorsed');
     }
     /**
      * Accept member application.
      */
-    public function accept(Member $member) : RedirectResponse
+    public function accept(Member $member, Request $request) : RedirectResponse
     {
         $this->authorize('accept', $member);
 
         $member->membership_status_id = 4;
         $member->save();
+
+        // calculate end of financial year (June 30)
+        $month = Carbon::now()->month;
+        $year = Carbon::now()->year;
+
+        if ($month > 6) {
+            $year += 1;
+        }
+
+        $to_date = Carbon::create($year, 6, 30);
+
+        // add record to member membership status
+        $this->recordAction($member, $request->user()->id, $to_date);
 
         return redirect()->back()->with('success', 'Application Accepted');
     }
@@ -236,5 +246,18 @@ class MemberController extends Controller
     public function destroy(Member $member)
     {
         //
+    }
+
+    private function recordAction(Member $member, $user_id, $to_date = null) {
+        $memberMembershipStatus = new MemberMembershipStatus([
+            'member_id' => $member->id,
+            'membership_status_id' => $member->membership_status_id,
+            'user_id' => $user_id,
+            'from_date' => Carbon::now(),
+        ]);
+        if ($to_date) {
+            $memberMembershipStatus->to_date = $to_date;
+        }
+        $memberMembershipStatus->save();
     }
 }
