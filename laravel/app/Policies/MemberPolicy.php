@@ -94,15 +94,6 @@ class MemberPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function sendSubReminder(User $user, Member $member): bool
-    {
-        $team = Team::first();
-        return $user->hasTeamPermission($team, 'member:send_sub_reminder');
-    }
-
-    /**
-     * Determine whether the user can update the model.
-     */
     public function update(User $user, Member $member): bool
     {
         $team = Team::first();
