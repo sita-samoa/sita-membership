@@ -31,7 +31,6 @@ class Member extends Model
         'other_membership',
         // 'membership_status_id',
         'note',
-        // 'membership_application_status_id',
     ];
 
     /**
@@ -166,10 +165,6 @@ class Member extends Model
 
     public function membershipStatus(): BelongsTo {
         return $this->belongsTo(MembershipStatus::class);
-    }
-
-    public function membershipApplicationStatus(): BelongsTo {
-        return $this->belongsTo(MembershipApplicationStatus::class);
     }
 
     public function qualifications() : HasMany {

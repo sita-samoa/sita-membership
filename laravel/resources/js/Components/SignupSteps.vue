@@ -54,7 +54,7 @@ const form = useForm({
   other_membership: props.member.other_membership ?? '',
   membership_status_id: props.member.membership_status_id ?? 1,
   note: props.member.note ?? '',
-  membership_application_status_id: props.member.membership_application_status_id ?? '',
+  membership_status_id: props.member.membership_status_id ?? '',
 })
 
 const mailingOptions = [

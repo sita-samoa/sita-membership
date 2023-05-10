@@ -39,8 +39,8 @@ function sendSubReminder() {
 
 const application_status_id = computed(() => {
     let m = props.member
-    if (m.membership_application_status_id) {
-        return m.membership_application_status_id
+    if (m.membership_status_id) {
+        return m.membership_status_id
     }
     return 0
 })

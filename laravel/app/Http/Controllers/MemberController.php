@@ -25,14 +25,14 @@ class MemberController extends Controller
         $this->authorize('viewAny', Member::class);
 
         return Inertia::render('Members/Index', [
-            'filters' => FacadesRequest::all('membership_application_status_id'),
+            'filters' => FacadesRequest::all('membership_status_id'),
             'members' => Member::orderBy('first_name')
-                ->when(FacadesRequest::input('membership_application_status_id'),
+                ->when(FacadesRequest::input('membership_status_id'),
                     function($query) {
-                        $query->where(FacadesRequest::only('membership_application_status_id'));
+                        $query->where(FacadesRequest::only('membership_status_id'));
                     }
                 )
-                ->with('membershipType', 'title', 'membershipApplicationStatus')
+                ->with('membershipType', 'title', 'membershipStatus')
                 ->paginate(10)
                 ->withQueryString()
         ]);
@@ -109,7 +109,7 @@ class MemberController extends Controller
     {
         $this->authorize('submit', $member);
 
-        $member->membership_application_status_id = 2;
+        $member->membership_status_id = 2;
         $member->save();
 
         return redirect()->back()->with('success', 'Application Submitted');
@@ -121,7 +121,7 @@ class MemberController extends Controller
     {
         $this->authorize('endorse', $member);
 
-        $member->membership_application_status_id = 3;
+        $member->membership_status_id = 3;
         $member->save();
 
         return redirect()->back()->with('success', 'Application Endorsed');
@@ -133,7 +133,7 @@ class MemberController extends Controller
     {
         $this->authorize('accept', $member);
 
-        $member->membership_application_status_id = 4;
+        $member->membership_status_id = 4;
         $member->save();
 
         return redirect()->back()->with('success', 'Application Accepted');
@@ -162,7 +162,7 @@ class MemberController extends Controller
         // Load title if exists.
         $relations = [
             "membershipType",
-            "membershipApplicationStatus",
+            "membershipStatus",
         ];
         if ($member->title_id) {
             $relations[] = "title";
@@ -211,7 +211,7 @@ class MemberController extends Controller
             'other_membership' => 'nullable|max:500',
             // 'membership_status_id' => 'int',
             'note' => 'nullable',
-            'membership_application_status_id' => 'nullable|int'
+            'membership_status_id' => 'nullable|int'
         ]);
 
         $member->update($validated);
