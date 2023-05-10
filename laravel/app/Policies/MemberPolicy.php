@@ -76,7 +76,7 @@ class MemberPolicy
     {
         $team = Team::first();
         return $user->hasTeamPermission($team, 'member:send_sub_reminder') &&
-         $member->membership_status_id == 3;
+         $member->membership_status_id == 4;
     }
 
     /**
@@ -88,7 +88,7 @@ class MemberPolicy
     {
         $team = Team::first();
         return $user->hasTeamPermission($team, 'member:send_sub_reminder') &&
-         $member->membership_status_id == 4;
+         $member->membership_status_id == 5;
     }
 
     /**

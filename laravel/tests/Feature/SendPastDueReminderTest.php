@@ -26,7 +26,7 @@ test('test that reminder cannot be sent if not Lapsed', function ($status_id) {
 
     $response->assertStatus(403);
     Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 0);
-})->with([1,2,3,5,6]);
+})->with([1,2,3,4,6]);
 
 
 test('test that reminder sent', function () {
@@ -34,7 +34,7 @@ test('test that reminder sent', function () {
 
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
     $member = Member::factory()->for($user)->create();
-    $member->membership_status_id = 4;
+    $member->membership_status_id = 5;
     $member->save();
 
     $response = $this->put('/members/'.$member->id.'/send-past-due-sub-reminder');
@@ -48,7 +48,7 @@ test('test user cannot send a reminder', function () {
 
     $this->actingAs($user = User::factory()->create());
     $member = Member::factory()->for($user)->create();
-    $member->membership_status_id = 4;
+    $member->membership_status_id = 5;
     $member->save();
 
     $response = $this->put('/members/'.$member->id.'/send-past-due-sub-reminder');
@@ -62,7 +62,7 @@ test('test other roles cannot send a reminder', function (string $role)  {
 
     $this->actingAs($user = User::factory()->create());
     $member = Member::factory()->for($user)->create();
-    $member->membership_status_id = 4;
+    $member->membership_status_id = 5;
     $member->save();
 
     $team = Team::first();
@@ -81,7 +81,7 @@ test('test coordinator can send a reminder', function () {
 
     $this->actingAs($user = User::factory()->create());
     $member = Member::factory()->for($user)->create();
-    $member->membership_status_id = 4;
+    $member->membership_status_id = 5;
     $member->save();
 
     $team = Team::first();
