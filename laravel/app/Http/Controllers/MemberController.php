@@ -8,6 +8,7 @@ use Inertia\Response;
 use App\Models\Member;
 use App\Models\MembershipType;
 use App\Models\Team;
+use App\Notifications\EndorsementNotification;
 use App\Policies\MemberPolicy;
 use App\Notifications\SubReminder;
 use Illuminate\Http\RedirectResponse;
@@ -111,6 +112,16 @@ class MemberController extends Controller
 
         $member->membership_application_status_id = 2;
         $member->save();
+
+        // send emails
+        $team = Team::first();
+        $users = $team->allUsers();
+        foreach ($users as $user) {
+            if ($team->userHasPermission($user, 'member:endorse')) {
+                // send email
+                $user->notify(new EndorsementNotification($member));
+            }
+        }
 
         return redirect()->back()->with('success', 'Application Submitted');
     }
