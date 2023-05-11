@@ -113,12 +113,11 @@ class MemberController extends Controller
         $member->membership_application_status_id = 2;
         $member->save();
 
-        // send emails
+        // Send endorsement notifications.
         $team = Team::first();
         $users = $team->allUsers();
         foreach ($users as $user) {
             if ($team->userHasPermission($user, 'member:endorse')) {
-                // send email
                 $user->notify(new EndorsementNotification($member));
             }
         }
