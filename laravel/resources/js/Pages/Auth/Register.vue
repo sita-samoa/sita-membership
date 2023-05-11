@@ -7,6 +7,8 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { useReCaptcha } from 'vue-recaptcha-v3';
+import { onMounted, onUnmounted } from 'vue';
 
 const form = useForm({
     name: '',
@@ -14,13 +16,22 @@ const form = useForm({
     password: '',
     password_confirmation: '',
     terms: false,
+    captcha_token: '',
 });
+
+const { executeRecaptcha, recaptchaLoaded } = useReCaptcha()
+const recaptcha = async () => {
+      await recaptchaLoaded()
+      form.captcha_token = await executeRecaptcha('login')
+      submit();
+}
 
 const submit = () => {
     form.post(route('register'), {
         onFinish: () => form.reset('password', 'password_confirmation'),
     });
 };
+
 </script>
 
 <template>
@@ -31,7 +42,7 @@ const submit = () => {
             <AuthenticationCardLogo />
         </template>
 
-        <form @submit.prevent="submit">
+        <form @submit.prevent="recaptcha">
             <div>
                 <InputLabel for="name" value="Name" />
                 <TextInput
