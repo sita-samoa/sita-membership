@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class EndorsementNotification extends Notification implements ShouldQueue
+class AcceptanceNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -36,10 +36,13 @@ class EndorsementNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("Signup submitted")
+            ->subject("Signup endorsed")
             ->greeting("Tālofa {$this->member->user->name}!")
-            ->line('A signup request has been submitted. Please review
-                for your Endorsement.')
+            ->line('A signup request has been endorsed. Please review
+                for your Acceptance.')
+            ->line('Before accepting please ensure:')
+            ->line('* that an invcoie has been issued; and')
+            ->line('* payment has been collected')
             ->action('View details', route('members.show', $this->member->id));
     }
 

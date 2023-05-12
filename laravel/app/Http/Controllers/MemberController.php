@@ -8,12 +8,11 @@ use Inertia\Response;
 use App\Models\Member;
 use App\Models\MembershipType;
 use App\Models\Team;
+use App\Notifications\AcceptanceNotification;
 use App\Notifications\EndorsementNotification;
-use App\Policies\MemberPolicy;
 use App\Notifications\SubReminder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class MemberController extends Controller
@@ -133,6 +132,15 @@ class MemberController extends Controller
 
         $member->membership_application_status_id = 3;
         $member->save();
+
+        // Send acceptance notifications.
+        $team = Team::first();
+        $users = $team->allUsers();
+        foreach ($users as $user) {
+            if ($team->userHasPermission($user, 'member:accept')) {
+                $user->notify(new AcceptanceNotification($member));
+            }
+        }
 
         return redirect()->back()->with('success', 'Application Endorsed');
     }
