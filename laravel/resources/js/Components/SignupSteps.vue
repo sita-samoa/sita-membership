@@ -142,13 +142,15 @@ function nextStep() {
 
 function submit() {
   if (member_id.value > 0) {
-    form.put(route('members.update', member_id.value), {
-      preserveScroll: true,
-      resetOnSuccess: false,
-      onSuccess() {
-        nextStep()
-      }
-    })
+    if (form.isDirty) {
+      form.put(route('members.update', member_id.value), {
+        preserveScroll: true,
+        resetOnSuccess: false,
+        onSuccess() {
+        }
+      })
+    }
+    nextStep()
   }
   else {
     form.post(route('members.signup.store'), {
@@ -177,7 +179,7 @@ onMounted(() => {
 <template>
 <div>
   <div class="p-6 bg-white border-b border-gray-200 lg:p-8">
-
+    <div class="my-3 text-sm" v-if="form.isDirty && member_id">There are unsaved changes. Press the "Next" button to save them.</div>
     <div class="mb-3">
       <Progress :progress="progress" />
     </div>
