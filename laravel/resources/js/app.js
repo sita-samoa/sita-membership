@@ -16,7 +16,7 @@ createInertiaApp({
         const captchaKey = props.initialPage.props.recaptcha_site_key;
         return createApp({ render: () => h(App, props) })
             .use(plugin)
-            .use(VueReCaptcha, { siteKey: captchaKey })
+            .use(VueReCaptcha, { siteKey: captchaKey, loaderOptions: { autoHideBadge: true } })
             .use(ZiggyVue, Ziggy)
             .mount(el);
     },

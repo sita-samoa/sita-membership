@@ -8,7 +8,14 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useReCaptcha } from 'vue-recaptcha-v3';
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted } from 'vue';
+
+onMounted(() => {
+    const ins = useReCaptcha().instance;
+    if(ins.value){
+        ins.value.showBadge()
+    }
+})
 
 const form = useForm({
     name: '',
