@@ -46,7 +46,6 @@ const canEdit = computed(() => {
 })
 
 const refereesList = props.list
-console.log(refereesList)
 const itemId = ref(-1)
 
 const form = useForm({
