@@ -46,6 +46,6 @@ class Recaptcha implements Rule {
      */
     public function message()
     {
-        return 'Something goes wrong. Please contact us directly through the phone or email.';
+        return 'Something went wrong. Please contact us through the SITA website.';
     }
 }
