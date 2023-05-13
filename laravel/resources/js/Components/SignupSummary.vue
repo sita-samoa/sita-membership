@@ -86,9 +86,9 @@ const application_ready_for_submission = props.options.completion.overall.status
 
   <Button class="w-full mb-3" :disabled="!(application_ready_for_submission || $page.props.permissions.canSubmit)" v-if="application_status_id <= 1" default @click.prevent="submit">Submit</Button>
 
-  <Button class="w-full mb-3" v-if="application_status_id === 2" default @click.prevent="endorse">Endorse</Button>
+  <Button class="w-full mb-3" v-if="application_status_id === 2 && $page.props.permissions.canEndorse" default @click.prevent="endorse">Endorse</Button>
 
-  <Button class="w-full mb-3" v-if="application_status_id === 3" default @click.prevent="accept">Accept</Button>
+  <Button class="w-full mb-3" v-if="application_status_id === 3 && $page.props.permissions.canAccept" default @click.prevent="accept">Accept</Button>
 
   <Button class="w-full mb-3" v-if="application_status_id === 4 && $page.props.permissions.canSendSubReminder" default @click.prevent="sendSubReminder">Send Sub Reminder</Button>
 
