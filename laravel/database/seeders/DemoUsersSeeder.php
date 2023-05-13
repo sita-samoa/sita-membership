@@ -17,7 +17,7 @@ class DemoUsersSeeder extends Seeder
         // create dev users per role
         $team = Team::first();
         $user = User::firstOrCreate(
-            ['email' => 'editor@example.com'], [
+            ['email' => 'editor@example.com', 'email_verified_at' => now()], [
                 'name' => 'Demo Editor',
                 'password' => bcrypt('password'),
             ]
@@ -30,7 +30,7 @@ class DemoUsersSeeder extends Seeder
         $user->teams()->attach($team, ['role' => 'editor']);
 
         $user = User::firstOrCreate(
-            ['email' => 'executive@example.com'], [
+            ['email' => 'executive@example.com', 'email_verified_at' => now()], [
                 'name' => 'Demo executive',
                 'password' => bcrypt('password'),
             ]
@@ -43,7 +43,7 @@ class DemoUsersSeeder extends Seeder
         $user->teams()->attach($team, ['role' => 'executive']);
 
         $user = User::firstOrCreate(
-            ['email' => 'coordinator@example.com'], [
+            ['email' => 'coordinator@example.com', 'email_verified_at' => now()], [
                 'name' => 'Demo coordinator',
                 'password' => bcrypt('password'),
             ]
