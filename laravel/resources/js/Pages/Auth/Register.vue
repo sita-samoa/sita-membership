@@ -8,14 +8,7 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import { useReCaptcha } from 'vue-recaptcha-v3';
-import { onMounted } from 'vue';
-
-onMounted(() => {
-    const ins = useReCaptcha().instance;
-    if(ins.value){
-        ins.value.showBadge()
-    }
-})
+import { onMounted, onUnmounted } from 'vue';
 
 const form = useForm({
     name: '',
@@ -26,12 +19,25 @@ const form = useForm({
     captcha_token: '',
 });
 
-const { executeRecaptcha, recaptchaLoaded } = useReCaptcha()
+const { executeRecaptcha, recaptchaLoaded, instance } = useReCaptcha()
 const recaptcha = async () => {
       await recaptchaLoaded()
       form.captcha_token = await executeRecaptcha('login')
       submit();
 }
+
+onMounted(async () => {
+    await recaptchaLoaded()
+    if(instance.value){
+        instance.value.showBadge()
+    }
+})
+
+onUnmounted(() => {
+    if(instance.value){
+        instance.value.hideBadge()
+    }
+})
 
 const submit = () => {
     form.post(route('register'), {
