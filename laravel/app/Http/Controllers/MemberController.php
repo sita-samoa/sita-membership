@@ -10,6 +10,8 @@ use App\Models\MemberMembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Team;
 use App\Notifications\PastDueSubReminder;
+use App\Notifications\AcceptanceNotification;
+use App\Notifications\EndorsementNotification;
 use App\Notifications\SubReminder;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -115,6 +117,14 @@ class MemberController extends Controller
 
         // add record to member membership status
         $this->recordAction($member, $request->user()->id);
+        // Send endorsement notifications.
+        $team = Team::first();
+        $users = $team->allUsers();
+        foreach ($users as $user) {
+            if ($team->userHasPermission($user, 'member:endorse')) {
+                $user->notify(new EndorsementNotification($member));
+            }
+        }
 
         return redirect()->back()->with('success', 'Application Submitted');
     }
@@ -130,6 +140,14 @@ class MemberController extends Controller
 
         // add record to member membership status
         $this->recordAction($member, $request->user()->id);
+        // Send acceptance notifications.
+        $team = Team::first();
+        $users = $team->allUsers();
+        foreach ($users as $user) {
+            if ($team->userHasPermission($user, 'member:accept')) {
+                $user->notify(new AcceptanceNotification($member));
+            }
+        }
 
         return redirect()->back()->with('success', 'Application Endorsed');
     }
