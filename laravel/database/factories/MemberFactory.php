@@ -37,9 +37,8 @@ class MemberFactory extends Factory
             'work_email' => $this->faker->email(),
 
             'membership_type_id' => rand(1,5),
-            'membership_application_status_id' => rand(1,4),
             'user_id' => User::factory(),
-            'membership_status_id' => rand(1,4),
+            'membership_status_id' => rand(1,6),
         ];
     }
 }

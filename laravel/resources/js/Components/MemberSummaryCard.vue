@@ -51,8 +51,8 @@ const linkData = { member: props.member.id, tab: 1 }
     </h5>
 
     <div class="flex mb-3">
-      <Badge :type="badgeType" v-if="props.member.membership_application_status">
-        {{ props.member.membership_application_status.title }}</Badge>
+      <Badge :type="badgeType" v-if="props.member.membership_status">
+        {{ props.member.membership_status.title }}</Badge>
       <Badge type="yellow" v-else>Draft</Badge>
       <Badge type="default">{{ props.member.membership_type.title }}</Badge>
     </div>

@@ -36,11 +36,16 @@ function sendSubReminder() {
     resetOnSuccess: false,
   })
 }
+function sendPastDueSubReminder() {
+  form.put(route('members.send-past-due-sub-reminder', props.member.id), {
+    resetOnSuccess: false,
+  })
+}
 
 const application_status_id = computed(() => {
     let m = props.member
-    if (m.membership_application_status_id) {
-        return m.membership_application_status_id
+    if (m.membership_status_id) {
+        return m.membership_status_id
     }
     return 0
 })
@@ -90,7 +95,9 @@ const application_ready_for_submission = props.options.completion.overall.status
 
   <Button class="w-full mb-3" v-if="application_status_id === 3 && $page.props.permissions.canAccept" default @click.prevent="accept">Accept</Button>
 
-  <Button class="w-full mb-3" v-if="application_status_id === 4 && $page.props.permissions.canSendSubReminder" default @click.prevent="sendSubReminder">Send Sub Reminder</Button>
+  <Button class="w-full mb-3" v-if="application_status_id === 4 && $page.props.permissions.canSendSubReminder" default @click.prevent="sendSubReminder">Send sub reminder</Button>
+
+  <Button class="w-full mb-3" v-if="application_status_id === 5 && $page.props.permissions.canSendPastDueSubReminder" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
 
 </div>
 </template>

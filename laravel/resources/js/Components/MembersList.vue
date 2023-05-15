@@ -23,17 +23,23 @@ const filterName = computed(() => {
       return "Endorsed"
     case 4:
       return "Accepted"
+    case 5:
+      return "Lapsed"
+    case 6:
+      return "Expired"
+    case 7:
+      return "Banned"
   }
   return "All"
 })
 
-const filterStatus = ref(usePage().props.filters.membership_application_status_id)
+const filterStatus = ref(usePage().props.filters.membership_status_id)
 
 watch(filterStatus, (value) => {
   router.get(
     route('members.index'),
     {
-      membership_application_status_id: value
+      membership_status_id: value
     },
     {
       preserveState: true,
@@ -75,6 +81,24 @@ watch(filterStatus, (value) => {
         <svg class="w-4 h-4 fill-current" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="M378 810 154 586l43-43 181 181 384-384 43 43-427 427Z"/></svg>
       </template>
       Accepted
+    </list-group-item>
+    <list-group-item @click="filterStatus = 5">
+      <template #prefix>
+        <svg class="w-4 h-4 fill-current" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="M378 810 154 586l43-43 181 181 384-384 43 43-427 427Z"/></svg>
+      </template>
+      Lapsed
+    </list-group-item>
+    <list-group-item @click="filterStatus = 6">
+      <template #prefix>
+        <svg class="w-4 h-4 fill-current" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="M378 810 154 586l43-43 181 181 384-384 43 43-427 427Z"/></svg>
+      </template>
+      Expired
+    </list-group-item>
+    <list-group-item @click="filterStatus = 7">
+      <template #prefix>
+        <svg class="w-4 h-4 fill-current" fill="currentColor" xmlns="http://www.w3.org/2000/svg" height="48" viewBox="0 96 960 960" width="48"><path d="M378 810 154 586l43-43 181 181 384-384 43 43-427 427Z"/></svg>
+      </template>
+      Banned
     </list-group-item>
   </list-group>
 </dropdown>

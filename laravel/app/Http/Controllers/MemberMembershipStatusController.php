@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\MembershipApplicationStatus;
+use App\Models\MemberMembershipStatus;
 use Illuminate\Http\Request;
 
-class MembershipApplicationStatusController extends Controller
+class MemberMembershipStatusController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -34,7 +34,7 @@ class MembershipApplicationStatusController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(MembershipApplicationStatus $membershipApplicationStatus)
+    public function show(MemberMembershipStatus $memberMembershipStatus)
     {
         //
     }
@@ -42,7 +42,7 @@ class MembershipApplicationStatusController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(MembershipApplicationStatus $membershipApplicationStatus)
+    public function edit(MemberMembershipStatus $memberMembershipStatus)
     {
         //
     }
@@ -50,7 +50,7 @@ class MembershipApplicationStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MembershipApplicationStatus $membershipApplicationStatus)
+    public function update(Request $request, MemberMembershipStatus $memberMembershipStatus)
     {
         //
     }
@@ -58,7 +58,7 @@ class MembershipApplicationStatusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(MembershipApplicationStatus $membershipApplicationStatus)
+    public function destroy(MemberMembershipStatus $memberMembershipStatus)
     {
         //
     }

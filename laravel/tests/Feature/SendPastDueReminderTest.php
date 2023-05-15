@@ -1,5 +1,7 @@
 <?php
 
+// test that button appears when sub is past due
+
 use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
@@ -9,7 +11,10 @@ beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
 });
 
-test('test that sub reminder cannot be sent if not Accepted', function ($status_id) {
+// @todo test that button appears when sub is past due
+// @todo test that button disappears when sub is more than 6 months past due
+
+test('test that reminder cannot be sent if not Lapsed', function ($status_id) {
     Queue::fake();
 
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
@@ -17,22 +22,22 @@ test('test that sub reminder cannot be sent if not Accepted', function ($status_
     $member->membership_status_id = $status_id;
     $member->save();
 
-    $response = $this->put('/members/'.$member->id.'/send-sub-reminder');
+    $response = $this->put('/members/'.$member->id.'/send-past-due-sub-reminder');
 
     $response->assertStatus(403);
     Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 0);
-})->with([1,2,3,5,6]);
+})->with([1,2,3,4,6]);
 
 
-test('test that sub reminder sent', function () {
+test('test that reminder sent', function () {
     Queue::fake();
 
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
     $member = Member::factory()->for($user)->create();
-    $member->membership_status_id = 4;
+    $member->membership_status_id = 5;
     $member->save();
 
-    $response = $this->put('/members/'.$member->id.'/send-sub-reminder');
+    $response = $this->put('/members/'.$member->id.'/send-past-due-sub-reminder');
 
     $response->assertStatus(302);
     Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 1);
@@ -43,10 +48,10 @@ test('test user cannot send a reminder', function () {
 
     $this->actingAs($user = User::factory()->create());
     $member = Member::factory()->for($user)->create();
-    $member->membership_status_id = 4;
+    $member->membership_status_id = 5;
     $member->save();
 
-    $response = $this->put('/members/'.$member->id.'/send-sub-reminder');
+    $response = $this->put('/members/'.$member->id.'/send-past-due-sub-reminder');
 
     $response->assertStatus(403);
     Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 0);
@@ -57,13 +62,13 @@ test('test other roles cannot send a reminder', function (string $role)  {
 
     $this->actingAs($user = User::factory()->create());
     $member = Member::factory()->for($user)->create();
-    $member->membership_status_id = 4;
+    $member->membership_status_id = 5;
     $member->save();
 
     $team = Team::first();
     $user->teams()->attach($team, ['role' => $role]);
 
-    $response = $this->put('/members/'.$member->id.'/send-sub-reminder');
+    $response = $this->put('/members/'.$member->id.'/send-past-due-sub-reminder');
 
     $response->assertStatus(403);
     Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 0);
@@ -76,13 +81,13 @@ test('test coordinator can send a reminder', function () {
 
     $this->actingAs($user = User::factory()->create());
     $member = Member::factory()->for($user)->create();
-    $member->membership_status_id = 4;
+    $member->membership_status_id = 5;
     $member->save();
 
     $team = Team::first();
     $user->teams()->attach($team, ['role' => 'coordinator']);
 
-    $response = $this->put('/members/'.$member->id.'/send-sub-reminder');
+    $response = $this->put('/members/'.$member->id.'/send-past-due-sub-reminder');
 
     $response->assertStatus(302);
     Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 1);
