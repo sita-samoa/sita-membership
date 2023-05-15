@@ -19,7 +19,7 @@ const props = defineProps({
     default: []
   },
   countryList: {
-    type: Array,
+    type: Object,
     default: [],
   },
   editable: {
@@ -38,12 +38,8 @@ const form = useForm({
 const listData = props.list
 const itemId = ref(-1)
 
-const countryOptions = [
-  { id: 1, name: "Australia" },
-  { id: 2, name: "Fiji" },
-  { id: 3, name: "New Zealand" },
-  { id: 4, name: "Samoa" },
-  { id: 5, name: "United States of America" },
+const popularCountries = [
+  'AU', 'FJ', 'NZ', 'WS', 'VU', 'US'
 ]
 const showFormModal = ref(false)
 const showConfirmationModal = ref(false)
@@ -54,6 +50,18 @@ const canAdd = computed(() => {
 
 const canEdit = computed(() => {
   return !canAdd.value
+})
+
+const otherCountries = computed(() => {
+  let countries = [],
+    keys = Object.keys(props.countryList)
+
+  keys.forEach(c => {
+    if (!popularCountries.includes(c)) {
+      countries.push(c)
+    }
+  })
+  return countries
 })
 
 function closeModal() {
@@ -160,7 +168,10 @@ function deleteItem() {
     <InputLabel for="countries" value="Country" class="mb-2" />
     <select v-model="form.country_iso2" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
       <option selected>Choose a country</option>
-      <option v-for="(value, key) in props.countryList" :value="key">{{ value }}</option>
+      <option disabled>----------</option>
+      <option v-for="countryCode in popularCountries" :value="countryCode">{{ props.countryList[countryCode] }}</option>
+      <option disabled>--Others--</option>
+      <option v-for="countryCode in otherCountries" :value="countryCode">{{ props.countryList[countryCode] }}</option>
     </select>
     <InputError class="mt-2" :message="form.errors.country_iso2" />
   </template>
