@@ -38,10 +38,7 @@ class MemberQualificationPolicy
      */
     public function update(User $user, MemberQualification $memberQualification): bool
     {
-        $member = Member::where('id', $memberQualification
-            ->member_id)->first();
-
-        return $member->user()->is($user);
+        //
     }
 
     /**

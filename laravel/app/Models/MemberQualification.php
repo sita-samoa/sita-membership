@@ -14,7 +14,7 @@ class MemberQualification extends Model
         'qualification',
         'year_attained',
         'institution',
-        'country_id'
+        'country_iso2'
     ];
 
     public function member(): BelongsTo {

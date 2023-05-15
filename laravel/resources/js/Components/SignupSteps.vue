@@ -22,6 +22,7 @@ const props = defineProps({
   referees:Object,
   memberWorkExperiences: Object,
   supportingDocuments: Object,
+  countryList: Object,
   tab: Number,
 })
 
@@ -260,7 +261,7 @@ onMounted(() => {
         </form>
       </tab>
       <tab name="sixth" title="Qualifications" :disabled="disableTabs">
-        <MemberQualifications :member_id="member_id" :list="props.qualifications" :editable="props.permissions.canUpdate" />
+        <MemberQualifications :member_id="member_id" :list="props.qualifications" :countryList="props.countryList" :editable="props.permissions.canUpdate" />
         <MemberDocuments :member_id="member_id" :list="props.supportingDocuments" />
 
         <!-- next button -->

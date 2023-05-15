@@ -10,6 +10,7 @@ use App\Models\Gender;
 use App\Models\Member;
 use App\Models\MembershipType;
 use App\Models\MemberWorkExperience;
+use Monarobase\CountryList\CountryListFacade;
 
 class SignupController extends Controller
 {
@@ -33,6 +34,7 @@ class SignupController extends Controller
             'supportingDocuments' => $member->supportingDocuments()
                 ->where('to_delete', false)
                 ->get(['id','title', 'file_name', 'file_size']),
+            'countryList' => CountryListFacade::getList(),
             'tab' => $request->get('tab'),
         ]);
     }

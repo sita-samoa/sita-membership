@@ -18,6 +18,10 @@ const props = defineProps({
     type: Object,
     default: []
   },
+  countryList: {
+    type: Array,
+    default: [],
+  },
   editable: {
     type: Boolean,
     default: true
@@ -25,7 +29,7 @@ const props = defineProps({
 })
 
 const form = useForm({
-  country_id: null,
+  country_iso2: null,
   qualification: null,
   year_attained: null,
   institution: null,
@@ -71,7 +75,7 @@ function edit(id) {
   form.qualification = item.qualification
   form.year_attained = item.year_attained
   form.institution = item.institution
-  form.country_id = item.country_id
+  form.country_iso2 = item.country_iso2
   showModal()
 }
 function submit() {
@@ -95,7 +99,7 @@ function update() {
       item.qualification = form.qualification
       item.year_attained = form.year_attained
       item.institution = form.institution
-      item.country_id = form.country_id
+      item.country_iso2 = form.country_iso2
 
       // reset form
       closeModalAndResetForm()
@@ -154,10 +158,11 @@ function deleteItem() {
     <InputError class="mt-2" :message="form.errors.institution" />
 
     <InputLabel for="countries" value="Country" class="mb-2" />
-    <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
+    <select v-model="form.country_iso2" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
       <option selected>Choose a country</option>
-      <option v-for="c in countryOptions" :value="c.id">{{ c.name }}</option>
+      <option v-for="(value, key) in props.countryList" :value="key">{{ value }}</option>
     </select>
+    <InputError class="mt-2" :message="form.errors.country_iso2" />
   </template>
   <template #footer>
     <CancelButton @click="closeModalAndResetForm" />
