@@ -51,6 +51,7 @@ Click "Register" and register a new account then use it to log in.
 * [Jet stream (inertia-vue)](https://jetstream.laravel.com/2.x/introduction.html#inertia-vue)
 * [Laravel vite](https://laravel.com/docs/10.x/vite)
 * [Github Project](https://github.com/orgs/sita-samoa/projects/1)
+* [Icons](https://pictogrammers.com/library/mdi/)
 
 **Common commands**
 
