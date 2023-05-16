@@ -87,45 +87,38 @@ class DatabaseSeeder extends Seeder
         // Add Membership Statuses
         DB::table('membership_statuses')->insert([
             'id' => 1,
-            'code' => 'pending',
-            'title' => 'Pending',
-        ]);
-        DB::table('membership_statuses')->insert([
-            'id' => 2,
-            'code' => 'active',
-            'title' => 'Active',
-        ]);
-        DB::table('membership_statuses')->insert([
-            'id' => 3,
-            'code' => 'expired',
-            'title' => 'Expired',
-        ]);
-        DB::table('membership_statuses')->insert([
-            'id' => 4,
-            'code' => 'banned',
-            'title' => 'Banned',
-        ]);
-
-        // Add Membership Application Statuses
-        DB::table('membership_application_statuses')->insert([
-            'id' => 1,
             'code' => 'draft',
             'title' => 'Draft',
         ]);
-        DB::table('membership_application_statuses')->insert([
+        DB::table('membership_statuses')->insert([
             'id' => 2,
             'code' => 'submitted',
             'title' => 'Submitted',
         ]);
-        DB::table('membership_application_statuses')->insert([
+        DB::table('membership_statuses')->insert([
             'id' => 3,
             'code' => 'endorsed',
             'title' => 'Endorsed',
         ]);
-        DB::table('membership_application_statuses')->insert([
+        DB::table('membership_statuses')->insert([
             'id' => 4,
             'code' => 'accepted',
             'title' => 'Accepted',
+        ]);
+        DB::table('membership_statuses')->insert([
+            'id' => 5,
+            'code' => 'lapsed',
+            'title' => 'Lapsed',
+        ]);
+        DB::table('membership_statuses')->insert([
+            'id' => 6,
+            'code' => 'expired',
+            'title' => 'Expired',
+        ]);
+        DB::table('membership_statuses')->insert([
+            'id' => 7,
+            'code' => 'banned',
+            'title' => 'Banned',
         ]);
     }
 }

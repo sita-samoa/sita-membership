@@ -60,6 +60,9 @@ Route::middleware([
     Route::put('/members/{member}/send-sub-reminder', [MemberController::class, 'sendSubReminder'])
     ->name('members.send-sub-reminder');
 
+    Route::put('/members/{member}/send-past-due-sub-reminder', [MemberController::class, 'sendPastDueSubReminder'])
+    ->name('members.send-past-due-sub-reminder');
+
     // Member work experience
     Route::resource('member-work-experiences', MemberWorkExperienceController::class)->only([
         'store', 'update', 'destroy'

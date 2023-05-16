@@ -34,7 +34,7 @@ php artisan key:generate
 # or you can run this (it will recreate the database each time)
 composer build
 
-# and this command to setup demo users and members for dev
+# and this command to setup demo users and members for dev (must run after composer build)
 composer dev
 
 # on prod you need to run this on a cron to process the queue

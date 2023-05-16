@@ -6,13 +6,16 @@ use App\Events\SubReminderRequested;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Member;
+use App\Models\MemberMembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Team;
-use App\Policies\MemberPolicy;
+use App\Notifications\PastDueSubReminder;
+use App\Notifications\AcceptanceNotification;
+use App\Notifications\EndorsementNotification;
 use App\Notifications\SubReminder;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class MemberController extends Controller
@@ -25,14 +28,14 @@ class MemberController extends Controller
         $this->authorize('viewAny', Member::class);
 
         return Inertia::render('Members/Index', [
-            'filters' => FacadesRequest::all('membership_application_status_id'),
+            'filters' => FacadesRequest::all('membership_status_id'),
             'members' => Member::orderBy('first_name')
-                ->when(FacadesRequest::input('membership_application_status_id'),
+                ->when(FacadesRequest::input('membership_status_id'),
                     function($query) {
-                        $query->where(FacadesRequest::only('membership_application_status_id'));
+                        $query->where(FacadesRequest::only('membership_status_id'));
                     }
                 )
-                ->with('membershipType', 'title', 'membershipApplicationStatus')
+                ->with('membershipType', 'title', 'membershipStatus')
                 ->paginate(10)
                 ->withQueryString()
         ]);
@@ -105,36 +108,71 @@ class MemberController extends Controller
     /**
      * Submit member application.
      */
-    public function submit(Member $member) : RedirectResponse
+    public function submit(Member $member, Request $request) : RedirectResponse
     {
         $this->authorize('submit', $member);
 
-        $member->membership_application_status_id = 2;
+        $member->membership_status_id = 2;
         $member->save();
+
+        // add record to member membership status
+        $this->recordAction($member, $request->user()->id);
+        // Send endorsement notifications.
+        $team = Team::first();
+        $users = $team->allUsers();
+        foreach ($users as $user) {
+            if ($team->userHasPermission($user, 'member:endorse')) {
+                $user->notify(new EndorsementNotification($member));
+            }
+        }
 
         return redirect()->back()->with('success', 'Application Submitted');
     }
     /**
      * Endorse member application.
      */
-    public function endorse(Member $member) : RedirectResponse
+    public function endorse(Member $member, Request $request) : RedirectResponse
     {
         $this->authorize('endorse', $member);
 
-        $member->membership_application_status_id = 3;
+        $member->membership_status_id = 3;
         $member->save();
+
+        // add record to member membership status
+        $this->recordAction($member, $request->user()->id);
+        // Send acceptance notifications.
+        $team = Team::first();
+        $users = $team->allUsers();
+        foreach ($users as $user) {
+            if ($team->userHasPermission($user, 'member:accept')) {
+                $user->notify(new AcceptanceNotification($member));
+            }
+        }
 
         return redirect()->back()->with('success', 'Application Endorsed');
     }
     /**
      * Accept member application.
      */
-    public function accept(Member $member) : RedirectResponse
+    public function accept(Member $member, Request $request) : RedirectResponse
     {
         $this->authorize('accept', $member);
 
-        $member->membership_application_status_id = 4;
+        $member->membership_status_id = 4;
         $member->save();
+
+        // calculate end of financial year (June 30)
+        $month = Carbon::now()->month;
+        $year = Carbon::now()->year;
+
+        if ($month > 6) {
+            $year += 1;
+        }
+
+        $to_date = Carbon::create($year, 6, 30);
+
+        // add record to member membership status
+        $this->recordAction($member, $request->user()->id, $to_date);
 
         return redirect()->back()->with('success', 'Application Accepted');
     }
@@ -150,6 +188,18 @@ class MemberController extends Controller
 
         return redirect()->back()->with('success', 'Reminder scheduled.');
     }
+    /**
+     * Send a sub reminder to member.
+     */
+    public function sendPastDueSubReminder(Member $member) : RedirectResponse
+    {
+        $this->authorize('sendPastDueSubReminder', $member);
+
+        // Email will be sent in a queue.
+        $member->user->notify(new PastDueSubReminder($member));
+
+        return redirect()->back()->with('success', 'Reminder scheduled.');
+    }
 
     /**
      * Display the specified resource.
@@ -162,7 +212,7 @@ class MemberController extends Controller
         // Load title if exists.
         $relations = [
             "membershipType",
-            "membershipApplicationStatus",
+            "membershipStatus",
         ];
         if ($member->title_id) {
             $relations[] = "title";
@@ -211,7 +261,7 @@ class MemberController extends Controller
             'other_membership' => 'nullable|max:500',
             // 'membership_status_id' => 'int',
             'note' => 'nullable',
-            'membership_application_status_id' => 'nullable|int'
+            'membership_status_id' => 'nullable|int'
         ]);
 
         $member->update($validated);
@@ -225,5 +275,18 @@ class MemberController extends Controller
     public function destroy(Member $member)
     {
         //
+    }
+
+    private function recordAction(Member $member, $user_id, $to_date = null) {
+        $memberMembershipStatus = new MemberMembershipStatus([
+            'member_id' => $member->id,
+            'membership_status_id' => $member->membership_status_id,
+            'user_id' => $user_id,
+            'from_date' => Carbon::now(),
+        ]);
+        if ($to_date) {
+            $memberMembershipStatus->to_date = $to_date;
+        }
+        $memberMembershipStatus->save();
     }
 }

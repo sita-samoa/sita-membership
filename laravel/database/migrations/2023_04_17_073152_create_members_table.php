@@ -35,7 +35,6 @@ return new class extends Migration
             $table->string('work_email')->nullable();
             $table->mediumText('other_membership')->nullable();
             $table->mediumText('note')->nullable();
-            $table->foreignId('membership_application_status_id')->nullable();
             $table->timestamps();
         });
     }
