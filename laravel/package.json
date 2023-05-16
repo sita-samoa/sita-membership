@@ -20,6 +20,7 @@
     "dependencies": {
         "flowbite": "^1.6.5",
         "flowbite-vue": "^0.0.10",
-        "vue-material-design-icons": "^5.2.0"
+        "vue-material-design-icons": "^5.2.0",
+        "vue-recaptcha-v3": "^2.0.1"
     }
 }

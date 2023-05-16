@@ -39,6 +39,17 @@ composer dev
 
 # on prod you need to run this on a cron to process the queue
 php artisan queue:work database --tries=1
+
+# register for a google recaptcha site key and secret here
+https://www.google.com/recaptcha/admin/create
+
+# in the domains field enter the following
+sita-membership.docker.localhost
+
+# once received, add your google recaptcha environment variables to laravel/.env
+GOOGLE_RECAPTCHA_SITE_KEY=YOUR_GOOGLE_RECAPTCHA_SITE_KEY
+GOOGLE_RECAPTCHA_SECRET_KEY=YOUR_GOOGLE_RECAPTCHA_SECRET_KEY
+
 ```
 
 Once installed you can access the dev site on
