@@ -7,6 +7,8 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
+import { useReCaptcha } from 'vue-recaptcha-v3';
+import { onMounted, onUnmounted } from 'vue';
 
 defineProps({
     canResetPassword: Boolean,
@@ -17,7 +19,27 @@ const form = useForm({
     email: '',
     password: '',
     remember: false,
+    captcha_token: '',
 });
+const { executeRecaptcha, recaptchaLoaded, instance } = useReCaptcha()
+const recaptcha = async () => {
+      await recaptchaLoaded()
+      form.captcha_token = await executeRecaptcha('login')
+      submit();
+}
+
+onMounted(async () => {
+    await recaptchaLoaded()
+    if(instance.value){
+        instance.value.showBadge()
+    }
+})
+
+onUnmounted(() => {
+    if(instance.value){
+        instance.value.hideBadge()
+    }
+})
 
 const submit = () => {
     form.transform(data => ({
@@ -41,7 +63,7 @@ const submit = () => {
             {{ status }}
         </div>
 
-        <form @submit.prevent="submit">
+        <form @submit.prevent="recaptcha">
             <div>
                 <InputLabel for="email" value="Email" />
                 <TextInput

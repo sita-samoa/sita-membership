@@ -22,7 +22,7 @@ const form = useForm({
 const { executeRecaptcha, recaptchaLoaded, instance } = useReCaptcha()
 const recaptcha = async () => {
       await recaptchaLoaded()
-      form.captcha_token = await executeRecaptcha('login')
+      form.captcha_token = await executeRecaptcha('register')
       submit();
 }
 
