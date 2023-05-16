@@ -11,6 +11,7 @@ import AddButton from '@/Components/AddButton.vue';
 import DeleteButton from '@/Components/DeleteButton.vue';
 import UpdateButton from '@/Components/UpdateButton.vue';
 import CancelButton from '@/Components/CancelButton.vue';
+import CloudDownloadIcon from 'vue-material-design-icons/CloudDownload.vue'
 
 const props = defineProps({
   member_id: Number,
@@ -147,6 +148,14 @@ function deleteItem() {
       <Progress v-if="form.progress" :progress="form.progress.percentage">
         {{ form.progress.percentage }}%
       </Progress>
+    </span>
+    <span v-else>
+      <div class="mb-3">
+        <a href="#" class="underline text-indigo-500" @click="download(itemId)">
+          Download file
+          <CloudDownloadIcon fillColor="currentColor" class="float-left mr-2" />
+        </a>
+      </div>
     </span>
 
   </template>
