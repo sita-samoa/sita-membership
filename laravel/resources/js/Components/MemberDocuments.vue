@@ -59,6 +59,9 @@ function edit(id) {
 
   showModal()
 }
+function download(id) {
+  window.open(route('members.documents.download.index', {document: id, member: props.member_id}))
+}
 function submit() {
   form.post(route('members.documents.store', props.member_id), {
     onSuccess(res) {
@@ -117,7 +120,7 @@ function deleteItem() {
   <Button class="p-3 my-3" color="alternative" @click.prevent="showModal" >Add Document</Button>
 
   <!-- Member supporting documents list -->
-  <MemberDocumentsList :list="listData" @edit-item="edit" />
+  <MemberDocumentsList :list="listData" @edit-item="edit" @download="download" />
 </div>
 
 <!-- Modal -->
