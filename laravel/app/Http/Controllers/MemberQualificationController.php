@@ -28,7 +28,7 @@ class MemberQualificationController extends Controller
             'qualification' => 'required|string',
             'year_attained' => 'required|int|min:1900|max:3000',
             'institution' => 'required|string',
-            // 'country_id' => 'required|string',
+            'country_iso2' => 'required|string',
         ]);
 
         $member_qualification = $member->qualifications()->create($validated);
@@ -46,13 +46,13 @@ class MemberQualificationController extends Controller
     public function update(Request $request, Member $member, MemberQualification $qualification) : RedirectResponse
     {
         // @todo - Implement authorization here
-        $this->authorize('update', $qualification);
+        $this->authorize('update', $member);
 
         $validated = $request->validate([
             'qualification' => 'required|string',
             'year_attained' => 'required|int|min:1900|max:3000',
             'institution' => 'required|string',
-            // 'country_id' => 'required|string',
+            'country_iso2' => 'required|string',
         ]);
 
         $qualification->update($validated);
@@ -66,7 +66,7 @@ class MemberQualificationController extends Controller
     public function destroy(Member $member, MemberQualification $qualification) : RedirectResponse
     {
         // @todo - Implement authorization here
-        $this->authorize('update', $qualification);
+        $this->authorize('update', $member);
 
         $qualification->delete();
 
