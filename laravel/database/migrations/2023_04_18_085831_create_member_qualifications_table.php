@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('member_qualifications', function (Blueprint $table) {
             $table->id();
             $table->foreignId('member_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('country_id')->nullable();
+            $table->string('country_iso2')->nullable();
             $table->string('qualification')->nullable();
             $table->integer('year_attained')->nullable();
             $table->string('institution')->nullable();
