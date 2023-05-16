@@ -32,7 +32,7 @@ const MIN_STEP = 1
 const MAX_STEP = 9
 
 const currentStep = ref(MIN_STEP)
-const activeTab = ref(getActiveTab(currentStep.value))
+const activeTab = ref(getActiveTab())
 const disableTabs = ref(false)
 
 const form = useForm({
@@ -68,52 +68,90 @@ const progress = computed(() => {
   return percent
 })
 
-function getActiveTab(currentStep) {
-    switch (currentStep.value) {
-        case 1:
-            return "first"
-        case 2:
-            return "second"
-        case 3:
-            return "third"
-        case 4:
-            return "fourth"
-        case 5:
-            return "fifth"
-        case 6:
-            return "sixth"
-        case 7:
-            return "seventh"
-        case 8:
-            return "eighth"
-        case 9:
-            return "ninth"
-        default:
-            return "first"
-    }
+function getActiveTab() {
+  switch (currentStep.value) {
+    case 1:
+      return "first"
+    case 2:
+      return "second"
+    case 3:
+      return "third"
+    case 4:
+      return "fourth"
+    case 5:
+      return "fifth"
+    case 6:
+      return "sixth"
+    case 7:
+      return "seventh"
+    case 8:
+      return "eighth"
+    case 9:
+      return "ninth"
+    default:
+      return "first"
+  }
 }
 
 function nextStep() {
-  currentStep.value = currentStep.value + 1
+  let step = 1
+  let tab = "first"
 
-  if (currentStep.value > MAX_STEP) {
-    currentStep.value = MAX_STEP
-
-    window.location.href = route('members.show', member_id.value)
+  switch (activeTab.value) {
+    case "first":
+      step = 2
+      tab = "second"
+      break;
+    case "second":
+      step = 3
+      tab = "third"
+      break;
+    case "third":
+      step = 4
+      tab = "fourth"
+      break;
+    case "fourth":
+      step = 5
+      tab = "fifth"
+      break;
+    case "fifth":
+      step = 6
+      tab = "sixth"
+      break;
+    case "sixth":
+      step = 7
+      tab = "seventh"
+      break;
+    case "seventh":
+      step = 8
+      tab = "eighth"
+      break;
+    case "eighth":
+      step = 9
+      tab = "ninth"
+      break;
+    case "ninth":
+      step = 9
+      tab = "ninth"
+      router.replace(route('members.show', member_id.value))
+      break;
   }
 
-  activeTab.value = getActiveTab(currentStep)
+  currentStep.value = step
+  activeTab.value = tab
 }
 
 function submit() {
   if (member_id.value > 0) {
-    form.put(route('members.update', member_id.value), {
-      preserveScroll: true,
-      resetOnSuccess: false,
-      onSuccess() {
-        nextStep()
-      }
-    })
+    if (form.isDirty) {
+      form.put(route('members.update', member_id.value), {
+        preserveScroll: true,
+        resetOnSuccess: false,
+        onSuccess() {
+        }
+      })
+    }
+    nextStep()
   }
   else {
     form.post(route('members.signup.store'), {
@@ -134,7 +172,7 @@ onMounted(() => {
     } else if(props.tab) {
         // check if user selected a tab from summary
         currentStep.value = Number(props.tab)
-        activeTab.value = getActiveTab(currentStep)
+        activeTab.value = getActiveTab()
     }
 })
 </script>
@@ -142,7 +180,7 @@ onMounted(() => {
 <template>
 <div>
   <div class="p-6 bg-white border-b border-gray-200 lg:p-8">
-
+    <div class="my-3 text-sm" v-if="form.isDirty && member_id">There are unsaved changes. Press the "Next" button to save them.</div>
     <div class="mb-3">
       <Progress :progress="progress" />
     </div>
