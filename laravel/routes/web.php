@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use Inertia\Inertia;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberQualificationController;
@@ -36,9 +37,8 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::resource('dashboard', DashboardController::class)
+        ->only(['index']);
 
     // Sign up Page
     Route::get('/members/signup', [MemberController::class, 'signup'])
@@ -64,42 +64,28 @@ Route::middleware([
     ->name('members.send-past-due-sub-reminder');
 
     // Member work experience
-    Route::resource('member-work-experiences', MemberWorkExperienceController::class)->only([
-        'store', 'update', 'destroy'
-    ]);
+    Route::resource('member-work-experiences', MemberWorkExperienceController::class)
+    ->only(['store', 'update', 'destroy']);
+
+    // Signup
+    Route::resource('members.signup', SignupController::class)
+    ->only(['index']);
+
+    // Academic Qualifications
+    Route::resource('members.qualifications', MemberQualificationController::class)
+    ->only(['store', 'update', 'destroy']);
+
+    // Referees
+    Route::resource('members.referees', MemberRefereeController::class)
+    ->only(['store', 'update', 'destroy']);
+
+
+    // Supporting Documents
+    Route::resource('members.documents', MemberSupportingDocumentController::class)
+    ->only(['store', 'update', 'destroy']);
+
+    // Members Pages
+    Route::resource('members', MemberController::class)
+    ->only(['store', 'show', 'update', 'index']);
 });
 
-// Signup
-Route::resource('members.signup', SignupController::class)
-    ->only(['index'])
-    ->middleware([
-        'auth:sanctum',
-        config('jetstream.auth_session'),
-        'verified'
-]);
-
-// Academic Qualifications
-Route::resource('members.qualifications', MemberQualificationController::class)
-    ->only(['store', 'update', 'destroy']);
-
-// Referees
-Route::resource('members.referees', MemberRefereeController::class)
-    ->only(['store', 'update', 'destroy']);
-
-// Supporting Documents
-Route::resource('members.documents', MemberSupportingDocumentController::class)
-    ->only(['store', 'update', 'destroy'])
-    ->middleware([
-        'auth:sanctum',
-        config('jetstream.auth_session'),
-        'verified'
-]);
-
-// Members Pages
-Route::resource('members', MemberController::class)
-    ->only(['store', 'show', 'update', 'index'])
-    ->middleware([
-        'auth:sanctum',
-        config('jetstream.auth_session'),
-        'verified'
-]);
