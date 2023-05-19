@@ -11,7 +11,11 @@ defineProps({
     totalLapsed: {
         type: Number,
         default: 0,
-    }
+    },
+    totalOwing: {
+        type: Number,
+        default: 0,
+    },
 })
 
 </script>
@@ -46,5 +50,7 @@ defineProps({
         <Link href="/members?membership_status_id=5" as="button">
             <Button class="p-3 mt-3">Lapsed Membership ({{ totalLapsed }})</Button>
         </Link>
+
+        <p>Total Owning: {{ totalOwing }}</p>
     </div>
 </template>
