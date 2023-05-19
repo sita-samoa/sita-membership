@@ -18,13 +18,22 @@ defineProps({
     },
 })
 
+function format(amount) {
+    let WSTala = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+    })
+
+    return WSTala.format(amount)
+}
+
 </script>
 
 <template>
     <!-- welcome and sign up -->
     <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
 
-        <h1 class="mt-8 text-2xl font-medium text-gray-900">
+        <h1 class="text-2xl font-medium text-gray-900">
             Welcome
         </h1>
 
@@ -37,9 +46,9 @@ defineProps({
         </Link>
     </div>
     <!-- exec dash -->
-    <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+    <div class="p-6 lg:p-8 bg-white border-b border-gray-200" v-if="$page.props.permissions.canReadAny">
 
-        <h1 class="mt-8 text-2xl font-medium text-gray-900">
+        <h1 class="text-2xl font-medium text-gray-900">
             Executive Dashboard
         </h1>
 
@@ -48,9 +57,9 @@ defineProps({
         </Link>
 
         <Link href="/members?membership_status_id=5" as="button">
-            <Button class="p-3 mt-3">Lapsed Membership ({{ totalLapsed }})</Button>
+            <Button class="p-3 my-3">Lapsed Membership ({{ totalLapsed }})</Button>
         </Link>
 
-        <p>Total Owning: {{ totalOwing }}</p>
+        <p>Estimated Total Owning: {{ format(totalOwing) }}</p>
     </div>
 </template>
