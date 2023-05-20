@@ -125,5 +125,17 @@ class DatabaseSeeder extends Seeder
             'code' => 'banned',
             'title' => 'Banned',
         ]);
+
+        // add mailing list options
+        DB::table('mailing_lists')->insert([
+            'id' => 1,
+            'code' => 'general',
+            'title' => 'SITA General',
+        ]);
+        DB::table('mailing_lists')->insert([
+            'id' => 2,
+            'code' => 'members',
+            'title' => 'SITA Members',
+        ]);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MailingList;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Title;
@@ -27,6 +28,7 @@ class SignupController extends Controller
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
                 'gender_options' => Gender::all(['id', 'code', 'title']),
                 'title_options' => Title::all(['id', 'code', 'title']),
+                'mailing_options' => MailingList::all(['id', 'code', 'title'])
             ],
             'qualifications' => $member->qualifications()->get(),
             'referees' => $member->referees()->get(),

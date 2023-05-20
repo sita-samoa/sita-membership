@@ -181,4 +181,8 @@ class Member extends Model
         return $this->hasMany(MemberSupportingDocument::class);
     }
 
+    public function mailingLists() : HasMany {
+        return $this->hasMany(MemberMailingPreference::class);
+    }
+
 }
