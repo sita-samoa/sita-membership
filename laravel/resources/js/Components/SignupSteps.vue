@@ -143,12 +143,18 @@ function nextStep() {
 
 function submit() {
   if (member_id.value > 0) {
-    if (form.isDirty) {
+    // Always check the 'General' tab
+    if (form.isDirty || activeTab.value === 'second') {
+      const tab = activeTab.value
       form.put(route('members.update', member_id.value), {
         preserveScroll: true,
         resetOnSuccess: false,
         onSuccess() {
-        }
+        },
+        onError() {
+          // Display the error tab.
+          activeTab.value = tab
+        },
       })
     }
     nextStep()
