@@ -46,9 +46,9 @@ class HandleInertiaRequests extends Middleware
                     'data' => $request->session()->get('data'),
                 ];
             },
-            'permissions' => auth()->user()->permissions ?? [],
             'user' => [
                 'member_id' => auth()->user()->members()->first()->id ?? 0,
+                'permissions' => auth()->user()->permissions ?? [],
             ],
             'recaptcha_site_key' => config('services.google_recaptcha.site_key')
         ]);

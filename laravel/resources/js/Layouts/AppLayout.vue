@@ -60,7 +60,7 @@ const logout = () => {
                             </div>
                             <div
                                 class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex"
-                                v-if="$page.props.permissions.canReadAny">
+                                v-if="$page.props.user.permissions.canReadAny">
                                 <NavLink :href="route('members.index')" :active="route().current('members.index')">
                                     Members
                                 </NavLink>
@@ -213,7 +213,7 @@ const logout = () => {
                         <ResponsiveNavLink
                             :href="route('members.index')"
                             :active="route().current('members.index')"
-                            v-if="$page.props.permissions.canReadAny">
+                            v-if="$page.props.user.permissions.canReadAny">
                             Members
                         </ResponsiveNavLink>
                     </div>

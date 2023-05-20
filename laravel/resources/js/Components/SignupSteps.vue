@@ -201,7 +201,7 @@ onMounted(() => {
           </div>
 
           <!-- next button -->
-          <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+          <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
         </form>
       </tab>
       <tab name="second" title="General" :disabled="disableTabs">
@@ -241,7 +241,7 @@ onMounted(() => {
           <InputError class="mt-2" :message="form.errors.current_employer" />
 
           <!-- next button -->
-          <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+          <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
         </form>
       </tab>
       <tab name="third" title="Home" :disabled="disableTabs">
@@ -261,7 +261,7 @@ onMounted(() => {
           <InputError class="mt-2" :message="form.errors.home_email" />
 
           <!-- next button -->
-          <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+          <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
 
         </form>
       </tab>
@@ -282,7 +282,7 @@ onMounted(() => {
           <InputError class="mt-2" :message="form.errors.work_email" />
 
           <!-- next button -->
-          <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+          <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
 
         </form>
       </tab>
@@ -294,28 +294,28 @@ onMounted(() => {
           <InputError class="mt-2" :message="form.errors.other_membership" />
 
           <!-- next button -->
-          <Button v-show="props.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+          <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
 
         </form>
       </tab>
       <tab name="sixth" title="Qualifications" :disabled="disableTabs">
-        <MemberQualifications :member_id="member_id" :list="props.qualifications" :countryList="props.countryList" :editable="props.permissions.canUpdate" />
+        <MemberQualifications :member_id="member_id" :list="props.qualifications" :countryList="props.countryList" :editable="$page.props.user.permissions.canUpdate" />
         <MemberDocuments :member_id="member_id" :list="props.supportingDocuments" />
 
         <!-- next button -->
-        <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+        <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
       <tab name="seventh" title="Work Experience" :disabled="disableTabs">
         <MemberWorkExperience :member-id="member.id" :member-work-experiences="memberWorkExperiences" />
 
         <!-- next button -->
-        <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+        <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
       <tab name="eighth" title="Referees" :disabled="disableTabs">
         <MemberReferees :member_id="member_id" :list="props.referees" />
 
         <!-- next button -->
-        <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+        <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
       <tab name="ninth" title="Mailing Lists" :disabled="disableTabs">
         <div>
@@ -332,7 +332,7 @@ onMounted(() => {
         </div>
 
         <!-- next button -->
-        <Button v-show="props.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+        <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
       <div v-show="props.tab" class="w-full flex justify-end">
           <Link class="underline text-indigo-500 text-sm" :href="route('members.show', member_id)">View Application Summary</Link>
