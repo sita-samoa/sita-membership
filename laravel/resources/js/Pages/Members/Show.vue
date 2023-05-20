@@ -5,6 +5,7 @@ import SignupSummary from '../../Components/SignupSummary.vue';
 defineProps([
   'member',
   'options',
+  'auditLog',
 ]);
 
 </script>
@@ -20,7 +21,7 @@ defineProps([
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                    <SignupSummary :member="member" :options="options" />
+                    <SignupSummary :member="member" :options="options" :auditLog="auditLog" />
                 </div>
             </div>
         </div>

@@ -3,12 +3,14 @@ import { computed } from 'vue'
 import { useForm, Link } from '@inertiajs/vue3'
 import { Alert, ListGroup, ListGroupItem, Button } from 'flowbite-vue'
 import MemberSummaryCard from './MemberSummaryCard.vue'
+import AuditLogTable from './AuditLogTable.vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 
 const props = defineProps([
     'member',
     'options',
+    'auditLog',
 ])
 
 const completion = props.options.completion.data
@@ -99,5 +101,6 @@ const application_ready_for_submission = props.options.completion.overall.status
 
   <Button class="w-full mb-3" v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
 
+  <AuditLogTable :auditLog="auditLog" />
 </div>
 </template>

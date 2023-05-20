@@ -127,14 +127,13 @@ class Member extends Model implements Auditable
             $this->supportingDocuments()->where('to_delete', false)->count()) {
             $completion['data']['part6']['status'] = true;
         }
-        // @todo Part 7
-
-        if($this->referees()->count() > 0){
-            $completion['data']['part8']['status'] = true;
-        }
 
         if ($this->workExperiences()->count()) {
             $completion['data']['part7']['status'] = true;
+        }
+
+        if($this->referees()->count() > 0){
+            $completion['data']['part8']['status'] = true;
         }
 
         $overall = true;
