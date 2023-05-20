@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { Link, useForm, router } from '@inertiajs/vue3'
+import { Link, useForm, usePage, router } from '@inertiajs/vue3'
 import { Alert, Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
 import MemberQualifications from '@/Components/MemberQualifications.vue'
 import MemberDocuments from '@/Components/MemberDocuments.vue'
@@ -35,9 +35,31 @@ const currentStep = ref(MIN_STEP)
 const activeTab = ref(getActiveTab())
 const disableTabs = ref(false)
 
+const setDefault = !(usePage().props.user.permissions.canAccept || usePage().props.auth.user.id === 1)
+
+function getFirstName() {
+  if (setDefault) {
+    return usePage().props.auth.user.name.split(' ')[0]
+  }
+  return ''
+}
+function getLastName() {
+  if (setDefault) {
+    let parts = usePage().props.auth.user.name.split(' ')
+    return parts[parts.length - 1]
+  }
+  return ''
+}
+function getEmail() {
+  if (setDefault) {
+    return usePage().props.auth.user.email
+  }
+  return ''
+}
+
 const form = useForm({
-  first_name: props.member.first_name ?? '',
-  last_name: props.member.last_name ?? '',
+  first_name: props.member.first_name ?? getFirstName(),
+  last_name: props.member.last_name ?? getLastName(),
   title_id: props.member.title_id ?? -1,
   dob: props.member.dob ?? '',
   membership_type_id: props.member.membership_type_id ?? 1,
@@ -47,11 +69,11 @@ const form = useForm({
   home_address: props.member.home_address ?? '',
   home_phone: props.member.home_phone ?? '',
   home_mobile: props.member.home_mobile ?? '',
-  home_email: props.member.home_email ?? '',
+  home_email: props.member.home_email ?? getEmail(),
   work_address: props.member.work_address ?? '',
   work_phone: props.member.work_phone ?? '',
   work_mobile: props.member.work_mobile ?? '',
-  work_email: props.member.work_email ?? '',
+  work_email: props.member.work_email ?? getEmail(),
   other_membership: props.member.other_membership ?? '',
   membership_status_id: props.member.membership_status_id ?? 1,
   note: props.member.note ?? '',
