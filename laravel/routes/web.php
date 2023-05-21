@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberQualificationController;
 use App\Http\Controllers\MemberSupportingDocumentController;
+use App\Http\Controllers\MailingListPreferenceController;
 use App\Http\Controllers\SignupController;
 use App\Http\Controllers\MemberRefereeController;
 use Illuminate\Support\Facades\Route;
@@ -63,6 +64,9 @@ Route::middleware([
 
     Route::put('/members/{member}/send-past-due-sub-reminder', [MemberController::class, 'sendPastDueSubReminder'])
     ->name('members.send-past-due-sub-reminder');
+
+    Route::put('/members/{member}/subscribe', [MemberController::class, 'toggleMailingListSubscription'])
+    ->name('members.subscribe');
 
     // Member work experience
     Route::resource('member-work-experiences', MemberWorkExperienceController::class)

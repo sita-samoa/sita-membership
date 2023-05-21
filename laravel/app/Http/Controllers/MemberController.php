@@ -9,6 +9,8 @@ use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Team;
+use App\Models\MailingList;
+use App\Models\MemberMailingPreference;
 use App\Notifications\PastDueSubReminder;
 use App\Notifications\AcceptanceNotification;
 use App\Notifications\EndorsementNotification;
@@ -199,6 +201,36 @@ class MemberController extends Controller
         $member->user->notify(new PastDueSubReminder($member));
 
         return redirect()->back()->with('success', 'Reminder scheduled.');
+    }
+    
+    /**
+     * Toggle Member Subscription to Mailing List
+     */
+    public function toggleMailingListSubscription(Member $member, Request $request){
+        $this->authorize('view', $member);
+
+        $validated = $request->validate([
+            'mailing_list_id' => 'required|int|min:1',
+            'subscribe' => 'required|bool'
+        ]);
+
+        $mailing_list = MailingList::find($validated['mailing_list_id']);
+        $foundPref = MemberMailingPreference::where('member_id', $member->id)->where('mailing_list_id', $mailing_list->id)->first();
+        $subscribe = $validated['subscribe'];
+        if($foundPref){
+            $foundPref->subscribed = $subscribe;
+            $foundPref->update();
+        }else{
+            $member_mailing_preference = new MemberMailingPreference();
+            $member_mailing_preference->mailing_list_id = $mailing_list->id;
+            $member_mailing_preference->member_id = $member->id;
+            $member_mailing_preference->subscribed = $subscribe;
+            $member_mailing_preference->save();
+        }
+
+
+        return redirect()->back()
+            ->with('success', ($subscribe ? 'Subsribed to ' : 'Unsubscribed from ') . $mailing_list->title);
     }
 
     /**
