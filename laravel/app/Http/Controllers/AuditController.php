@@ -38,6 +38,7 @@ class AuditController extends Controller
 
         return Inertia::render('Members/Audit', [
             'auditLog' => $auditLog,
+            'member_id' => $member->id,
         ]);
     }
 

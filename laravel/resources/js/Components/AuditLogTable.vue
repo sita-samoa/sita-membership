@@ -1,6 +1,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import { Link } from '@inertiajs/vue3'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import DialogModal from '@/Components/DialogModal.vue'
@@ -14,6 +15,10 @@ defineProps({
     type: Object,
     default: {}
   },
+  member_id: {
+    type: Number,
+    default: 0
+  },
 })
 
 const show = ref(false)
@@ -22,6 +27,21 @@ const selectedItem = ref(null)
 function showModal(item) {
   show.value = true
   selectedItem.value = item
+}
+
+function toReadable(model) {
+  switch(model) {
+    case 'App\\Models\\MemberReferee':
+      return 'referee'
+    case 'App\\Models\\MemberWorkExperience':
+      return 'work experience'
+    case 'App\\Models\\MemberQualification':
+      return 'qualification'
+    case 'App\\Models\\MemberSupportingDocument':
+      return 'supporting document'
+    default:
+      return 'member'
+  }
 }
 
 </script>
@@ -36,6 +56,9 @@ function showModal(item) {
                   </th>
                   <th scope="col" class="px-6 py-3">
                       Date
+                  </th>
+                  <th scope="col" class="px-6 py-3 ">
+                      Type
                   </th>
                   <th scope="col" class="px-6 py-3 hidden md:block">
                       Fields
@@ -54,6 +77,9 @@ function showModal(item) {
                   <td class="px-6 py-4">
                       {{ dayjs(a.created_at).fromNow() }}
                   </td>
+                  <td class="px-6 py-4 ">
+                    {{ toReadable(a.auditable_type) }}
+                  </td>
                   <td class="px-6 py-4 hidden md:block">
                       <div v-for="(a, index) in Object.keys(a.new_values)">{{ a }}</div>
                   </td>
@@ -64,7 +90,13 @@ function showModal(item) {
           </tbody>
       </table>
   </div>
+  <div class="relative overflow-x-auto p-6" v-else>
+    No audit to display. Check back later.
+  </div>
 
+  <div class="w-full flex justify-end p-6">
+      <Link class="underline text-indigo-500 text-sm" :href="route('members.show', member_id)">View Application Summary</Link>
+  </div>
 <DialogModal :show="show" >
   <template #title><span class="capitalize">{{ selectedItem.event }} - {{ dayjs(selectedItem.created_at).fromNow() }} (id: {{ selectedItem.id }})</span></template>
   <template #content>
@@ -121,7 +153,7 @@ function showModal(item) {
       <!-- content footer -->
       <div class="my-3 ml-5">
         <div class="mb-3"><InputLabel>User</InputLabel> {{ selectedItem.user.name }}</div>
-        <div class="mb-3"><InputLabel>Model</InputLabel> {{ selectedItem.auditable_type }}</div>
+        <div class="mb-3"><InputLabel>Model</InputLabel> {{ toReadable(selectedItem.auditable_type) }}</div>
         <div class="mb-3"><InputLabel>IP address</InputLabel> {{ selectedItem.ip_address }}</div>
         <div class="mb-3"><InputLabel>Url</InputLabel> {{ selectedItem.url }}</div>
         <div class="mb-3"><InputLabel>User Agent</InputLabel> {{ selectedItem.user_agent }}</div>
