@@ -254,7 +254,6 @@ class MemberController extends Controller
             'options' => [
                 'completion' => $member->completions,
             ],
-            'auditLog' => $member->audits()->with('user')->latest()->get(),
         ]);
     }
 

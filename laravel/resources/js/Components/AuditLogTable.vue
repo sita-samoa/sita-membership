@@ -27,7 +27,6 @@ function showModal(item) {
 </script>
 <template>
 
-  <h4 class="text-xl my-3" v-if="auditLog.length">Audit log</h4>
   <div class="relative overflow-x-auto" v-if="auditLog.length">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
