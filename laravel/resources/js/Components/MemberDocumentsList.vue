@@ -1,6 +1,7 @@
 <script setup>
 import { ListGroup, ListGroupItem } from 'flowbite-vue'
 import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
+import CloudDownloadIcon from 'vue-material-design-icons/CloudDownload.vue'
 
 defineProps(["list"])
 
@@ -18,6 +19,11 @@ function bytesToSize(bytes) {
       <PencilOutlineIcon fillColor="green" />
     </template>
     {{ item.title }} <span v-show="!item.title">{{ item.file_name }}&nbsp;</span> ({{ bytesToSize(item.file_size) }})
+    <template #suffix>
+      <div @click.stop="$emit('download', item.id)" title="Download" class="place-items-end">
+        <CloudDownloadIcon fillColor="currentColor" />
+      </div>
+    </template>
   </list-group-item>
 </list-group>
 </template>
