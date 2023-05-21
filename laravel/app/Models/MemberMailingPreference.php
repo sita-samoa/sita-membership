@@ -11,6 +11,11 @@ class MemberMailingPreference extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'member_id', 
+        'mailing_list_id',
+    ];
+
     public function member() : BelongsTo {
         return $this->belongsTo(Member::class);
     }
