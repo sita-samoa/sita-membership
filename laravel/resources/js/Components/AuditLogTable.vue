@@ -121,6 +121,7 @@ function showModal(item) {
       <!-- content footer -->
       <div class="my-3 ml-5">
         <div class="mb-3"><InputLabel>User</InputLabel> {{ selectedItem.user.name }}</div>
+        <div class="mb-3"><InputLabel>Model</InputLabel> {{ selectedItem.auditable_type }}</div>
         <div class="mb-3"><InputLabel>IP address</InputLabel> {{ selectedItem.ip_address }}</div>
         <div class="mb-3"><InputLabel>Url</InputLabel> {{ selectedItem.url }}</div>
         <div class="mb-3"><InputLabel>User Agent</InputLabel> {{ selectedItem.user_agent }}</div>

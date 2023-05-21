@@ -16,8 +16,24 @@ class AuditController extends Controller
     {
         $this->authorize('view', $member);
 
+        $auditLog = $member->audits()->with('user')->latest()->get();
+
+        // @todo Sort the merged collection by 'created_at' desc.
+        foreach($member->qualifications()->cursor() as $q) {
+            $auditLog = $auditLog->merge($q->audits()->with('user')->get());
+        }
+        foreach ($member->supportingDocuments()->cursor() as $q) {
+            $auditLog = $auditLog->merge($q->audits()->with('user')->get());
+        }
+        foreach ($member->workExperiences()->cursor() as $q) {
+            $auditLog = $auditLog->merge($q->audits()->with('user')->get());
+        }
+        foreach ($member->referees()->cursor() as $q) {
+            $auditLog = $auditLog->merge($q->audits()->with('user')->get());
+        }
+
         return Inertia::render('Members/Audit', [
-            'auditLog' => $member->audits()->with('user')->latest()->get(),
+            'auditLog' => $auditLog,
         ]);
     }
 
