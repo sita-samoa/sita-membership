@@ -57,7 +57,7 @@ function toggleSubscription(event){
 <template>
   <div>
     <InputLabel value="Mailing Lists" class="mb-4" />
-    <Alert type="info" class="mt-3 mb-2">Please check the mail lists you
+    <Alert v-if="!hasExistingMailingOptions" type="info" class="mt-3 mb-2">Please check the mail lists you
       want to join.
     </Alert>
 
