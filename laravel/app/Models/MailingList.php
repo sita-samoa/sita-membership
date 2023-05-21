@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class MailingList extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'title',
+    ];
+
+    public function member(): BelongsTo {
+        return $this->belongsTo(Member::class);
+    }
 }
