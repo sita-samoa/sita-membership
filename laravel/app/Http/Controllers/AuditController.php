@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Member;
+use OwenIt\Auditing\Models\Audit;
 
 class AuditController extends Controller
 {
@@ -16,21 +17,24 @@ class AuditController extends Controller
     {
         $this->authorize('view', $member);
 
-        $auditLog = $member->audits()->with('user')->latest()->get();
+        $auditIds = $member->audits()->get('id');
 
-        // @todo Sort the merged collection by 'created_at' desc.
         foreach($member->qualifications()->cursor() as $q) {
-            $auditLog = $auditLog->merge($q->audits()->with('user')->get());
+            $auditIds = $auditIds->merge($q->audits()->get('id'));
         }
         foreach ($member->supportingDocuments()->cursor() as $q) {
-            $auditLog = $auditLog->merge($q->audits()->with('user')->get());
+            $auditIds = $auditIds->merge($q->audits()->get('id'));
         }
         foreach ($member->workExperiences()->cursor() as $q) {
-            $auditLog = $auditLog->merge($q->audits()->with('user')->get());
+            $auditIds = $auditIds->merge($q->audits()->get('id'));
         }
         foreach ($member->referees()->cursor() as $q) {
-            $auditLog = $auditLog->merge($q->audits()->with('user')->get());
+            $auditIds = $auditIds->merge($q->audits()->get('id'));
         }
+        $ids = array_column($auditIds->all(), 'id');
+
+        // Crazy way to get relationship audits sorted.
+        $auditLog = Audit::whereIn('id', $ids)->with('user:id,name')->latest()->get();
 
         return Inertia::render('Members/Audit', [
             'auditLog' => $auditLog,
