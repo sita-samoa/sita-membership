@@ -7,6 +7,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import DialogModal from '@/Components/DialogModal.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 import InputLabel from '@/Components/InputLabel.vue'
+import Pagination from '@/Components/Pagination.vue'
 
 dayjs.extend(relativeTime)
 
@@ -47,8 +48,8 @@ function toReadable(model) {
 </script>
 <template>
 
-  <div class="relative overflow-x-auto" v-if="auditLog.length">
-      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+  <div class="relative overflow-x-auto p-6" v-if="auditLog.data.length">
+      <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
                   <th scope="col" class="px-6 py-3">
@@ -70,7 +71,7 @@ function toReadable(model) {
           </thead>
           <tbody>
               <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
-                v-for="a in auditLog">
+                v-for="a in auditLog.data">
                   <th scope="row" class="capitalize px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                       <a href="#" @click="showModal(a)" class="underline text-indigo-500"> {{ a.event }} </a>
                   </th>
@@ -89,6 +90,9 @@ function toReadable(model) {
               </tr>
           </tbody>
       </table>
+
+      <!-- Pagination -->
+      <Pagination :links="auditLog.links" />
   </div>
   <div class="relative overflow-x-auto p-6" v-else>
     No audit to display. Check back later.
@@ -97,6 +101,7 @@ function toReadable(model) {
   <div class="w-full flex justify-end p-6">
       <Link class="underline text-indigo-500 text-sm" :href="route('members.show', member_id)">View Application Summary</Link>
   </div>
+
 <DialogModal :show="show" >
   <template #title><span class="capitalize">{{ selectedItem.event }} - {{ dayjs(selectedItem.created_at).fromNow() }} (id: {{ selectedItem.id }})</span></template>
   <template #content>

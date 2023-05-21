@@ -17,6 +17,7 @@ class AuditController extends Controller
     {
         $this->authorize('view', $member);
 
+        // Crazy way to get relationship audits sorted.
         $auditIds = $member->audits()->get('id');
 
         foreach($member->qualifications()->cursor() as $q) {
@@ -33,11 +34,13 @@ class AuditController extends Controller
         }
         $ids = array_column($auditIds->all(), 'id');
 
-        // Crazy way to get relationship audits sorted.
-        $auditLog = Audit::whereIn('id', $ids)->with('user:id,name')->latest()->get();
 
         return Inertia::render('Members/Audit', [
-            'auditLog' => $auditLog,
+            'auditLog' => Audit::whereIn('id', $ids)
+                ->with('user:id,name')
+                ->orderBy('created_at', 'desc')
+                ->paginate(10)
+                ->withQueryString(),
             'member_id' => $member->id,
         ]);
     }
