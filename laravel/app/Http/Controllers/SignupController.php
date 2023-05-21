@@ -36,6 +36,7 @@ class SignupController extends Controller
             'supportingDocuments' => $member->supportingDocuments()
                 ->where('to_delete', false)
                 ->get(['id','title', 'file_name', 'file_size']),
+            'memberMailingLists' => $member->mailingLists()->get(['mailing_list_id', 'subscribed']),
             'countryList' => CountryListFacade::getList(),
             'tab' => $request->get('tab'),
         ]);
