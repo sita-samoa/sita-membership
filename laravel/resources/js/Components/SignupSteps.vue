@@ -26,6 +26,8 @@ const props = defineProps({
   tab: Number,
 })
 
+const page = usePage();
+
 const member_id = ref(props.member.id)
 
 const MIN_STEP = 1
@@ -35,24 +37,24 @@ const currentStep = ref(MIN_STEP)
 const activeTab = ref(getActiveTab())
 const disableTabs = ref(false)
 
-const setDefault = !(usePage().props.user.permissions.canAccept || usePage().props.auth.user.id === 1)
+const setDefault = !(page.props.user.permissions.canAccept || page.props.auth.user.id === 1)
 
 function getFirstName() {
   if (setDefault) {
-    return usePage().props.auth.user.name.split(' ')[0]
+    return page.props.auth.user.name.split(' ')[0]
   }
   return ''
 }
 function getLastName() {
-  if (setDefault) {
-    let parts = usePage().props.auth.user.name.split(' ')
+  let parts = page.props.auth.user.name.split(' ')
+  if (setDefault && parts.length > 1) {
     return parts[parts.length - 1]
   }
   return ''
 }
 function getEmail() {
   if (setDefault) {
-    return usePage().props.auth.user.email
+    return page.props.auth.user.email
   }
   return ''
 }
@@ -194,8 +196,8 @@ function submit() {
 }
 
 onMounted(() => {
-    if(member_id.value !== 0 && !props.tab){
-        // check if user have already started their membership application, then go to summary
+    if(member_id.value !== 0 && !props.tab && page.props.user?.completion?.data?.part2?.status){
+        // check if user have already started their membership application, have completed first 2 steps then go to summary
         router.replace(route('members.show', member_id.value))
     } else if(props.tab) {
         // check if user selected a tab from summary
@@ -362,7 +364,7 @@ onMounted(() => {
         <!-- next button -->
         <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
-      <div v-show="props.tab" class="w-full flex justify-end">
+      <div v-show="props.tab || $page.props.user?.completion?.data?.part2?.status" class="w-full flex justify-end">
           <Link class="underline text-indigo-500 text-sm" :href="route('members.show', member_id)">View Application Summary</Link>
       </div>
     </tabs>

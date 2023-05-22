@@ -37,7 +37,7 @@ function format(amount) {
         </h1>
 
         <!-- does have a profile -->
-        <div v-if="!$page.props.user.member_id">
+        <div v-if="!$page.props.user.member_id || !$page.props.user?.completion?.data?.part2?.status">
             <Alert type="info" class="mb-2 mt-3">
                 Click the Sign up button to begin.
             </Alert>
