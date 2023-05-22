@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DownloadController;
 use Inertia\Inertia;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberQualificationController;
@@ -79,13 +80,27 @@ Route::middleware([
     Route::resource('members.referees', MemberRefereeController::class)
     ->only(['store', 'update', 'destroy']);
 
-
     // Supporting Documents
     Route::resource('members.documents', MemberSupportingDocumentController::class)
     ->only(['store', 'update', 'destroy']);
 
+    });
+
+    // Supporting Documents download
+    Route::resource('members.documents.download', DownloadController::class)
+        ->only(['index'])
+        ->middleware([
+            'auth:sanctum',
+            config('jetstream.auth_session'),
+            'verified'
+    ]);
+
     // Members Pages
     Route::resource('members', MemberController::class)
-    ->only(['store', 'show', 'update', 'index']);
-});
+        ->only(['store', 'show', 'update', 'index'])
+        ->middleware([
+            'auth:sanctum',
+            config('jetstream.auth_session'),
+            'verified'
+    ]);
 

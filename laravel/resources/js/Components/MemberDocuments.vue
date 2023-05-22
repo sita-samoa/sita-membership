@@ -11,6 +11,7 @@ import AddButton from '@/Components/AddButton.vue';
 import DeleteButton from '@/Components/DeleteButton.vue';
 import UpdateButton from '@/Components/UpdateButton.vue';
 import CancelButton from '@/Components/CancelButton.vue';
+import CloudDownloadIcon from 'vue-material-design-icons/CloudDownload.vue'
 
 const props = defineProps({
   member_id: Number,
@@ -58,6 +59,9 @@ function edit(id) {
   form.file_name = item.file_name
 
   showModal()
+}
+function download(id) {
+  window.open(route('members.documents.download.index', {document: id, member: props.member_id}))
 }
 function submit() {
   form.post(route('members.documents.store', props.member_id), {
@@ -117,7 +121,7 @@ function deleteItem() {
   <Button class="p-3 my-3" color="alternative" @click.prevent="showModal" >Add Document</Button>
 
   <!-- Member supporting documents list -->
-  <MemberDocumentsList :list="listData" @edit-item="edit" />
+  <MemberDocumentsList :list="listData" @edit-item="edit" @download="download" />
 </div>
 
 <!-- Modal -->
@@ -144,6 +148,14 @@ function deleteItem() {
       <Progress v-if="form.progress" :progress="form.progress.percentage">
         {{ form.progress.percentage }}%
       </Progress>
+    </span>
+    <span v-else>
+      <div class="mb-3">
+        <a href="#" class="underline text-indigo-500" @click="download(itemId)">
+          Download file
+          <CloudDownloadIcon fillColor="currentColor" class="float-left mr-2" />
+        </a>
+      </div>
     </span>
 
   </template>
