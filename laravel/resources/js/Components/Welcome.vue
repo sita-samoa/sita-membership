@@ -1,5 +1,4 @@
 <script setup>
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
 import { Link } from '@inertiajs/vue3';
 import { Alert, Button } from 'flowbite-vue';
 
@@ -33,20 +32,34 @@ function format(amount) {
     <!-- welcome and sign up -->
     <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
 
-        <h1 class="text-2xl font-medium text-gray-900">
-            Welcome
+        <h1 class="mt-8 text-2xl font-medium text-gray-900">
+            Tālofa {{ $page.props.auth.user.name }}
         </h1>
 
-        <Alert type="info" class="mb-2 mt-3">
-            Click the Sign up button to begin.
-        </Alert>
+        <!-- does have a profile -->
+        <div v-if="!$page.props.user.member_id">
+            <Alert type="info" class="mb-2 mt-3">
+                Click the Sign up button to begin.
+            </Alert>
 
-        <Link href="/members/signup">
-            <Button class="p-3 mt-3">Sign Up</Button>
-        </Link>
+            <Link href="/members/signup">
+                <Button class="p-3 mt-3">Sign Up</Button>
+            </Link>
+        </div>
+
+        <!-- has a profile -->
+        <div v-else>
+            <Alert type="info" class="mb-2 mt-3">
+                Click the View details button to review your details.
+            </Alert>
+
+            <Link :href="route('members.show', { id: $page.props.user.member_id })">
+                <Button class="p-3 mt-3">View details</Button>
+            </Link>
+        </div>
     </div>
     <!-- exec dash -->
-    <div class="p-6 lg:p-8 bg-white border-b border-gray-200" v-if="$page.props.permissions.canReadAny">
+    <div class="p-6 lg:p-8 bg-white border-b border-gray-200" v-if="$page.props.user.permissions.canReadAny">
 
         <h1 class="text-2xl font-medium text-gray-900">
             Executive Dashboard
