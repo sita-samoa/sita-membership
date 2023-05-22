@@ -52,6 +52,7 @@ class HandleInertiaRequests extends Middleware
                 }
                 return [
                     'member_id' => $user->members()->first()->id ?? 0,
+                    'completion' => $user->members()->first() ? $user->members()->first()->getCompletionsAttribute() : [],
                     'permissions' => $user->permissions ?? [],
                 ];
             },
