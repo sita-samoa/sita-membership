@@ -202,7 +202,7 @@ class MemberController extends Controller
 
         return redirect()->back()->with('success', 'Reminder scheduled.');
     }
-    
+
     /**
      * Toggle Member Subscription to Mailing List
      */
@@ -230,7 +230,7 @@ class MemberController extends Controller
 
 
         return redirect()->back()
-            ->with('success', ($subscribe ? 'Subsribed to ' : 'Unsubscribed from ') . $mailing_list->title);
+            ->with('success', ($subscribe ? 'Subscribed to ' : 'Unsubscribed from ') . $mailing_list->title);
     }
 
     /**
