@@ -59,7 +59,7 @@ function format(amount) {
         </div>
     </div>
     <!-- exec dash -->
-    <div class="p-6 lg:p-8 bg-white border-b border-gray-200" v-if="$page.props.permissions.canReadAny">
+    <div class="p-6 lg:p-8 bg-white border-b border-gray-200" v-if="$page.props.user.permissions.canReadAny">
 
         <h1 class="text-2xl font-medium text-gray-900">
             Executive Dashboard
