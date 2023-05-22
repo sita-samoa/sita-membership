@@ -130,12 +130,12 @@ class DatabaseSeeder extends Seeder
         DB::table('mailing_lists')->insert([
             'id' => 1,
             'code' => 'general',
-            'title' => 'SITA General',
+            'title' => 'SITA General - General Announcements for the public.',
         ]);
         DB::table('mailing_lists')->insert([
             'id' => 2,
             'code' => 'members',
-            'title' => 'SITA Members',
+            'title' => 'SITA Members - Announcements for SITA Members only.',
         ]);
     }
 }
