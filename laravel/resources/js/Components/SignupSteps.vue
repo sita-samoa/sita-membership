@@ -1,10 +1,11 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { Link, useForm, usePage, router } from '@inertiajs/vue3'
-import { Alert, Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
+import { Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
 import MemberQualifications from '@/Components/MemberQualifications.vue'
 import MemberDocuments from '@/Components/MemberDocuments.vue'
 import MemberWorkExperience from '@/Components/MemberWorkExperience.vue'
+import MemberMailingListPreference from '@/Components/MemberMailingListPreference.vue'
 import MemberReferees from '@/Components/MemberReferees.vue'
 import InputError from '@/Components/InputError.vue'
 import InputLabel from '@/Components/InputLabel.vue'
@@ -22,6 +23,7 @@ const props = defineProps({
   referees:Object,
   memberWorkExperiences: Object,
   supportingDocuments: Object,
+  memberMailingLists: Object,
   countryList: Object,
   tab: Number,
 })
@@ -82,10 +84,6 @@ const form = useForm({
   membership_status_id: props.member.membership_status_id ?? '',
 })
 
-const mailingOptions = [
-  { id: 1, name: "SITA General" },
-  { id: 2, name: "SITA Members" },
-]
 
 const progress = computed(() => {
   let percent = currentStep.value / MAX_STEP * 100
@@ -348,18 +346,7 @@ onMounted(() => {
         <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
       </tab>
       <tab name="ninth" title="Mailing Lists" :disabled="disableTabs">
-        <div>
-          <InputLabel value="Mailing Lists" class="mb-4" />
-          <Alert type="info" class="mt-3 mb-2">Please check the mail lists you
-            want to join.
-          </Alert>
-
-          <div class="flex items-center mb-4" v-for="m in mailingOptions">
-            <input :id="m.id" type="checkbox" :value="m.id" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-            <InputLabel :for="m.id" :value="m.name" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
-          </div>
-
-        </div>
+        <MemberMailingListPreference :member_id="member_id" :list="props.memberMailingLists" :mailing_options="props.options.mailing_options" />
 
         <!-- next button -->
         <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
