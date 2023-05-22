@@ -18,26 +18,31 @@ class DatabaseSeeder extends Seeder
             'id' => 1,
             'code' => 'full',
             'title' => 'Full',
+            'annual_cost' => 100,
         ]);
         DB::table('membership_types')->insert([
             'id' => 2,
             'code' => 'associate',
             'title' => 'Associate',
+            'annual_cost' => 50,
         ]);
         DB::table('membership_types')->insert([
             'id' => 3,
             'code' => 'affiliate',
             'title' => 'Affiliate',
+            'annual_cost' => 50,
         ]);
         DB::table('membership_types')->insert([
             'id' => 4,
             'code' => 'student',
             'title' => 'Student',
+            'annual_cost' => 0,
         ]);
         DB::table('membership_types')->insert([
             'id' => 5,
             'code' => 'fellow',
             'title' => 'Fellow',
+            'annual_cost' => 0,
         ]);
 
         // Add Gender Options
