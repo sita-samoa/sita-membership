@@ -99,5 +99,7 @@ const application_ready_for_submission = props.options.completion.overall.status
 
   <Button class="w-full mb-3" v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
 
+  <!-- Audit log link -->
+  <Link :href="route('members.audit.index', {member: member.id})" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
 </div>
 </template>

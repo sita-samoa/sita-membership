@@ -240,12 +240,11 @@ class MemberController extends Controller
     {
         $this->authorize('view', $member);
 
-        // @todo Part 8
-        // Load title if exists.
         $relations = [
             "membershipType",
             "membershipStatus",
         ];
+        // Load title if exists.
         if ($member->title_id) {
             $relations[] = "title";
         }
@@ -254,7 +253,7 @@ class MemberController extends Controller
             'member' => $member->load($relations),
             'options' => [
                 'completion' => $member->completions,
-            ]
+            ],
         ]);
     }
 

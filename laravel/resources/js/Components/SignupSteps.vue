@@ -25,7 +25,7 @@ const props = defineProps({
   supportingDocuments: Object,
   memberMailingLists: Object,
   countryList: Object,
-  tab: Number,
+  tab: String,
 })
 
 const page = usePage();

@@ -6,10 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use OwenIt\Auditing\Contracts\Auditable;
+use OwenIt\Auditing\Auditable as AuditableTrait;
 
-class Member extends Model
+class Member extends Model implements Auditable
 {
     use HasFactory;
+    use AuditableTrait;
 
     protected $fillable = [
         'title_id',
@@ -124,14 +127,13 @@ class Member extends Model
             $this->supportingDocuments()->where('to_delete', false)->count()) {
             $completion['data']['part6']['status'] = true;
         }
-        // @todo Part 7
-
-        if($this->referees()->count() > 0){
-            $completion['data']['part8']['status'] = true;
-        }
 
         if ($this->workExperiences()->count()) {
             $completion['data']['part7']['status'] = true;
+        }
+
+        if($this->referees()->count() > 0){
+            $completion['data']['part8']['status'] = true;
         }
 
         $overall = true;
