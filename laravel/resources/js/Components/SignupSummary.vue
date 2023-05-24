@@ -42,6 +42,13 @@ function sendPastDueSubReminder() {
   })
 }
 
+function markAsActive() {
+    form.put(route('members.activate', props.member.id), {
+        resetOnSuccess: false,
+        preserveScroll: true,
+    })
+}
+
 const application_status_id = computed(() => {
     let m = props.member
     if (m.membership_status_id) {
@@ -94,6 +101,8 @@ const application_ready_for_submission = props.options.completion.overall.status
   <Button class="w-full mb-3" v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" default @click.prevent="endorse">Endorse</Button>
 
   <Button class="w-full mb-3" v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" default @click.prevent="accept">Accept</Button>
+
+  <Button class="w-full mb-3" color="green" v-if="application_status_id === 5 && $page.props.user.permissions.canMarkActive" default @click.prevent="markAsActive">Activate Membership</Button>
 
   <Button class="w-full mb-3" v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" default @click.prevent="sendSubReminder">Send sub reminder</Button>
 

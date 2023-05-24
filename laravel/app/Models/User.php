@@ -77,6 +77,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 'canSubmit' => $this->can('submit', $member),
                 'canEndorse' => $this->can('endorse', $member),
                 'canAccept' => $this->can('accept', $member),
+                'canMarkActive' => $this->can('markActive', $member),
                 'canSendSubReminder' => $this->can('sendSubReminder', $member),
                 'canSendPastDueSubReminder' => $this->can('sendPastDueSubReminder', $member),
             ];
@@ -90,6 +91,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'canSubmit' => true,
             'canEndorse' => false,
             'canAccept' => false,
+            'canMarkActive' => false,
             'canSendSubReminder' => false,
             'canSendPastDueSubReminder' => false,
         ];

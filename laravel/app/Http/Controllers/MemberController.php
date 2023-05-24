@@ -102,7 +102,7 @@ class MemberController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) : RedirectResponse
+    public function store(Request $request)
     {
         // unused
     }
@@ -178,6 +178,34 @@ class MemberController extends Controller
 
         return redirect()->back()->with('success', 'Application Accepted');
     }
+
+    /**
+     * Mark a lapsed member as active
+     */
+    public function markActive(Member $member, Request $request) : RedirectResponse
+    {
+        $this->authorize('markActive', $member);
+
+        $member->membership_status_id = 4;
+        $member->save();
+
+        // calculate end of financial year (June 30)
+        $month = Carbon::now()->month;
+        $year = Carbon::now()->year;
+
+        if ($month > 6) {
+            $year += 1;
+        }
+
+        $to_date = Carbon::create($year, 6, 30);
+
+        // add record to member membership status
+        $this->recordAction($member, $request->user()->id, $to_date);
+
+        return redirect()->back()->with('success', 'Member marked as active.');
+    }
+
+
     /**
      * Send a sub reminder to member.
      */
