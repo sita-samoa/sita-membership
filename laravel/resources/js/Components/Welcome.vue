@@ -73,6 +73,6 @@ function format(amount) {
             <Button class="p-3 my-3">Lapsed Membership ({{ totalLapsed }})</Button>
         </Link>
 
-        <p>Estimated Total Owning: {{ format(totalOwing) }}</p>
+        <p>Estimated Total Owing: {{ format(totalOwing) }}</p>
     </div>
 </template>
