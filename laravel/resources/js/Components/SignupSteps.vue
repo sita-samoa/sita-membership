@@ -32,6 +32,8 @@ const page = usePage();
 
 const member_id = ref(props.member.id)
 
+const applicationSubmitted = props.member.membership_status_id != "" && props.member.membership_status_id > 1
+
 const MIN_STEP = 1
 const MAX_STEP = 9
 
@@ -210,7 +212,7 @@ onMounted(() => {
   <div class="p-6 bg-white border-b border-gray-200 lg:p-8">
     <div class="my-3 text-sm" v-if="form.isDirty && member_id">There are unsaved changes. Press the "Next" button to save them.</div>
     <div class="mb-3">
-      <Progress :progress="progress" />
+      <Progress v-if="!applicationSubmitted" :progress="progress" />
     </div>
     <tabs v-model="activeTab" class="p-5">
       <!-- class appends to content DIV for all tabs -->
