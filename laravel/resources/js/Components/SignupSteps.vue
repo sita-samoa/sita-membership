@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { Link, useForm, usePage, router } from '@inertiajs/vue3'
-import { Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
+import { Button, Progress, Input, Tabs, Tab, Toast } from 'flowbite-vue'
 import MemberQualifications from '@/Components/MemberQualifications.vue'
 import MemberDocuments from '@/Components/MemberDocuments.vue'
 import MemberWorkExperience from '@/Components/MemberWorkExperience.vue'
@@ -18,6 +18,7 @@ const props = defineProps({
       id: 0
     }
   },
+  completion: Object,
   qualifications:Object,
   permissions:Object,
   referees:Object,
@@ -88,8 +89,17 @@ const form = useForm({
 
 
 const progress = computed(() => {
-  let percent = currentStep.value / MAX_STEP * 100
-  return percent
+    if(applicationSubmitted || !props.completion) return MIN_STEP/MAX_STEP * 100
+    let progress = MIN_STEP
+    const parts = [1,2,3,4,5,6,7,8,9]
+    const completion = props.completion?.data
+    parts.map(part => {
+        if(completion[`part${part}`]?.status){
+            progress++
+        }
+    })
+    let percent = progress / MAX_STEP * 100
+    return percent
 })
 
 function getActiveTab() {
