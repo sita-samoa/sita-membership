@@ -92,6 +92,18 @@ class MemberPolicy
     }
 
     /**
+     * Determine whether the user can mark a member as active.
+     *
+     * Must have the permission and status must be Lapsed
+     */
+    public function markActive(User $user, Member $member): bool
+    {
+        $team = Team::first();
+        return $user->hasTeamPermission($team, 'member:mark_active') &&
+         $member->membership_status_id == 5;
+    }
+
+    /**
      * Determine whether the user can update the model.
      */
     public function update(User $user, Member $member): bool
