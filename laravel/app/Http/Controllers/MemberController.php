@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\SubReminderRequested;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\Member;
-use App\Models\MemberMembershipStatus;
 use App\Models\MembershipType;
 use App\Models\Team;
 use App\Models\MailingList;
@@ -15,6 +13,7 @@ use App\Notifications\PastDueSubReminder;
 use App\Notifications\AcceptanceNotification;
 use App\Notifications\EndorsementNotification;
 use App\Notifications\SubReminder;
+use App\Repositories\MemberRepository;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,6 +21,11 @@ use Illuminate\Support\Facades\Request as FacadesRequest;
 
 class MemberController extends Controller
 {
+    public function __construct(public MemberRepository $rep = new MemberRepository())
+    {
+
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -118,7 +122,7 @@ class MemberController extends Controller
         $member->save();
 
         // add record to member membership status
-        $this->recordAction($member, $request->user()->id);
+        $this->rep->recordAction($member, $request->user());
         // Send endorsement notifications.
         $team = Team::first();
         $users = $team->allUsers();
@@ -141,7 +145,7 @@ class MemberController extends Controller
         $member->save();
 
         // add record to member membership status
-        $this->recordAction($member, $request->user()->id);
+        $this->rep->recordAction($member, $request->user());
         // Send acceptance notifications.
         $team = Team::first();
         $users = $team->allUsers();
@@ -160,21 +164,7 @@ class MemberController extends Controller
     {
         $this->authorize('accept', $member);
 
-        $member->membership_status_id = 4;
-        $member->save();
-
-        // calculate end of financial year (June 30)
-        $month = Carbon::now()->month;
-        $year = Carbon::now()->year;
-
-        if ($month > 6) {
-            $year += 1;
-        }
-
-        $to_date = Carbon::create($year, 6, 30);
-
-        // add record to member membership status
-        $this->recordAction($member, $request->user()->id, $to_date);
+        $this->rep->accept($member, $request->user());
 
         return redirect()->back()->with('success', 'Application Accepted');
     }
@@ -186,21 +176,7 @@ class MemberController extends Controller
     {
         $this->authorize('markActive', $member);
 
-        $member->membership_status_id = 4;
-        $member->save();
-
-        // calculate end of financial year (June 30)
-        $month = Carbon::now()->month;
-        $year = Carbon::now()->year;
-
-        if ($month > 6) {
-            $year += 1;
-        }
-
-        $to_date = Carbon::create($year, 6, 30);
-
-        // add record to member membership status
-        $this->recordAction($member, $request->user()->id, $to_date);
+        $this->rep->accept($member, $request->user());
 
         return redirect()->back()->with('success', 'Member marked as active.');
     }
@@ -334,18 +310,5 @@ class MemberController extends Controller
     public function destroy(Member $member)
     {
         //
-    }
-
-    private function recordAction(Member $member, $user_id, $to_date = null) {
-        $memberMembershipStatus = new MemberMembershipStatus([
-            'member_id' => $member->id,
-            'membership_status_id' => $member->membership_status_id,
-            'user_id' => $user_id,
-            'from_date' => Carbon::now(),
-        ]);
-        if ($to_date) {
-            $memberMembershipStatus->to_date = $to_date;
-        }
-        $memberMembershipStatus->save();
     }
 }
