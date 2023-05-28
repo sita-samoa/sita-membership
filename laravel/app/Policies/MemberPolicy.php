@@ -5,7 +5,7 @@ namespace App\Policies;
 use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
-use Illuminate\Support\Facades\Log;
+use App\Enums\MembershipStatus;
 
 class MemberPolicy
 {
@@ -76,7 +76,7 @@ class MemberPolicy
     {
         $team = Team::first();
         return $user->hasTeamPermission($team, 'member:send_sub_reminder') &&
-         $member->membership_status_id == 4;
+         $member->membership_status_id == MembershipStatus::ACCEPTED->value;
     }
 
     /**
@@ -88,7 +88,7 @@ class MemberPolicy
     {
         $team = Team::first();
         return $user->hasTeamPermission($team, 'member:send_sub_reminder') &&
-         $member->membership_status_id == 5;
+         $member->membership_status_id == MembershipStatus::LAPSED->value;
     }
 
     /**
@@ -100,7 +100,7 @@ class MemberPolicy
     {
         $team = Team::first();
         return $user->hasTeamPermission($team, 'member:mark_active') &&
-         $member->membership_status_id == 5;
+         $member->membership_status_id == MembershipStatus::LAPSED->value;
     }
 
     /**

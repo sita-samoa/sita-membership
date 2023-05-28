@@ -3,6 +3,7 @@
 use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
+use App\Enums\MembershipStatus;
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -19,7 +20,7 @@ test('test can mark as active', function ($role) {
     );
 
     $member = Member::factory()->create();
-    $member->membership_status_id = 5;
+    $member->membership_status_id = MembershipStatus::LAPSED->value;
     $member->save();
 
     $response = $this->put('/members/' . $member->id . '/activate');
@@ -37,7 +38,7 @@ test('test cannot mark as active', function ($role) {
     );
 
     $member = Member::factory()->create();
-    $member->membership_status_id = 5;
+    $member->membership_status_id = MembershipStatus::LAPSED->value;
     $member->save();
 
     $response = $this->put('/members/' . $member->id . '/activate');

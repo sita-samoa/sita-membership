@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\MembershipStatus;
 use App\Models\MemberMembershipStatus;
 use App\Notifications\ExpiringSubReminder;
 use Carbon\Carbon;
@@ -33,7 +34,7 @@ class MemberMembershipStatusRepository extends Repository
 
     $ids = [];
     // Get profiles that will expire in 3 months or less
-    $accepted_status_id = 4;
+    $accepted_status_id = MembershipStatus::ACCEPTED->value;
     $statuses = $this->getByStatusIdExpiringIn3Months($accepted_status_id);
     // @todo - load matches into a queue to be run every 5 mins
     foreach ($statuses as $status) {

@@ -14,7 +14,7 @@ use App\Notifications\AcceptanceNotification;
 use App\Notifications\EndorsementNotification;
 use App\Notifications\SubReminder;
 use App\Repositories\MemberRepository;
-use Carbon\Carbon;
+use App\Enums\MembershipStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Request as FacadesRequest;
@@ -84,7 +84,7 @@ class MemberController extends Controller
         $member = new Member();
         $member->fill($validated);
         // set non fillable fields
-        $member->membership_status_id = 1;
+        $member->membership_status_id = MembershipStatus::DRAFT->value;
         $member->user_id = $request->user()->id;
         $member->save();
 
@@ -118,7 +118,7 @@ class MemberController extends Controller
     {
         $this->authorize('submit', $member);
 
-        $member->membership_status_id = 2;
+        $member->membership_status_id = MembershipStatus::SUBMITTED->value;
         $member->save();
 
         // add record to member membership status
@@ -141,7 +141,7 @@ class MemberController extends Controller
     {
         $this->authorize('endorse', $member);
 
-        $member->membership_status_id = 3;
+        $member->membership_status_id = MembershipStatus::ENDORSED->value;
         $member->save();
 
         // add record to member membership status
