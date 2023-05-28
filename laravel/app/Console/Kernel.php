@@ -2,8 +2,7 @@
 
 namespace App\Console;
 
-use App\Http\Repositories\MemberRepository;
-use Carbon\Carbon;
+use App\Http\Repositories\MemberMembershipStatusRepository;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -14,17 +13,11 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
         $schedule->call(function () {
-            $rep = new MemberRepository();
-            // Get profiles that will expire in 3 months or less
-            $members = $rep->getMembersExpiringIn(new Carbon("3 months"));
-
-            // @todo - Add to dash board list of members that will expire in 3
-            //  months or less.
-            // @todo - Add a button to send bulk remindrs to those on the list
-            // @todo - Perform bulk operations on the member list (e.g. send reminder)
-        })->daily();
+            $rep = new MemberMembershipStatusRepository();
+            $rep->sendExpiringMembershipReminder();
+        })->monthly();
+        // })->everyMinute();
     }
 
     /**
