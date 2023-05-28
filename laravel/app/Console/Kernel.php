@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\Http\Repositories\MemberMembershipStatusRepository;
+use App\Repositories\MemberMembershipStatusRepository;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 

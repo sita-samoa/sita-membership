@@ -2,7 +2,7 @@
 
 namespace App\Notifications;
 
-use App\Http\Repositories\MemberMembershipStatusRepository;
+use App\Repositories\MemberMembershipStatusRepository;
 use App\Models\Member;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

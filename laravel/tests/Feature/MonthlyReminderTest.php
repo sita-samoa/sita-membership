@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Repositories\MemberMembershipStatusRepository;
+use App\Repositories\MemberMembershipStatusRepository;
 use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\User;
