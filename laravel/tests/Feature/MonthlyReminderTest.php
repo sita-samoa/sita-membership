@@ -16,9 +16,17 @@ test('get memberships expiring in 3 months', function () {
     $user = User::factory()->withPersonalTeam()->create();
     // generate members
     $member1 = Member::factory()->for($user)->create();
+    $member1->membership_status_id = 4;
+    $member1->save();
     $member2 = Member::factory()->for($user)->create();
+    $member2->membership_status_id = 4;
+    $member2->save();
     $member3 = Member::factory()->for($user)->create();
+    $member3->membership_status_id = 4;
+    $member3->save();
     $member4 = Member::factory()->for($user)->create();
+    $member4->membership_status_id = 5;
+    $member4->save();
     $member5 = Member::factory()->for($user)->create();
     $member6 = Member::factory()->for($user)->create();
     $member7 = Member::factory()->for($user)->create();
@@ -59,6 +67,7 @@ test('get memberships expiring in 3 months', function () {
             'from_date' => null,
             'to_date' => $future_month_2->toMutable(),
         ],
+        // Not Accepted/ Active
         [
             'member_id' => $member4->id,
             'membership_status_id' => 4,
@@ -110,13 +119,11 @@ test('get memberships expiring in 3 months', function () {
     }
 
     $rep = new MemberMembershipStatusRepository();
-    // $results = $rep->getByStatusIdExpiringIn(4, $current->toMutable(), $future_month_3->toMutable());
-    // $results = $rep->getByStatusIdExpiringIn3Months(4, $current->toMutable());
-    $results = $rep->getByStatusIdExpiringIn3Months(4,null,-1);
+    $results = $rep->getByStatusIdExpiringIn3Months(4, $current->toMutable());
 
     expect($results->count())->toEqual(4);
 
     Queue::fake();
     $rep->sendExpiringMembershipReminder($current->toMutable());
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 3);
+    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 2);
 });

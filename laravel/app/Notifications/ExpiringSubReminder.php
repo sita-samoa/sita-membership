@@ -37,10 +37,10 @@ class ExpiringSubReminder extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            // ->subject("Sub Reminder")
             ->greeting("Tālofa {$this->member->user->name}!")
-            ->line('Your membership will expire in {$this->days_until_expiry} days. Your
-                contribution is greatly appreciated.')
+            ->line("Your membership will expire in {$this->days_until_expiry}
+                days. Please plan for the renewal of your fees. Your
+                contribution is greatly appreciated.")
             ->action('View details', route('members.show', $this->member->id))
             ->line('Thank you for your support!');
     }
