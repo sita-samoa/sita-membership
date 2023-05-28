@@ -186,5 +186,9 @@ class Member extends Model implements Auditable
     public function mailingLists() : HasMany {
         return $this->hasMany(MemberMailingPreference::class);
     }
+    public function membershipStatuses(): HasMany
+    {
+        return $this->hasMany(MemberMembershipStatus::class);
+    }
 
 }
