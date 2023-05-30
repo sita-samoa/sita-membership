@@ -15,6 +15,8 @@ use App\Notifications\EndorsementNotification;
 use App\Notifications\SubReminder;
 use App\Repositories\MemberRepository;
 use App\Enums\MembershipStatus;
+use App\Repositories\MemberMembershipStatusRepository;
+use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Request as FacadesRequest;
@@ -201,8 +203,15 @@ class MemberController extends Controller
     {
         $this->authorize('sendPastDueSubReminder', $member);
 
+        $end_grace_period = Carbon::now();
+        $rep = new MemberMembershipStatusRepository();
+        $statuses = $rep->getByMemberIdAndStatusId($member->id, MembershipStatus::ACCEPTED->value);
+        if ($statuses->count()) {
+            $end_grace_period = Carbon::createFromFormat('Y-m-d', $statuses[0]->to_date);
+        }
+
         // Email will be sent in a queue.
-        $member->user->notify(new PastDueSubReminder($member));
+        $member->user->notify(new PastDueSubReminder($member, $end_grace_period->addMonthsWithoutOverflow(6)));
 
         return redirect()->back()->with('success', 'Reminder scheduled.');
     }

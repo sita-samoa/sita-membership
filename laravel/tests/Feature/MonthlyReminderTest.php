@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Queue;
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-});
 
-test('get memberships expiring in 3 months', function () {
     $user = User::factory()->withPersonalTeam()->create();
     // generate members
     $member1 = Member::factory()->for($user)->create();
@@ -34,7 +32,7 @@ test('get memberships expiring in 3 months', function () {
     $member9 = Member::factory()->for($user)->create();
 
     // Use CarbonImmutable or else the dates keep changing.
-    $current = CarbonImmutable::createFromDate(2023, 5, 28);
+    $this->current = $current = CarbonImmutable::createFromDate(2023, 5, 28);
 
     $end_date = CarbonImmutable::createFromDate(2023, 6, 30);
     $past_year = $current->subYear(1);
@@ -52,8 +50,16 @@ test('get memberships expiring in 3 months', function () {
             'from_date' => null,
             'to_date' => $end_date,
         ],
+        // Duplicate entry
         [
             'member_id' => $member1->id,
+            'membership_status_id' => EnumsMembershipStatus::ACCEPTED->value,
+            'user_id' => $user->id,
+            'from_date' => null,
+            'to_date' => $future_month_1,
+        ],
+        [
+            'member_id' => $member2->id,
             'membership_status_id' => EnumsMembershipStatus::ACCEPTED->value,
             'user_id' => $user->id,
             'from_date' => null,
@@ -116,13 +122,39 @@ test('get memberships expiring in 3 months', function () {
     foreach ($data as $d) {
         MemberMembershipStatus::create($d);
     }
+});
+
+test('get memberships expiring in 3 months', function () {
+    $rep = new MemberMembershipStatusRepository();
+    $results = $rep->getExpiringIn3Months($this->current->toMutable());
+
+    expect($results->count())->toEqual(5);
+});
+
+test('send expiring membership reminders', function () {
+    Queue::fake();
 
     $rep = new MemberMembershipStatusRepository();
-    $results = $rep->getByStatusIdExpiringIn3Months(EnumsMembershipStatus::ACCEPTED->value, $current->toMutable());
+    $rep->sendExpiringMembershipReminders($this->current->toMutable());
 
-    expect($results->count())->toEqual(4);
+    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 3);
+});
 
+test('get memberships expired less than 6 months', function () {
+    $current = $this->current->addMonthsWithoutOverflow(3);
+    $rep = new MemberMembershipStatusRepository();
+    $results = $rep->getExpiredLessThan6Months($current->toMutable());
+
+    expect($results->count())->toEqual(5);
+});
+
+test('send past due sub reminders', function () {
     Queue::fake();
-    $rep->sendExpiringMembershipReminder($current->toMutable());
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 2);
+
+    $current = $this->current->addMonthsWithoutOverflow(3);
+    $rep = new MemberMembershipStatusRepository();
+    $rep->sendPastDueSubReminders($current->toMutable());
+
+    // Only one of the 5 items is marked Lapsed and will be notified.
+    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 1);
 });
