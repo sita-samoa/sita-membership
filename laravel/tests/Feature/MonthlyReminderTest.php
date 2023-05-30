@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Queue;
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
-
     $user = User::factory()->withPersonalTeam()->create();
     // generate members
     $member1 = Member::factory()->for($user)->create();
