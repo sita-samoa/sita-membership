@@ -57,6 +57,20 @@ Once installed you can access the dev site on
 
 Click "Register" and register a new account then use it to log in.
 
+## On Prod
+
+Ensure that the following commands are run on a cron
+
+```
+# run every minute
+php artisan schedule:work # for scheduled tasks
+
+# run every 5 minutes
+php artisan queue:work # for running queues
+
+```
+
+
 ## Resources
 
 * [Jet stream (inertia-vue)](https://jetstream.laravel.com/2.x/introduction.html#inertia-vue)
