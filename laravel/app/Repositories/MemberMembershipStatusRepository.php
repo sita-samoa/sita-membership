@@ -33,7 +33,7 @@ class MemberMembershipStatusRepository extends Repository
     if ($current == null) {
       $current = Carbon::now();
     }
-    $future_3_months = $current->toImmutable()->addMonthsNoOverflow(3)->toMutable();
+    $future_3_months = $current->toImmutable()->addMonthsWithoutOverflow(3)->toMutable();
     return $this->getByStatusIdExpiringBetween(MembershipStatus::ACCEPTED->value, $current, $future_3_months, $limit);
   }
 
@@ -75,14 +75,25 @@ class MemberMembershipStatusRepository extends Repository
       }
     }
 
+    $end_grace_period = Carbon::now();
+    // used in local (mariadb)
+    $mariadb_format = 'Y-m-d';
+    // used in github actions (sqlite)
+    $sqlite_format = 'Y-m-d H:i:s';
     foreach ($ids as $status) {
       $member = $status->member;
       $user = $member->user;
       $expiry_date = $status->to_date;
-      // $days = $current->diffInDays($expiry_date);
-      $end_grace_period = Carbon::createFromFormat('Y-m-d', $expiry_date)->addMonthsNoOverflow(6);
 
-      $user->notify(new PastDueSubReminder($member, $end_grace_period));
+      // Cater for sqlite date format using github actions
+      if (Carbon::canBeCreatedFromFormat($expiry_date, $mariadb_format)) {
+        $end_grace_period = Carbon::createFromFormat($mariadb_format, $expiry_date);
+      }
+      else if (Carbon::canBeCreatedFromFormat($expiry_date, $sqlite_format)) {
+        $end_grace_period = Carbon::createFromFormat($sqlite_format, $expiry_date);
+      }
+
+      $user->notify(new PastDueSubReminder($member, $end_grace_period->addMonthsWithoutOverflow(6)));
 
       // @todo - Add to dash board list of members that will expire in 3
       //  months or less.
