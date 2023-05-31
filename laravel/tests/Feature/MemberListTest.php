@@ -16,7 +16,7 @@ test('test roles can access', function (string $role) {
 
     // can access
     $user = User::factory()->create();
-    $user->teams()->attach($team, array('role' => $role));
+    $user->teams()->attach($team, ['role' => $role]);
     $this->actingAs($user->fresh());
     $response = $this->get('/members');
 

@@ -11,9 +11,11 @@ use Carbon\Carbon;
 class MemberRepository extends Repository
 {
   const MONTH_FOR_END_OF_FINANCIAL_YEAR = 6; // June.
+
   const DAYS_OF_MONTH_OF_FINANCIAL_YEAR = 30;
 
-  public function generateEndDate(Carbon $current_dt = null) {
+  public function generateEndDate(Carbon $current_dt = null)
+  {
     if ($current_dt == null) {
       $current_dt = Carbon::now();
     }
@@ -24,12 +26,15 @@ class MemberRepository extends Repository
 
     if ($current_dt->month > $month) {
       $next_year = $current_dt->year + 1;
+
       return Carbon::create($next_year, $month, $day);
     }
+
     return Carbon::create($current_dt->year, $month, $day);
   }
 
-  public function accept(Member $member, User $user) {
+  public function accept(Member $member, User $user)
+  {
     $member->membership_status_id = MembershipStatus::ACCEPTED->value;
     $member->save();
 
@@ -51,14 +56,15 @@ class MemberRepository extends Repository
   public function recordAction(Member $member, User $user, $to_date = null)
   {
     $membership_status = new MemberMembershipStatus([
-      'member_id' => $member->id,
-      'membership_status_id' => $member->membership_status_id,
-      'user_id' => $user->id,
-      'from_date' => Carbon::now(),
+        'member_id' => $member->id,
+        'membership_status_id' => $member->membership_status_id,
+        'user_id' => $user->id,
+        'from_date' => Carbon::now(),
     ]);
     if ($to_date) {
       $membership_status->to_date = $to_date;
     }
+
     return $membership_status->save();
   }
 }

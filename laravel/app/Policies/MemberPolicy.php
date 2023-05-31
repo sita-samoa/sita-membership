@@ -2,10 +2,10 @@
 
 namespace App\Policies;
 
+use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
-use App\Enums\MembershipStatus;
 
 class MemberPolicy
 {
@@ -15,6 +15,7 @@ class MemberPolicy
     public function viewAny(User $user): bool
     {
         $team = Team::first();
+
         return $user->hasTeamPermission($team, 'member:read_any');
     }
 
@@ -24,6 +25,7 @@ class MemberPolicy
     public function view(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:read_any');
     }
 
@@ -55,6 +57,7 @@ class MemberPolicy
     public function endorse(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $user->hasTeamPermission($team, 'member:endorse');
     }
 
@@ -64,6 +67,7 @@ class MemberPolicy
     public function accept(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $user->hasTeamPermission($team, 'member:accept');
     }
 
@@ -75,6 +79,7 @@ class MemberPolicy
     public function sendSubReminder(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $user->hasTeamPermission($team, 'member:send_sub_reminder') &&
          $member->membership_status_id == MembershipStatus::ACCEPTED->value;
     }
@@ -87,6 +92,7 @@ class MemberPolicy
     public function sendPastDueSubReminder(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $user->hasTeamPermission($team, 'member:send_sub_reminder') &&
          $member->membership_status_id == MembershipStatus::LAPSED->value;
     }
@@ -99,6 +105,7 @@ class MemberPolicy
     public function markActive(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $user->hasTeamPermission($team, 'member:mark_active') &&
          $member->membership_status_id == MembershipStatus::LAPSED->value;
     }
@@ -109,6 +116,7 @@ class MemberPolicy
     public function update(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:update_any');
     }
 
@@ -118,6 +126,7 @@ class MemberPolicy
     public function delete(User $user, Member $member): bool
     {
         $team = Team::first();
+
         return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:delete_any');
     }
 

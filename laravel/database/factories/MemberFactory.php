@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Ramsey\Uuid\Type\Integer;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Member>
@@ -19,10 +18,10 @@ class MemberFactory extends Factory
     public function definition(): array
     {
         return [
-            'title_id' => rand(1,4),
+            'title_id' => rand(1, 4),
             'first_name' => $this->faker->firstName(),
             'last_name' => $this->faker->lastName(),
-            'gender_id' => rand(1,4),
+            'gender_id' => rand(1, 4),
             'job_title' => $this->faker->jobTitle(),
             'current_employer' => $this->faker->company,
 
@@ -36,9 +35,9 @@ class MemberFactory extends Factory
             'work_mobile' => $this->faker->phoneNumber(),
             'work_email' => $this->faker->email(),
 
-            'membership_type_id' => rand(1,5),
+            'membership_type_id' => rand(1, 5),
             'user_id' => User::factory(),
-            'membership_status_id' => rand(1,6),
+            'membership_status_id' => rand(1, 6),
         ];
     }
 }

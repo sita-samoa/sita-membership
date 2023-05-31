@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 class Member extends Model implements Auditable
 {
@@ -52,9 +52,10 @@ class Member extends Model implements Auditable
     /**
      * Get member completions
      *
-     * @return Array
+     * @return array
      */
-    public function getCompletionsAttribute() {
+    public function getCompletionsAttribute()
+    {
         $completion = [
             'data' => [
                 'part1' => [
@@ -97,7 +98,7 @@ class Member extends Model implements Auditable
             'overall' => [
                 'status' => false,
                 'title' => 'Overall',
-            ]
+            ],
         ];
 
         if ($this->membership_type_id) {
@@ -137,7 +138,7 @@ class Member extends Model implements Auditable
             $completion['data']['part7']['status'] = true;
         }
 
-        if($this->referees()->count() > 0){
+        if ($this->referees()->count() > 0) {
             $completion['data']['part8']['status'] = true;
         }
         if ($this->viewed_mailing_list || $this->mailingLists()->count() > 0){
@@ -145,8 +146,8 @@ class Member extends Model implements Auditable
         }
 
         $overall = true;
-        foreach($completion['data'] as $key => $value) {
-            if (!$value['status']) {
+        foreach ($completion['data'] as $key => $value) {
+            if (! $value['status']) {
                 $overall = false;
                 break;
             }
@@ -157,46 +158,58 @@ class Member extends Model implements Auditable
         return $completion;
     }
 
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function title(): BelongsTo {
+    public function title(): BelongsTo
+    {
         return $this->belongsTo(Title::class);
     }
 
-    public function gender(): BelongsTo {
+    public function gender(): BelongsTo
+    {
         return $this->belongsTo(Gender::class);
     }
 
-    public function membershipType(): BelongsTo {
+    public function membershipType(): BelongsTo
+    {
         return $this->belongsTo(MembershipType::class);
     }
 
-    public function membershipStatus(): BelongsTo {
+    public function membershipStatus(): BelongsTo
+    {
         return $this->belongsTo(MembershipStatus::class);
     }
 
-    public function qualifications() : HasMany {
+    public function qualifications(): HasMany
+    {
         return $this->hasMany(MemberQualification::class);
     }
 
-    public function referees(): HasMany {
+    public function referees(): HasMany
+    {
         return $this->hasMany(MemberReferee::class);
     }
-    public function workExperiences() : HasMany {
+
+    public function workExperiences(): HasMany
+    {
         return $this->hasMany(MemberWorkExperience::class);
     }
-    public function supportingDocuments() : HasMany {
+
+    public function supportingDocuments(): HasMany
+    {
         return $this->hasMany(MemberSupportingDocument::class);
     }
 
-    public function mailingLists() : HasMany {
+    public function mailingLists(): HasMany
+    {
         return $this->hasMany(MemberMailingPreference::class);
     }
+
     public function membershipStatuses(): HasMany
     {
         return $this->hasMany(MemberMembershipStatus::class);
     }
-
 }

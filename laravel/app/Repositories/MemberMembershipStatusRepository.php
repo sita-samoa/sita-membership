@@ -22,10 +22,10 @@ class MemberMembershipStatusRepository extends Repository
   public function getByStatusIdExpiringBetween(int $status_id, Carbon $from_date, Carbon $to_date, int $limit = 10): Collection
   {
     return MemberMembershipStatus::where('membership_status_id', $status_id)
-      ->whereBetween('to_date', $from_date->toPeriod($to_date))
-      ->latest()
-      ->limit($limit)
-      ->get();
+        ->whereBetween('to_date', $current->toPeriod($date))
+        ->latest()
+        ->limit($limit)
+        ->get();
   }
 
   public function getExpiringIn3Months(Carbon $current = null, int $limit = -1): Collection
@@ -33,26 +33,11 @@ class MemberMembershipStatusRepository extends Repository
     if ($current == null) {
       $current = Carbon::now();
     }
-    $future_3_months = $current->toImmutable()->addMonthsWithoutOverflow(3)->toMutable();
-    return $this->getByStatusIdExpiringBetween(MembershipStatus::ACCEPTED->value, $current, $future_3_months, $limit);
+
+    return $this->getByStatusIdExpiringBetween($status_id, $current, Carbon::now()->addMonthsNoOverflow(3), $limit);
   }
 
-  public function getExpiredLessThan6Months(Carbon $current = null, int $limit = -1): Collection
-  {
-    if ($current == null) {
-      $current = Carbon::now();
-    }
-    $past_6_months = $current->toImmutable()->subMonthsNoOverflow(6)->toMutable();
-    return $this->getByStatusIdExpiringBetween(MembershipStatus::ACCEPTED->value, $past_6_months, $current, $limit);
-  }
-
-  /**
-   * Send Past Due Sub Reminders to Members whose subs expired 6 months ago or less
-   *
-   * @param Carbon|null $current
-   * @return void
-   */
-  public function sendPastDueSubReminders(Carbon $current = null)
+  public function sendExpiringMembershipReminder(Carbon $current = null)
   {
     if ($current == null) {
       $current = Carbon::now();
@@ -69,7 +54,7 @@ class MemberMembershipStatusRepository extends Repository
         $id = $status->member->id;
 
         // Make sure we dont have duplicate member ids (in case it was Activated twice)
-        if (!in_array($id, array_keys($ids))) {
+        if (! in_array($id, array_keys($ids))) {
           $ids[$id] = $status;
         }
       }

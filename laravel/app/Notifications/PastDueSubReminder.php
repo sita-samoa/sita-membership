@@ -42,7 +42,7 @@ class PastDueSubReminder extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject("Past Due Sub Reminder")
+            ->subject('Past Due Sub Reminder')
             ->greeting("Tālofa {$this->member->user->name}!")
             ->line('Your SITA sub is now due.')
             ->line("If we dont hear back from you by
