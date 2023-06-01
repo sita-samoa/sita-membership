@@ -36,7 +36,8 @@ class MemberController extends Controller
         return Inertia::render('Members/Index', [
             'filters' => FacadesRequest::all('membership_status_id'),
             'members' => Member::orderBy('first_name')
-                ->when(FacadesRequest::input('membership_status_id'),
+                ->when(
+                    FacadesRequest::input('membership_status_id'),
                     function ($query) {
                         $query->where(FacadesRequest::only('membership_status_id'));
                     }
@@ -186,7 +187,7 @@ class MemberController extends Controller
     }
 
     /**
-     * Mark a lapsed member as active
+     * Mark a lapsed member as active.
      */
     public function markActive(Member $member, Request $request): RedirectResponse
     {
@@ -231,7 +232,7 @@ class MemberController extends Controller
     }
 
     /**
-     * Toggle Member Subscription to Mailing List
+     * Toggle Member Subscription to Mailing List.
      */
     public function toggleMailingListSubscription(Member $member, Request $request)
     {

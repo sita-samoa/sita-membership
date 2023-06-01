@@ -4,8 +4,8 @@ namespace App\Repositories;
 
 class Repository
 {
-  public function __construct()
-  {
+    public function __construct()
+    {
 
-  }
+    }
 }

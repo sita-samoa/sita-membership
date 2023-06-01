@@ -40,9 +40,12 @@ class FortifyServiceProvider extends ServiceProvider
             $user = User::where('email', $request->email)->first();
 
             if ($user && Hash::check($request->password, $user->password)) {
-                Validator::make([$request->captcha_token],
-                ['captcha_token' => [new Recaptcha],
-                ])->validate();
+                Validator::make(
+                    [$request->captcha_token],
+                    [
+                        'captcha_token' => [new Recaptcha],
+                    ]
+                )->validate();
 
                 return $user;
             } else {

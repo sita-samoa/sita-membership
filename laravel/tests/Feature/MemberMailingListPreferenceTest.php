@@ -12,8 +12,10 @@ test('test member subscribes to mailing list', function () {
     $this->actingAs($user = User::factory()->create());
     $member = Member::factory()->for($user)->create();
 
-    $response = $this->put('/members/'.$member->id.'/subscribe',
-    ['mailing_list_id' => 1, 'subscribe' => true]);
+    $response = $this->put(
+        '/members/'.$member->id.'/subscribe',
+        ['mailing_list_id' => 1, 'subscribe' => true]
+    );
     $response->assertStatus(302);
     expect($member->mailingLists()->first()->subscribed)->toEqual(true);
 });
@@ -28,8 +30,10 @@ test('test member unsubscribes from mailing list', function () {
         'subscribed' => true,
     ]);
 
-    $response = $this->put('/members/'.$member->id.'/subscribe',
-    ['mailing_list_id' => 1, 'subscribe' => false]);
+    $response = $this->put(
+        '/members/'.$member->id.'/subscribe',
+        ['mailing_list_id' => 1, 'subscribe' => false]
+    );
     $response->assertStatus(302);
     expect($member->mailingLists()->first()->subscribed)->toEqual(false);
 });
