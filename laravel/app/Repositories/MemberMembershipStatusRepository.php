@@ -11,29 +11,59 @@ use Illuminate\Database\Eloquent\Collection;
 
 class MemberMembershipStatusRepository extends Repository
 {
-    public function getByStatusIdExpiringBetween(
-        int $status_id,
-        Carbon $current,
-        Carbon $date,
-        int $limit = 10
-    ): Collection {
+    public function getByMemberIdAndStatusId($member_id, $status_id, int $limit = 10): Collection
+    {
         return MemberMembershipStatus::where('membership_status_id', $status_id)
-            ->whereBetween('to_date', $current->toPeriod($date))
+            ->where('member_id', $member_id)
             ->latest()
             ->limit($limit)
             ->get();
     }
 
-    public function getByStatusIdExpiringIn3Months(int $status_id, Carbon $current = null, int $limit = -1): Collection
+    public function getByStatusIdExpiringBetween(
+        int $status_id,
+        Carbon $from_date,
+        Carbon $to_date,
+        int $limit = 10
+    ): Collection {
+        return MemberMembershipStatus::where('membership_status_id', $status_id)
+            ->whereBetween('to_date', $from_date->toPeriod($to_date))
+            ->latest()
+            ->limit($limit)
+            ->get();
+    }
+
+    public function getExpiringIn3Months(Carbon $current = null, int $limit = -1): Collection
     {
         if ($current == null) {
             $current = Carbon::now();
         }
+        $future_3_months = $current->toImmutable()->addMonthsWithoutOverflow(3)->toMutable();
 
-        return $this->getByStatusIdExpiringBetween($status_id, $current, Carbon::now()->addMonthsNoOverflow(3), $limit);
+        return $this->getByStatusIdExpiringBetween(
+            MembershipStatus::ACCEPTED->value,
+            $current,
+            $future_3_months,
+            $limit
+        );
     }
 
-    public function sendExpiringMembershipReminder(Carbon $current = null)
+    public function getExpiredLessThan6Months(Carbon $current = null, int $limit = -1): Collection
+    {
+        if ($current == null) {
+            $current = Carbon::now();
+        }
+        $past_6_months = $current->toImmutable()->subMonthsNoOverflow(6)->toMutable();
+
+        return $this->getByStatusIdExpiringBetween(MembershipStatus::ACCEPTED->value, $past_6_months, $current, $limit);
+    }
+
+    /**
+     * Send Past Due Sub Reminders to Members whose subs expired 6 months ago or less.
+     *
+     * @return void
+     */
+    public function sendPastDueSubReminders(Carbon $current = null)
     {
         if ($current == null) {
             $current = Carbon::now();
@@ -41,16 +71,71 @@ class MemberMembershipStatusRepository extends Repository
 
         $ids = [];
         // Get profiles that will expire in 3 months or less
-        $accepted_status_id = MembershipStatus::ACCEPTED->value;
-        $statuses = $this->getByStatusIdExpiringIn3Months($accepted_status_id);
+        $lapsed_status = MembershipStatus::LAPSED->value;
+        $statuses = $this->getExpiredLessThan6Months($current);
         // @todo - load matches into a queue to be run every 5 mins
         foreach ($statuses as $status) {
             // ensure member status is correct
-            if ($status->member->membershipStatus->id === $accepted_status_id) {
+            if ($status->member->membershipStatus->id === $lapsed_status) {
                 $id = $status->member->id;
 
                 // Make sure we dont have duplicate member ids (in case it was Activated twice)
-                if (! array_key_exists($id, $ids)) {
+                if (!array_key_exists($id, $ids)) {
+                    $ids[$id] = $status;
+                }
+            }
+        }
+
+        $end_grace_period = Carbon::now();
+        // used in local (mariadb)
+        $mariadb_format = 'Y-m-d';
+        // used in github actions (sqlite)
+        $sqlite_format = 'Y-m-d H:i:s';
+        foreach ($ids as $status) {
+            $member = $status->member;
+            $user = $member->user;
+            $expiry_date = $status->to_date;
+
+            // Cater for sqlite date format using github actions
+            if (Carbon::canBeCreatedFromFormat($expiry_date, $mariadb_format)) {
+                $end_grace_period = Carbon::createFromFormat($mariadb_format, $expiry_date);
+            } elseif (Carbon::canBeCreatedFromFormat($expiry_date, $sqlite_format)) {
+                $end_grace_period = Carbon::createFromFormat($sqlite_format, $expiry_date);
+            }
+
+            $user->notify(new PastDueSubReminder($member, $end_grace_period->addMonthsWithoutOverflow(6)));
+
+            // @todo - Add to dash board list of members that will expire in 3
+            //  months or less.
+            // @todo - Add a button to send bulk remindrs to those on the list
+            // @todo - Perform bulk operations on the member list (e.g. send reminder)
+        }
+    }
+
+    /**
+     * Send Expiring Membership Reminders to members whose subs will expire
+     * in 3 months or less.
+     *
+     * @return void
+     */
+    public function sendExpiringMembershipReminders(Carbon $current = null)
+    {
+        if ($current == null) {
+            $current = Carbon::now();
+        }
+
+        $ids = [];
+        // Get profiles that will expire in 3 months or less
+        $accepted_status = MembershipStatus::ACCEPTED->value;
+        $statuses = $this->getExpiringIn3Months($current);
+        // @todo - load matches into a queue to be run every 5 mins
+        foreach ($statuses as $status) {
+            // ensure member status is correct
+            if ($status->member->membershipStatus->id === $accepted_status) {
+                $id = $status->member->id;
+
+                // Make sure we dont have duplicate member ids (in case it was Activated twice)
+                if (!array_key_exists($id, $ids)) {
                     $ids[$id] = $status;
                 }
             }

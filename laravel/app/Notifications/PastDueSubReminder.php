@@ -13,8 +13,10 @@ class PastDueSubReminder extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected function getDays() {
+    protected function getDays()
+    {
         $current = Carbon::now();
+
         return $current->diffInDays($this->grace_period);
     }
 
