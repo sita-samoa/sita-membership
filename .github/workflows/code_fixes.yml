@@ -22,8 +22,12 @@ jobs:
         with:
           php-version: 8.1
 
-      - name: Fix PHP code style issues
+      - name: Setup Composer
         uses: "ramsey/composer-install@v2"
+        with:
+          working-directory: ./laravel
+
+      - name: Fix PHP code style issues
         run: composer format
 
       - name: Cache node modules
@@ -52,4 +56,4 @@ jobs:
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit_message: Fix styling
+          commit_message: "[ci-review] Fix styling"
