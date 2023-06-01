@@ -15,7 +15,8 @@ class UsersTableSeeder extends Seeder
     {
         if (config('admin.admin_name')) {
             $user = User::firstOrCreate(
-                ['email' => config('admin.admin_email')], [
+                ['email' => config('admin.admin_email')],
+                [
                     'name' => config('admin.admin_name'),
                     'password' => bcrypt(config('admin.admin_password')),
                     'email_verified_at' => now(),

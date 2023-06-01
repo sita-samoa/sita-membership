@@ -13,7 +13,6 @@ class MemberMembershipStatusRepository extends Repository
 {
     public function getByMemberIdAndStatusId($member_id, $status_id, int $limit = 10): Collection
     {
-
         return MemberMembershipStatus::where('membership_status_id', $status_id)
             ->where('member_id', $member_id)
             ->latest()
