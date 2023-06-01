@@ -14,11 +14,14 @@ createInertiaApp({
   resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
   setup({ el, App, props, plugin }) {
     const captchaKey = props.initialPage.props.recaptcha_site_key
-    return createApp({ render: () => h(App, props) })
-      .use(plugin)
-      .use(VueReCaptcha, { siteKey: captchaKey, loaderOptions: { autoHideBadge: true } })
-      .use(ZiggyVue, Ziggy)
-      .mount(el)
+    return (
+      createApp({ render: () => h(App, props) })
+        .use(plugin)
+        .use(VueReCaptcha, { siteKey: captchaKey, loaderOptions: { autoHideBadge: true } })
+        /* eslint no-undef: 0 */
+        .use(ZiggyVue, Ziggy)
+        .mount(el)
+    )
   },
   progress: {
     color: '#4B5563',
