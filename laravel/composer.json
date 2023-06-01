@@ -65,6 +65,10 @@
             "./vendor/bin/phpcbf",
             "./vendor/bin/rector"
         ],
+        "format_ci": [
+            "./vendor/bin/pint",
+            "./vendor/bin/phpcbf"
+        ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
             "@php artisan package:discover --ansi"
