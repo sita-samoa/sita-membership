@@ -10,9 +10,9 @@ use Carbon\Carbon;
 
 class MemberRepository extends Repository
 {
-    const MONTH_FOR_END_OF_FINANCIAL_YEAR = 6; // June.
+    final public const MONTH_FOR_END_OF_FINANCIAL_YEAR = 6; // June.
 
-    const DAYS_OF_MONTH_OF_FINANCIAL_YEAR = 30;
+    final public const DAYS_OF_MONTH_OF_FINANCIAL_YEAR = 30;
 
     public function generateEndDate(Carbon $current_dt = null)
     {
