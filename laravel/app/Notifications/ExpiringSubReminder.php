@@ -2,7 +2,6 @@
 
 namespace App\Notifications;
 
-use App\Repositories\MemberMembershipStatusRepository;
 use App\Models\Member;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -36,7 +35,7 @@ class ExpiringSubReminder extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        return (new MailMessage())
             ->greeting("Tālofa {$this->member->user->name}!")
             ->line("Your membership will expire in {$this->days_until_expiry}
                 days. Please plan for the renewal of your fees. Your

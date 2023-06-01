@@ -78,6 +78,9 @@ class JetstreamServiceProvider extends ServiceProvider
             'member:mark_active',
             'member:submit_any',
             'member:send_sub_reminder',
-        ])->description('SITA Coordinator users have the ability to read, create, update and accept member applications.');
+        ])->description(
+            'SITA Coordinator users have the ability to read, create, update
+            and accept member applications.'
+        );
     }
 }

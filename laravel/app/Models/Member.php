@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 class Member extends Model implements Auditable
 {
@@ -48,11 +48,12 @@ class Member extends Model implements Auditable
     }
 
     /**
-     * Get member completions
+     * Get member completions.
      *
-     * @return Array
+     * @return array
      */
-    public function getCompletionsAttribute() {
+    public function getCompletionsAttribute()
+    {
         $completion = [
             'data' => [
                 'part1' => [
@@ -95,13 +96,14 @@ class Member extends Model implements Auditable
             'overall' => [
                 'status' => false,
                 'title' => 'Overall',
-            ]
+            ],
         ];
 
         if ($this->membership_type_id) {
             $completion['data']['part1']['status'] = true;
         }
-        if ($this->first_name &&
+        if (
+            $this->first_name &&
             $this->last_name &&
             $this->gender_id &&
             $this->job_title &&
@@ -109,22 +111,26 @@ class Member extends Model implements Auditable
         ) {
             $completion['data']['part2']['status'] = true;
         }
-        if ($this->home_address ||
+        if (
+            $this->home_address ||
             $this->home_phone ||
             $this->home_mobile ||
             $this->home_email
         ) {
             $completion['data']['part3']['status'] = true;
         }
-        if ($this->work_address ||
+        if (
+            $this->work_address ||
             $this->work_phone ||
             $this->work_mobile ||
             $this->work_email
         ) {
             $completion['data']['part4']['status'] = true;
         }
-        if ($this->qualifications()->count() &&
-            $this->supportingDocuments()->where('to_delete', false)->count()) {
+        if (
+            $this->qualifications()->count() &&
+            $this->supportingDocuments()->where('to_delete', false)->count()
+        ) {
             $completion['data']['part6']['status'] = true;
         }
 
@@ -132,13 +138,13 @@ class Member extends Model implements Auditable
             $completion['data']['part7']['status'] = true;
         }
 
-        if($this->referees()->count() > 0){
+        if ($this->referees()->count() > 0) {
             $completion['data']['part8']['status'] = true;
         }
 
         $overall = true;
-        foreach($completion['data'] as $key => $value) {
-            if (!$value['status']) {
+        foreach ($completion['data'] as $value) {
+            if (! $value['status']) {
                 $overall = false;
                 break;
             }
@@ -149,46 +155,58 @@ class Member extends Model implements Auditable
         return $completion;
     }
 
-    public function user(): BelongsTo {
+    public function user(): BelongsTo
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function title(): BelongsTo {
+    public function title(): BelongsTo
+    {
         return $this->belongsTo(Title::class);
     }
 
-    public function gender(): BelongsTo {
+    public function gender(): BelongsTo
+    {
         return $this->belongsTo(Gender::class);
     }
 
-    public function membershipType(): BelongsTo {
+    public function membershipType(): BelongsTo
+    {
         return $this->belongsTo(MembershipType::class);
     }
 
-    public function membershipStatus(): BelongsTo {
+    public function membershipStatus(): BelongsTo
+    {
         return $this->belongsTo(MembershipStatus::class);
     }
 
-    public function qualifications() : HasMany {
+    public function qualifications(): HasMany
+    {
         return $this->hasMany(MemberQualification::class);
     }
 
-    public function referees(): HasMany {
+    public function referees(): HasMany
+    {
         return $this->hasMany(MemberReferee::class);
     }
-    public function workExperiences() : HasMany {
+
+    public function workExperiences(): HasMany
+    {
         return $this->hasMany(MemberWorkExperience::class);
     }
-    public function supportingDocuments() : HasMany {
+
+    public function supportingDocuments(): HasMany
+    {
         return $this->hasMany(MemberSupportingDocument::class);
     }
 
-    public function mailingLists() : HasMany {
+    public function mailingLists(): HasMany
+    {
         return $this->hasMany(MemberMailingPreference::class);
     }
+
     public function membershipStatuses(): HasMany
     {
         return $this->hasMany(MemberMembershipStatus::class);
     }
-
 }

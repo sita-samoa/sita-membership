@@ -17,6 +17,7 @@
         "tightenco/ziggy": "^1.0"
     },
     "require-dev": {
+        "driftingly/rector-laravel": "^0.20.0",
         "fakerphp/faker": "^1.9.1",
         "laravel/pint": "^1.0",
         "laravel/sail": "^1.18",
@@ -24,7 +25,9 @@
         "nunomaduro/collision": "^7.0",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
-        "spatie/laravel-ignition": "^2.0"
+        "rector/rector": "^0.16.0",
+        "spatie/laravel-ignition": "^2.0",
+        "squizlabs/php_codesniffer": "^3.7"
     },
     "autoload": {
         "psr-4": {
@@ -47,6 +50,21 @@
         "dev": [
             "php artisan db:seed --class=DemoUsersSeeder",
             "php artisan db:seed --class=MembersTableSeeder"
+        ],
+        "lint": [
+            "./vendor/bin/pint --test",
+            "./vendor/bin/phpcs",
+            "./vendor/bin/rector --dry-run"
+        ],
+        "lint_ci": [
+            "./vendor/bin/pint --test",
+            "./vendor/bin/phpcs -n",
+            "./vendor/bin/rector --dry-run"
+        ],
+        "format": [
+            "./vendor/bin/pint",
+            "./vendor/bin/phpcbf",
+            "./vendor/bin/rector"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",

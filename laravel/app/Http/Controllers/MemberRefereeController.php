@@ -28,7 +28,7 @@ class MemberRefereeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Member $member, Request $request) : RedirectResponse
+    public function store(Member $member, Request $request): RedirectResponse
     {
         $this->authorize('view', $member);
 
@@ -36,7 +36,7 @@ class MemberRefereeController extends Controller
             'name' => 'required|string',
             'organisation' => 'required|string',
             'phone' => 'required|string|min:5',
-            'email' => 'required|email|string'
+            'email' => 'required|email|string',
         ]);
 
         $member_referee = $member->referees()->create($validated);
@@ -44,7 +44,7 @@ class MemberRefereeController extends Controller
         return redirect()
             ->back()
             ->with('success', 'Referee added.')
-            ->with('data', [ "id" => $member_referee->id]);
+            ->with('data', ['id' => $member_referee->id]);
     }
 
     /**
@@ -66,7 +66,7 @@ class MemberRefereeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Member $member, MemberReferee $referee) : RedirectResponse
+    public function update(Request $request, Member $member, MemberReferee $referee): RedirectResponse
     {
         $this->authorize('update', $member);
 
@@ -74,7 +74,7 @@ class MemberRefereeController extends Controller
             'name' => 'required|string',
             'organisation' => 'required|string',
             'phone' => 'required|string|min:5',
-            'email' => 'required|email|string'
+            'email' => 'required|email|string',
         ]);
 
         $referee->update($validated);

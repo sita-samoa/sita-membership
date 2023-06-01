@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
-import { Link } from '@inertiajs/vue3';
-import { TheCard, Badge, } from 'flowbite-vue'
+import { Link } from '@inertiajs/vue3'
+import { TheCard, Badge } from 'flowbite-vue'
 
 const props = defineProps({
   member: {
@@ -9,41 +9,40 @@ const props = defineProps({
     default: {
       data: [],
       links: [],
-    }
+    },
   },
   linkRoute: {
     type: String,
     default: 'members.show',
-  }
+  },
 })
 
 const member_name = computed(() => {
   let member = props.member
-  return member.first_name + " " + member.last_name
+  return member.first_name + ' ' + member.last_name
 })
 
-let badgeType = "default";
-switch(props.member.membership_status_id){
-    case 1:
-        // draft
-        badgeType = 'yellow';
-        break;
-    case 2:
-        // submitted
-        badgeType = 'pink';
-        break;
-    case 3:
-        // endorsed
-        badgeType = 'dark';
-        break;
-    case 4:
-        // accepted
-        badgeType = 'green';
-        break;
+let badgeType = 'default'
+switch (props.member.membership_status_id) {
+  case 1:
+    // draft
+    badgeType = 'yellow'
+    break
+  case 2:
+    // submitted
+    badgeType = 'pink'
+    break
+  case 3:
+    // endorsed
+    badgeType = 'dark'
+    break
+  case 4:
+    // accepted
+    badgeType = 'green'
+    break
 }
 
 const linkData = { member: props.member.id, tab: 1 }
-
 </script>
 <template>
   <the-card class="sm:w-full">
@@ -53,15 +52,12 @@ const linkData = { member: props.member.id, tab: 1 }
       </h5>
 
       <div class="flex mb-3">
-        <Badge :type="badgeType" v-if="props.member.membership_status">
-          {{ props.member.membership_status.title }}</Badge>
-        <Badge type="yellow" v-else>Draft</Badge>
+        <Badge v-if="props.member.membership_status" :type="badgeType"> {{ props.member.membership_status.title }}</Badge>
+        <Badge v-else type="yellow">Draft</Badge>
         <Badge type="default">{{ props.member.membership_type.title }}</Badge>
       </div>
 
-      <p class="font-normal text-gray-700 dark:text-gray-400">
-        {{ props.member.job_title }}, {{ props.member.current_employer }}
-      </p>
+      <p class="font-normal text-gray-700 dark:text-gray-400">{{ props.member.job_title }}, {{ props.member.current_employer }}</p>
     </Link>
   </the-card>
 </template>

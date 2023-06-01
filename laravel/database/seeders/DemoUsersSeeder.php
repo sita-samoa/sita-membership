@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -18,7 +17,8 @@ class DemoUsersSeeder extends Seeder
         $team = Team::first();
 
         $user = User::firstOrCreate(
-            ['email' => 'demo@example.com', 'email_verified_at' => now()], [
+            ['email' => 'demo@example.com', 'email_verified_at' => now()],
+            [
                 'name' => 'Demo user',
                 'password' => bcrypt('password'),
             ]
@@ -30,7 +30,8 @@ class DemoUsersSeeder extends Seeder
         ]));
 
         $user = User::firstOrCreate(
-            ['email' => 'editor@example.com', 'email_verified_at' => now()], [
+            ['email' => 'editor@example.com', 'email_verified_at' => now()],
+            [
                 'name' => 'Demo Editor',
                 'password' => bcrypt('password'),
             ]
@@ -43,7 +44,8 @@ class DemoUsersSeeder extends Seeder
         $user->teams()->attach($team, ['role' => 'editor']);
 
         $user = User::firstOrCreate(
-            ['email' => 'executive@example.com', 'email_verified_at' => now()], [
+            ['email' => 'executive@example.com', 'email_verified_at' => now()],
+            [
                 'name' => 'Demo executive',
                 'password' => bcrypt('password'),
             ]
@@ -56,7 +58,8 @@ class DemoUsersSeeder extends Seeder
         $user->teams()->attach($team, ['role' => 'executive']);
 
         $user = User::firstOrCreate(
-            ['email' => 'coordinator@example.com', 'email_verified_at' => now()], [
+            ['email' => 'coordinator@example.com', 'email_verified_at' => now()],
+            [
                 'name' => 'Demo coordinator',
                 'password' => bcrypt('password'),
             ]
