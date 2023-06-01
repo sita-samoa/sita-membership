@@ -153,7 +153,7 @@ function deleteItem() {
       <CancelButton @click="closeModalAndResetForm" />
 
       <div>
-        <AddButton v-if="canAdd" @click="submit" />
+        <AddButton v-if="canAdd" :disabled="form.processing" @click="submit" />
         <DeleteButton v-if="canEdit" @click="showConfirmationModal = true" />
         <UpdateButton v-if="canEdit" @click="update" />
       </div>
