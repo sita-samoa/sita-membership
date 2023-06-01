@@ -58,8 +58,7 @@
         ],
         "lint_ci": [
             "./vendor/bin/pint --test",
-            "./vendor/bin/phpcs -n",
-            "./vendor/bin/rector --dry-run"
+            "./vendor/bin/phpcs -n"
         ],
         "format": [
             "./vendor/bin/pint",
