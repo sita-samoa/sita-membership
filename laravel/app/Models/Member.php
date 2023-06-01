@@ -125,7 +125,7 @@ class Member extends Model implements Auditable
         ) {
             $completion['data']['part4']['status'] = true;
         }
-        if ($this->viewed_other_memberships == true){
+        if ($this->viewed_other_memberships || $this->other_membership){
             $completion['data']['part5']['status'] = true;
         }
         if ($this->qualifications()->count() &&
@@ -140,8 +140,8 @@ class Member extends Model implements Auditable
         if($this->referees()->count() > 0){
             $completion['data']['part8']['status'] = true;
         }
-        if ($this->viewed_mailing_list == true){
-            $completion['data']['part5']['status'] = true;
+        if ($this->viewed_mailing_list || $this->mailingLists()->count() > 0){
+            $completion['data']['part9']['status'] = true;
         }
 
         $overall = true;

@@ -1,7 +1,7 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3'
 import InputLabel from '@/Components/InputLabel.vue';
-import { Alert } from 'flowbite-vue'
+import { Alert, Button } from 'flowbite-vue'
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -37,7 +37,7 @@ const memberPreferences = computed(() => {
   })
 })
 
-const mailingOptions = hasExistingMailingOptions ? 
+const mailingOptions = hasExistingMailingOptions ?
   memberPreferences
   :  defaultOptions;
 
@@ -61,11 +61,13 @@ function toggleSubscription(event){
       want to join.
     </Alert>
 
-    <form>
+    <form @submit.prevent="$emit('submit', 'viewed_mailing_list')">
       <div class="flex items-center mb-4" v-for="m in mailingOptions">
         <input @change="toggleSubscription" :id="m.id" type="checkbox" :checked="m.subscribed" :value="m.id" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
         <InputLabel :for="m.id" :value="m.title" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
       </div>
+      <!-- next button -->
+      <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
     </form>
 
 </div>

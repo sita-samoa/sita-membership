@@ -137,6 +137,20 @@ class MemberController extends Controller
         return redirect()->back()->with('success', 'Application Submitted');
     }
     /**
+     * Mark Viewed Other Memberships or Mailing List as true.
+     */
+    public function markOptionalFlagAsViewed(Member $member, Request $request) : RedirectResponse
+    {
+        $validated = $request->validate([
+            'flag_name' => 'required|string',
+        ]);
+
+        $flag_name = $validated['flag_name'];
+        $this->rep->markOptionalFlagAsViewed($member, $flag_name);
+
+        return redirect()->back();
+    }
+    /**
      * Endorse member application.
      */
     public function endorse(Member $member, Request $request) : RedirectResponse
