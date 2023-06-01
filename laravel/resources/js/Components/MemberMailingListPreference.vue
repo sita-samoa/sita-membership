@@ -1,47 +1,45 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3'
-import InputLabel from '@/Components/InputLabel.vue';
-import { Alert, Button } from 'flowbite-vue'
-import { computed } from 'vue';
+import InputLabel from '@/Components/InputLabel.vue'
+import { Alert } from 'flowbite-vue'
+import { computed } from 'vue'
 
 const props = defineProps({
   member_id: Number,
   mailing_options: {
     type: Object,
-    default: []
+    default: [],
   },
   list: {
     type: Object,
-    default: []
-  }
+    default: [],
+  },
 })
 
 const form = useForm({
   mailing_list_id: null,
-  subscribe: null
-});
+  subscribe: null,
+})
 
-const defaultOptions = props.mailing_options.map(e => ({...e, subscribed: false}));
-const hasExistingMailingOptions = props.list.length > 0;
+const defaultOptions = props.mailing_options.map(e => ({ ...e, subscribed: false }))
+const hasExistingMailingOptions = props.list.length > 0
 
 const memberPreferences = computed(() => {
   return defaultOptions.map(e => {
     let pref = props.list.find(x => x.mailing_list_id === e.id)
-    if(pref){
+    if (pref) {
       return {
         ...e,
-        subscribed: pref.subscribed
+        subscribed: pref.subscribed,
       }
     }
-    return e;
+    return e
   })
 })
 
-const mailingOptions = hasExistingMailingOptions ?
-  memberPreferences
-  :  defaultOptions;
+const mailingOptions = hasExistingMailingOptions ? memberPreferences : defaultOptions
 
-function toggleSubscription(event){
+function toggleSubscription(event) {
   const mailing_list_id = event.target.value
   const subscribe = event.target.checked
   form.mailing_list_id = mailing_list_id
@@ -49,17 +47,14 @@ function toggleSubscription(event){
   form.put(route('members.subscribe', { member: props.member_id }), {
     preserveScroll: true,
     resetOnSuccess: false,
-  });
-  form.reset();
+  })
+  form.reset()
 }
-
 </script>
 <template>
   <div>
     <InputLabel value="Mailing Lists" class="mb-4" />
-    <Alert v-if="!hasExistingMailingOptions" type="info" class="mt-3 mb-2">Please check the mail lists you
-      want to join.
-    </Alert>
+    <Alert v-if="!hasExistingMailingOptions" type="info" class="mt-3 mb-2">Please check the mail lists you want to join. </Alert>
 
     <form @submit.prevent="$emit('submit', 'viewed_mailing_list')">
       <div class="flex items-center mb-4" v-for="m in mailingOptions">
@@ -69,6 +64,5 @@ function toggleSubscription(event){
       <!-- next button -->
       <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
     </form>
-
-</div>
+  </div>
 </template>
