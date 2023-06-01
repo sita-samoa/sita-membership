@@ -23,7 +23,6 @@ class MemberController extends Controller
 {
     public function __construct(public MemberRepository $rep = new MemberRepository())
     {
-
     }
 
     /**
@@ -244,7 +243,8 @@ class MemberController extends Controller
         ]);
 
         $mailing_list = MailingList::find($validated['mailing_list_id']);
-        $foundPref = MemberMailingPreference::where('member_id', $member->id)->where('mailing_list_id', $mailing_list->id)->first();
+        $foundPref = MemberMailingPreference::where('member_id', $member->id)
+            ->where('mailing_list_id', $mailing_list->id)->first();
         $subscribe = $validated['subscribe'];
         if ($foundPref) {
             $foundPref->subscribed = $subscribe;

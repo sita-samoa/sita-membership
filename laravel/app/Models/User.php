@@ -97,6 +97,5 @@ class User extends Authenticatable implements MustVerifyEmail
             'canSendSubReminder' => false,
             'canSendPastDueSubReminder' => false,
         ];
-
     }
 }

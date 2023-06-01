@@ -43,7 +43,6 @@ test('test can endorse', function ($role) {
 
     $response = $this->put('/members/'.$member->id.'/endorse');
     $response->assertStatus(302);
-
 })->with(['admin', 'executive']);
 
 test('test cannot endorse', function ($role) {
@@ -60,7 +59,6 @@ test('test cannot endorse', function ($role) {
 
     $response = $this->put('/members/'.$member->id.'/endorse');
     $response->assertStatus(403);
-
 })->with(['editor', 'coordinator']);
 
 test('test that user cannot endorse their own application', function () {

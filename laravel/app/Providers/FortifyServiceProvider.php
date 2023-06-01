@@ -43,7 +43,7 @@ class FortifyServiceProvider extends ServiceProvider
                 Validator::make(
                     [$request->captcha_token],
                     [
-                        'captcha_token' => [new Recaptcha],
+                        'captcha_token' => [new Recaptcha()],
                     ]
                 )->validate();
 

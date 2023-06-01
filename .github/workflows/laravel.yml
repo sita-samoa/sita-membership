@@ -41,8 +41,8 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
 
-      - name: Run pint lint tests
-        run: vendor/bin/pint --test
+      - name: Run coding style tests
+        run: composer coding_style_test_ci
 
       - name: Use Node.js 16.x
         uses: actions/setup-node@v3

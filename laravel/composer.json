@@ -24,7 +24,8 @@
         "nunomaduro/collision": "^7.0",
         "pestphp/pest": "^2.0",
         "pestphp/pest-plugin-laravel": "^2.0",
-        "spatie/laravel-ignition": "^2.0"
+        "spatie/laravel-ignition": "^2.0",
+        "squizlabs/php_codesniffer": "^3.7"
     },
     "autoload": {
         "psr-4": {
@@ -47,6 +48,18 @@
         "dev": [
             "php artisan db:seed --class=DemoUsersSeeder",
             "php artisan db:seed --class=MembersTableSeeder"
+        ],
+        "coding_style_test": [
+            "./vendor/bin/pint --test",
+            "./vendor/bin/phpcs"
+        ],
+        "coding_style_test_ci": [
+            "./vendor/bin/pint --test",
+            "./vendor/bin/phpcs -n"
+        ],
+        "coding_style_fix": [
+            "./vendor/bin/pint",
+            "./vendor/bin/phpcbf"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
