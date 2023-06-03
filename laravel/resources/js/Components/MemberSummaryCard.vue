@@ -19,8 +19,8 @@ const props = defineProps({
 
 const member_name = computed(() => {
   let member = props.member
-  let fullName = member.first_name + " " + member.last_name
-  if(!fullName || fullName.includes('null')){
+  let fullName = member.first_name + ' ' + member.last_name
+  if (!fullName || fullName.includes('null')) {
     fullName = 'Unnamed Member'
   }
   return fullName
@@ -61,9 +61,7 @@ const linkData = { member: props.member.id, tab: 1 }
         <Badge type="default">{{ props.member.membership_type.title }}</Badge>
       </div>
 
-      <p v-if="props.member.job_title" class="font-normal text-gray-700 dark:text-gray-400">
-        {{ props.member.job_title }}, {{ props.member.current_employer }}
-      </p>
+      <p v-if="props.member.job_title" class="font-normal text-gray-700 dark:text-gray-400">{{ props.member.job_title }}, {{ props.member.current_employer }}</p>
     </Link>
   </the-card>
 </template>

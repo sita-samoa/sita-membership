@@ -87,23 +87,22 @@ const form = useForm({
   other_membership: props.member.other_membership ?? '',
   membership_status_id: props.member.membership_status_id ?? 1,
   note: props.member.note ?? '',
-  membership_status_id: props.member.membership_status_id ?? '',
   viewed_other_memberships: props.member.viewed_other_memberships ?? false,
   viewed_mailing_list: props.member.viewed_mailing_list ?? false,
 })
 
 const progress = computed(() => {
-    if(applicationSubmitted || !props.completion) return MIN_STEP/MAX_STEP * 100
-    let progress = MIN_STEP
-    const parts = [1,2,3,4,5,6,7,8,9]
-    const completion = props.completion?.data
-    parts.map(part => {
-        if(completion[`part${part}`]?.status){
-            progress++
-        }
-    })
-    let percent = progress / MAX_STEP * 100
-    return percent
+  if (applicationSubmitted || !props.completion) return (MIN_STEP / MAX_STEP) * 100
+  let progress = MIN_STEP
+  const parts = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  const completion = props.completion?.data
+  parts.forEach(part => {
+    if (completion[`part${part}`]?.status) {
+      progress++
+    }
+  })
+  let percent = (progress / MAX_STEP) * 100
+  return percent
 })
 
 function getActiveTab() {
@@ -179,29 +178,29 @@ function nextStep() {
   activeTab.value = tab
 }
 
-function markFlagAsViewed(flag){
-    if(flag == MAILING_LIST || flag == OTHER_MEMBERSHIPS){
+function markFlagAsViewed(flag) {
+  if (flag == MAILING_LIST || flag == OTHER_MEMBERSHIPS) {
     // if user has hasn't viewed any of the flags yet, then mark them as read
-    if(!props.member[flag] || props.member[flag] == 0){
-        form.put(route('members.view-flag', { member: member_id.value, flag_name: flag}), {
-            preserveScroll: true,
-            resetOnSuccess: false,
-            onSuccess(){
-                if(flag == MAILING_LIST){
-                    nextStep()
-                }
-            }
-        })
-     }else if(flag == MAILING_LIST){
-        nextStep()
-     }
+    if (!props.member[flag] || props.member[flag] == 0) {
+      form.put(route('members.view-flag', { member: member_id.value, flag_name: flag }), {
+        preserveScroll: true,
+        resetOnSuccess: false,
+        onSuccess() {
+          if (flag == MAILING_LIST) {
+            nextStep()
+          }
+        },
+      })
+    } else if (flag == MAILING_LIST) {
+      nextStep()
     }
+  }
 }
 
 function submit(flag) {
   if (member_id.value > 0) {
-    if(flag){
-        markFlagAsViewed(flag)
+    if (flag) {
+      markFlagAsViewed(flag)
     }
     // Always check the 'General' tab
     if (form.isDirty || activeTab.value === 'second') {
@@ -221,8 +220,8 @@ function submit(flag) {
       })
       return
     }
-    if(activeTab.value !== 'ninth'){
-        nextStep()
+    if (activeTab.value !== 'ninth') {
+      nextStep()
     }
   } else {
     form.post(route('members.signup.store'), {
@@ -236,24 +235,24 @@ function submit(flag) {
   }
 }
 
-function getPartStatus(part){
-    return page.props.user?.completion?.data?.[part]?.status
+function getPartStatus(part) {
+  return page.props.user?.completion?.data?.[part]?.status
 }
 
 onMounted(() => {
   if (member_id.value !== 0 && !props.tab && getPartStatus('part2')) {
     // check if user have already started their membership application, have completed first 2 steps then go to summary
     router.replace(route('members.show', member_id.value))
-  } else if(member_id.value !== 0 && !props.tab && !getPartStatus('part2') && getPartStatus('part1')){
+  } else if (member_id.value !== 0 && !props.tab && !getPartStatus('part2') && getPartStatus('part1')) {
     // user completed first step only
     currentStep.value = 2
     activeTab.value = getActiveTab()
-    disableTabs.value = ! page.props.user?.completion?.data?.part2?.status
+    disableTabs.value = !page.props.user?.completion?.data?.part2?.status
   } else if (props.tab) {
     // check if user selected a tab from summary
     currentStep.value = Number(props.tab)
     activeTab.value = getActiveTab()
-    disableTabs.value = ! page.props.user?.completion?.data?.part2?.status
+    disableTabs.value = !page.props.user?.completion?.data?.part2?.status
   }
 })
 </script>

@@ -33,15 +33,17 @@ class MemberRepository extends Repository
         return Carbon::create($current_dt->year, $month, $day);
     }
 
-    public function markOptionalFlagAsViewed(Member $member, String $flag){
-        if($flag == 'viewed_other_memberships'){
+    public function markOptionalFlagAsViewed(Member $member, string $flag)
+    {
+        if ($flag == 'viewed_other_memberships') {
             $member->viewed_other_memberships = true;
             $member->save();
-        }else if($flag == 'viewed_mailing_list'){
+        } elseif ($flag == 'viewed_mailing_list') {
             $member->viewed_mailing_list = true;
             $member->save();
         }
     }
+
     public function accept(Member $member, User $user)
     {
         $member->membership_status_id = MembershipStatus::ACCEPTED->value;

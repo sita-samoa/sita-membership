@@ -72,7 +72,7 @@ Route::middleware([
         ->name('members.subscribe');
 
     Route::put('/members/{member}/view-flag', [MemberController::class, 'markOptionalFlagAsViewed'])
-    ->name('members.view-flag');
+        ->name('members.view-flag');
 
     // Member work experience
     Route::resource('member-work-experiences', MemberWorkExperienceController::class)

@@ -35,7 +35,7 @@ class Member extends Model implements Auditable
         // 'membership_status_id',
         'note',
         'viewed_other_memberships',
-        'viewed_mailing_list'
+        'viewed_mailing_list',
     ];
 
     /**
@@ -129,11 +129,13 @@ class Member extends Model implements Auditable
         ) {
             $completion['data']['part4']['status'] = true;
         }
-        if ($this->viewed_other_memberships || $this->other_membership){
+        if ($this->viewed_other_memberships || $this->other_membership) {
             $completion['data']['part5']['status'] = true;
         }
-        if ($this->qualifications()->count() &&
-            $this->supportingDocuments()->where('to_delete', false)->count()) {
+        if (
+            $this->qualifications()->count() &&
+            $this->supportingDocuments()->where('to_delete', false)->count()
+        ) {
             $completion['data']['part6']['status'] = true;
         }
 
@@ -144,7 +146,7 @@ class Member extends Model implements Auditable
         if ($this->referees()->count() > 0) {
             $completion['data']['part8']['status'] = true;
         }
-        if ($this->viewed_mailing_list || $this->mailingLists()->count() > 0){
+        if ($this->viewed_mailing_list || $this->mailingLists()->count() > 0) {
             $completion['data']['part9']['status'] = true;
         }
 
