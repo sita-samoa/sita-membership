@@ -127,7 +127,7 @@ const disableTwoFactorAuthentication = () => {
           <div class="mt-4" v-html="qrCode" />
 
           <div v-if="setupKey" class="mt-4 max-w-xl text-sm text-gray-600">
-            <p class="font-semibold">Setup Key: <span v-html="setupKey"></span></p>
+            <p class="font-semibold">Setup Key: <span v-html="setupKey" /></p>
           </div>
 
           <div v-if="confirming" class="mt-4">

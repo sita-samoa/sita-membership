@@ -83,7 +83,7 @@ const submit = () => {
         <InputLabel for="terms">
           <span class="pb-3">Terms and Conditions</span>
           <div class="flex items-center mt-2">
-            <Checkbox id="terms" class="text-primary" v-model:checked="form.terms" name="terms" required />
+            <Checkbox id="terms" v-model:checked="form.terms" class="text-primary" name="terms" required />
 
             <div class="ml-2 text-xs"><strong>Applicants Declaration:</strong> I declare that all information is true and correct, and if admitted to the Society, I understand that I am bound to the Rules, regulations and Codes of the Society as amended from time to time.</div>
           </div>

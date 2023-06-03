@@ -152,14 +152,14 @@ function deleteItem() {
       <Input v-model="form.qualification" placeholder="enter your qualification" label="Qualification" class="mb-2" />
       <InputError class="mt-2" :message="form.errors.qualification" />
 
-      <Input name="year_attained" type="number" v-model="form.year_attained" placeholder="enter your year attended" label="Year attended" class="mb-2" />
+      <Input v-model="form.year_attained" name="year_attained" type="number" placeholder="enter your year attended" label="Year attended" class="mb-2" />
       <InputError class="mt-2" :message="form.errors.year_attained" />
 
       <Input v-model="form.institution" placeholder="enter your institution" label="Institution" class="mb-2" />
       <InputError class="mt-2" :message="form.errors.institution" />
 
       <InputLabel for="countries" value="Country" class="mb-2" />
-      <select v-model="form.country_iso2" id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
+      <select id="countries" v-model="form.country_iso2" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
         <option selected>Choose a country</option>
         <option disabled>----------</option>
         <option v-for="countryCode in popularCountries" :value="countryCode">{{ props.countryList[countryCode] }}</option>

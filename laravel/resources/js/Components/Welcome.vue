@@ -51,7 +51,7 @@ function format(amount) {
     </div>
   </div>
   <!-- exec dash -->
-  <div class="p-6 lg:p-8 bg-white border-b border-gray-200" v-if="$page.props.user.permissions.canReadAny">
+  <div v-if="$page.props.user.permissions.canReadAny" class="p-6 lg:p-8 bg-white border-b border-gray-200">
     <h1 class="text-2xl font-medium text-gray-900">Executive Dashboard</h1>
 
     <Link href="/members?membership_status_id=2" as="button">

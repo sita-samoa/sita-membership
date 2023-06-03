@@ -14,7 +14,7 @@ defineProps(['auditLog', 'member_id'])
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-          <AuditLogTable :auditLog="auditLog" :member_id="member_id" />
+          <AuditLogTable :audit-log="auditLog" :member_id="member_id" />
         </div>
       </div>
     </div>

@@ -45,7 +45,7 @@ function toReadable(model) {
 }
 </script>
 <template>
-  <div class="relative overflow-x-auto p-6" v-if="auditLog.data.length">
+  <div v-if="auditLog.data.length" class="relative overflow-x-auto p-6">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
@@ -57,9 +57,9 @@ function toReadable(model) {
         </tr>
       </thead>
       <tbody>
-        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="a in auditLog.data">
+        <tr v-for="a in auditLog.data" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
           <th scope="row" class="capitalize px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-            <a href="#" @click="showModal(a)" class="underline text-indigo-500"> {{ a.event }} </a>
+            <a href="#" class="underline text-indigo-500" @click="showModal(a)"> {{ a.event }} </a>
           </th>
           <td class="px-6 py-4">
             {{ dayjs(a.created_at).fromNow() }}
@@ -80,7 +80,7 @@ function toReadable(model) {
     <!-- Pagination -->
     <Pagination :links="auditLog.links" />
   </div>
-  <div class="relative overflow-x-auto p-6" v-else>No audit to display. Check back later.</div>
+  <div v-else class="relative overflow-x-auto p-6">No audit to display. Check back later.</div>
 
   <div class="w-full flex justify-end p-6">
     <Link class="underline text-indigo-500 text-sm" :href="route('members.show', member_id)">View Application Summary</Link>
@@ -93,7 +93,7 @@ function toReadable(model) {
     <template #content>
       <!-- mobile -->
       <div class="visible md:hidden">
-        <div class="px-5 py-3 bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="(a, index) in Object.keys(selectedItem.new_values)">
+        <div v-for="(a, index) in Object.keys(selectedItem.new_values)" class="px-5 py-3 bg-white border-b dark:bg-gray-800 dark:border-gray-700">
           <p scope="row" class="font-medium text-gray-900 whitespace-nowrap dark:text-white mb-3">Field: {{ a }}</p>
           <p>Old Value: {{ selectedItem.old_values[a] }}</p>
           <p>New Value: {{ selectedItem.new_values[a] }}</p>
@@ -111,7 +111,7 @@ function toReadable(model) {
             </tr>
           </thead>
           <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700" v-for="(a, index) in Object.keys(selectedItem.new_values)">
+            <tr v-for="(a, index) in Object.keys(selectedItem.new_values)" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
               <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                 {{ a }}
               </th>

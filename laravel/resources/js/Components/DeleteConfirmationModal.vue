@@ -13,9 +13,9 @@ defineProps({
 </script>
 <template>
   <ConfirmationModal :show="show">
-    <template v-slot:title> Delete </template>
-    <template v-slot:content> Are you sure? </template>
-    <template v-slot:footer>
+    <template #title> Delete </template>
+    <template #content> Are you sure? </template>
+    <template #footer>
       <Button color="alternative" class="mr-3" @click="emit('close')">Cancel</Button>
       <Button color="red" @click="emit('delete')">Do it</Button>
     </template>

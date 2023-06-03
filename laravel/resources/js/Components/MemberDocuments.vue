@@ -135,7 +135,7 @@ function deleteItem() {
 
       <span v-if="canAdd">
         <InputLabel for="file" value="File Upload" class="mb-4" />
-        <input type="file" id="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" @input="form.file = $event.target.files[0]" />
+        <input id="file" type="file" class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" @input="form.file = $event.target.files[0]" />
         <InputError class="mt-2" :message="form.errors.file" />
 
         <Progress v-if="form.progress" :progress="form.progress.percentage"> {{ form.progress.percentage }}% </Progress>
@@ -144,7 +144,7 @@ function deleteItem() {
         <div class="mb-3">
           <a href="#" class="underline text-indigo-500" @click="download(itemId)">
             Download file
-            <CloudDownloadIcon fillColor="currentColor" class="float-left mr-2" />
+            <CloudDownloadIcon fill-color="currentColor" class="float-left mr-2" />
           </a>
         </div>
       </span>

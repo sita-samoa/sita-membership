@@ -5,10 +5,10 @@ import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
 defineProps(['list'])
 </script>
 <template>
-  <list-group class="w-full" v-show="list.length">
+  <list-group v-show="list.length" class="w-full">
     <list-group-item v-for="item in list" @click="$emit('editItem', item.id)">
       <template #prefix>
-        <PencilOutlineIcon fillColor="green" />
+        <PencilOutlineIcon fill-color="green" />
       </template>
       {{ item.qualification }}
     </list-group-item>
