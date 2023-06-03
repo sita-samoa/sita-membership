@@ -51,20 +51,23 @@
             "php artisan db:seed --class=DemoUsersSeeder",
             "php artisan db:seed --class=MembersTableSeeder"
         ],
-        "sniff": [
+        "lint": [
             "./vendor/bin/pint --test",
             "./vendor/bin/phpcs",
             "./vendor/bin/rector --dry-run"
         ],
-        "sniff_ci": [
+        "lint_ci": [
             "./vendor/bin/pint --test",
-            "./vendor/bin/phpcs -n",
-            "./vendor/bin/rector --dry-run"
+            "./vendor/bin/phpcs -n"
         ],
-        "lint": [
+        "format": [
             "./vendor/bin/pint",
             "./vendor/bin/phpcbf",
             "./vendor/bin/rector"
+        ],
+        "format_ci": [
+            "./vendor/bin/pint",
+            "./vendor/bin/phpcbf"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
