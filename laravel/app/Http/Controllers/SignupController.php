@@ -24,6 +24,7 @@ class SignupController extends Controller
 
         return Inertia::render('Members/Signup', [
             'member' => $member,
+            'completion' => $member->getCompletionsAttribute(),
             'options' => [
                 'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
                 'gender_options' => Gender::all(['id', 'code', 'title']),

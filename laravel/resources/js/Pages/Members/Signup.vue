@@ -4,6 +4,7 @@ import SignupSteps from '../../Components/SignupSteps.vue';
 
 defineProps([
   'member',
+  'completion',
   'options',
   'qualifications',
   'permissions',
@@ -30,6 +31,7 @@ defineProps([
                 <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                     <SignupSteps
                         :member="member"
+                        :completion="completion"
                         :options="options"
                         :qualifications="qualifications"
                         :permissions="permissions"
