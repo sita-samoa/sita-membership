@@ -38,6 +38,16 @@ class MemberRepository extends Repository
     return $this->recordAction($member, $user, $to_date);
   }
 
+  public function markOptionalFlagAsViewed(Member $member, String $flag){
+    if($flag == 'viewed_other_memberships'){
+        $member->viewed_other_memberships = true;
+        $member->save();
+    }else if($flag == 'viewed_mailing_list'){
+        $member->viewed_mailing_list = true;
+        $member->save();
+    }
+  }
+
   public function recordAction(Member $member, User $user, $to_date = null)
   {
     $membership_status = new MemberMembershipStatus([
