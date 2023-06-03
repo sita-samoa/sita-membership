@@ -243,6 +243,11 @@ onMounted(() => {
   if (member_id.value !== 0 && !props.tab && getPartStatus('part2')) {
     // check if user have already started their membership application, have completed first 2 steps then go to summary
     router.replace(route('members.show', member_id.value))
+  } else if(member_id.value !== 0 && !props.tab && !getPartStatus('part2') && getPartStatus('part1')){
+    // user completed first step only
+    currentStep.value = 2
+    activeTab.value = getActiveTab()
+    disableTabs.value = ! page.props.user?.completion?.data?.part2?.status
   } else if (props.tab) {
     // check if user selected a tab from summary
     currentStep.value = Number(props.tab)
