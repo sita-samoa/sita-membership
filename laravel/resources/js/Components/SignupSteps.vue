@@ -93,17 +93,17 @@ const form = useForm({
 })
 
 const progress = computed(() => {
-    if(applicationSubmitted || !props.completion) return MIN_STEP/MAX_STEP * 100
-    let progress = MIN_STEP
-    const parts = [1,2,3,4,5,6,7,8,9]
-    const completion = props.completion?.data
-    parts.map(part => {
-        if(completion[`part${part}`]?.status){
-            progress++
-        }
-    })
-    let percent = progress / MAX_STEP * 100
-    return percent
+  if (applicationSubmitted || !props.completion) return (MIN_STEP / MAX_STEP) * 100
+  let progress = MIN_STEP
+  const parts = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+  const completion = props.completion?.data
+  parts.map(part => {
+    if (completion[`part${part}`]?.status) {
+      progress++
+    }
+  })
+  let percent = (progress / MAX_STEP) * 100
+  return percent
 })
 
 function getActiveTab() {
@@ -133,7 +133,7 @@ function getActiveTab() {
 
 function nextStep() {
   let step = 1
-  let tab = "first"
+  let tab = 'first'
   switch (activeTab.value) {
     case 'first':
       step = 2
@@ -178,29 +178,29 @@ function nextStep() {
   activeTab.value = tab
 }
 
-function markFlagAsViewed(flag){
-    if(flag == MAILING_LIST || flag == OTHER_MEMBERSHIPS){
+function markFlagAsViewed(flag) {
+  if (flag == MAILING_LIST || flag == OTHER_MEMBERSHIPS) {
     // if user has hasn't viewed any of the flags yet, then mark them as read
-    if(!props.member[flag] || props.member[flag] == 0){
-        form.put(route('members.view-flag', { member: member_id.value, flag_name: flag}), {
-            preserveScroll: true,
-            resetOnSuccess: false,
-            onSuccess(){
-                if(flag == MAILING_LIST){
-                    nextStep()
-                }
-            }
-        })
-     }else if(flag == MAILING_LIST){
-        nextStep()
-     }
+    if (!props.member[flag] || props.member[flag] == 0) {
+      form.put(route('members.view-flag', { member: member_id.value, flag_name: flag }), {
+        preserveScroll: true,
+        resetOnSuccess: false,
+        onSuccess() {
+          if (flag == MAILING_LIST) {
+            nextStep()
+          }
+        },
+      })
+    } else if (flag == MAILING_LIST) {
+      nextStep()
     }
+  }
 }
 
 function submit(flag) {
   if (member_id.value > 0) {
-    if(flag){
-        markFlagAsViewed(flag)
+    if (flag) {
+      markFlagAsViewed(flag)
     }
     // Always check the 'General' tab
     if (form.isDirty || activeTab.value === 'second') {
@@ -220,8 +220,8 @@ function submit(flag) {
       })
       return
     }
-    if(activeTab.value !== 'ninth'){
-        nextStep()
+    if (activeTab.value !== 'ninth') {
+      nextStep()
     }
   } else {
     form.post(route('members.signup.store'), {
@@ -235,24 +235,24 @@ function submit(flag) {
   }
 }
 
-function getPartStatus(part){
-    return page.props.user?.completion?.data?.[part]?.status
+function getPartStatus(part) {
+  return page.props.user?.completion?.data?.[part]?.status
 }
 
 onMounted(() => {
   if (member_id.value !== 0 && !props.tab && getPartStatus('part2')) {
     // check if user have already started their membership application, have completed first 2 steps then go to summary
     router.replace(route('members.show', member_id.value))
-  } else if(member_id.value !== 0 && !props.tab && !getPartStatus('part2') && getPartStatus('part1')){
+  } else if (member_id.value !== 0 && !props.tab && !getPartStatus('part2') && getPartStatus('part1')) {
     // user completed first step only
     currentStep.value = 2
     activeTab.value = getActiveTab()
-    disableTabs.value = ! page.props.user?.completion?.data?.part2?.status
+    disableTabs.value = !page.props.user?.completion?.data?.part2?.status
   } else if (props.tab) {
     // check if user selected a tab from summary
     currentStep.value = Number(props.tab)
     activeTab.value = getActiveTab()
-    disableTabs.value = ! page.props.user?.completion?.data?.part2?.status
+    disableTabs.value = !page.props.user?.completion?.data?.part2?.status
   }
 })
 </script>
@@ -361,41 +361,41 @@ onMounted(() => {
             <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
           </form>
         </tab>
-      <tab name="fifth" title="Memberships" :disabled="disableTabs">
-        <form @submit.prevent="submit('viewed_other_memberships')">
+        <tab name="fifth" title="Memberships" :disabled="disableTabs">
+          <form @submit.prevent="submit('viewed_other_memberships')">
             <InputLabel for="message" value="Other Memberships" class="mb-4" />
             <textarea id="message" v-model="form.other_membership" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="List each professional organisation you are a member of in a separate line..."></textarea>
             <InputError class="mt-2" :message="form.errors.other_membership" />
             <!-- next button -->
-            <Button v-show="$page.props.user.permissions.canUpdate"  type="submit" class="p-3 mt-3">Next</Button>
-        </form>
-      </tab>
-      <tab name="sixth" title="Qualifications" :disabled="disableTabs">
-        <MemberQualifications :member_id="member_id" :list="props.qualifications" :countryList="props.countryList" :editable="$page.props.user.permissions.canUpdate" />
-        <MemberDocuments :member_id="member_id" :list="props.supportingDocuments" />
+            <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+          </form>
+        </tab>
+        <tab name="sixth" title="Qualifications" :disabled="disableTabs">
+          <MemberQualifications :member_id="member_id" :list="props.qualifications" :countryList="props.countryList" :editable="$page.props.user.permissions.canUpdate" />
+          <MemberDocuments :member_id="member_id" :list="props.supportingDocuments" />
 
-        <!-- next button -->
-        <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-      </tab>
-      <tab name="seventh" title="Work Experience" :disabled="disableTabs">
-        <MemberWorkExperience :member-id="member.id" :member-work-experiences="memberWorkExperiences" />
+          <!-- next button -->
+          <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+        </tab>
+        <tab name="seventh" title="Work Experience" :disabled="disableTabs">
+          <MemberWorkExperience :member-id="member.id" :member-work-experiences="memberWorkExperiences" />
 
-        <!-- next button -->
-        <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-      </tab>
-      <tab name="eighth" title="Referees" :disabled="disableTabs">
-        <MemberReferees :member_id="member_id" :list="props.referees" />
+          <!-- next button -->
+          <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+        </tab>
+        <tab name="eighth" title="Referees" :disabled="disableTabs">
+          <MemberReferees :member_id="member_id" :list="props.referees" />
 
-        <!-- next button -->
-        <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
-      </tab>
-      <tab name="ninth" title="Mailing Lists" :disabled="disableTabs">
-        <MemberMailingListPreference @submit="submit" :member_id="member_id" :list="props.memberMailingLists" :mailing_options="props.options.mailing_options" />
-      </tab>
-      <div v-show="props.tab || $page.props.user?.completion?.data?.part2?.status" class="w-full flex justify-end">
+          <!-- next button -->
+          <Button v-show="$page.props.user.permissions.canUpdate" @click.prevent="nextStep" class="p-3 mt-3">Next</Button>
+        </tab>
+        <tab name="ninth" title="Mailing Lists" :disabled="disableTabs">
+          <MemberMailingListPreference @submit="submit" :member_id="member_id" :list="props.memberMailingLists" :mailing_options="props.options.mailing_options" />
+        </tab>
+        <div v-show="props.tab || $page.props.user?.completion?.data?.part2?.status" class="w-full flex justify-end">
           <Link class="underline text-indigo-500 text-sm" :href="route('members.show', member_id)">View Application Summary</Link>
-      </div>
-    </tabs>
-</div>
-</div>
+        </div>
+      </tabs>
+    </div>
+  </div>
 </template>
