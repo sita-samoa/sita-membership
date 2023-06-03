@@ -11,6 +11,7 @@ class HandleInertiaRequests extends Middleware
      * The root template that's loaded on the first page visit.
      *
      * @see https://inertiajs.com/server-side-setup#root-template
+     *
      * @var string
      */
     protected $rootView = 'app';
@@ -19,8 +20,6 @@ class HandleInertiaRequests extends Middleware
      * Determines the current asset version.
      *
      * @see https://inertiajs.com/asset-versioning
-     * @param  \Illuminate\Http\Request  $request
-     * @return string|null
      */
     public function version(Request $request): ?string
     {
@@ -31,8 +30,6 @@ class HandleInertiaRequests extends Middleware
      * Defines the props that are shared by default.
      *
      * @see https://inertiajs.com/shared-data
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
      */
     public function share(Request $request): array
     {
@@ -47,16 +44,17 @@ class HandleInertiaRequests extends Middleware
                 ];
             },
             'user' => function () use ($request) {
-                if (!$user = $request->user()) {
+                if (! $user = $request->user()) {
                     return;
                 }
+
                 return [
                     'member_id' => $user->members()->first()->id ?? 0,
                     'completion' => $user->members()->first() ? $user->members()->first()->completions : [],
                     'permissions' => $user->permissions ?? [],
                 ];
             },
-            'recaptcha_site_key' => config('services.google_recaptcha.site_key')
+            'recaptcha_site_key' => config('services.google_recaptcha.site_key'),
         ]);
     }
 }

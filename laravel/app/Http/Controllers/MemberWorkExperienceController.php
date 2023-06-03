@@ -85,6 +85,7 @@ class MemberWorkExperienceController extends Controller
     public function destroy(MemberWorkExperience $memberWorkExperience)
     {
         $memberWorkExperience->delete();
+
         return redirect()->back()
             ->with('success', 'Work experience deleted.');
     }

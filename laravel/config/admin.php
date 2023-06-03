@@ -1,4 +1,5 @@
 <?php
+
 return [
 
     /*
@@ -12,6 +13,6 @@ return [
 
     'admin_name' => env('ADMIN_NAME', 'admin'),
     'admin_email' => env('ADMIN_EMAIL', 'admin@example.com'),
-    'admin_password' =>env('ADMIN_PASSWORD', 'admin'),
-    'admin_team' =>env('ADMIN_TEAM', 'SITA Online'),
-    ];
+    'admin_password' => env('ADMIN_PASSWORD', 'admin'),
+    'admin_team' => env('ADMIN_TEAM', 'SITA Online'),
+];
