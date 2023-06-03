@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { Link, useForm, usePage, router } from '@inertiajs/vue3'
-import { Button, Progress, Input, Tabs, Tab, Toast } from 'flowbite-vue'
+import { Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
 import MemberQualifications from '@/Components/MemberQualifications.vue'
 import MemberDocuments from '@/Components/MemberDocuments.vue'
 import MemberWorkExperience from '@/Components/MemberWorkExperience.vue'
