@@ -51,7 +51,7 @@ class MemberMembershipStatusRepository extends Repository
     }
 
     /**
-     * Send Past Due Sub Reminders to Members whose subs expired 6 months ago or less
+     * Send Past Due Sub Reminders to Members whose subs expired 6 months ago or less.
      *
      * @return void
      */
@@ -62,16 +62,16 @@ class MemberMembershipStatusRepository extends Repository
         }
 
         $ids = [];
-      // Get profiles that will expire in 3 months or less
+        // Get profiles that will expire in 3 months or less
         $lapsed_status = MembershipStatus::LAPSED->value;
         $statuses = $this->getExpiredLessThan6Months($current);
-      // @todo - load matches into a queue to be run every 5 mins
+        // @todo - load matches into a queue to be run every 5 mins
         foreach ($statuses as $status) {
-          // ensure member status is correct
+            // ensure member status is correct
             if ($status->member->membershipStatus->id === $lapsed_status) {
                 $id = $status->member->id;
 
-              // Make sure we dont have duplicate member ids (in case it was Activated twice)
+                // Make sure we dont have duplicate member ids (in case it was Activated twice)
                 if (! in_array($id, array_keys($ids))) {
                     $ids[$id] = $status;
                 }
@@ -79,16 +79,16 @@ class MemberMembershipStatusRepository extends Repository
         }
 
         $end_grace_period = Carbon::now();
-      // used in local (mariadb)
+        // used in local (mariadb)
         $mariadb_format = 'Y-m-d';
-      // used in github actions (sqlite)
+        // used in github actions (sqlite)
         $sqlite_format = 'Y-m-d H:i:s';
         foreach ($ids as $status) {
             $member = $status->member;
             $user = $member->user;
             $expiry_date = $status->to_date;
 
-          // Cater for sqlite date format using github actions
+            // Cater for sqlite date format using github actions
             if (Carbon::canBeCreatedFromFormat($expiry_date, $mariadb_format)) {
                 $end_grace_period = Carbon::createFromFormat($mariadb_format, $expiry_date);
             } elseif (Carbon::canBeCreatedFromFormat($expiry_date, $sqlite_format)) {
@@ -97,16 +97,16 @@ class MemberMembershipStatusRepository extends Repository
 
             $user->notify(new PastDueSubReminder($member, $end_grace_period->addMonthsWithoutOverflow(6)));
 
-          // @todo - Add to dash board list of members that will expire in 3
-          //  months or less.
-          // @todo - Add a button to send bulk remindrs to those on the list
-          // @todo - Perform bulk operations on the member list (e.g. send reminder)
+            // @todo - Add to dash board list of members that will expire in 3
+            //  months or less.
+            // @todo - Add a button to send bulk remindrs to those on the list
+            // @todo - Perform bulk operations on the member list (e.g. send reminder)
         }
     }
 
     /**
      * Send Expiring Membership Reminders to members whose subs will expire
-     * in 3 months or less
+     * in 3 months or less.
      *
      * @return void
      */
@@ -117,16 +117,16 @@ class MemberMembershipStatusRepository extends Repository
         }
 
         $ids = [];
-      // Get profiles that will expire in 3 months or less
+        // Get profiles that will expire in 3 months or less
         $accepted_status = MembershipStatus::ACCEPTED->value;
         $statuses = $this->getExpiringIn3Months($current);
-      // @todo - load matches into a queue to be run every 5 mins
+        // @todo - load matches into a queue to be run every 5 mins
         foreach ($statuses as $status) {
-          // ensure member status is correct
+            // ensure member status is correct
             if ($status->member->membershipStatus->id === $accepted_status) {
                 $id = $status->member->id;
 
-              // Make sure we dont have duplicate member ids (in case it was Activated twice)
+                // Make sure we dont have duplicate member ids (in case it was Activated twice)
                 if (! in_array($id, array_keys($ids))) {
                     $ids[$id] = $status;
                 }
@@ -141,10 +141,10 @@ class MemberMembershipStatusRepository extends Repository
 
             $user->notify(new ExpiringSubReminder($member, $days));
 
-          // @todo - Add to dash board list of members that will expire in 3
-          //  months or less.
-          // @todo - Add a button to send bulk remindrs to those on the list
-          // @todo - Perform bulk operations on the member list (e.g. send reminder)
+            // @todo - Add to dash board list of members that will expire in 3
+            //  months or less.
+            // @todo - Add a button to send bulk remindrs to those on the list
+            // @todo - Perform bulk operations on the member list (e.g. send reminder)
         }
     }
 }

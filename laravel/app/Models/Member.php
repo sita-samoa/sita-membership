@@ -50,7 +50,7 @@ class Member extends Model implements Auditable
     }
 
     /**
-     * Get member completions
+     * Get member completions.
      *
      * @return array
      */

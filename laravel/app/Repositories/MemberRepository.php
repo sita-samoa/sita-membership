@@ -20,9 +20,9 @@ class MemberRepository extends Repository
             $current_dt = Carbon::now();
         }
 
-      // Set end of financial year (June 30)
-        $month = MemberRepository::MONTH_FOR_END_OF_FINANCIAL_YEAR;
-        $day = MemberRepository::DAYS_OF_MONTH_OF_FINANCIAL_YEAR;
+        // Set end of financial year (June 30)
+        $month = self::MONTH_FOR_END_OF_FINANCIAL_YEAR;
+        $day = self::DAYS_OF_MONTH_OF_FINANCIAL_YEAR;
 
         if ($current_dt->month > $month) {
             $next_year = $current_dt->year + 1;

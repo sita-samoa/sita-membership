@@ -189,7 +189,7 @@ class MemberController extends Controller
     }
 
     /**
-     * Mark a lapsed member as active
+     * Mark a lapsed member as active.
      */
     public function markActive(Member $member, Request $request): RedirectResponse
     {
@@ -234,7 +234,7 @@ class MemberController extends Controller
     }
 
     /**
-     * Toggle Member Subscription to Mailing List
+     * Toggle Member Subscription to Mailing List.
      */
     public function toggleMailingListSubscription(Member $member, Request $request)
     {
