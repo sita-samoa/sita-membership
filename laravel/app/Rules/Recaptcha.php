@@ -33,11 +33,7 @@ class Recaptcha implements Rule
             'response' => $value,
         ])->json();
 
-        if ($response['success'] && $response['score'] > 0.5) {
-            return true;
-        }
-
-        return false;
+        return $response['success'] && $response['score'] > 0.5;
     }
 
     /**

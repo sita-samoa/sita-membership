@@ -151,7 +151,7 @@ class Member extends Model implements Auditable
         }
 
         $overall = true;
-        foreach ($completion['data'] as $key => $value) {
+        foreach ($completion['data'] as $value) {
             if (! $value['status']) {
                 $overall = false;
                 break;
