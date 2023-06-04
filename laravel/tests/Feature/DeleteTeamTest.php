@@ -11,7 +11,8 @@ test('teams can be deleted', function () {
     ]));
 
     $team->users()->attach(
-        $otherUser = User::factory()->create(), ['role' => 'test-role']
+        $otherUser = User::factory()->create(),
+        ['role' => 'test-role']
     );
 
     $response = $this->delete('/teams/'.$team->id);
