@@ -189,7 +189,7 @@ class MemberController extends Controller
     }
 
     /**
-     * Mark a lapsed member as active
+     * Mark a lapsed member as active.
      */
     public function markActive(Member $member, Request $request): RedirectResponse
     {
@@ -234,7 +234,7 @@ class MemberController extends Controller
     }
 
     /**
-     * Toggle Member Subscription to Mailing List
+     * Toggle Member Subscription to Mailing List.
      */
     public function toggleMailingListSubscription(Member $member, Request $request)
     {
@@ -246,7 +246,8 @@ class MemberController extends Controller
         ]);
 
         $mailing_list = MailingList::find($validated['mailing_list_id']);
-        $foundPref = MemberMailingPreference::where('member_id', $member->id)->where('mailing_list_id', $mailing_list->id)->first();
+        $foundPref = MemberMailingPreference::where('member_id', $member->id)
+            ->where('mailing_list_id', $mailing_list->id)->first();
         $subscribe = $validated['subscribe'];
         if ($foundPref) {
             $foundPref->subscribed = $subscribe;
