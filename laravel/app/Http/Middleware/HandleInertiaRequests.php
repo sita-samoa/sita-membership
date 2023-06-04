@@ -44,7 +44,7 @@ class HandleInertiaRequests extends Middleware
                 ];
             },
             'user' => function () use ($request) {
-                if (!$user = $request->user()) {
+                if (! $user = $request->user()) {
                     return;
                 }
 

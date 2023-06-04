@@ -42,7 +42,7 @@ class FortifyServiceProvider extends ServiceProvider
             if ($user && Hash::check($request->password, $user->password)) {
                 Validator::make(
                     [$request->captcha_token],
-                    ['captcha_token' => [new Recaptcha],
+                    ['captcha_token' => [new Recaptcha()],
                     ]
                 )->validate();
 

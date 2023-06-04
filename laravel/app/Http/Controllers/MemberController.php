@@ -25,7 +25,6 @@ class MemberController extends Controller
 {
     public function __construct(public MemberRepository $rep = new MemberRepository())
     {
-
     }
 
     /**

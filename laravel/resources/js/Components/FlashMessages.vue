@@ -1,7 +1,6 @@
-
 <script setup>
-import { ref, watch } from 'vue';
-import { usePage } from '@inertiajs/vue3';
+import { ref, watch } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 
 const show = ref('true')
 

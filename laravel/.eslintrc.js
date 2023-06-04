@@ -14,11 +14,7 @@ module.exports = {
     amd: true,
     node: true,
   },
-  extends: [
-    'eslint:recommended',
-    'plugin:vue/vue3-recommended',
-    'plugin:prettier/recommended',
-  ],
+  extends: ['eslint:recommended', 'plugin:vue/vue3-recommended', 'plugin:prettier/recommended'],
   plugins: ['prettier'],
   ignorePatterns: ['**/build/**', '**/vendor/**'],
   rules: {
@@ -34,10 +30,7 @@ module.exports = {
     indent: ['error', 2],
     quotes: ['warn', 'single'],
     semi: ['warn', 'never'],
-    'no-unused-vars': [
-      'error',
-      { vars: 'all', args: 'after-used', ignoreRestSiblings: true },
-    ],
+    'no-unused-vars': ['error', { vars: 'all', args: 'after-used', ignoreRestSiblings: true }],
     'comma-dangle': ['warn', 'always-multiline'],
     'vue/multi-word-component-names': 'off',
     'vue/max-attributes-per-line': 'off',

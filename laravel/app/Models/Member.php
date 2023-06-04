@@ -104,7 +104,8 @@ class Member extends Model implements Auditable
         if ($this->membership_type_id) {
             $completion['data']['part1']['status'] = true;
         }
-        if ($this->first_name &&
+        if (
+            $this->first_name &&
             $this->last_name &&
             $this->gender_id &&
             $this->job_title &&
@@ -112,14 +113,16 @@ class Member extends Model implements Auditable
         ) {
             $completion['data']['part2']['status'] = true;
         }
-        if ($this->home_address ||
+        if (
+            $this->home_address ||
             $this->home_phone ||
             $this->home_mobile ||
             $this->home_email
         ) {
             $completion['data']['part3']['status'] = true;
         }
-        if ($this->work_address ||
+        if (
+            $this->work_address ||
             $this->work_phone ||
             $this->work_mobile ||
             $this->work_email
@@ -129,8 +132,10 @@ class Member extends Model implements Auditable
         if ($this->viewed_other_memberships || $this->other_membership) {
             $completion['data']['part5']['status'] = true;
         }
-        if ($this->qualifications()->count() &&
-            $this->supportingDocuments()->where('to_delete', false)->count()) {
+        if (
+            $this->qualifications()->count() &&
+            $this->supportingDocuments()->where('to_delete', false)->count()
+        ) {
             $completion['data']['part6']['status'] = true;
         }
 
@@ -147,7 +152,7 @@ class Member extends Model implements Auditable
 
         $overall = true;
         foreach ($completion['data'] as $key => $value) {
-            if (!$value['status']) {
+            if (! $value['status']) {
                 $overall = false;
                 break;
             }

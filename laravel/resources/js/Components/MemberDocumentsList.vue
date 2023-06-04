@@ -3,7 +3,7 @@ import { ListGroup, ListGroupItem } from 'flowbite-vue'
 import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
 import CloudDownloadIcon from 'vue-material-design-icons/CloudDownload.vue'
 
-defineProps(["list"])
+defineProps(['list'])
 
 function bytesToSize(bytes) {
   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB']
@@ -13,17 +13,17 @@ function bytesToSize(bytes) {
 }
 </script>
 <template>
-<list-group class="w-full" v-show="list.length">
-  <list-group-item v-for="item in list" @click="$emit('editItem', item.id)">
-    <template #prefix>
-      <PencilOutlineIcon fillColor="green" />
-    </template>
-    {{ item.title }} <span v-show="!item.title">{{ item.file_name }}&nbsp;</span> ({{ bytesToSize(item.file_size) }})
-    <template #suffix>
-      <div @click.stop="$emit('download', item.id)" title="Download" class="place-items-end">
-        <CloudDownloadIcon fillColor="currentColor" />
-      </div>
-    </template>
-  </list-group-item>
-</list-group>
+  <list-group v-show="list.length" class="w-full">
+    <list-group-item v-for="item in list" @click="$emit('editItem', item.id)">
+      <template #prefix>
+        <PencilOutlineIcon fill-color="green" />
+      </template>
+      {{ item.title }} <span v-show="!item.title">{{ item.file_name }}&nbsp;</span> ({{ bytesToSize(item.file_size) }})
+      <template #suffix>
+        <div title="Download" class="place-items-end" @click.stop="$emit('download', item.id)">
+          <CloudDownloadIcon fill-color="currentColor" />
+        </div>
+      </template>
+    </list-group-item>
+  </list-group>
 </template>
