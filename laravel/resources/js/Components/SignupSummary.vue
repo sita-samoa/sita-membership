@@ -82,23 +82,23 @@ const application_ready_for_submission = props.options.completion.overall.status
     <!-- Action buttons -->
     <p v-show="!application_ready_for_submission" class="w-full my-3 ml-2 text-sm text-gray-500">Please ensure all sections are completed before submitting</p>
 
-  <Button class="w-full mb-3" :disabled="!(application_ready_for_submission || $page.props.user.permissions.canSubmit) || form.processing" v-if="application_status_id <= 1" default @click.prevent="submit">Submit</Button>
+    <Button v-if="application_status_id <= 1" class="w-full mb-3" :disabled="!(application_ready_for_submission || $page.props.user.permissions.canSubmit) || form.processing" default @click.prevent="submit">Submit</Button>
 
-  <Button class="w-full mb-3" :disabled="form.processing" v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" default @click.prevent="endorse">Endorse</Button>
+    <Button v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" class="w-full mb-3" :disabled="form.processing" default @click.prevent="endorse">Endorse</Button>
 
-  <Button class="w-full mb-3" :disabled="form.processing" v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" default @click.prevent="showAcceptanceModal = true">Accept</Button>
+    <Button v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" class="w-full mb-3" :disabled="form.processing" default @click.prevent="showAcceptanceModal = true">Accept</Button>
 
-  <Button class="w-full mb-3" color="green" :disabled="form.processing" v-if="(application_status_id === 5 || application_status_id === 6) && $page.props.user.permissions.canAccept" default @click.prevent="showActivateModal = true">Activate Membership</Button>
+    <Button v-if="(application_status_id === 5 || application_status_id === 6) && $page.props.user.permissions.canAccept" class="w-full mb-3" color="green" :disabled="form.processing" default @click.prevent="showActivateModal = true">Activate Membership</Button>
 
-  <Button class="w-full mb-3" :disabled="form.processing" v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" default @click.prevent="sendSubReminder">Send sub reminder</Button>
+    <Button v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" class="w-full mb-3" :disabled="form.processing" default @click.prevent="sendSubReminder">Send sub reminder</Button>
 
-  <Button class="w-full mb-3" :disabled="form.processing" v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
+    <Button v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" class="w-full mb-3" :disabled="form.processing" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
 
-  <!-- Audit log link -->
-  <Link :href="route('members.audit.index', {member: member.id})" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
+    <!-- Audit log link -->
+    <Link :href="route('members.audit.index', { member: member.id })" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
 
-  <!-- Dialog Modals -->
-  <AcceptModal :show="showAcceptanceModal" :memberId="member.id" @close="showAcceptanceModal = false" />
-  <AcceptModal :show="showActivateModal" :memberId="member.id" @close="showActivateModal = false" headingText="Activate Membership" buttonText="Activate" />
-</div>
+    <!-- Dialog Modals -->
+    <AcceptModal :show="showAcceptanceModal" :member-id="member.id" @close="showAcceptanceModal = false" />
+    <AcceptModal :show="showActivateModal" :member-id="member.id" heading-text="Activate Membership" button-text="Activate" @close="showActivateModal = false" />
+  </div>
 </template>

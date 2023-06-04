@@ -47,16 +47,16 @@ function accept() {
     <template #title>{{ props.headingText }}</template>
     <template #content>
       <div class="mb-3">Please provide the following information.</div>
-      <Input required v-model="form.financial_year" placeholder="enter payment financial year" label="Financial Year" class="mb-2" type="number" />
+      <Input v-model="form.financial_year" required placeholder="enter payment financial year" label="Financial Year" class="mb-2" type="number" />
       <InputError class="mt-2" :message="form.errors.financial_year" />
 
-      <Input required v-model="form.receipt_number" placeholder="enter payment receipt #" label="Receipt #" class="mb-2" />
+      <Input v-model="form.receipt_number" required placeholder="enter payment receipt #" label="Receipt #" class="mb-2" />
       <InputError class="mt-2" :message="form.errors.receipt_number" />
     </template>
     <template #footer>
       <CancelButton @click="emits('close')" />
       <div>
-        <PrimaryButton @click="accept" :disabled="form.processing">{{ props.buttonText }}</PrimaryButton>
+        <PrimaryButton :disabled="form.processing" @click="accept">{{ props.buttonText }}</PrimaryButton>
       </div>
     </template>
   </DialogModal>
