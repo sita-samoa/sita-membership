@@ -27,8 +27,8 @@ jobs:
         with:
           working-directory: ./laravel
 
-      - name: Fix PHP code style issues
-        run: composer format_ci
+      # - name: Fix PHP code style issues
+      #   run: composer format_ci
 
       - name: Cache node modules
         id: cache-npm
