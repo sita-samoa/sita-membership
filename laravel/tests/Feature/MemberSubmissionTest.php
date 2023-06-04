@@ -14,7 +14,7 @@ test('test cannot submit application when incomplete', function () {
 
     $member = Member::factory()->create();
 
-    $response = $this->put('/members/' . $member->id . '/submit');
+    $response = $this->put('/members/'.$member->id.'/submit');
     $response->assertStatus(403);
 });
 
@@ -30,7 +30,7 @@ test('test group admin can submit application when incomplete', function () {
 
     $member = Member::factory()->create();
 
-    $response = $this->put('/members/' . $member->id . '/submit');
+    $response = $this->put('/members/'.$member->id.'/submit');
     $response->assertStatus(302);
 });
 
@@ -48,7 +48,7 @@ test('test notification sent when submitted', function () {
 
     $member = Member::factory()->create();
 
-    $response = $this->put('/members/' . $member->id . '/submit');
+    $response = $this->put('/members/'.$member->id.'/submit');
     $response->assertStatus(302);
 
     // There should be two users receiving notifications. Site admin and Group admin.
@@ -63,7 +63,7 @@ test('@todo - test that user can submit their own application', function () {
         'qualification' => '1',
         'year_attained' => '1',
         'institution' => '1',
-        'country_id' => 1
+        'country_id' => 1,
     ]);
     $member->supportingDocuments()->create([
         'title' => '1',
@@ -82,7 +82,7 @@ test('@todo - test that user can submit their own application', function () {
         'email' => '1@test.com',
     ]);
 
-    $response = $this->put('/members/' . $member->id . '/submit');
+    $response = $this->put('/members/'.$member->id.'/submit');
     $response->assertStatus(302);
 })->skip();
 

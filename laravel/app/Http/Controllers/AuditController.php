@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Models\Member;
 use OwenIt\Auditing\Models\Audit;
 
 class AuditController extends Controller
@@ -13,14 +13,14 @@ class AuditController extends Controller
     /**
      * Show the audit log for this member.
      */
-    public function index(Request $request, Member $member) : Response
+    public function index(Request $request, Member $member): Response
     {
         $this->authorize('view', $member);
 
         // Crazy way to get relationship audits sorted.
         $auditIds = $member->audits()->get('id');
 
-        foreach($member->qualifications()->cursor() as $q) {
+        foreach ($member->qualifications()->cursor() as $q) {
             $auditIds = $auditIds->merge($q->audits()->get('id'));
         }
         foreach ($member->supportingDocuments()->cursor() as $q) {
@@ -34,7 +34,6 @@ class AuditController extends Controller
         }
         $ids = array_column($auditIds->all(), 'id');
 
-
         return Inertia::render('Members/Audit', [
             'auditLog' => Audit::whereIn('id', $ids)
                 ->with('user:id,name')
@@ -44,5 +43,4 @@ class AuditController extends Controller
             'member_id' => $member->id,
         ]);
     }
-
 }

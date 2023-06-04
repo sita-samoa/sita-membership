@@ -35,7 +35,7 @@ class SubReminder extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
+        return (new MailMessage())
             // ->subject("Sub Reminder")
             ->greeting("Tālofa {$this->member->user->name}!")
             ->line('This is a reminder to pay your SITA Sub. Your

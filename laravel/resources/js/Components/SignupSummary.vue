@@ -6,30 +6,26 @@ import MemberSummaryCard from './MemberSummaryCard.vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 
-const props = defineProps([
-    'member',
-    'options',
-])
+const props = defineProps(['member', 'options'])
 
 const completion = props.options.completion.data
 
-const form = useForm({
-})
+const form = useForm({})
 
 function submit() {
-    form.put(route('members.submit', props.member.id), {
-        resetOnSuccess: false,
-    })
+  form.put(route('members.submit', props.member.id), {
+    resetOnSuccess: false,
+  })
 }
 function endorse() {
-    form.put(route('members.endorse', props.member.id), {
-        resetOnSuccess: false,
-    })
+  form.put(route('members.endorse', props.member.id), {
+    resetOnSuccess: false,
+  })
 }
 function accept() {
-    form.put(route('members.accept', props.member.id), {
-        resetOnSuccess: false,
-    })
+  form.put(route('members.accept', props.member.id), {
+    resetOnSuccess: false,
+  })
 }
 function sendSubReminder() {
   form.put(route('members.send-sub-reminder', props.member.id), {
@@ -43,72 +39,71 @@ function sendPastDueSubReminder() {
 }
 
 function markAsActive() {
-    form.put(route('members.activate', props.member.id), {
-        resetOnSuccess: false,
-        preserveScroll: true,
-    })
+  form.put(route('members.activate', props.member.id), {
+    resetOnSuccess: false,
+    preserveScroll: true,
+  })
 }
 
 const application_status_id = computed(() => {
-    let m = props.member
-    if (m.membership_status_id) {
-        return m.membership_status_id
-    }
-    return 0
+  let m = props.member
+  if (m.membership_status_id) {
+    return m.membership_status_id
+  }
+  return 0
 })
 
 const application_ready_for_submission = props.options.completion.overall.status
-
 </script>
 
 <template>
-    <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-        <!-- Alerts -->
-        <Alert type="info" class="mb-2" v-if="application_status_id === 0">
-            <strong>Draft</strong><br />
-            Complete your signup and press Submit.
-        </Alert>
+  <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+    <!-- Alerts -->
+    <Alert v-if="application_status_id === 0" type="info" class="mb-2">
+      <strong>Draft</strong><br />
+      Complete your signup and press Submit.
+    </Alert>
 
-        <Alert type="info" class="mb-2" v-if="application_status_id === 2">
-            <strong>Submitted</strong><br />
-            Your application has been submitted and is under review.
-        </Alert>
+    <Alert v-if="application_status_id === 2" type="info" class="mb-2">
+      <strong>Submitted</strong><br />
+      Your application has been submitted and is under review.
+    </Alert>
 
-        <Alert type="info" class="mb-2" v-if="application_status_id === 3">
-            <strong>Endorsed</strong><br />
-            Your application has been endorsed and is awaiting settlement.
-        </Alert>
+    <Alert v-if="application_status_id === 3" type="info" class="mb-2">
+      <strong>Endorsed</strong><br />
+      Your application has been endorsed and is awaiting settlement.
+    </Alert>
 
-  <MemberSummaryCard :member="props.member" link-route="members.signup.index" class="mb-3" />
+    <MemberSummaryCard :member="props.member" link-route="members.signup.index" class="mb-3" />
 
-  <list-group class="w-full mb-3">
-    <Link v-for="(c,index) in completion" :href="route('members.signup.index', { member: props.member.id, tab: index.replace('part','')})">
-      <list-group-item>
-        <template #prefix>
-          <CheckCircleOutlineIcon fillColor="green" v-if="c.status" />
-          <AlertCircleOutlineIcon fillColor="blue" v-else />
-        </template>
-        {{ c.title }}
-      </list-group-item>
-    </Link>
-  </list-group>
+    <list-group class="w-full mb-3">
+      <Link v-for="(c, index) in completion" :href="route('members.signup.index', { member: props.member.id, tab: index.replace('part', '') })">
+        <list-group-item>
+          <template #prefix>
+            <CheckCircleOutlineIcon v-if="c.status" fill-color="green" />
+            <AlertCircleOutlineIcon v-else fill-color="blue" />
+          </template>
+          {{ c.title }}
+        </list-group-item>
+      </Link>
+    </list-group>
 
-  <!-- Action buttons -->
-  <p class="w-full my-3 ml-2 text-sm text-gray-500" v-show="!application_ready_for_submission">Please ensure all sections are completed before submitting</p>
+    <!-- Action buttons -->
+    <p v-show="!application_ready_for_submission" class="w-full my-3 ml-2 text-sm text-gray-500">Please ensure all sections are completed before submitting</p>
 
-  <Button class="w-full mb-3" :disabled="!(application_ready_for_submission || $page.props.user.permissions.canSubmit)" v-if="application_status_id <= 1" default @click.prevent="submit">Submit</Button>
+    <Button v-if="application_status_id <= 1" class="w-full mb-3" :disabled="!(application_ready_for_submission || $page.props.user.permissions.canSubmit)" default @click.prevent="submit">Submit</Button>
 
-  <Button class="w-full mb-3" v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" default @click.prevent="endorse">Endorse</Button>
+    <Button v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" class="w-full mb-3" default @click.prevent="endorse">Endorse</Button>
 
-  <Button class="w-full mb-3" v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" default @click.prevent="accept">Accept</Button>
+    <Button v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" class="w-full mb-3" default @click.prevent="accept">Accept</Button>
 
-  <Button class="w-full mb-3" color="green" v-if="application_status_id === 5 && $page.props.user.permissions.canMarkActive" default @click.prevent="markAsActive">Activate Membership</Button>
+    <Button v-if="application_status_id === 5 && $page.props.user.permissions.canMarkActive" class="w-full mb-3" color="green" default @click.prevent="markAsActive">Activate Membership</Button>
 
-  <Button class="w-full mb-3" v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" default @click.prevent="sendSubReminder">Send sub reminder</Button>
+    <Button v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" class="w-full mb-3" default @click.prevent="sendSubReminder">Send sub reminder</Button>
 
-  <Button class="w-full mb-3" v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
+    <Button v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" class="w-full mb-3" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
 
-  <!-- Audit log link -->
-  <Link :href="route('members.audit.index', {member: member.id})" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
-</div>
+    <!-- Audit log link -->
+    <Link :href="route('members.audit.index', { member: member.id })" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
+  </div>
 </template>
