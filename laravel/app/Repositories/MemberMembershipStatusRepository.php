@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Enums\MembershipStatus;
 use App\Models\MemberMembershipStatus;
+use App\Models\User;
 use App\Notifications\ExpiringSubReminder;
 use App\Notifications\PastDueSubReminder;
 use Carbon\Carbon;
@@ -19,7 +20,12 @@ class MemberMembershipStatusRepository extends Repository
       ->limit($limit)
       ->get();
   }
-  public function getByStatusIdExpiringBetween(int $status_id, Carbon $from_date, Carbon $to_date, int $limit = 10): Collection
+  public function getByStatusIdExpiringBetween(
+    int $status_id,
+    Carbon $from_date,
+    Carbon $to_date,
+    int $limit = 10
+  ): Collection
   {
     return MemberMembershipStatus::where('membership_status_id', $status_id)
       ->whereBetween('to_date', $from_date->toPeriod($to_date))
@@ -144,6 +150,46 @@ class MemberMembershipStatusRepository extends Repository
       //  months or less.
       // @todo - Add a button to send bulk remindrs to those on the list
       // @todo - Perform bulk operations on the member list (e.g. send reminder)
+    }
+  }
+
+  /**
+   * Mark members as lapsed when their membership expires.
+   *
+   * @param Carbon|null $current
+   * @return void
+   */
+  public function markAsLapsed(Carbon $current = null)
+  {
+    if ($current == null) {
+      $current = Carbon::now();
+    }
+    $ids = [];
+
+    $admin_user = User::first();
+    $rep = new MemberRepository();
+    // Get lapsed members.
+    $statuses = $this->getExpiredLessThan6Months($current, -1);
+    foreach ($statuses as $status) {
+      $member = $status->member;
+      if ($member->membership_status_id === MembershipStatus::ACCEPTED->value) {
+        $id = $member->id;
+        // Make sure we dont have duplicate member ids (in case it was Activated twice)
+        if (!in_array($id, array_keys($ids))) {
+          $ids[$id] = $status;
+        }
+
+      }
+    }
+
+    foreach ($ids as $status) {
+      $member = $status->member;
+      // Mark as lapsed.
+      // Note: Lapsed membership reminders will be sent by sendPastDueSubReminders().
+      $member->membership_status_id = MembershipStatus::LAPSED->value;
+      $member->save();
+
+      $rep->recordAction($member, $admin_user);
     }
   }
 }

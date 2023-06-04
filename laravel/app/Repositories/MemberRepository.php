@@ -7,11 +7,20 @@ use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 class MemberRepository extends Repository
 {
   const MONTH_FOR_END_OF_FINANCIAL_YEAR = 6; // June.
   const DAYS_OF_MONTH_OF_FINANCIAL_YEAR = 30;
+
+  public function getByMembershipStatusId(int $membership_status_id, int $limit = 10) : Collection
+  {
+    return Member::where('membership_status_id', $membership_status_id)
+      ->latest()
+      ->limit($limit)
+      ->get();
+  }
 
   public function generateEndDate(Carbon $current_dt = null) {
     if ($current_dt == null) {
