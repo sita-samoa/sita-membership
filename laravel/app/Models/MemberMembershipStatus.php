@@ -16,6 +16,7 @@ class MemberMembershipStatus extends Model
         'user_id',
         'from_date',
         'to_date',
+        'receipt_number',
     ];
 
     public function user(): BelongsTo

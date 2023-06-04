@@ -38,13 +38,19 @@ class MemberRepository extends Repository
     return Carbon::create($current_dt->year, $month, $day);
   }
 
-  public function accept(Member $member, User $user) {
+  public function accept(Member $member, User $user, int $financial_year, string $receipt_number) {
     $member->membership_status_id = MembershipStatus::ACCEPTED->value;
     $member->save();
 
-    $to_date = $this->generateEndDate();
+    $to_date = $this->generateEndDate(
+      Carbon::createFromDate(
+        $financial_year + 1,
+        self::MONTH_FOR_END_OF_FINANCIAL_YEAR,
+        self::DAYS_OF_MONTH_OF_FINANCIAL_YEAR
+      )
+    );
 
-    return $this->recordAction($member, $user, $to_date);
+    return $this->recordAction($member, $user, $to_date, $receipt_number);
   }
 
   public function markOptionalFlagAsViewed(Member $member, String $flag){
@@ -57,13 +63,14 @@ class MemberRepository extends Repository
     }
   }
 
-  public function recordAction(Member $member, User $user, $to_date = null)
+  public function recordAction(Member $member, User $user, $to_date = null, string $receipt_number = '')
   {
     $membership_status = new MemberMembershipStatus([
       'member_id' => $member->id,
       'membership_status_id' => $member->membership_status_id,
       'user_id' => $user->id,
       'from_date' => Carbon::now(),
+      'receipt_number' => $receipt_number,
     ]);
     if ($to_date) {
       $membership_status->to_date = $to_date;

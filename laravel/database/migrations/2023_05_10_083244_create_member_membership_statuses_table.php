@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained();
             $table->date('from_date')->nullable();
             $table->date('to_date')->nullable();
+            $table->text('receipt_number')->nullable();
             $table->timestamps();
         });
     }

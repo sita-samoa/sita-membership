@@ -1,10 +1,11 @@
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useForm, Link } from '@inertiajs/vue3'
 import { Alert, ListGroup, ListGroupItem, Button } from 'flowbite-vue'
-import MemberSummaryCard from './MemberSummaryCard.vue'
+import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
+import AcceptModal from '@/Components/AcceptModal.vue'
 
 const props = defineProps([
     'member',
@@ -12,6 +13,7 @@ const props = defineProps([
 ])
 
 const completion = props.options.completion.data
+const showAcceptanceModal = ref(false)
 
 const form = useForm({
 })
@@ -23,11 +25,6 @@ function submit() {
 }
 function endorse() {
     form.put(route('members.endorse', props.member.id), {
-        resetOnSuccess: false,
-    })
-}
-function accept() {
-    form.put(route('members.accept', props.member.id), {
         resetOnSuccess: false,
     })
 }
@@ -43,6 +40,7 @@ function sendPastDueSubReminder() {
 }
 
 function markAsActive() {
+    // @todo - replace this with "accept" call
     form.put(route('members.activate', props.member.id), {
         resetOnSuccess: false,
         preserveScroll: true,
@@ -96,19 +94,22 @@ const application_ready_for_submission = props.options.completion.overall.status
   <!-- Action buttons -->
   <p class="w-full my-3 ml-2 text-sm text-gray-500" v-show="!application_ready_for_submission">Please ensure all sections are completed before submitting</p>
 
-  <Button class="w-full mb-3" :disabled="!(application_ready_for_submission || $page.props.user.permissions.canSubmit)" v-if="application_status_id <= 1" default @click.prevent="submit">Submit</Button>
+  <Button class="w-full mb-3" :disabled="!(application_ready_for_submission || $page.props.user.permissions.canSubmit) || form.processing" v-if="application_status_id <= 1" default @click.prevent="submit">Submit</Button>
 
-  <Button class="w-full mb-3" v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" default @click.prevent="endorse">Endorse</Button>
+  <Button class="w-full mb-3" :disabled="form.processing" v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" default @click.prevent="endorse">Endorse</Button>
 
-  <Button class="w-full mb-3" v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" default @click.prevent="accept">Accept</Button>
+  <Button class="w-full mb-3" :disabled="form.processing" v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" default @click.prevent="showAcceptanceModal = true">Accept</Button>
 
-  <Button class="w-full mb-3" color="green" v-if="application_status_id === 5 && $page.props.user.permissions.canMarkActive" default @click.prevent="markAsActive">Activate Membership</Button>
+  <Button class="w-full mb-3" color="green" :disabled="form.processing" v-if="application_status_id === 5 && $page.props.user.permissions.canMarkActive" default @click.prevent="markAsActive">Activate Membership</Button>
 
-  <Button class="w-full mb-3" v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" default @click.prevent="sendSubReminder">Send sub reminder</Button>
+  <Button class="w-full mb-3" :disabled="form.processing" v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" default @click.prevent="sendSubReminder">Send sub reminder</Button>
 
-  <Button class="w-full mb-3" v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
+  <Button class="w-full mb-3" :disabled="form.processing" v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
 
   <!-- Audit log link -->
   <Link :href="route('members.audit.index', {member: member.id})" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
+
+  <!-- Dialog Modal -->
+  <AcceptModal :show="showAcceptanceModal" :memberId="member.id" @close="showAcceptanceModal = false" />
 </div>
 </template>
