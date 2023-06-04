@@ -38,22 +38,28 @@ class MemberRepository extends Repository
     return Carbon::create($current_dt->year, $month, $day);
   }
 
-  public function accept(Member $member, User $user, int $financial_year, string $receipt_number) {
+  public function accept(Member $member, User $user, int $financial_year = 0, string $receipt_number = '')
+  {
     $member->membership_status_id = MembershipStatus::ACCEPTED->value;
     $member->save();
 
+    if ($financial_year === 0) {
+      $financial_year = Carbon::now()->year;
+    }
+
     $to_date = $this->generateEndDate(
-      Carbon::createFromDate(
-        $financial_year + 1,
-        self::MONTH_FOR_END_OF_FINANCIAL_YEAR,
-        self::DAYS_OF_MONTH_OF_FINANCIAL_YEAR
-      )
+        Carbon::createFromDate(
+            $financial_year + 1,
+            self::MONTH_FOR_END_OF_FINANCIAL_YEAR,
+            self::DAYS_OF_MONTH_OF_FINANCIAL_YEAR
+        )
     );
 
     return $this->recordAction($member, $user, $to_date, $receipt_number);
   }
 
-  public function markOptionalFlagAsViewed(Member $member, String $flag){
+  public function markOptionalFlagAsViewed(Member $member, String $flag)
+  {
     if($flag == 'viewed_other_memberships'){
         $member->viewed_other_memberships = true;
         $member->save();
