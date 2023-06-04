@@ -173,8 +173,8 @@ test('membership marked as lapsed and recorded', function () {
     $current = $this->current->addMonthsWithoutOverflow(3);
     $rep = new MemberMembershipStatusRepository();
 
-    $statues = MemberMembershipStatus::get();
-    expect($statues->count())->toEqual(count($this->data));
+    $statuses = MemberMembershipStatus::get();
+    expect($statuses->count())->toEqual(count($this->data));
 
     $rep2 = new MemberRepository();
     $members = $rep2->getByMembershipStatusId(EnumsMembershipStatus::LAPSED->value);
@@ -187,7 +187,7 @@ test('membership marked as lapsed and recorded', function () {
     expect($members->count())->toEqual(4);
 
     // Membership records created.
-    $statues = MemberMembershipStatus::get();
-    expect($statues->count())->toEqual(13);
+    $statuses = MemberMembershipStatus::get();
+    expect($statuses->count())->toEqual(13);
 
 });
