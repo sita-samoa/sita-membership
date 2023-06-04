@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Enums\MembershipStatus;
 use App\Models\MemberMembershipStatus;
+use App\Models\User;
 use App\Notifications\ExpiringSubReminder;
 use App\Notifications\PastDueSubReminder;
 use Carbon\Carbon;
@@ -149,6 +150,44 @@ class MemberMembershipStatusRepository extends Repository
             //  months or less.
             // @todo - Add a button to send bulk remindrs to those on the list
             // @todo - Perform bulk operations on the member list (e.g. send reminder)
+        }
+    }
+
+    /**
+     * Mark members as lapsed when their membership expires.
+     *
+     * @return void
+     */
+    public function markAsLapsed(Carbon $current = null)
+    {
+        if ($current == null) {
+            $current = Carbon::now();
+        }
+        $ids = [];
+
+        $admin_user = User::first();
+        $rep = new MemberRepository();
+        // Get lapsed members.
+        $statuses = $this->getExpiredLessThan6Months($current, -1);
+        foreach ($statuses as $status) {
+            $member = $status->member;
+            if ($member->membership_status_id === MembershipStatus::ACCEPTED->value) {
+                $id = $member->id;
+                // Make sure we dont have duplicate member ids (in case it was Activated twice)
+                if (! array_key_exists($id, $ids)) {
+                    $ids[$id] = $status;
+                }
+            }
+        }
+
+        foreach ($ids as $status) {
+            $member = $status->member;
+            // Mark as lapsed.
+            // Note: Lapsed membership reminders will be sent by sendPastDueSubReminders().
+            $member->membership_status_id = MembershipStatus::LAPSED->value;
+            $member->save();
+
+            $rep->recordAction($member, $admin_user);
         }
     }
 }

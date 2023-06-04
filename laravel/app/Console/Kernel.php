@@ -18,6 +18,12 @@ class Kernel extends ConsoleKernel
             $rep->sendExpiringMembershipReminders();
             $rep->sendPastDueSubReminders();
         })->monthly();
+
+        $schedule->call(function () {
+            // Mark members as lapsed.
+            $rep = new MemberMembershipStatusRepository();
+            $rep->markAsLapsed();
+        })->daily();
     }
 
     /**

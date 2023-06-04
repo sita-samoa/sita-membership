@@ -5,6 +5,7 @@ use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\User;
 use App\Repositories\MemberMembershipStatusRepository;
+use App\Repositories\MemberRepository;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Queue;
 
@@ -25,10 +26,20 @@ beforeEach(function () {
     $member4->membership_status_id = EnumsMembershipStatus::LAPSED->value;
     $member4->save();
     $member5 = Member::factory()->for($user)->create();
+    $member5->membership_status_id = EnumsMembershipStatus::ACCEPTED->value;
+    $member5->save();
     $member6 = Member::factory()->for($user)->create();
+    $member6->membership_status_id = EnumsMembershipStatus::ACCEPTED->value;
+    $member6->save();
     $member7 = Member::factory()->for($user)->create();
+    $member7->membership_status_id = EnumsMembershipStatus::ACCEPTED->value;
+    $member7->save();
     $member8 = Member::factory()->for($user)->create();
+    $member8->membership_status_id = EnumsMembershipStatus::ACCEPTED->value;
+    $member8->save();
     $member9 = Member::factory()->for($user)->create();
+    $member9->membership_status_id = EnumsMembershipStatus::ACCEPTED->value;
+    $member9->save();
 
     // Use CarbonImmutable or else the dates keep changing.
     $this->current = $current = CarbonImmutable::createFromDate(2023, 5, 28);
@@ -41,7 +52,7 @@ beforeEach(function () {
     $future_month_3 = $current->addMonthsWithoutOverflow(3);
     $future_month_4 = $current->addMonthsWithoutOverflow(4);
 
-    $data = [
+    $this->data = [
         [
             'member_id' => $member1->id,
             'membership_status_id' => EnumsMembershipStatus::ACCEPTED->value,
@@ -118,7 +129,7 @@ beforeEach(function () {
         ],
     ];
 
-    foreach ($data as $d) {
+    foreach ($this->data as $d) {
         MemberMembershipStatus::create($d);
     }
 });
@@ -156,4 +167,26 @@ test('send past due sub reminders', function () {
 
     // Only one of the 5 items is marked Lapsed and will be notified.
     Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 1);
+});
+
+test('membership marked as lapsed and recorded', function () {
+    $current = $this->current->addMonthsWithoutOverflow(3);
+    $rep = new MemberMembershipStatusRepository();
+
+    $statuses = MemberMembershipStatus::get();
+    expect($statuses->count())->toEqual(count($this->data));
+
+    $rep2 = new MemberRepository();
+    $members = $rep2->getByMembershipStatusId(EnumsMembershipStatus::LAPSED->value);
+    expect($members->count())->toEqual(1);
+
+    $rep->markAsLapsed($current->toMutable());
+
+    // Members marked lapsed.
+    $members = $rep2->getByMembershipStatusId(EnumsMembershipStatus::LAPSED->value);
+    expect($members->count())->toEqual(4);
+
+    // Membership records created.
+    $statuses = MemberMembershipStatus::get();
+    expect($statuses->count())->toEqual(13);
 });

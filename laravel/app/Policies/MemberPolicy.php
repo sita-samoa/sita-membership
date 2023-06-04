@@ -68,7 +68,12 @@ class MemberPolicy
     {
         $team = Team::first();
 
-        return $user->hasTeamPermission($team, 'member:accept');
+        return $user->hasTeamPermission($team, 'member:accept') &&
+            (
+                $member->membership_status_id == MembershipStatus::ENDORSED->value ||
+                $member->membership_status_id == MembershipStatus::LAPSED->value ||
+                $member->membership_status_id == MembershipStatus::EXPIRED->value
+            );
     }
 
     /**
@@ -94,19 +99,6 @@ class MemberPolicy
         $team = Team::first();
 
         return $user->hasTeamPermission($team, 'member:send_sub_reminder') &&
-         $member->membership_status_id == MembershipStatus::LAPSED->value;
-    }
-
-    /**
-     * Determine whether the user can mark a member as active.
-     *
-     * Must have the permission and status must be Lapsed
-     */
-    public function markActive(User $user, Member $member): bool
-    {
-        $team = Team::first();
-
-        return $user->hasTeamPermission($team, 'member:mark_active') &&
          $member->membership_status_id == MembershipStatus::LAPSED->value;
     }
 

@@ -183,21 +183,19 @@ class MemberController extends Controller
     {
         $this->authorize('accept', $member);
 
-        $this->rep->accept($member, $request->user());
+        $validated = $request->validate([
+            'financial_year' => 'required|int|min:2000',
+            'receipt_number' => 'required|string',
+        ]);
+
+        $this->rep->accept(
+            $member,
+            $request->user(),
+            $validated['financial_year'],
+            $validated['receipt_number']
+        );
 
         return redirect()->back()->with('success', 'Application Accepted');
-    }
-
-    /**
-     * Mark a lapsed member as active.
-     */
-    public function markActive(Member $member, Request $request): RedirectResponse
-    {
-        $this->authorize('markActive', $member);
-
-        $this->rep->accept($member, $request->user());
-
-        return redirect()->back()->with('success', 'Member marked as active.');
     }
 
     /**

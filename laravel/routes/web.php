@@ -59,9 +59,6 @@ Route::middleware([
     Route::put('/members/{member}/accept', [MemberController::class, 'accept'])
         ->name('members.accept');
 
-    Route::put('/members/{member}/activate', [MemberController::class, 'markActive'])
-        ->name('members.activate');
-
     Route::put('/members/{member}/send-sub-reminder', [MemberController::class, 'sendSubReminder'])
         ->name('members.send-sub-reminder');
 

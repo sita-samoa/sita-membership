@@ -1,14 +1,17 @@
 <script setup>
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useForm, Link } from '@inertiajs/vue3'
 import { Alert, ListGroup, ListGroupItem, Button } from 'flowbite-vue'
-import MemberSummaryCard from './MemberSummaryCard.vue'
+import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
+import AcceptModal from '@/Components/AcceptModal.vue'
 
 const props = defineProps(['member', 'options'])
 
 const completion = props.options.completion.data
+const showAcceptanceModal = ref(false)
+const showActivateModal = ref(false)
 
 const form = useForm({})
 
@@ -22,11 +25,6 @@ function endorse() {
     resetOnSuccess: false,
   })
 }
-function accept() {
-  form.put(route('members.accept', props.member.id), {
-    resetOnSuccess: false,
-  })
-}
 function sendSubReminder() {
   form.put(route('members.send-sub-reminder', props.member.id), {
     resetOnSuccess: false,
@@ -35,13 +33,6 @@ function sendSubReminder() {
 function sendPastDueSubReminder() {
   form.put(route('members.send-past-due-sub-reminder', props.member.id), {
     resetOnSuccess: false,
-  })
-}
-
-function markAsActive() {
-  form.put(route('members.activate', props.member.id), {
-    resetOnSuccess: false,
-    preserveScroll: true,
   })
 }
 
@@ -91,19 +82,23 @@ const application_ready_for_submission = props.options.completion.overall.status
     <!-- Action buttons -->
     <p v-show="!application_ready_for_submission" class="w-full my-3 ml-2 text-sm text-gray-500">Please ensure all sections are completed before submitting</p>
 
-    <Button v-if="application_status_id <= 1" class="w-full mb-3" :disabled="!(application_ready_for_submission || $page.props.user.permissions.canSubmit)" default @click.prevent="submit">Submit</Button>
+    <Button v-if="application_status_id <= 1" class="w-full mb-3" :disabled="!(application_ready_for_submission || $page.props.user.permissions.canSubmit) || form.processing" default @click.prevent="submit">Submit</Button>
 
-    <Button v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" class="w-full mb-3" default @click.prevent="endorse">Endorse</Button>
+    <Button v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" class="w-full mb-3" :disabled="form.processing" default @click.prevent="endorse">Endorse</Button>
 
-    <Button v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" class="w-full mb-3" default @click.prevent="accept">Accept</Button>
+    <Button v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" class="w-full mb-3" :disabled="form.processing" default @click.prevent="showAcceptanceModal = true">Accept</Button>
 
-    <Button v-if="application_status_id === 5 && $page.props.user.permissions.canMarkActive" class="w-full mb-3" color="green" default @click.prevent="markAsActive">Activate Membership</Button>
+    <Button v-if="(application_status_id === 5 || application_status_id === 6) && $page.props.user.permissions.canAccept" class="w-full mb-3" color="green" :disabled="form.processing" default @click.prevent="showActivateModal = true">Activate Membership</Button>
 
-    <Button v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" class="w-full mb-3" default @click.prevent="sendSubReminder">Send sub reminder</Button>
+    <Button v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" class="w-full mb-3" :disabled="form.processing" default @click.prevent="sendSubReminder">Send sub reminder</Button>
 
-    <Button v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" class="w-full mb-3" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
+    <Button v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" class="w-full mb-3" :disabled="form.processing" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
 
     <!-- Audit log link -->
     <Link :href="route('members.audit.index', { member: member.id })" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
+
+    <!-- Dialog Modals -->
+    <AcceptModal :show="showAcceptanceModal" :member-id="member.id" @close="showAcceptanceModal = false" />
+    <AcceptModal :show="showActivateModal" :member-id="member.id" heading-text="Activate Membership" button-text="Activate" @close="showActivateModal = false" />
   </div>
 </template>

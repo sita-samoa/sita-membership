@@ -7,12 +7,21 @@ use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 class MemberRepository extends Repository
 {
     final public const MONTH_FOR_END_OF_FINANCIAL_YEAR = 6; // June.
 
     final public const DAYS_OF_MONTH_OF_FINANCIAL_YEAR = 30;
+
+    public function getByMembershipStatusId(int $membership_status_id, int $limit = 10): Collection
+    {
+        return Member::where('membership_status_id', $membership_status_id)
+            ->latest()
+            ->limit($limit)
+            ->get();
+    }
 
     public function generateEndDate(Carbon $current_dt = null)
     {
@@ -33,14 +42,24 @@ class MemberRepository extends Repository
         return Carbon::create($current_dt->year, $month, $day);
     }
 
-    public function accept(Member $member, User $user)
+    public function accept(Member $member, User $user, int $financial_year = 0, string $receipt_number = '')
     {
         $member->membership_status_id = MembershipStatus::ACCEPTED->value;
         $member->save();
 
-        $to_date = $this->generateEndDate();
+        if ($financial_year === 0) {
+            $financial_year = Carbon::now()->year;
+        }
 
-        return $this->recordAction($member, $user, $to_date);
+        $to_date = $this->generateEndDate(
+            Carbon::createFromDate(
+                $financial_year + 1,
+                self::MONTH_FOR_END_OF_FINANCIAL_YEAR,
+                self::DAYS_OF_MONTH_OF_FINANCIAL_YEAR
+            )
+        );
+
+        return $this->recordAction($member, $user, $to_date, $receipt_number);
     }
 
     public function markOptionalFlagAsViewed(Member $member, string $flag)
@@ -54,13 +73,14 @@ class MemberRepository extends Repository
         }
     }
 
-    public function recordAction(Member $member, User $user, $to_date = null)
+    public function recordAction(Member $member, User $user, $to_date = null, string $receipt_number = '')
     {
         $membership_status = new MemberMembershipStatus([
             'member_id' => $member->id,
             'membership_status_id' => $member->membership_status_id,
             'user_id' => $user->id,
             'from_date' => Carbon::now(),
+            'receipt_number' => $receipt_number,
         ]);
         if ($to_date) {
             $membership_status->to_date = $to_date;
