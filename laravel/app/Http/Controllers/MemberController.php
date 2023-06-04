@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers;
 
-use Inertia\Inertia;
-use Inertia\Response;
+use App\Enums\MembershipStatus;
+use App\Models\MailingList;
 use App\Models\Member;
+use App\Models\MemberMailingPreference;
 use App\Models\MembershipType;
 use App\Models\Team;
-use App\Models\MailingList;
-use App\Models\MemberMailingPreference;
-use App\Notifications\PastDueSubReminder;
 use App\Notifications\AcceptanceNotification;
 use App\Notifications\EndorsementNotification;
+use App\Notifications\PastDueSubReminder;
 use App\Notifications\SubReminder;
-use App\Repositories\MemberRepository;
-use App\Enums\MembershipStatus;
 use App\Repositories\MemberMembershipStatusRepository;
+use App\Repositories\MemberRepository;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Request as FacadesRequest;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class MemberController extends Controller
 {
@@ -31,21 +31,22 @@ class MemberController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request) : Response
+    public function index(Request $request): Response
     {
         $this->authorize('viewAny', Member::class);
 
         return Inertia::render('Members/Index', [
             'filters' => FacadesRequest::all('membership_status_id'),
             'members' => Member::orderBy('first_name')
-                ->when(FacadesRequest::input('membership_status_id'),
-                    function($query) {
+                ->when(
+                    FacadesRequest::input('membership_status_id'),
+                    function ($query) {
                         $query->where(FacadesRequest::only('membership_status_id'));
                     }
                 )
                 ->with('membershipType', 'title', 'membershipStatus')
                 ->paginate(10)
-                ->withQueryString()
+                ->withQueryString(),
         ]);
     }
 
@@ -58,7 +59,7 @@ class MemberController extends Controller
         $user = $request->user();
         $team = Team::first();
 
-        if (!$user->hasTeamPermission($team, 'member:create_many')) {
+        if (! $user->hasTeamPermission($team, 'member:create_many')) {
             $member = Member::where('user_id', $user->id)->first();
 
             if ($member) {
@@ -76,7 +77,7 @@ class MemberController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function storeSignup(Request $request) : RedirectResponse
+    public function storeSignup(Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'membership_type_id' => 'required|int|min:1',
@@ -116,7 +117,7 @@ class MemberController extends Controller
     /**
      * Submit member application.
      */
-    public function submit(Member $member, Request $request) : RedirectResponse
+    public function submit(Member $member, Request $request): RedirectResponse
     {
         $this->authorize('submit', $member);
 
@@ -136,10 +137,11 @@ class MemberController extends Controller
 
         return redirect()->back()->with('success', 'Application Submitted');
     }
+
     /**
      * Mark Viewed Other Memberships or Mailing List as true.
      */
-    public function markOptionalFlagAsViewed(Member $member, Request $request) : RedirectResponse
+    public function markOptionalFlagAsViewed(Member $member, Request $request): RedirectResponse
     {
         $validated = $request->validate([
             'flag_name' => 'required|string',
@@ -150,10 +152,11 @@ class MemberController extends Controller
 
         return redirect()->back();
     }
+
     /**
      * Endorse member application.
      */
-    public function endorse(Member $member, Request $request) : RedirectResponse
+    public function endorse(Member $member, Request $request): RedirectResponse
     {
         $this->authorize('endorse', $member);
 
@@ -173,10 +176,11 @@ class MemberController extends Controller
 
         return redirect()->back()->with('success', 'Application Endorsed');
     }
+
     /**
      * Accept member application.
      */
-    public function accept(Member $member, Request $request) : RedirectResponse
+    public function accept(Member $member, Request $request): RedirectResponse
     {
         $this->authorize('accept', $member);
 
@@ -198,7 +202,7 @@ class MemberController extends Controller
     /**
      * Send a sub reminder to member.
      */
-    public function sendSubReminder(Member $member) : RedirectResponse
+    public function sendSubReminder(Member $member): RedirectResponse
     {
         $this->authorize('sendSubReminder', $member);
 
@@ -207,10 +211,11 @@ class MemberController extends Controller
 
         return redirect()->back()->with('success', 'Reminder scheduled.');
     }
+
     /**
      * Send a sub reminder to member.
      */
-    public function sendPastDueSubReminder(Member $member) : RedirectResponse
+    public function sendPastDueSubReminder(Member $member): RedirectResponse
     {
         $this->authorize('sendPastDueSubReminder', $member);
 
@@ -228,23 +233,24 @@ class MemberController extends Controller
     }
 
     /**
-     * Toggle Member Subscription to Mailing List
+     * Toggle Member Subscription to Mailing List.
      */
-    public function toggleMailingListSubscription(Member $member, Request $request){
+    public function toggleMailingListSubscription(Member $member, Request $request)
+    {
         $this->authorize('view', $member);
 
         $validated = $request->validate([
             'mailing_list_id' => 'required|int|min:1',
-            'subscribe' => 'required|bool'
+            'subscribe' => 'required|bool',
         ]);
 
         $mailing_list = MailingList::find($validated['mailing_list_id']);
         $foundPref = MemberMailingPreference::where('member_id', $member->id)->where('mailing_list_id', $mailing_list->id)->first();
         $subscribe = $validated['subscribe'];
-        if($foundPref){
+        if ($foundPref) {
             $foundPref->subscribed = $subscribe;
             $foundPref->update();
-        }else{
+        } else {
             $member_mailing_preference = new MemberMailingPreference();
             $member_mailing_preference->mailing_list_id = $mailing_list->id;
             $member_mailing_preference->member_id = $member->id;
@@ -252,25 +258,24 @@ class MemberController extends Controller
             $member_mailing_preference->save();
         }
 
-
         return redirect()->back()
-            ->with('success', ($subscribe ? 'Subscribed to ' : 'Unsubscribed from ') . $mailing_list->title);
+            ->with('success', ($subscribe ? 'Subscribed to ' : 'Unsubscribed from ').$mailing_list->title);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Member $member) : Response
+    public function show(Member $member): Response
     {
         $this->authorize('view', $member);
 
         $relations = [
-            "membershipType",
-            "membershipStatus",
+            'membershipType',
+            'membershipStatus',
         ];
         // Load title if exists.
         if ($member->title_id) {
-            $relations[] = "title";
+            $relations[] = 'title';
         }
 
         return Inertia::render('Members/Show', [
@@ -292,7 +297,7 @@ class MemberController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Member $member) : RedirectResponse
+    public function update(Request $request, Member $member): RedirectResponse
     {
         $this->authorize('update', $member);
 
@@ -316,7 +321,7 @@ class MemberController extends Controller
             'other_membership' => 'nullable|max:500',
             // 'membership_status_id' => 'int',
             'note' => 'nullable',
-            'membership_status_id' => 'nullable|int'
+            'membership_status_id' => 'nullable|int',
         ]);
 
         $member->update($validated);

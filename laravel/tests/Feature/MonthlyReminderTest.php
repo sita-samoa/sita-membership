@@ -1,10 +1,10 @@
 <?php
 
-use App\Repositories\MemberMembershipStatusRepository;
+use App\Enums\MembershipStatus as EnumsMembershipStatus;
 use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\User;
-use App\Enums\MembershipStatus as EnumsMembershipStatus;
+use App\Repositories\MemberMembershipStatusRepository;
 use App\Repositories\MemberRepository;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Queue;

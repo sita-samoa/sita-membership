@@ -1,9 +1,9 @@
 <?php
 
+use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
-use App\Enums\MembershipStatus;
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);

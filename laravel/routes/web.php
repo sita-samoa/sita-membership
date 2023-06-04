@@ -1,18 +1,17 @@
 <?php
 
+use App\Http\Controllers\AuditController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DownloadController;
-use App\Http\Controllers\AuditController;
-use Inertia\Inertia;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberQualificationController;
-use App\Http\Controllers\MemberSupportingDocumentController;
-use App\Http\Controllers\MailingListPreferenceController;
-use App\Http\Controllers\SignupController;
 use App\Http\Controllers\MemberRefereeController;
-use Illuminate\Support\Facades\Route;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\MemberSupportingDocumentController;
 use App\Http\Controllers\MemberWorkExperienceController;
+use App\Http\Controllers\SignupController;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,10 +66,10 @@ Route::middleware([
         ->name('members.send-past-due-sub-reminder');
 
     Route::put('/members/{member}/subscribe', [MemberController::class, 'toggleMailingListSubscription'])
-    ->name('members.subscribe');
+        ->name('members.subscribe');
 
     Route::put('/members/{member}/view-flag', [MemberController::class, 'markOptionalFlagAsViewed'])
-    ->name('members.view-flag');
+        ->name('members.view-flag');
 
     // Member work experience
     Route::resource('member-work-experiences', MemberWorkExperienceController::class)
@@ -108,4 +107,3 @@ Route::middleware([
     Route::resource('members', MemberController::class)
         ->only(['store', 'show', 'update', 'index']);
 });
-
