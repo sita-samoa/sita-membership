@@ -2,8 +2,8 @@
 import { router, usePage } from '@inertiajs/vue3'
 import { computed, ref, watch } from 'vue'
 import { Dropdown, ListGroup, ListGroupItem } from 'flowbite-vue'
-import MemberSummaryCard from '@/Components/MemberSummaryCard.vue';
-import Pagination from '@/Components/Pagination.vue';
+import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
+import Pagination from '@/Components/Pagination.vue'
 import AccountCircleIcon from 'vue-material-design-icons/AccountCircle.vue'
 import FileIcon from 'vue-material-design-icons/File.vue'
 import SendCheckIcon from 'vue-material-design-icons/SendCheck.vue'
@@ -56,59 +56,59 @@ watch(filterStatus, value => {
 })
 </script>
 <template>
-<!-- Filter dropdown -->
-<dropdown :text="'Show - ' + filterName" class="mb-3">
-  <list-group>
-    <list-group-item @click="filterStatus = ''">
-      <template #prefix>
-        <AccountCircleIcon />
-      </template>
-      All
-    </list-group-item>
-    <list-group-item @click="filterStatus = 1">
-      <template #prefix>
-        <FileIcon />
-      </template>
-      Draft
-    </list-group-item>
-    <list-group-item @click="filterStatus = 2">
-      <template #prefix>
-        <SendCheckIcon />
-      </template>
-      Submitted
-    </list-group-item>
-    <list-group-item @click="filterStatus = 3">
-      <template #prefix>
-        <DecagramIcon />
-      </template>
-      Endorsed
-    </list-group-item>
-    <list-group-item @click="filterStatus = 4">
-      <template #prefix>
-        <CheckDecagramIcon />
-      </template>
-      Accepted
-    </list-group-item>
-    <list-group-item @click="filterStatus = 5">
-      <template #prefix>
-        <ClockOutlineIcon />
-      </template>
-      Lapsed
-    </list-group-item>
-    <list-group-item @click="filterStatus = 6">
-      <template #prefix>
-        <ClockAlertOutlineIcon />
-      </template>
-      Expired
-    </list-group-item>
-    <list-group-item @click="filterStatus = 7">
-      <template #prefix>
-        <AccountOffIcon />
-      </template>
-      Banned
-    </list-group-item>
-  </list-group>
-</dropdown>
+  <!-- Filter dropdown -->
+  <dropdown :text="'Show - ' + filterName" class="mb-3">
+    <list-group>
+      <list-group-item @click="filterStatus = ''">
+        <template #prefix>
+          <AccountCircleIcon />
+        </template>
+        All
+      </list-group-item>
+      <list-group-item @click="filterStatus = 1">
+        <template #prefix>
+          <FileIcon />
+        </template>
+        Draft
+      </list-group-item>
+      <list-group-item @click="filterStatus = 2">
+        <template #prefix>
+          <SendCheckIcon />
+        </template>
+        Submitted
+      </list-group-item>
+      <list-group-item @click="filterStatus = 3">
+        <template #prefix>
+          <DecagramIcon />
+        </template>
+        Endorsed
+      </list-group-item>
+      <list-group-item @click="filterStatus = 4">
+        <template #prefix>
+          <CheckDecagramIcon />
+        </template>
+        Accepted
+      </list-group-item>
+      <list-group-item @click="filterStatus = 5">
+        <template #prefix>
+          <ClockOutlineIcon />
+        </template>
+        Lapsed
+      </list-group-item>
+      <list-group-item @click="filterStatus = 6">
+        <template #prefix>
+          <ClockAlertOutlineIcon />
+        </template>
+        Expired
+      </list-group-item>
+      <list-group-item @click="filterStatus = 7">
+        <template #prefix>
+          <AccountOffIcon />
+        </template>
+        Banned
+      </list-group-item>
+    </list-group>
+  </dropdown>
 
   <!-- No results message -->
   <div v-if="!props.list.total">No matches found. Try changing the filter.</div>
