@@ -64,7 +64,13 @@ class MemberPolicy
     public function accept(User $user, Member $member): bool
     {
         $team = Team::first();
-        return $user->hasTeamPermission($team, 'member:accept');
+
+        return $user->hasTeamPermission($team, 'member:accept') &&
+            (
+                $member->membership_status_id == MembershipStatus::ENDORSED->value ||
+                $member->membership_status_id == MembershipStatus::LAPSED->value ||
+                $member->membership_status_id == MembershipStatus::EXPIRED->value
+            );
     }
 
     /**

@@ -70,13 +70,11 @@ test('cannot mark as accepted with status', function (MembershipStatus $status) 
         'financial_year' => Carbon::now()->year,
         'receipt_number' => '111',
     ]);
-    $response->assertStatus(302);
+    $response->assertStatus(403);
 })->with([
     'DRAFT' => MembershipStatus::DRAFT,
     'SUBMITTED' => MembershipStatus::SUBMITTED,
     'ACCEPTED' => MembershipStatus::ACCEPTED,
-    'LAPSED' => MembershipStatus::LAPSED,
-    'EXPIRED' => MembershipStatus::EXPIRED,
     'BANNED' => MembershipStatus::BANNED,
 ]);
 
