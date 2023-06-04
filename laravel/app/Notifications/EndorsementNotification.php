@@ -35,8 +35,8 @@ class EndorsementNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->subject("Signup submitted")
+        return (new MailMessage())
+            ->subject('Signup submitted')
             ->greeting("Tālofa {$this->member->user->name}!")
             ->line('A signup request has been submitted. Please review
                 for your Endorsement.')

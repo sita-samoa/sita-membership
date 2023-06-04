@@ -2,10 +2,10 @@
 
 // test that button appears when sub is past due
 
+use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
-use App\Enums\MembershipStatus;
 use Illuminate\Support\Facades\Queue;
 
 beforeEach(function () {
@@ -27,8 +27,7 @@ test('test that reminder cannot be sent if not Lapsed', function ($status_id) {
 
     $response->assertStatus(403);
     Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 0);
-})->with([1,2,3,4,6]);
-
+})->with([1, 2, 3, 4, 6]);
 
 test('test that reminder sent', function () {
     Queue::fake();
@@ -58,7 +57,7 @@ test('test user cannot send a reminder', function () {
     Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 0);
 });
 
-test('test other roles cannot send a reminder', function (string $role)  {
+test('test other roles cannot send a reminder', function (string $role) {
     Queue::fake();
 
     $this->actingAs($user = User::factory()->create());

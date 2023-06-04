@@ -1,9 +1,9 @@
 <?php
 
+use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
-use App\Enums\MembershipStatus;
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -23,7 +23,7 @@ test('test can mark as active', function ($role) {
     $member->membership_status_id = MembershipStatus::LAPSED->value;
     $member->save();
 
-    $response = $this->put('/members/' . $member->id . '/activate');
+    $response = $this->put('/members/'.$member->id.'/activate');
     $response->assertStatus(302);
 })->with(['admin', 'coordinator']);
 
@@ -41,7 +41,7 @@ test('test cannot mark as active', function ($role) {
     $member->membership_status_id = MembershipStatus::LAPSED->value;
     $member->save();
 
-    $response = $this->put('/members/' . $member->id . '/activate');
+    $response = $this->put('/members/'.$member->id.'/activate');
     $response->assertStatus(403);
 })->with(['editor', 'executive']);
 
@@ -50,6 +50,6 @@ test('test that user cannot mark themselves as active', function () {
 
     $member = Member::factory()->for($user)->create();
 
-    $response = $this->put('/members/' . $member->id . '/activate');
+    $response = $this->put('/members/'.$member->id.'/activate');
     $response->assertStatus(403);
 });

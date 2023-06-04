@@ -5,8 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use OwenIt\Auditing\Contracts\Auditable;
 
 class MemberQualification extends Model implements Auditable
 {
@@ -17,11 +17,11 @@ class MemberQualification extends Model implements Auditable
         'qualification',
         'year_attained',
         'institution',
-        'country_iso2'
+        'country_iso2',
     ];
 
-    public function member(): BelongsTo {
+    public function member(): BelongsTo
+    {
         return $this->belongsTo(Member::class);
     }
-
 }

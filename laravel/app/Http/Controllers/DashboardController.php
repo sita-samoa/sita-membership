@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\MembershipType;
-use App\Enums\MembershipStatus;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -13,7 +13,7 @@ class DashboardController extends Controller
     /**
      * Display dashboard.
      */
-    public function index() : Response
+    public function index(): Response
     {
         // Calculate outstanding payment
         $membershipType = MembershipType::get();

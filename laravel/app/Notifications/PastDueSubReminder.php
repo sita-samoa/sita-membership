@@ -13,8 +13,10 @@ class PastDueSubReminder extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    protected function getDays() {
+    protected function getDays()
+    {
         $current = Carbon::now();
+
         return $current->diffInDays($this->grace_period);
     }
 
@@ -41,8 +43,8 @@ class PastDueSubReminder extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->subject("Past Due Sub Reminder")
+        return (new MailMessage())
+            ->subject('Past Due Sub Reminder')
             ->greeting("Tālofa {$this->member->user->name}!")
             ->line('Your SITA sub is now due.')
             ->line("If we dont hear back from you by

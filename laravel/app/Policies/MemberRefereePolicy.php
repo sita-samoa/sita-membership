@@ -2,10 +2,9 @@
 
 namespace App\Policies;
 
+use App\Models\Member;
 use App\Models\MemberReferee;
 use App\Models\User;
-use App\Models\Member;
-use Illuminate\Auth\Access\Response;
 
 class MemberRefereePolicy
 {
@@ -39,7 +38,7 @@ class MemberRefereePolicy
     public function update(User $user, MemberReferee $memberReferee): bool
     {
         $member = Member::where('id', $memberReferee
-        ->member_id)->first();
+            ->member_id)->first();
 
         return $member->user()->is($user);
     }
@@ -50,7 +49,7 @@ class MemberRefereePolicy
     public function delete(User $user, MemberReferee $memberReferee): bool
     {
         $member = Member::where('id', $memberReferee
-        ->member_id)->first();
+            ->member_id)->first();
 
         return $member->user()->is($user);
     }

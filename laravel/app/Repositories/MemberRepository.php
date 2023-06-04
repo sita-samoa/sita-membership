@@ -10,55 +10,62 @@ use Carbon\Carbon;
 
 class MemberRepository extends Repository
 {
-  const MONTH_FOR_END_OF_FINANCIAL_YEAR = 6; // June.
-  const DAYS_OF_MONTH_OF_FINANCIAL_YEAR = 30;
+    const MONTH_FOR_END_OF_FINANCIAL_YEAR = 6; // June.
 
-  public function generateEndDate(Carbon $current_dt = null) {
-    if ($current_dt == null) {
-      $current_dt = Carbon::now();
+    const DAYS_OF_MONTH_OF_FINANCIAL_YEAR = 30;
+
+    public function generateEndDate(Carbon $current_dt = null)
+    {
+        if ($current_dt == null) {
+            $current_dt = Carbon::now();
+        }
+
+      // Set end of financial year (June 30)
+        $month = MemberRepository::MONTH_FOR_END_OF_FINANCIAL_YEAR;
+        $day = MemberRepository::DAYS_OF_MONTH_OF_FINANCIAL_YEAR;
+
+        if ($current_dt->month > $month) {
+            $next_year = $current_dt->year + 1;
+
+            return Carbon::create($next_year, $month, $day);
+        }
+
+        return Carbon::create($current_dt->year, $month, $day);
     }
 
-    // Set end of financial year (June 30)
-    $month = MemberRepository::MONTH_FOR_END_OF_FINANCIAL_YEAR;
-    $day = MemberRepository::DAYS_OF_MONTH_OF_FINANCIAL_YEAR;
-
-    if ($current_dt->month > $month) {
-      $next_year = $current_dt->year + 1;
-      return Carbon::create($next_year, $month, $day);
-    }
-    return Carbon::create($current_dt->year, $month, $day);
-  }
-
-  public function accept(Member $member, User $user) {
-    $member->membership_status_id = MembershipStatus::ACCEPTED->value;
-    $member->save();
-
-    $to_date = $this->generateEndDate();
-
-    return $this->recordAction($member, $user, $to_date);
-  }
-
-  public function markOptionalFlagAsViewed(Member $member, String $flag){
-    if($flag == 'viewed_other_memberships'){
-        $member->viewed_other_memberships = true;
+    public function accept(Member $member, User $user)
+    {
+        $member->membership_status_id = MembershipStatus::ACCEPTED->value;
         $member->save();
-    }else if($flag == 'viewed_mailing_list'){
-        $member->viewed_mailing_list = true;
-        $member->save();
-    }
-  }
 
-  public function recordAction(Member $member, User $user, $to_date = null)
-  {
-    $membership_status = new MemberMembershipStatus([
-      'member_id' => $member->id,
-      'membership_status_id' => $member->membership_status_id,
-      'user_id' => $user->id,
-      'from_date' => Carbon::now(),
-    ]);
-    if ($to_date) {
-      $membership_status->to_date = $to_date;
+        $to_date = $this->generateEndDate();
+
+        return $this->recordAction($member, $user, $to_date);
     }
-    return $membership_status->save();
-  }
+
+    public function markOptionalFlagAsViewed(Member $member, string $flag)
+    {
+        if ($flag == 'viewed_other_memberships') {
+            $member->viewed_other_memberships = true;
+            $member->save();
+        } elseif ($flag == 'viewed_mailing_list') {
+            $member->viewed_mailing_list = true;
+            $member->save();
+        }
+    }
+
+    public function recordAction(Member $member, User $user, $to_date = null)
+    {
+        $membership_status = new MemberMembershipStatus([
+            'member_id' => $member->id,
+            'membership_status_id' => $member->membership_status_id,
+            'user_id' => $user->id,
+            'from_date' => Carbon::now(),
+        ]);
+        if ($to_date) {
+            $membership_status->to_date = $to_date;
+        }
+
+        return $membership_status->save();
+    }
 }

@@ -17,44 +17,43 @@ const props = defineProps({
   list: {
     Type: Object,
     Default: {},
-  }
+  },
 })
 
 const filterName = computed(() => {
   const status = parseInt(filterStatus.value)
-  switch(status) {
+  switch (status) {
     case 1:
-      return "Draft"
+      return 'Draft'
     case 2:
-      return "Submitted"
+      return 'Submitted'
     case 3:
-      return "Endorsed"
+      return 'Endorsed'
     case 4:
-      return "Accepted"
+      return 'Accepted'
     case 5:
-      return "Lapsed"
+      return 'Lapsed'
     case 6:
-      return "Expired"
+      return 'Expired'
     case 7:
-      return "Banned"
+      return 'Banned'
   }
-  return "All"
+  return 'All'
 })
 
 const filterStatus = ref(usePage().props.filters.membership_status_id)
 
-watch(filterStatus, (value) => {
+watch(filterStatus, value => {
   router.get(
     route('members.index'),
     {
-      membership_status_id: value
+      membership_status_id: value,
     },
     {
       preserveState: true,
     }
   )
 })
-
 </script>
 <template>
 <!-- Filter dropdown -->
@@ -111,17 +110,15 @@ watch(filterStatus, (value) => {
   </list-group>
 </dropdown>
 
-<!-- No results message -->
-<div v-if="!props.list.total">No matches found. Try changing the filter.</div>
-<div v-else class="mb-3">
-  Showing {{ props.list.from }} to {{ props.list.to }} of {{ props.list.total }} results.
-</div>
+  <!-- No results message -->
+  <div v-if="!props.list.total">No matches found. Try changing the filter.</div>
+  <div v-else class="mb-3">Showing {{ props.list.from }} to {{ props.list.to }} of {{ props.list.total }} results.</div>
 
-<div class="flex flex-wrap">
-  <!-- Member list-->
-  <MemberSummaryCard class="mb-3 mr-3" v-for="member in props.list.data" :key="member.id" :member="member" />
-</div>
+  <div class="flex flex-wrap">
+    <!-- Member list-->
+    <MemberSummaryCard v-for="member in props.list.data" :key="member.id" class="mb-3 mr-3" :member="member" />
+  </div>
 
-<!-- Pagination -->
-<Pagination :links="props.list.links" />
+  <!-- Pagination -->
+  <Pagination :links="props.list.links" />
 </template>
