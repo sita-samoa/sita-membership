@@ -14,7 +14,6 @@ class MemberMembershipStatusRepository extends Repository
 {
     public function getByMemberIdAndStatusId($member_id, $status_id, int $limit = 10): Collection
     {
-
         return MemberMembershipStatus::where('membership_status_id', $status_id)
             ->where('member_id', $member_id)
             ->latest()
@@ -42,7 +41,8 @@ class MemberMembershipStatusRepository extends Repository
         }
         $future_3_months = $current->toImmutable()->addMonthsWithoutOverflow(3)->toMutable();
 
-        return $this->getByStatusIdExpiringBetween(MembershipStatus::ACCEPTED->value, $current, $future_3_months, $limit);
+        return $this->
+            getByStatusIdExpiringBetween(MembershipStatus::ACCEPTED->value, $current, $future_3_months, $limit);
     }
 
     public function getExpiredLessThan6Months(Carbon $current = null, int $limit = -1): Collection

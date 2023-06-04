@@ -11,9 +11,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 class MemberRepository extends Repository
 {
-    const MONTH_FOR_END_OF_FINANCIAL_YEAR = 6; // June.
+    final public const MONTH_FOR_END_OF_FINANCIAL_YEAR = 6; // June.
 
-    const DAYS_OF_MONTH_OF_FINANCIAL_YEAR = 30;
+    final public const DAYS_OF_MONTH_OF_FINANCIAL_YEAR = 30;
 
     public function getByMembershipStatusId(int $membership_status_id, int $limit = 10): Collection
     {

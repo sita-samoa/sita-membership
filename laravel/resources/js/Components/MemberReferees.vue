@@ -141,7 +141,7 @@ function submit() {
     <template #footer>
       <CancelButton @click="closeModalAndResetForm" />
       <div>
-        <AddButton v-if="canAdd" @click="submit" />
+        <AddButton v-if="canAdd" @click="submit" :disabled="form.processing" />
         <DeleteButton v-if="canEdit" @click="showConfirmationModal = true" />
         <UpdateButton v-if="canEdit" @click="update" />
       </div>

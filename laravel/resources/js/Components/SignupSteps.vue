@@ -280,7 +280,7 @@ onMounted(() => {
             </div>
 
             <!-- next button -->
-            <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+            <Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</Button>
           </form>
         </tab>
         <tab name="second" title="General" :disabled="disableTabs">
@@ -318,7 +318,7 @@ onMounted(() => {
             <InputError class="mt-2" :message="form.errors.current_employer" />
 
             <!-- next button -->
-            <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+            <Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</Button>
           </form>
         </tab>
         <tab name="third" title="Home" :disabled="disableTabs">
@@ -338,7 +338,7 @@ onMounted(() => {
             <InputError class="mt-2" :message="form.errors.home_email" />
 
             <!-- next button -->
-            <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+            <Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</Button>
           </form>
         </tab>
         <tab name="fourth" title="Work" :disabled="disableTabs">
@@ -358,7 +358,7 @@ onMounted(() => {
             <InputError class="mt-2" :message="form.errors.work_email" />
 
             <!-- next button -->
-            <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+            <Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</Button>
           </form>
         </tab>
         <tab name="fifth" title="Memberships" :disabled="disableTabs">
@@ -367,7 +367,7 @@ onMounted(() => {
             <textarea id="message" v-model="form.other_membership" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="List each professional organisation you are a member of in a separate line..." />
             <InputError class="mt-2" :message="form.errors.other_membership" />
             <!-- next button -->
-            <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+            <Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</Button>
           </form>
         </tab>
         <tab name="sixth" title="Qualifications" :disabled="disableTabs">

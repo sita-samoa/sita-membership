@@ -57,6 +57,19 @@ Once installed you can access the dev site on
 
 Click "Register" and register a new account then use it to log in.
 
+## Linting
+
+```
+# run in php container
+composer lint # shows warnings and errors
+composer lint_ci # shows only errors
+composer format # tries to fix php problems
+
+# run in node container
+npm run lint # shows warnings and tries to fix
+npm run format # tries to fix js/vue problems
+```
+
 ## On Prod
 
 Ensure that the following commands are run on a cron
