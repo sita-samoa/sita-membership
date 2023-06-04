@@ -189,5 +189,4 @@ test('membership marked as lapsed and recorded', function () {
     // Membership records created.
     $statuses = MemberMembershipStatus::get();
     expect($statuses->count())->toEqual(13);
-
 });
