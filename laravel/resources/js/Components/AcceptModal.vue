@@ -5,6 +5,7 @@ import { Input } from 'flowbite-vue'
 import InputError from '@/Components/InputError.vue'
 import CancelButton from '@/Components/CancelButton.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
+import { stringifyExpression } from '@vue/compiler-core'
 
 const props = defineProps({
   show: {
@@ -14,6 +15,14 @@ const props = defineProps({
   memberId: {
     type: Number,
     default: 0,
+  },
+  headingText: {
+    type: String,
+    default: 'Mark as Accepted',
+  },
+  buttonText: {
+    type: String,
+    default: 'Accept',
   },
 })
 
@@ -35,9 +44,9 @@ function accept() {
 </script>
 <template>
   <DialogModal :show="show">
-    <template #title>Mark as Accepted</template>
+    <template #title>{{ props.headingText }}</template>
     <template #content>
-      <div class="mb-3">Please provide the following informations.</div>
+      <div class="mb-3">Please provide the following information.</div>
       <Input required v-model="form.financial_year" placeholder="enter payment financial year" label="Financial Year" class="mb-2" type="number" />
       <InputError class="mt-2" :message="form.errors.financial_year" />
 
@@ -47,7 +56,7 @@ function accept() {
     <template #footer>
       <CancelButton @click="emits('close')" />
       <div>
-        <PrimaryButton @click="accept" :disabled="form.processing">Accept</PrimaryButton>
+        <PrimaryButton @click="accept" :disabled="form.processing">{{ props.buttonText }}</PrimaryButton>
       </div>
     </template>
   </DialogModal>

@@ -14,6 +14,7 @@ const props = defineProps([
 
 const completion = props.options.completion.data
 const showAcceptanceModal = ref(false)
+const showActivateModal = ref(false)
 
 const form = useForm({
 })
@@ -37,14 +38,6 @@ function sendPastDueSubReminder() {
   form.put(route('members.send-past-due-sub-reminder', props.member.id), {
     resetOnSuccess: false,
   })
-}
-
-function markAsActive() {
-    // @todo - replace this with "accept" call
-    form.put(route('members.activate', props.member.id), {
-        resetOnSuccess: false,
-        preserveScroll: true,
-    })
 }
 
 const application_status_id = computed(() => {
@@ -100,7 +93,7 @@ const application_ready_for_submission = props.options.completion.overall.status
 
   <Button class="w-full mb-3" :disabled="form.processing" v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" default @click.prevent="showAcceptanceModal = true">Accept</Button>
 
-  <Button class="w-full mb-3" color="green" :disabled="form.processing" v-if="application_status_id === 5 && $page.props.user.permissions.canMarkActive" default @click.prevent="markAsActive">Activate Membership</Button>
+  <Button class="w-full mb-3" color="green" :disabled="form.processing" v-if="(application_status_id === 5 || application_status_id === 6) && $page.props.user.permissions.canAccept" default @click.prevent="showActivateModal = true">Activate Membership</Button>
 
   <Button class="w-full mb-3" :disabled="form.processing" v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" default @click.prevent="sendSubReminder">Send sub reminder</Button>
 
@@ -109,7 +102,8 @@ const application_ready_for_submission = props.options.completion.overall.status
   <!-- Audit log link -->
   <Link :href="route('members.audit.index', {member: member.id})" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
 
-  <!-- Dialog Modal -->
+  <!-- Dialog Modals -->
   <AcceptModal :show="showAcceptanceModal" :memberId="member.id" @close="showAcceptanceModal = false" />
+  <AcceptModal :show="showActivateModal" :memberId="member.id" @close="showActivateModal = false" headingText="Activate Membership" buttonText="Activate" />
 </div>
 </template>

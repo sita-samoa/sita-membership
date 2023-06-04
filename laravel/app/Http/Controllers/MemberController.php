@@ -196,19 +196,6 @@ class MemberController extends Controller
     }
 
     /**
-     * Mark a lapsed member as active
-     */
-    public function markActive(Member $member, Request $request) : RedirectResponse
-    {
-        $this->authorize('markActive', $member);
-
-        $this->rep->accept($member, $request->user());
-
-        return redirect()->back()->with('success', 'Member marked as active.');
-    }
-
-
-    /**
      * Send a sub reminder to member.
      */
     public function sendSubReminder(Member $member) : RedirectResponse
