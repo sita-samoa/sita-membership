@@ -1,5 +1,5 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue'
+import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import Welcome from '@/Components/Welcome.vue'
 
 defineProps({
@@ -19,7 +19,7 @@ defineProps({
 </script>
 
 <template>
-  <AppLayout title="Dashboard">
+  <LayoutAuthenticated title="Dashboard">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
     </template>
@@ -31,5 +31,5 @@ defineProps({
         </div>
       </div>
     </div>
-  </AppLayout>
+  </LayoutAuthenticated>
 </template>

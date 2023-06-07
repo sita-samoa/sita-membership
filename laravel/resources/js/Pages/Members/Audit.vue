@@ -1,12 +1,12 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue'
+import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import AuditLogTable from '../../Components/AuditLogTable.vue'
 
 defineProps(['auditLog', 'member_id'])
 </script>
 
 <template>
-  <AppLayout title="Audit Log">
+  <LayoutAuthenticated title="Audit Log">
     <template #header>
       <h2 class="text-xl font-semibold leading-tight text-gray-800">Audit Log</h2>
     </template>
@@ -18,5 +18,5 @@ defineProps(['auditLog', 'member_id'])
         </div>
       </div>
     </div>
-  </AppLayout>
+  </LayoutAuthenticated>
 </template>

@@ -1,10 +1,12 @@
 <script setup>
+import { Link } from '@inertiajs/vue3'
 import { mdiLogout, mdiClose } from "@mdi/js";
 import { computed } from "vue";
 import { useStyleStore } from "@/Stores/style.js";
 import AsideMenuList from "@/Components/AsideMenuList.vue";
 import AsideMenuItem from "@/Components/AsideMenuItem.vue";
 import BaseIcon from "@/Components/BaseIcon.vue";
+import ApplicationMark from '@/Components/ApplicationMark.vue'
 
 defineProps({
   menu: {
@@ -49,7 +51,10 @@ const asideLgCloseClick = (event) => {
         <div
           class="text-center flex-1 lg:text-left lg:pl-6 xl:text-center xl:pl-0"
         >
-          <b class="font-black">One</b>
+          <!-- Logo -->
+          <Link :href="route('dashboard.index')">
+            <ApplicationMark class="block h-9 w-auto" />
+          </Link>
         </div>
         <button
           class="hidden lg:inline-block xl:hidden p-3"

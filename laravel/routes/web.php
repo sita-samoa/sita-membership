@@ -33,13 +33,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard1', function () {
+Route::get('/demo', function () {
     return Inertia::render('HomeView');
-})->middleware(['auth', 'verified'])->name('dashboard1');
-
-Route::get('/tables', function () {
-    return Inertia::render('HomeView');
-})->middleware(['auth', 'verified'])->name('tables');
+})->middleware(['auth', 'verified'])->name('demo');
 
 Route::middleware([
     'auth:sanctum',

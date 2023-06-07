@@ -1,12 +1,12 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue'
+import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import SignupSummary from '../../Components/SignupSummary.vue'
 
 defineProps(['member', 'options', 'auditLog'])
 </script>
 
 <template>
-  <AppLayout title="Summary">
+  <LayoutAuthenticated title="Summary">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">Summary</h2>
     </template>
@@ -18,5 +18,5 @@ defineProps(['member', 'options', 'auditLog'])
         </div>
       </div>
     </div>
-  </AppLayout>
+  </LayoutAuthenticated>
 </template>

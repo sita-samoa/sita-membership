@@ -15,25 +15,25 @@ import {
 
 export default [
   {
-    route: 'dashboard1',
+    route: 'dashboard.index',
     icon: mdiMonitor,
     label: 'Dashboard',
   },
   {
-    route: 'dashboard.index',
-    icon: mdiMonitor,
-    label: 'Old Dashboard',
-  },
-  {
-    route: 'tables',
-    label: 'Tables',
+    route: 'members.signup',
+    label: 'Sign Up',
     icon: mdiTable,
   },
-  // {
-  //   route: "/forms",
-  //   label: "Forms",
-  //   icon: mdiSquareEditOutline,
-  // },
+  {
+    route: 'members.index',
+    label: 'Members',
+    icon: mdiSquareEditOutline,
+  },
+  {
+    route: 'demo',
+    icon: mdiMonitor,
+    label: 'Demo Dashboard',
+  },
   // {
   //   route: "/ui",
   //   label: "UI",
@@ -64,18 +64,18 @@ export default [
   //   label: "Error",
   //   icon: mdiAlertCircle,
   // },
-  {
-    label: 'Dropdown',
-    icon: mdiViewList,
-    menu: [
-      {
-        label: 'Item One',
-      },
-      {
-        label: 'Item Two',
-      },
-    ],
-  },
+  // {
+  //   label: 'Teams',
+  //   icon: mdiViewList,
+  //   menu: [
+  //     {
+  //       label: 'Manage',
+  //     },
+  //     {
+  //       label: 'Item Two',
+  //     },
+  //   ],
+  // },
   {
     href: 'https://github.com/sita-samoa/sita-membership',
     label: 'GitHub',

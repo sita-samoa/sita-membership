@@ -1,12 +1,12 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue'
+import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import MembersList from '../../Components/MembersList.vue'
 
 defineProps(['member', 'members'])
 </script>
 
 <template>
-  <AppLayout title="Members">
+  <LayoutAuthenticated title="Members">
     <template #header>
       <h2 class="font-semibold text-xl text-gray-800 leading-tight">Members</h2>
     </template>
@@ -19,5 +19,5 @@ defineProps(['member', 'members'])
         </div>
       </div>
     </div>
-  </AppLayout>
+  </LayoutAuthenticated>
 </template>

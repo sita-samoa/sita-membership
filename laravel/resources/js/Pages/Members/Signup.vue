@@ -1,12 +1,12 @@
 <script setup>
-import AppLayout from '@/Layouts/AppLayout.vue'
+import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import SignupSteps from '../../Components/SignupSteps.vue'
 
 defineProps(['member', 'completion', 'options', 'qualifications', 'permissions', 'referees', 'memberWorkExperiences', 'supportingDocuments', 'memberMailingLists', 'countryList', 'tab'])
 </script>
 
 <template>
-  <AppLayout title="Sign Up">
+  <LayoutAuthenticated title="Sign Up">
     <template #header>
       <h2 class="text-xl font-semibold leading-tight text-gray-800">Sign Up</h2>
     </template>
@@ -18,5 +18,5 @@ defineProps(['member', 'completion', 'options', 'qualifications', 'permissions',
         </div>
       </div>
     </div>
-  </AppLayout>
+  </LayoutAuthenticated>
 </template>
