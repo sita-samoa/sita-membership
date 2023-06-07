@@ -1,101 +1,131 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3'
-import AuthenticationCard from '@/Components/AuthenticationCard.vue'
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
-import Checkbox from '@/Components/Checkbox.vue'
-import InputError from '@/Components/InputError.vue'
-import InputLabel from '@/Components/InputLabel.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
-import TextInput from '@/Components/TextInput.vue'
-import { useReCaptcha } from 'vue-recaptcha-v3'
-import { onMounted, onUnmounted } from 'vue'
+import { useForm, usePage, Head } from "@inertiajs/vue3";
+import { computed } from "vue";
+import { mdiAccount, mdiEmail, mdiFormTextboxPassword } from "@mdi/js";
+import LayoutGuest from "@/Layouts/LayoutGuest.vue";
+import SectionFullScreen from "@/Components/SectionFullScreen.vue";
+import CardBox from "@/Components/CardBox.vue";
+import FormCheckRadioGroup from "@/Components/FormCheckRadioGroup.vue";
+import FormField from "@/Components/FormField.vue";
+import FormControl from "@/Components/FormControl.vue";
+import BaseDivider from "@/Components/BaseDivider.vue";
+import BaseButton from "@/Components/BaseButton.vue";
+import BaseButtons from "@/Components/BaseButtons.vue";
+import FormValidationErrors from "@/Components/FormValidationErrors.vue";
 
 const form = useForm({
-  name: '',
-  email: '',
-  password: '',
-  password_confirmation: '',
-  terms: false,
-  captcha_token: '',
-})
+  name: "",
+  email: "",
+  password: "",
+  password_confirmation: "",
+  terms: [],
+});
 
-const { executeRecaptcha, recaptchaLoaded, instance } = useReCaptcha()
-const recaptcha = async () => {
-  await recaptchaLoaded()
-  form.captcha_token = await executeRecaptcha('register')
-  submit()
-}
-
-onMounted(async () => {
-  await recaptchaLoaded()
-  if (instance.value) {
-    instance.value.showBadge()
-  }
-})
-
-onUnmounted(() => {
-  if (instance.value) {
-    instance.value.hideBadge()
-  }
-})
+const hasTermsAndPrivacyPolicyFeature = computed(
+  () => usePage().props.jetstream?.hasTermsAndPrivacyPolicyFeature
+);
 
 const submit = () => {
-  form.post(route('register'), {
-    onFinish: () => form.reset('password', 'password_confirmation'),
-  })
-}
+  form
+    .transform((data) => ({
+      ...data,
+      terms: form.terms && form.terms.length,
+    }))
+    .post(route("register"), {
+      onFinish: () => form.reset("password", "password_confirmation"),
+    });
+};
 </script>
 
 <template>
-  <Head title="Register" />
+  <LayoutGuest>
+    <Head title="Register" />
 
-  <AuthenticationCard>
-    <template #logo>
-      <AuthenticationCardLogo />
-    </template>
+    <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
+      <CardBox
+        :class="cardClass"
+        class="my-24"
+        is-form
+        @submit.prevent="submit"
+      >
+        <FormValidationErrors />
 
-    <form @submit.prevent="recaptcha">
-      <div>
-        <InputLabel for="name" value="Name" />
-        <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" required autofocus autocomplete="name" />
-        <InputError class="mt-2" :message="form.errors.name" />
-      </div>
+        <FormField label="Name" label-for="name" help="Please enter your name">
+          <FormControl
+            v-model="form.name"
+            id="name"
+            :icon="mdiAccount"
+            autocomplete="name"
+            type="text"
+            required
+          />
+        </FormField>
 
-      <div class="mt-4">
-        <InputLabel for="email" value="Email" />
-        <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required autocomplete="username" />
-        <InputError class="mt-2" :message="form.errors.email" />
-      </div>
+        <FormField
+          label="Email"
+          label-for="email"
+          help="Please enter your email"
+        >
+          <FormControl
+            v-model="form.email"
+            id="email"
+            :icon="mdiEmail"
+            autocomplete="email"
+            type="email"
+            required
+          />
+        </FormField>
 
-      <div class="mt-4">
-        <InputLabel for="password" value="Password" />
-        <TextInput id="password" v-model="form.password" type="password" class="mt-1 block w-full" required autocomplete="new-password" />
-        <InputError class="mt-2" :message="form.errors.password" />
-      </div>
+        <FormField
+          label="Password"
+          label-for="password"
+          help="Please enter new password"
+        >
+          <FormControl
+            v-model="form.password"
+            id="password"
+            :icon="mdiFormTextboxPassword"
+            type="password"
+            autocomplete="new-password"
+            required
+          />
+        </FormField>
 
-      <div class="mt-4">
-        <InputLabel for="password_confirmation" value="Confirm Password" />
-        <TextInput id="password_confirmation" v-model="form.password_confirmation" type="password" class="mt-1 block w-full" required autocomplete="new-password" />
-        <InputError class="mt-2" :message="form.errors.password_confirmation" />
-      </div>
+        <FormField
+          label="Confirm Password"
+          label-for="password_confirmation"
+          help="Please confirm your password"
+        >
+          <FormControl
+            v-model="form.password_confirmation"
+            id="password_confirmation"
+            :icon="mdiFormTextboxPassword"
+            type="password"
+            autocomplete="new-password"
+            required
+          />
+        </FormField>
 
-      <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
-        <InputLabel for="terms">
-          <span class="pb-3">Terms and Conditions</span>
-          <div class="flex items-center mt-2">
-            <Checkbox id="terms" v-model:checked="form.terms" class="text-primary" name="terms" required />
+        <FormCheckRadioGroup
+          v-if="hasTermsAndPrivacyPolicyFeature"
+          v-model="form.terms"
+          name="remember"
+          :options="{ agree: 'I agree to the Terms' }"
+        />
 
-            <div class="ml-2 text-xs"><strong>Applicants Declaration:</strong> I declare that all information is true and correct, and if admitted to the Society, I understand that I am bound to the Rules, regulations and Codes of the Society as amended from time to time.</div>
-          </div>
-          <InputError class="mt-2" :message="form.errors.terms" />
-        </InputLabel>
-      </div>
+        <BaseDivider />
 
-      <div class="flex items-center justify-end mt-4">
-        <Link :href="route('login')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"> Already registered? </Link>
-
-        <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Register </PrimaryButton>
-      </div>
-    </form>
-  </AuthenticationCard>
+        <BaseButtons>
+          <BaseButton
+            type="submit"
+            color="info"
+            label="Register"
+            :class="{ 'opacity-25': form.processing }"
+            :disabled="form.processing"
+          />
+          <BaseButton route-name="login" color="info" outline label="Login" />
+        </BaseButtons>
+      </CardBox>
+    </SectionFullScreen>
+  </LayoutGuest>
 </template>

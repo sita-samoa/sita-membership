@@ -33,13 +33,21 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/dashboard', function () {
+    return Inertia::render('HomeView');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/tables', function () {
+    return Inertia::render('HomeView');
+})->middleware(['auth', 'verified'])->name('tables');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
 
-    Route::resource('dashboard', DashboardController::class)
+    Route::resource('dashboard1', DashboardController::class)
         ->only(['index']);
 
     // Sign up Page

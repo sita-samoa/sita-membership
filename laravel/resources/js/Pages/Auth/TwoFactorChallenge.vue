@@ -1,18 +1,21 @@
 <script setup>
+import { useForm, Head } from '@inertiajs/vue3'
 import { nextTick, ref } from 'vue'
-import { Head, useForm } from '@inertiajs/vue3'
-import AuthenticationCard from '@/Components/AuthenticationCard.vue'
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
-import InputError from '@/Components/InputError.vue'
-import InputLabel from '@/Components/InputLabel.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
-import TextInput from '@/Components/TextInput.vue'
+import LayoutGuest from '@/Layouts/LayoutGuest.vue'
+import SectionFullScreen from '@/Components/SectionFullScreen.vue'
+import CardBox from '@/Components/CardBox.vue'
+import FormControl from '@/Components/FormControl.vue'
+import FormField from '@/Components/FormField.vue'
+import BaseDivider from '@/Components/BaseDivider.vue'
+import BaseButton from '@/Components/BaseButton.vue'
+import FormValidationErrors from '@/Components/FormValidationErrors.vue'
+import BaseLevel from '@/Components/BaseLevel.vue'
 
 const recovery = ref(false)
 
 const form = useForm({
   code: '',
-  recovery_code: '',
+  recovery_code: ''
 })
 
 const recoveryCodeInput = ref(null)
@@ -24,10 +27,10 @@ const toggleRecovery = async () => {
   await nextTick()
 
   if (recovery.value) {
-    recoveryCodeInput.value.focus()
+    recoveryCodeInput.value?.focus()
     form.code = ''
   } else {
-    codeInput.value.focus()
+    codeInput.value?.focus()
     form.recovery_code = ''
   }
 }
@@ -38,41 +41,86 @@ const submit = () => {
 </script>
 
 <template>
-  <Head title="Two-factor Confirmation" />
+  <LayoutGuest>
+    <Head title="Two-factor Confirmation" />
 
-  <AuthenticationCard>
-    <template #logo>
-      <AuthenticationCardLogo />
-    </template>
+    <SectionFullScreen
+      v-slot="{ cardClass }"
+      bg="purplePink"
+    >
+      <CardBox
+        :class="cardClass"
+        is-form
+        @submit.prevent="submit"
+      >
+        <FormValidationErrors />
 
-    <div class="mb-4 text-sm text-gray-600">
-      <template v-if="!recovery"> Please confirm access to your account by entering the authentication code provided by your authenticator application. </template>
+        <FormField>
+          <div class="mb-4 text-sm text-gray-600">
+            <template v-if="! recovery">
+              Please confirm access to your account by entering the authentication code provided by your authenticator application.
+            </template>
 
-      <template v-else> Please confirm access to your account by entering one of your emergency recovery codes. </template>
-    </div>
+            <template v-else>
+              Please confirm access to your account by entering one of your emergency recovery codes.
+            </template>
+          </div>
+        </FormField>
 
-    <form @submit.prevent="submit">
-      <div v-if="!recovery">
-        <InputLabel for="code" value="Code" />
-        <TextInput id="code" ref="codeInput" v-model="form.code" type="text" inputmode="numeric" class="mt-1 block w-full" autofocus autocomplete="one-time-code" />
-        <InputError class="mt-2" :message="form.errors.code" />
-      </div>
+        <FormField
+          v-if="!recovery"
+          label="Code"
+          label-for="code"
+          help="Please enter one-time code"
+        >
+          <FormControl
+            id="code"
+            @set-ref="codeInput = $event"
+            v-model="form.code"
+            type="text"
+            inputmode="numeric"
+            autofocus
+            autocomplete="one-time-code"
+          />
+        </FormField>
 
-      <div v-else>
-        <InputLabel for="recovery_code" value="Recovery Code" />
-        <TextInput id="recovery_code" ref="recoveryCodeInput" v-model="form.recovery_code" type="text" class="mt-1 block w-full" autocomplete="one-time-code" />
-        <InputError class="mt-2" :message="form.errors.recovery_code" />
-      </div>
+        <FormField
+          v-else
+          label="Recovery Code"
+          label-for="recovery_code"
+          help="Please enter recovery code"
+        >
+          <FormControl
+            id="recovery_code"
+            @set-ref="recoveryCodeInput = $event"
+            v-model="form.recovery_code"
+            type="text"
+            class="mt-1 block w-full"
+            autocomplete="one-time-code"
+          />
+        </FormField>
 
-      <div class="flex items-center justify-end mt-4">
-        <button type="button" class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer" @click.prevent="toggleRecovery">
-          <template v-if="!recovery"> Use a recovery code </template>
+        <BaseDivider />
 
-          <template v-else> Use an authentication code </template>
-        </button>
+        <BaseLevel>
+          <BaseButton
+            type="submit"
+            color="info"
+            label="Log in"
+            :class="{ 'opacity-25': form.processing }"
+            :disabled="form.processing"
+          />
+          <button @click.prevent="toggleRecovery">
+            <template v-if="!recovery">
+              Use a recovery code
+            </template>
 
-        <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Log in </PrimaryButton>
-      </div>
-    </form>
-  </AuthenticationCard>
+            <template v-else>
+              Use an authentication code
+            </template>
+          </button>
+        </BaseLevel>
+      </CardBox>
+    </SectionFullScreen>
+  </LayoutGuest>
 </template>

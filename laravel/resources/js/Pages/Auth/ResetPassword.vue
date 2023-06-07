@@ -1,15 +1,24 @@
 <script setup>
-import { Head, useForm } from '@inertiajs/vue3'
-import AuthenticationCard from '@/Components/AuthenticationCard.vue'
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
-import InputError from '@/Components/InputError.vue'
-import InputLabel from '@/Components/InputLabel.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
-import TextInput from '@/Components/TextInput.vue'
+import { useForm, Head, Link } from '@inertiajs/vue3'
+import { mdiEmail, mdiFormTextboxPassword } from '@mdi/js'
+import LayoutGuest from '@/Layouts/LayoutGuest.vue'
+import SectionFullScreen from '@/Components/SectionFullScreen.vue'
+import CardBox from '@/Components/CardBox.vue'
+import FormField from '@/Components/FormField.vue'
+import FormControl from '@/Components/FormControl.vue'
+import BaseDivider from '@/Components/BaseDivider.vue'
+import BaseButton from '@/Components/BaseButton.vue'
+import FormValidationErrors from '@/Components/FormValidationErrors.vue'
 
 const props = defineProps({
-  email: String,
-  token: String,
+  email: {
+    type: String,
+    default: null
+  },
+  token: {
+    type: String,
+    default: null
+  }
 })
 
 const form = useForm({
@@ -20,42 +29,83 @@ const form = useForm({
 })
 
 const submit = () => {
-  form.post(route('password.update'), {
-    onFinish: () => form.reset('password', 'password_confirmation'),
-  })
+  form
+    .post(route('password.update'), {
+      onFinish: () => form.reset('password', 'password_confirmation'),
+    })
 }
 </script>
 
 <template>
-  <Head title="Reset Password" />
+  <LayoutGuest>
+    <Head title="Reset Password" />
 
-  <AuthenticationCard>
-    <template #logo>
-      <AuthenticationCardLogo />
-    </template>
+    <SectionFullScreen
+      v-slot="{ cardClass }"
+      bg="purplePink"
+    >
+      <CardBox
+        :class="cardClass"
+        is-form
+        @submit.prevent="submit"
+      >
+        <FormValidationErrors />
 
-    <form @submit.prevent="submit">
-      <div>
-        <InputLabel for="email" value="Email" />
-        <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required autofocus autocomplete="username" />
-        <InputError class="mt-2" :message="form.errors.email" />
-      </div>
+        <FormField
+          label="Email"
+          label-for="email"
+          help="Please enter your email"
+        >
+          <FormControl
+            v-model="form.email"
+            :icon="mdiEmail"
+            autocomplete="email"
+            type="email"
+            id="email"
+            required
+          />
+        </FormField>
 
-      <div class="mt-4">
-        <InputLabel for="password" value="Password" />
-        <TextInput id="password" v-model="form.password" type="password" class="mt-1 block w-full" required autocomplete="new-password" />
-        <InputError class="mt-2" :message="form.errors.password" />
-      </div>
+        <FormField
+          label="Password"
+          label-for="password"
+          help="Please enter new password"
+        >
+          <FormControl
+            v-model="form.password"
+            :icon="mdiFormTextboxPassword"
+            type="password"
+            autocomplete="new-password"
+            id="password"
+            required
+          />
+        </FormField>
 
-      <div class="mt-4">
-        <InputLabel for="password_confirmation" value="Confirm Password" />
-        <TextInput id="password_confirmation" v-model="form.password_confirmation" type="password" class="mt-1 block w-full" required autocomplete="new-password" />
-        <InputError class="mt-2" :message="form.errors.password_confirmation" />
-      </div>
+        <FormField
+          label="Confirm Password"
+          label-for="password_confirmation"
+          help="Please confirm new password"
+        >
+          <FormControl
+            v-model="form.password_confirmation"
+            :icon="mdiFormTextboxPassword"
+            type="password"
+            autocomplete="new-password"
+            id="password_confirmation"
+            required
+          />
+        </FormField>
 
-      <div class="flex items-center justify-end mt-4">
-        <PrimaryButton :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Reset Password </PrimaryButton>
-      </div>
-    </form>
-  </AuthenticationCard>
+        <BaseDivider />
+
+        <BaseButton
+          type="submit"
+          color="info"
+          label="Reset password"
+          :class="{ 'opacity-25': form.processing }"
+          :disabled="form.processing"
+        />
+      </CardBox>
+    </SectionFullScreen>
+  </LayoutGuest>
 </template>
