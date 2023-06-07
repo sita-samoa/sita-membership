@@ -33,9 +33,9 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
+Route::get('/dashboard1', function () {
     return Inertia::render('HomeView');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard1');
 
 Route::get('/tables', function () {
     return Inertia::render('HomeView');
@@ -47,7 +47,7 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    Route::resource('dashboard1', DashboardController::class)
+    Route::resource('dashboard', DashboardController::class)
         ->only(['index']);
 
     // Sign up Page

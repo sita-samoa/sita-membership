@@ -15,13 +15,18 @@ import {
 
 export default [
   {
-    route: "dashboard",
+    route: 'dashboard1',
     icon: mdiMonitor,
-    label: "Dashboard",
+    label: 'Dashboard',
   },
   {
-    route: "tables",
-    label: "Tables",
+    route: 'dashboard.index',
+    icon: mdiMonitor,
+    label: 'Old Dashboard',
+  },
+  {
+    route: 'tables',
+    label: 'Tables',
     icon: mdiTable,
   },
   // {
@@ -60,27 +65,21 @@ export default [
   //   icon: mdiAlertCircle,
   // },
   {
-    label: "Dropdown",
+    label: 'Dropdown',
     icon: mdiViewList,
     menu: [
       {
-        label: "Item One",
+        label: 'Item One',
       },
       {
-        label: "Item Two",
+        label: 'Item Two',
       },
     ],
   },
   {
-    href: "https://github.com/justboil/admin-one-vue-tailwind",
-    label: "GitHub",
+    href: 'https://github.com/sita-samoa/sita-membership',
+    label: 'GitHub',
     icon: mdiGithub,
-    target: "_blank",
+    target: '_blank',
   },
-  {
-    href: "https://github.com/justboil/admin-one-react-tailwind",
-    label: "React version",
-    icon: mdiReact,
-    target: "_blank",
-  },
-];
+]

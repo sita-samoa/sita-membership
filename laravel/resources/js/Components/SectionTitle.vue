@@ -1,19 +1,17 @@
-<script setup>
-defineProps({
-  custom: Boolean,
-  first: Boolean,
-  last: Boolean,
-});
-</script>
-
 <template>
-  <section
-    class="py-24 px-6 lg:px-0 lg:max-w-2xl lg:mx-auto text-center"
-    :class="{ '-mb-6': first, '-mt-6': last, '-my-6': !first && !last }"
-  >
-    <slot v-if="custom" />
-    <h1 v-else class="text-2xl text-gray-500 dark:text-slate-400">
-      <slot />
-    </h1>
-  </section>
+  <div class="md:col-span-1 flex justify-between">
+    <div class="px-4 sm:px-0">
+      <h3 class="text-lg font-medium text-gray-900">
+        <slot name="title" />
+      </h3>
+
+      <p class="mt-1 text-sm text-gray-600">
+        <slot name="description" />
+      </p>
+    </div>
+
+    <div class="px-4 sm:px-0">
+      <slot name="aside" />
+    </div>
+  </div>
 </template>
