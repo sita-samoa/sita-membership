@@ -34,6 +34,21 @@ class MemberMembershipStatusRepository extends Repository
             ->get();
     }
 
+    public function getExpiringIn1Months(Carbon $current = null, int $limit = -1): Collection
+    {
+        if ($current == null) {
+            $current = Carbon::now();
+        }
+        $future_1_months = $current->toImmutable()->addMonthsWithoutOverflow(1)->toMutable();
+
+        return $this->getByStatusIdExpiringBetween(
+            MembershipStatus::ACCEPTED->value,
+            $current,
+            $future_1_months,
+            $limit
+        );
+    }
+
     public function getExpiringIn3Months(Carbon $current = null, int $limit = -1): Collection
     {
         if ($current == null) {
@@ -41,8 +56,12 @@ class MemberMembershipStatusRepository extends Repository
         }
         $future_3_months = $current->toImmutable()->addMonthsWithoutOverflow(3)->toMutable();
 
-        return $this->
-            getByStatusIdExpiringBetween(MembershipStatus::ACCEPTED->value, $current, $future_3_months, $limit);
+        return $this->getByStatusIdExpiringBetween(
+            MembershipStatus::ACCEPTED->value,
+            $current,
+            $future_3_months,
+            $limit
+        );
     }
 
     public function getExpiredLessThan6Months(Carbon $current = null, int $limit = -1): Collection
@@ -77,7 +96,7 @@ class MemberMembershipStatusRepository extends Repository
                 $id = $status->member->id;
 
                 // Make sure we dont have duplicate member ids (in case it was Activated twice)
-                if (! array_key_exists($id, $ids)) {
+                if (!array_key_exists($id, $ids)) {
                     $ids[$id] = $status;
                 }
             }
@@ -111,11 +130,11 @@ class MemberMembershipStatusRepository extends Repository
 
     /**
      * Send Expiring Membership Reminders to members whose subs will expire
-     * in 3 months or less.
+     * in set durations {months} months or less.
      *
      * @return void
      */
-    public function sendExpiringMembershipReminders(Carbon $current = null)
+    public function sendExpiringMembershipReminders(int $months, Carbon $current = null)
     {
         if ($current == null) {
             $current = Carbon::now();
@@ -124,7 +143,14 @@ class MemberMembershipStatusRepository extends Repository
         $ids = [];
         // Get profiles that will expire in 3 months or less
         $accepted_status = MembershipStatus::ACCEPTED->value;
-        $statuses = $this->getExpiringIn3Months($current);
+        $statuses = [];
+
+        if ($months === 1) {
+            $statuses = $this->getExpiringIn1Months($current);
+        } elseif ($months === 3) {
+            $statuses = $this->getExpiringIn3Months($current);
+        }
+
         // @todo - load matches into a queue to be run every 5 mins
         foreach ($statuses as $status) {
             // ensure member status is correct
@@ -132,7 +158,7 @@ class MemberMembershipStatusRepository extends Repository
                 $id = $status->member->id;
 
                 // Make sure we dont have duplicate member ids (in case it was Activated twice)
-                if (! array_key_exists($id, $ids)) {
+                if (!array_key_exists($id, $ids)) {
                     $ids[$id] = $status;
                 }
             }
@@ -174,7 +200,7 @@ class MemberMembershipStatusRepository extends Repository
             if ($member->membership_status_id === MembershipStatus::ACCEPTED->value) {
                 $id = $member->id;
                 // Make sure we dont have duplicate member ids (in case it was Activated twice)
-                if (! array_key_exists($id, $ids)) {
+                if (!array_key_exists($id, $ids)) {
                     $ids[$id] = $status;
                 }
             }
