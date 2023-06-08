@@ -134,6 +134,13 @@ beforeEach(function () {
     }
 });
 
+test('get memberships expiring in 1 months', function () {
+    $rep = new MemberMembershipStatusRepository();
+    $results = $rep->getExpiringIn1Months($this->current->toMutable());
+
+    expect($results->count())->toEqual(2);
+});
+
 test('get memberships expiring in 3 months', function () {
     $rep = new MemberMembershipStatusRepository();
     $results = $rep->getExpiringIn3Months($this->current->toMutable());
@@ -141,11 +148,19 @@ test('get memberships expiring in 3 months', function () {
     expect($results->count())->toEqual(5);
 });
 
-test('send expiring membership reminders', function () {
+test('send expiring membership reminders per 1 month', function () {
     Queue::fake();
 
     $rep = new MemberMembershipStatusRepository();
-    $rep->sendExpiringMembershipReminders($this->current->toMutable());
+    $rep->sendExpiringMembershipReminders(1, $this->current->toMutable());
+
+    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 2);
+});
+test('send expiring membership reminders per 3 month', function () {
+    Queue::fake();
+
+    $rep = new MemberMembershipStatusRepository();
+    $rep->sendExpiringMembershipReminders(3, $this->current->toMutable());
 
     Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 3);
 });

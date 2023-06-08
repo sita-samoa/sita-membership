@@ -15,7 +15,12 @@ class Kernel extends ConsoleKernel
     {
         $schedule->call(function () {
             $rep = new MemberMembershipStatusRepository();
-            $rep->sendExpiringMembershipReminders();
+            $rep->sendExpiringMembershipReminders(1);
+        })->weekly();
+
+        $schedule->call(function () {
+            $rep = new MemberMembershipStatusRepository();
+            $rep->sendExpiringMembershipReminders(3);
             $rep->sendPastDueSubReminders();
         })->monthly();
 
