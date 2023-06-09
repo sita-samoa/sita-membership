@@ -1,6 +1,11 @@
 <script setup>
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import { Alert, Button } from 'flowbite-vue'
+
+import { mdiReload } from '@mdi/js'
+import CardBox from '@/Components/CardBox.vue'
+import BaseButton from '@/Components/BaseButton.vue'
+import CardBoxComponentTitle from '@/Components/CardBoxComponentTitle.vue'
 
 defineProps({
   totalSubmitted: {
@@ -29,39 +34,45 @@ function format(amount) {
 
 <template>
   <!-- welcome and sign up -->
-  <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
-    <h1 class="mt-8 text-2xl font-medium text-gray-900">Tālofa {{ $page.props.auth.user.name }}</h1>
+  <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
+    <CardBox>
+      <CardBoxComponentTitle :title="'Tālofa ' + usePage().props.auth.user.name">
+        <BaseButton :icon="mdiReload" color="whiteDark" rounded-full />
+      </CardBoxComponentTitle>
+      <div class="space-y-3">
+        <!-- does have a profile -->
+        <div v-if="!$page.props.user.member_id || !$page.props.user?.completion?.data?.part2?.status">
+          <Alert type="info" class="mb-2 mt-3"> Click the Sign up button to begin. </Alert>
 
-    <!-- does have a profile -->
-    <div v-if="!$page.props.user.member_id || !$page.props.user?.completion?.data?.part2?.status">
-      <Alert type="info" class="mb-2 mt-3"> Click the Sign up button to begin. </Alert>
+          <Link href="/members/signup">
+            <Button class="p-3 mt-3">Sign Up</Button>
+          </Link>
+        </div>
 
-      <Link href="/members/signup">
-        <Button class="p-3 mt-3">Sign Up</Button>
+        <!-- has a profile -->
+        <div v-else>
+          <Alert type="info" class="mb-2 mt-3"> Click the View details button to review your details. </Alert>
+
+          <Link :href="route('members.show', { id: $page.props.user.member_id })">
+            <Button class="p-3 mt-3">View details</Button>
+          </Link>
+        </div>
+      </div>
+    </CardBox>
+
+    <!-- exec dash -->
+    <CardBox v-if="$page.props.user.permissions.canReadAny">
+      <CardBoxComponentTitle title="Executive Dashboard"> </CardBoxComponentTitle>
+
+      <Link href="/members?membership_status_id=2" as="button">
+        <Button class="p-3 mt-3 mr-3">Pending Endorsements ({{ totalSubmitted }})</Button>
       </Link>
-    </div>
 
-    <!-- has a profile -->
-    <div v-else>
-      <Alert type="info" class="mb-2 mt-3"> Click the View details button to review your details. </Alert>
-
-      <Link :href="route('members.show', { id: $page.props.user.member_id })">
-        <Button class="p-3 mt-3">View details</Button>
+      <Link href="/members?membership_status_id=5" as="button">
+        <Button class="p-3 my-3">Lapsed Membership ({{ totalLapsed }})</Button>
       </Link>
-    </div>
-  </div>
-  <!-- exec dash -->
-  <div v-if="$page.props.user.permissions.canReadAny" class="p-6 lg:p-8 bg-white border-b border-gray-200">
-    <h1 class="text-2xl font-medium text-gray-900">Executive Dashboard</h1>
 
-    <Link href="/members?membership_status_id=2" as="button">
-      <Button class="p-3 mt-3 mr-3">Pending Endorsements ({{ totalSubmitted }})</Button>
-    </Link>
-
-    <Link href="/members?membership_status_id=5" as="button">
-      <Button class="p-3 my-3">Lapsed Membership ({{ totalLapsed }})</Button>
-    </Link>
-
-    <p>Estimated Total Owing: {{ format(totalOwing) }}</p>
+      <p>Estimated Total Owing: {{ format(totalOwing) }}</p>
+    </CardBox>
   </div>
 </template>

@@ -1,6 +1,13 @@
 <script setup>
+import { Head } from '@inertiajs/vue3'
 import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import Welcome from '@/Components/Welcome.vue'
+
+import {
+  mdiChartTimelineVariant,
+} from "@mdi/js";
+import SectionMain from "@/Components/SectionMain.vue";
+import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
 
 defineProps({
   totalSubmitted: {
@@ -20,16 +27,11 @@ defineProps({
 
 <template>
   <LayoutAuthenticated title="Dashboard">
-    <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">Dashboard</h2>
-    </template>
-
-    <div class="py-12">
-      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-          <Welcome :total-submitted="totalSubmitted" :total-lapsed="totalLapsed" :total-owing="totalOwing" />
-        </div>
-      </div>
-    </div>
+    <Head title="Dashboard" />
+    <SectionMain>
+      <SectionTitleLineWithButton :icon="mdiChartTimelineVariant" title="Dashboard" main>
+      </SectionTitleLineWithButton>
+      <Welcome :total-submitted="totalSubmitted" :total-lapsed="totalLapsed" :total-owing="totalOwing" />
+    </SectionMain>
   </LayoutAuthenticated>
 </template>
