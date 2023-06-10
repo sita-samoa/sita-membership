@@ -9,7 +9,7 @@ import FormField from '@/Components/FormField.vue'
 import BaseDivider from '@/Components/BaseDivider.vue'
 import BaseButton from '@/Components/BaseButton.vue'
 import FormValidationErrors from '@/Components/FormValidationErrors.vue'
-import ApplicationMark from '@/Components/ApplicationMark.vue'
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
 
 const form = useForm({
   password: ''
@@ -43,7 +43,7 @@ const submit = () => {
       >
         <FormValidationErrors />
 
-        <ApplicationMark class="block h-14 w-auto mb-6" />
+        <AuthenticationCardLogo />
 
         <FormField>
           <div class="mb-4 text-sm text-gray-600">

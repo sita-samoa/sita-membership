@@ -11,7 +11,7 @@ import BaseDivider from "@/Components/BaseDivider.vue";
 import BaseButton from "@/Components/BaseButton.vue";
 import BaseButtons from "@/Components/BaseButtons.vue";
 import FormValidationErrors from "@/Components/FormValidationErrors.vue";
-import ApplicationMark from '@/Components/ApplicationMark.vue'
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
 import Checkbox from '@/Components/Checkbox.vue'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import InputLabel from '@/Components/InputLabel.vue'
@@ -70,7 +70,7 @@ onUnmounted(() => {
 
         <FormValidationErrors />
 
-        <ApplicationMark class="block h-14 w-auto mb-6" />
+        <AuthenticationCardLogo />
 
         <FormField label="Name" label-for="name" help="Please enter your name">
           <FormControl

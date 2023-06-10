@@ -13,9 +13,9 @@ import BaseButtons from '@/Components/BaseButtons.vue'
 import FormValidationErrors from '@/Components/FormValidationErrors.vue'
 import NotificationBarInCard from '@/Components/NotificationBarInCard.vue'
 import BaseLevel from '@/Components/BaseLevel.vue'
-import ApplicationMark from '@/Components/ApplicationMark.vue'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import { onMounted, onUnmounted } from 'vue'
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
 
 const { executeRecaptcha, recaptchaLoaded, instance } = useReCaptcha()
 const recaptcha = async () => {
@@ -86,7 +86,7 @@ const submit = () => {
           {{ status }}
         </NotificationBarInCard>
 
-        <ApplicationMark class="block h-14 w-auto mb-6" />
+        <AuthenticationCardLogo />
 
         <FormField
           label="Email"

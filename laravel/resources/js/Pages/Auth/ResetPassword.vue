@@ -9,7 +9,7 @@ import FormControl from '@/Components/FormControl.vue'
 import BaseDivider from '@/Components/BaseDivider.vue'
 import BaseButton from '@/Components/BaseButton.vue'
 import FormValidationErrors from '@/Components/FormValidationErrors.vue'
-import ApplicationMark from '@/Components/ApplicationMark.vue'
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
 
 const props = defineProps({
   email: {
@@ -52,7 +52,7 @@ const submit = () => {
       >
         <FormValidationErrors />
 
-        <ApplicationMark class="block h-14 w-auto mb-6" />
+        <AuthenticationCardLogo />
 
         <FormField
           label="Email"

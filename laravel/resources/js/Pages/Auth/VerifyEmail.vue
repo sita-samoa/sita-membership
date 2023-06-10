@@ -10,7 +10,7 @@ import BaseButton from "@/Components/BaseButton.vue";
 import FormValidationErrors from "@/Components/FormValidationErrors.vue";
 import NotificationBarInCard from "@/Components/NotificationBarInCard.vue";
 import BaseLevel from "@/Components/BaseLevel.vue";
-import ApplicationMark from '@/Components/ApplicationMark.vue'
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
 
 const props = defineProps({
   status: {
@@ -43,7 +43,7 @@ const submit = () => {
           provided during registration.
         </NotificationBarInCard>
 
-        <ApplicationMark class="block h-14 w-auto mb-6" />
+        <AuthenticationCardLogo />
 
         <FormField>
           <div class="mb-4 text-sm text-gray-600">
