@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia'
 import { white as styleDefault } from '@/styles'
 import { darkModeKey } from '@/config'
 

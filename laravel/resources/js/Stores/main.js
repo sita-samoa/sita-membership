@@ -1,7 +1,7 @@
-import { defineStore } from "pinia";
-import axios from "axios";
+import { defineStore } from 'pinia'
+import axios from 'axios'
 
-export const useMainStore = defineStore("main", {
+export const useMainStore = defineStore('main', {
   state: () => ({
     /* User */
     userName: null,
@@ -18,27 +18,27 @@ export const useMainStore = defineStore("main", {
   actions: {
     setUser(payload) {
       if (payload.name) {
-        this.userName = payload.name;
+        this.userName = payload.name
       }
       if (payload.email) {
-        this.userEmail = payload.email;
+        this.userEmail = payload.email
       }
       if (payload.avatar) {
-        this.userAvatar = payload.avatar;
+        this.userAvatar = payload.avatar
       }
     },
 
     fetch(sampleDataKey) {
       axios
         .get(`data-sources/${sampleDataKey}.json`)
-        .then((r) => {
+        .then(r => {
           if (r.data && r.data.data) {
-            this[sampleDataKey] = r.data.data;
+            this[sampleDataKey] = r.data.data
           }
         })
-        .catch((error) => {
-          alert(error.message);
-        });
+        .catch(error => {
+          alert(error.message)
+        })
     },
   },
-});
+})

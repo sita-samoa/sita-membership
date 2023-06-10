@@ -1,5 +1,5 @@
 <script setup>
-import { computed, useSlots } from "vue";
+import { computed, useSlots } from 'vue'
 
 defineProps({
   label: {
@@ -14,31 +14,29 @@ defineProps({
     type: String,
     default: null,
   },
-});
+})
 
-const slots = useSlots();
+const slots = useSlots()
 
 const wrapperClass = computed(() => {
-  const base = [];
-  const slotsLength = slots.default().length;
+  const base = []
+  const slotsLength = slots.default().length
 
   if (slotsLength > 1) {
-    base.push("grid grid-cols-1 gap-3");
+    base.push('grid grid-cols-1 gap-3')
   }
 
   if (slotsLength === 2) {
-    base.push("md:grid-cols-2");
+    base.push('md:grid-cols-2')
   }
 
-  return base;
-});
+  return base
+})
 </script>
 
 <template>
   <div class="mb-6 last:mb-0">
-    <label v-if="label" :for="labelFor" class="block font-bold mb-2">{{
-      label
-    }}</label>
+    <label v-if="label" :for="labelFor" class="block font-bold mb-2">{{ label }}</label>
     <div :class="wrapperClass">
       <slot />
     </div>

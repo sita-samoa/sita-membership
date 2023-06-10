@@ -9,32 +9,22 @@ import MemberMailingListPreference from '@/Components/MemberMailingListPreferenc
 import MemberReferees from '@/Components/MemberReferees.vue'
 import InputError from '@/Components/InputError.vue'
 import InputLabel from '@/Components/InputLabel.vue'
-import {
-  mdiContrastCircle,
-  mdiInformation,
-  mdiCheckCircle,
-  mdiAlert,
-  mdiAlertCircle,
-  mdiOpenInNew,
-  mdiClose,
-  mdiReload,
-  mdiTrendingUp,
-} from "@mdi/js";
-import SectionMain from "@/Components/SectionMain.vue";
-import CardBox from "@/Components/CardBox.vue";
-import BaseButtons from "@/Components/BaseButtons.vue";
-import BaseButton from "@/Components/BaseButton.vue";
-import NotificationBar from "@/Components/NotificationBar.vue";
-import BaseDivider from "@/Components/BaseDivider.vue";
-import CardBoxModal from "@/Components/CardBoxModal.vue";
-import SectionTitle from "@/Components/SectionTitle.vue";
-import FormField from "@/Components/FormField.vue";
-import FormCheckRadioGroup from "@/Components/FormCheckRadioGroup.vue";
-import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
-import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
-import CardBoxComponentEmpty from "@/Components/CardBoxComponentEmpty.vue";
-import CardBoxComponentTitle from "@/Components/CardBoxComponentTitle.vue";
-import PillTag from "@/Components/PillTag.vue";
+import { mdiContrastCircle, mdiInformation, mdiCheckCircle, mdiAlert, mdiAlertCircle, mdiOpenInNew, mdiClose, mdiReload, mdiTrendingUp } from '@mdi/js'
+import SectionMain from '@/Components/SectionMain.vue'
+import CardBox from '@/Components/CardBox.vue'
+import BaseButtons from '@/Components/BaseButtons.vue'
+import BaseButton from '@/Components/BaseButton.vue'
+import NotificationBar from '@/Components/NotificationBar.vue'
+import BaseDivider from '@/Components/BaseDivider.vue'
+import CardBoxModal from '@/Components/CardBoxModal.vue'
+import SectionTitle from '@/Components/SectionTitle.vue'
+import FormField from '@/Components/FormField.vue'
+import FormCheckRadioGroup from '@/Components/FormCheckRadioGroup.vue'
+import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
+import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue'
+import CardBoxComponentEmpty from '@/Components/CardBoxComponentEmpty.vue'
+import CardBoxComponentTitle from '@/Components/CardBoxComponentTitle.vue'
+import PillTag from '@/Components/PillTag.vue'
 
 const props = defineProps({
   options: Object,
@@ -285,7 +275,7 @@ onMounted(() => {
 
 <template>
   <CardBox>
-    <div >
+    <div>
       <div v-if="form.isDirty && member_id" class="my-3 text-sm">There are unsaved changes. Press the "Next" button to save them.</div>
       <div class="mb-3">
         <Progress v-if="!applicationSubmitted" :progress="progress" />

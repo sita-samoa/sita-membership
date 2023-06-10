@@ -41,8 +41,8 @@ const props = defineProps({
   canResetPassword: Boolean,
   status: {
     type: String,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const form = useForm({
@@ -55,8 +55,8 @@ const form = useForm({
 const submit = () => {
   form
     .transform(data => ({
-      ... data,
-      remember: form.remember && form.remember.length ? 'on' : ''
+      ...data,
+      remember: form.remember && form.remember.length ? 'on' : '',
     }))
     .post(route('login'), {
       onFinish: () => form.reset('password'),
@@ -68,86 +68,34 @@ const submit = () => {
   <LayoutGuest>
     <Head title="Login" />
 
-    <SectionFullScreen
-      v-slot="{ cardClass }"
-      bg="purplePink"
-    >
-      <CardBox
-        :class="cardClass"
-        is-form
-        @submit.prevent="recaptcha"
-      >
+    <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
+      <CardBox :class="cardClass" is-form @submit.prevent="recaptcha">
         <FormValidationErrors />
 
-        <NotificationBarInCard
-          v-if="status"
-          color="info"
-        >
+        <NotificationBarInCard v-if="status" color="info">
           {{ status }}
         </NotificationBarInCard>
 
         <AuthenticationCardLogo />
 
-        <FormField
-          label="Email"
-          label-for="email"
-          help="Please enter your email"
-        >
-          <FormControl
-            v-model="form.email"
-            :icon="mdiAccount"
-            id="email"
-            autocomplete="email"
-            type="email"
-            required
-          />
+        <FormField label="Email" label-for="email" help="Please enter your email">
+          <FormControl v-model="form.email" :icon="mdiAccount" id="email" autocomplete="email" type="email" required />
         </FormField>
 
-        <FormField
-          label="Password"
-          label-for="password"
-          help="Please enter your password"
-        >
-          <FormControl
-            v-model="form.password"
-            :icon="mdiAsterisk"
-            type="password"
-            id="password"
-            autocomplete="current-password"
-            required
-          />
+        <FormField label="Password" label-for="password" help="Please enter your password">
+          <FormControl v-model="form.password" :icon="mdiAsterisk" type="password" id="password" autocomplete="current-password" required />
         </FormField>
 
-        <FormCheckRadioGroup
-          v-model="form.remember"
-          name="remember"
-          :options="{ remember: 'Remember' }"
-        />
+        <FormCheckRadioGroup v-model="form.remember" name="remember" :options="{ remember: 'Remember' }" />
 
         <BaseDivider />
 
         <BaseLevel>
           <BaseButtons>
-            <BaseButton
-              type="submit"
-              color="info"
-              label="Login"
-              :class="{ 'opacity-25': form.processing }"
-              :disabled="form.processing"
-            />
-            <BaseButton
-              v-if="canResetPassword"
-              route-name="password.request"
-              color="info"
-              outline
-              label="Remind"
-            />
+            <BaseButton type="submit" color="info" label="Login" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" />
+            <BaseButton v-if="canResetPassword" route-name="password.request" color="info" outline label="Remind" />
           </BaseButtons>
-          <Link
-            :href="route('register')"
-          >
-            Register
-          </Link>
+          <Link :href="route('register')"> Register </Link>
         </BaseLevel>
       </CardBox>
     </SectionFullScreen>

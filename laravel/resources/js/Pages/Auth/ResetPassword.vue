@@ -14,12 +14,12 @@ import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
 const props = defineProps({
   email: {
     type: String,
-    default: null
+    default: null,
   },
   token: {
     type: String,
-    default: null
-  }
+    default: null,
+  },
 })
 
 const form = useForm({
@@ -30,10 +30,9 @@ const form = useForm({
 })
 
 const submit = () => {
-  form
-    .post(route('password.update'), {
-      onFinish: () => form.reset('password', 'password_confirmation'),
-    })
+  form.post(route('password.update'), {
+    onFinish: () => form.reset('password', 'password_confirmation'),
+  })
 }
 </script>
 
@@ -41,73 +40,27 @@ const submit = () => {
   <LayoutGuest>
     <Head title="Reset Password" />
 
-    <SectionFullScreen
-      v-slot="{ cardClass }"
-      bg="purplePink"
-    >
-      <CardBox
-        :class="cardClass"
-        is-form
-        @submit.prevent="submit"
-      >
+    <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
+      <CardBox :class="cardClass" is-form @submit.prevent="submit">
         <FormValidationErrors />
 
         <AuthenticationCardLogo />
 
-        <FormField
-          label="Email"
-          label-for="email"
-          help="Please enter your email"
-        >
-          <FormControl
-            v-model="form.email"
-            :icon="mdiEmail"
-            autocomplete="email"
-            type="email"
-            id="email"
-            required
-          />
+        <FormField label="Email" label-for="email" help="Please enter your email">
+          <FormControl v-model="form.email" :icon="mdiEmail" autocomplete="email" type="email" id="email" required />
         </FormField>
 
-        <FormField
-          label="Password"
-          label-for="password"
-          help="Please enter new password"
-        >
-          <FormControl
-            v-model="form.password"
-            :icon="mdiFormTextboxPassword"
-            type="password"
-            autocomplete="new-password"
-            id="password"
-            required
-          />
+        <FormField label="Password" label-for="password" help="Please enter new password">
+          <FormControl v-model="form.password" :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" id="password" required />
         </FormField>
 
-        <FormField
-          label="Confirm Password"
-          label-for="password_confirmation"
-          help="Please confirm new password"
-        >
-          <FormControl
-            v-model="form.password_confirmation"
-            :icon="mdiFormTextboxPassword"
-            type="password"
-            autocomplete="new-password"
-            id="password_confirmation"
-            required
-          />
+        <FormField label="Confirm Password" label-for="password_confirmation" help="Please confirm new password">
+          <FormControl v-model="form.password_confirmation" :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" id="password_confirmation" required />
         </FormField>
 
         <BaseDivider />
 
-        <BaseButton
-          type="submit"
-          color="info"
-          label="Reset password"
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        />
+        <BaseButton type="submit" color="info" label="Reset password" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" />
       </CardBox>
     </SectionFullScreen>
   </LayoutGuest>

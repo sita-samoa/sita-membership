@@ -1,7 +1,7 @@
 <script setup>
-import { mdiUpload } from "@mdi/js";
-import { computed, ref, watch } from "vue";
-import BaseButton from "@/Components/BaseButton.vue";
+import { mdiUpload } from '@mdi/js'
+import { computed, ref, watch } from 'vue'
+import BaseButton from '@/Components/BaseButton.vue'
 
 const props = defineProps({
   modelValue: {
@@ -22,35 +22,35 @@ const props = defineProps({
   },
   color: {
     type: String,
-    default: "info",
+    default: 'info',
   },
   isRoundIcon: Boolean,
-});
+})
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(['update:modelValue'])
 
-const root = ref(null);
+const root = ref(null)
 
-const file = ref(props.modelValue);
+const file = ref(props.modelValue)
 
-const showFilename = computed(() => !props.isRoundIcon && file.value);
+const showFilename = computed(() => !props.isRoundIcon && file.value)
 
-const modelValueProp = computed(() => props.modelValue);
+const modelValueProp = computed(() => props.modelValue)
 
-watch(modelValueProp, (value) => {
-  file.value = value;
+watch(modelValueProp, value => {
+  file.value = value
 
   if (!value) {
-    root.value.input.value = null;
+    root.value.input.value = null
   }
-});
+})
 
-const upload = (event) => {
-  const value = event.target.files || event.dataTransfer.files;
+const upload = event => {
+  const value = event.target.files || event.dataTransfer.files
 
-  file.value = value[0];
+  file.value = value[0]
 
-  emit("update:modelValue", file.value);
+  emit('update:modelValue', file.value)
 
   // Use this as an example for handling file uploads
   // let formData = new FormData()
@@ -71,7 +71,7 @@ const upload = (event) => {
   //   .catch(err => {
   //
   //   })
-};
+}
 
 // const uploadPercent = ref(0)
 //
@@ -85,27 +85,10 @@ const upload = (event) => {
 <template>
   <div class="flex items-stretch justify-start relative">
     <label class="inline-flex">
-      <BaseButton
-        as="a"
-        :class="{ 'w-12 h-12': isRoundIcon, 'rounded-r-none': showFilename }"
-        :icon-size="isRoundIcon ? 24 : undefined"
-        :label="isRoundIcon ? null : label"
-        :icon="icon"
-        :color="color"
-        :rounded-full="isRoundIcon"
-      />
-      <input
-        ref="root"
-        type="file"
-        class="absolute top-0 left-0 w-full h-full opacity-0 outline-none cursor-pointer -z-1"
-        :accept="accept"
-        @input="upload"
-      />
+      <BaseButton as="a" :class="{ 'w-12 h-12': isRoundIcon, 'rounded-r-none': showFilename }" :icon-size="isRoundIcon ? 24 : undefined" :label="isRoundIcon ? null : label" :icon="icon" :color="color" :rounded-full="isRoundIcon" />
+      <input ref="root" type="file" class="absolute top-0 left-0 w-full h-full opacity-0 outline-none cursor-pointer -z-1" :accept="accept" @input="upload" />
     </label>
-    <div
-      v-if="showFilename"
-      class="px-4 py-2 bg-gray-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700 border rounded-r"
-    >
+    <div v-if="showFilename" class="px-4 py-2 bg-gray-100 dark:bg-slate-800 border-gray-200 dark:border-slate-700 border rounded-r">
       <span class="text-ellipsis line-clamp-1">
         {{ file.name }}
       </span>

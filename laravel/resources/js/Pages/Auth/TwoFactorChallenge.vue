@@ -15,7 +15,7 @@ const recovery = ref(false)
 
 const form = useForm({
   code: '',
-  recovery_code: ''
+  recovery_code: '',
 })
 
 const recoveryCodeInput = ref(null)
@@ -44,80 +44,34 @@ const submit = () => {
   <LayoutGuest>
     <Head title="Two-factor Confirmation" />
 
-    <SectionFullScreen
-      v-slot="{ cardClass }"
-      bg="purplePink"
-    >
-      <CardBox
-        :class="cardClass"
-        is-form
-        @submit.prevent="submit"
-      >
+    <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
+      <CardBox :class="cardClass" is-form @submit.prevent="submit">
         <FormValidationErrors />
 
         <FormField>
           <div class="mb-4 text-sm text-gray-600">
-            <template v-if="! recovery">
-              Please confirm access to your account by entering the authentication code provided by your authenticator application.
-            </template>
+            <template v-if="!recovery"> Please confirm access to your account by entering the authentication code provided by your authenticator application. </template>
 
-            <template v-else>
-              Please confirm access to your account by entering one of your emergency recovery codes.
-            </template>
+            <template v-else> Please confirm access to your account by entering one of your emergency recovery codes. </template>
           </div>
         </FormField>
 
-        <FormField
-          v-if="!recovery"
-          label="Code"
-          label-for="code"
-          help="Please enter one-time code"
-        >
-          <FormControl
-            id="code"
-            @set-ref="codeInput = $event"
-            v-model="form.code"
-            type="text"
-            inputmode="numeric"
-            autofocus
-            autocomplete="one-time-code"
-          />
+        <FormField v-if="!recovery" label="Code" label-for="code" help="Please enter one-time code">
+          <FormControl id="code" @set-ref="codeInput = $event" v-model="form.code" type="text" inputmode="numeric" autofocus autocomplete="one-time-code" />
         </FormField>
 
-        <FormField
-          v-else
-          label="Recovery Code"
-          label-for="recovery_code"
-          help="Please enter recovery code"
-        >
-          <FormControl
-            id="recovery_code"
-            @set-ref="recoveryCodeInput = $event"
-            v-model="form.recovery_code"
-            type="text"
-            class="mt-1 block w-full"
-            autocomplete="one-time-code"
-          />
+        <FormField v-else label="Recovery Code" label-for="recovery_code" help="Please enter recovery code">
+          <FormControl id="recovery_code" @set-ref="recoveryCodeInput = $event" v-model="form.recovery_code" type="text" class="mt-1 block w-full" autocomplete="one-time-code" />
         </FormField>
 
         <BaseDivider />
 
         <BaseLevel>
-          <BaseButton
-            type="submit"
-            color="info"
-            label="Log in"
-            :class="{ 'opacity-25': form.processing }"
-            :disabled="form.processing"
-          />
+          <BaseButton type="submit" color="info" label="Log in" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" />
           <button @click.prevent="toggleRecovery">
-            <template v-if="!recovery">
-              Use a recovery code
-            </template>
+            <template v-if="!recovery"> Use a recovery code </template>
 
-            <template v-else>
-              Use an authentication code
-            </template>
+            <template v-else> Use an authentication code </template>
           </button>
         </BaseLevel>
       </CardBox>

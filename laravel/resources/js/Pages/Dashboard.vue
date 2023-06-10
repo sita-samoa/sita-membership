@@ -1,11 +1,9 @@
 <script setup>
 import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import Welcome from '@/Components/Welcome.vue'
-import {
-  mdiMonitor,
-} from "@mdi/js";
-import SectionMain from "@/Components/SectionMain.vue";
-import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
+import { mdiMonitor } from '@mdi/js'
+import SectionMain from '@/Components/SectionMain.vue'
+import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue'
 
 defineProps({
   totalSubmitted: {
@@ -26,8 +24,7 @@ defineProps({
 <template>
   <LayoutAuthenticated title="Dashboard">
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiMonitor" title="Dashboard" main> &nbsp;
-      </SectionTitleLineWithButton>
+      <SectionTitleLineWithButton :icon="mdiMonitor" title="Dashboard" main> &nbsp; </SectionTitleLineWithButton>
       <Welcome :total-submitted="totalSubmitted" :total-lapsed="totalLapsed" :total-owing="totalOwing" />
     </SectionMain>
   </LayoutAuthenticated>

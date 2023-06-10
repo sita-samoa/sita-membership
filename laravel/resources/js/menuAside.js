@@ -1,16 +1,4 @@
-import {
-  mdiAccountCircle,
-  mdiMonitor,
-  mdiGithub,
-  mdiLock,
-  mdiAlertCircle,
-  mdiViewList,
-  mdiClipboardText,
-  mdiTelevisionGuide,
-  mdiResponsive,
-  mdiPalette,
-  mdiReact,
-} from "@mdi/js";
+import { mdiAccountCircle, mdiMonitor, mdiGithub, mdiLock, mdiAlertCircle, mdiViewList, mdiClipboardText, mdiTelevisionGuide, mdiResponsive, mdiPalette, mdiReact } from '@mdi/js'
 
 export default [
   {

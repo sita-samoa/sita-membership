@@ -1,8 +1,4 @@
-import {
-  mdiAccount,
-  mdiLogout,
-  mdiThemeLightDark,
-} from "@mdi/js";
+import { mdiAccount, mdiLogout, mdiThemeLightDark } from '@mdi/js'
 
 export default [
   {

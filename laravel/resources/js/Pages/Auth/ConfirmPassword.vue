@@ -12,7 +12,7 @@ import FormValidationErrors from '@/Components/FormValidationErrors.vue'
 import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
 
 const form = useForm({
-  password: ''
+  password: '',
 })
 
 const passwordInput = ref(null)
@@ -23,7 +23,7 @@ const submit = () => {
       form.reset()
 
       passwordInput.value?.focus()
-    }
+    },
   })
 }
 </script>
@@ -32,49 +32,23 @@ const submit = () => {
   <LayoutGuest>
     <Head title="Secure Area" />
 
-    <SectionFullScreen
-      v-slot="{ cardClass }"
-      bg="purplePink"
-    >
-      <CardBox
-        :class="cardClass"
-        is-form
-        @submit.prevent="submit"
-      >
+    <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
+      <CardBox :class="cardClass" is-form @submit.prevent="submit">
         <FormValidationErrors />
 
         <AuthenticationCardLogo />
 
         <FormField>
-          <div class="mb-4 text-sm text-gray-600">
-            This is a secure area of the application. Please confirm your password before continuing.
-          </div>
+          <div class="mb-4 text-sm text-gray-600">This is a secure area of the application. Please confirm your password before continuing.</div>
         </FormField>
 
-        <FormField
-          label="Password"
-          label-for="password"
-          help="Please enter your password to confirm"
-        >
-          <FormControl
-            id="password"
-            @set-ref="passwordInput = $event"
-            v-model="form.password"
-            type="password"
-            required
-            autocomplete="current-password"
-          />
+        <FormField label="Password" label-for="password" help="Please enter your password to confirm">
+          <FormControl id="password" @set-ref="passwordInput = $event" v-model="form.password" type="password" required autocomplete="current-password" />
         </FormField>
 
         <BaseDivider />
 
-        <BaseButton
-          type="submit"
-          color="info"
-          label="Confirm"
-          :class="{ 'opacity-25': form.processing }"
-          :disabled="form.processing"
-        />
+        <BaseButton type="submit" color="info" label="Confirm" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" />
       </CardBox>
     </SectionFullScreen>
   </LayoutGuest>

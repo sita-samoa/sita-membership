@@ -1,18 +1,18 @@
 <script setup>
-import { computed, ref } from "vue";
-import { useMainStore } from "@/Stores/main";
-import { mdiCheckDecagram } from "@mdi/js";
-import BaseLevel from "@/Components/BaseLevel.vue";
-import UserAvatarCurrentUser from "@/Components/UserAvatarCurrentUser.vue";
-import CardBox from "@/Components/CardBox.vue";
-import FormCheckRadio from "@/Components/FormCheckRadio.vue";
-import PillTag from "@/Components/PillTag.vue";
+import { computed, ref } from 'vue'
+import { useMainStore } from '@/Stores/main'
+import { mdiCheckDecagram } from '@mdi/js'
+import BaseLevel from '@/Components/BaseLevel.vue'
+import UserAvatarCurrentUser from '@/Components/UserAvatarCurrentUser.vue'
+import CardBox from '@/Components/CardBox.vue'
+import FormCheckRadio from '@/Components/FormCheckRadio.vue'
+import PillTag from '@/Components/PillTag.vue'
 
-const mainStore = useMainStore();
+const mainStore = useMainStore()
 
-const userName = computed(() => mainStore.userName);
+const userName = computed(() => mainStore.userName)
 
-const userSwitchVal = ref(false);
+const userSwitchVal = ref(false)
 </script>
 
 <template>
@@ -21,13 +21,7 @@ const userSwitchVal = ref(false);
       <UserAvatarCurrentUser class="lg:mx-12" />
       <div class="space-y-3 text-center md:text-left lg:mx-12">
         <div class="flex justify-center md:block">
-          <FormCheckRadio
-            v-model="userSwitchVal"
-            name="notifications-switch"
-            type="switch"
-            label="Notifications"
-            :input-value="true"
-          />
+          <FormCheckRadio v-model="userSwitchVal" name="notifications-switch" type="switch" label="Notifications" :input-value="true" />
         </div>
         <h1 class="text-2xl">
           Howdy, <b>{{ userName }}</b

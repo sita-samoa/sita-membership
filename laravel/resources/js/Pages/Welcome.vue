@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3'
-import ApplicationMark from '@/Components/ApplicationMark.vue';
+import ApplicationMark from '@/Components/ApplicationMark.vue'
 
 defineProps({
   canLogin: Boolean,

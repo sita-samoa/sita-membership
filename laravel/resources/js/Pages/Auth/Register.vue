@@ -1,16 +1,16 @@
 <script setup>
-import { useForm, Head } from "@inertiajs/vue3";
-import { onMounted, onUnmounted } from "vue";
-import { mdiAccount, mdiEmail, mdiFormTextboxPassword } from "@mdi/js";
-import LayoutGuest from "@/Layouts/LayoutGuest.vue";
-import SectionFullScreen from "@/Components/SectionFullScreen.vue";
-import CardBox from "@/Components/CardBox.vue";
-import FormField from "@/Components/FormField.vue";
-import FormControl from "@/Components/FormControl.vue";
-import BaseDivider from "@/Components/BaseDivider.vue";
-import BaseButton from "@/Components/BaseButton.vue";
-import BaseButtons from "@/Components/BaseButtons.vue";
-import FormValidationErrors from "@/Components/FormValidationErrors.vue";
+import { useForm, Head } from '@inertiajs/vue3'
+import { onMounted, onUnmounted } from 'vue'
+import { mdiAccount, mdiEmail, mdiFormTextboxPassword } from '@mdi/js'
+import LayoutGuest from '@/Layouts/LayoutGuest.vue'
+import SectionFullScreen from '@/Components/SectionFullScreen.vue'
+import CardBox from '@/Components/CardBox.vue'
+import FormField from '@/Components/FormField.vue'
+import FormControl from '@/Components/FormControl.vue'
+import BaseDivider from '@/Components/BaseDivider.vue'
+import BaseButton from '@/Components/BaseButton.vue'
+import BaseButtons from '@/Components/BaseButtons.vue'
+import FormValidationErrors from '@/Components/FormValidationErrors.vue'
 import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
 import Checkbox from '@/Components/Checkbox.vue'
 import { useReCaptcha } from 'vue-recaptcha-v3'
@@ -18,19 +18,19 @@ import InputLabel from '@/Components/InputLabel.vue'
 import InputError from '@/Components/InputError.vue'
 
 const form = useForm({
-  name: "",
-  email: "",
-  password: "",
-  password_confirmation: "",
+  name: '',
+  email: '',
+  password: '',
+  password_confirmation: '',
   terms: false,
   captcha_token: '',
-});
+})
 
 const submit = () => {
   form.post(route('register'), {
     onFinish: () => form.reset('password', 'password_confirmation'),
   })
-};
+}
 
 const { executeRecaptcha, recaptchaLoaded, instance } = useReCaptcha()
 const recaptcha = async () => {
@@ -38,7 +38,6 @@ const recaptcha = async () => {
   form.captcha_token = await executeRecaptcha('register')
   submit()
 }
-
 
 onMounted(async () => {
   await recaptchaLoaded()
@@ -52,7 +51,6 @@ onUnmounted(() => {
     instance.value.hideBadge()
   }
 })
-
 </script>
 
 <template>
@@ -60,72 +58,25 @@ onUnmounted(() => {
     <Head title="Register" />
 
     <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
-      <CardBox
-      :class="cardClass"
-      class="my-24"
-      is-form
-      @submit.prevent="recaptcha"
-      >
-
-
+      <CardBox :class="cardClass" class="my-24" is-form @submit.prevent="recaptcha">
         <FormValidationErrors />
 
         <AuthenticationCardLogo />
 
         <FormField label="Name" label-for="name" help="Please enter your name">
-          <FormControl
-            v-model="form.name"
-            id="name"
-            :icon="mdiAccount"
-            autocomplete="name"
-            type="text"
-            required
-          />
+          <FormControl v-model="form.name" id="name" :icon="mdiAccount" autocomplete="name" type="text" required />
         </FormField>
 
-        <FormField
-          label="Email"
-          label-for="email"
-          help="Please enter your email"
-        >
-          <FormControl
-            v-model="form.email"
-            id="email"
-            :icon="mdiEmail"
-            autocomplete="email"
-            type="email"
-            required
-          />
+        <FormField label="Email" label-for="email" help="Please enter your email">
+          <FormControl v-model="form.email" id="email" :icon="mdiEmail" autocomplete="email" type="email" required />
         </FormField>
 
-        <FormField
-          label="Password"
-          label-for="password"
-          help="Please enter new password"
-        >
-          <FormControl
-            v-model="form.password"
-            id="password"
-            :icon="mdiFormTextboxPassword"
-            type="password"
-            autocomplete="new-password"
-            required
-          />
+        <FormField label="Password" label-for="password" help="Please enter new password">
+          <FormControl v-model="form.password" id="password" :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" required />
         </FormField>
 
-        <FormField
-          label="Confirm Password"
-          label-for="password_confirmation"
-          help="Please confirm your password"
-        >
-          <FormControl
-            v-model="form.password_confirmation"
-            id="password_confirmation"
-            :icon="mdiFormTextboxPassword"
-            type="password"
-            autocomplete="new-password"
-            required
-          />
+        <FormField label="Confirm Password" label-for="password_confirmation" help="Please confirm your password">
+          <FormControl v-model="form.password_confirmation" id="password_confirmation" :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" required />
         </FormField>
 
         <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
@@ -143,13 +94,7 @@ onUnmounted(() => {
         <BaseDivider />
 
         <BaseButtons>
-          <BaseButton
-            type="submit"
-            color="info"
-            label="Register"
-            :class="{ 'opacity-25': form.processing }"
-            :disabled="form.processing"
-          />
+          <BaseButton type="submit" color="info" label="Register" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" />
           <BaseButton route-name="login" color="info" outline label="Login" />
         </BaseButtons>
       </CardBox>

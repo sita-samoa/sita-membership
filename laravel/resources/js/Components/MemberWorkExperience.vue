@@ -1,10 +1,6 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3'
-import {
-  Alert,
-  Button,
-  Table,
-} from 'flowbite-vue'
+import { Alert, Button, Table } from 'flowbite-vue'
 import { ref, nextTick, onMounted } from 'vue'
 import InputLabel from './InputLabel.vue'
 import Input from './Input.vue'

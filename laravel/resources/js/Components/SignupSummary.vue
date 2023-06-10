@@ -6,7 +6,7 @@ import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import AcceptModal from '@/Components/AcceptModal.vue'
-import CardBox from "@/Components/CardBox.vue";
+import CardBox from '@/Components/CardBox.vue'
 
 const props = defineProps(['member', 'options'])
 

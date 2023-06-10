@@ -1,16 +1,14 @@
 <script setup>
-import LayoutAuthenticated from "@/Layouts/LayoutAuthenticated.vue";
+import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import DeleteUserForm from '@/Pages/Profile/Partials/DeleteUserForm.vue'
 import LogoutOtherBrowserSessionsForm from '@/Pages/Profile/Partials/LogoutOtherBrowserSessionsForm.vue'
 import SectionBorder from '@/Components/SectionBorder.vue'
 import TwoFactorAuthenticationForm from '@/Pages/Profile/Partials/TwoFactorAuthenticationForm.vue'
 import UpdatePasswordForm from '@/Pages/Profile/Partials/UpdatePasswordForm.vue'
 import UpdateProfileInformationForm from '@/Pages/Profile/Partials/UpdateProfileInformationForm.vue'
-import {
-  mdiAccount,
-} from "@mdi/js";
-import SectionMain from "@/Components/SectionMain.vue";
-import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
+import { mdiAccount } from '@mdi/js'
+import SectionMain from '@/Components/SectionMain.vue'
+import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue'
 
 defineProps({
   confirmsTwoFactorAuthentication: Boolean,
@@ -21,8 +19,7 @@ defineProps({
 <template>
   <LayoutAuthenticated title="Profile">
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiAccount" title="Profile" main> &nbsp;
-      </SectionTitleLineWithButton>
+      <SectionTitleLineWithButton :icon="mdiAccount" title="Profile" main> &nbsp; </SectionTitleLineWithButton>
       <Welcome :total-submitted="totalSubmitted" :total-lapsed="totalLapsed" :total-owing="totalOwing" />
 
       <div>

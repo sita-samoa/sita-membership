@@ -1,7 +1,7 @@
 <script setup>
-import { useStyleStore } from "@/Stores/style.js";
+import { useStyleStore } from '@/Stores/style.js'
 
-const styleStore = useStyleStore();
+const styleStore = useStyleStore()
 </script>
 
 <template>
