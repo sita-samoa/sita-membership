@@ -1,5 +1,5 @@
 <script setup>
-import { router } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 import { mdiForwardburger, mdiBackburger, mdiMenu } from "@mdi/js";
 import { ref } from "vue";
 import menuAside from "@/menuAside.js";
@@ -7,11 +7,14 @@ import menuNavBar from "@/menuNavBar.js";
 import { useMainStore } from "@/Stores/main.js";
 import { useStyleStore } from "@/Stores/style.js";
 import BaseIcon from "@/Components/BaseIcon.vue";
-import FormControl from "@/Components/FormControl.vue";
 import NavBar from "@/Components/NavBar.vue";
 import NavBarItemPlain from "@/Components/NavBarItemPlain.vue";
 import AsideMenu from "@/Components/AsideMenu.vue";
 import FooterBar from "@/Components/FooterBar.vue";
+
+defineProps({
+  title: String,
+})
 
 useMainStore().setUser({
   name: "John Doe",
@@ -44,6 +47,7 @@ const menuClick = (event, item) => {
 </script>
 
 <template>
+  <Head :title="title" />
   <div
     :class="{
       dark: styleStore.darkMode,
@@ -85,7 +89,17 @@ const menuClick = (event, item) => {
         @menu-click="menuClick"
         @aside-lg-close-click="isAsideLgActive = false"
       />
-      <slot />
+
+        <!-- Page Heading -->
+        <header v-if="$slots.header" class="bg-white shadow">
+          <FlashMessages />
+          <slot name="header" />
+        </header>
+
+        <!-- Page Content -->
+        <main>
+          <slot />
+        </main>
       <FooterBar>
       </FooterBar>
     </div>

@@ -1,5 +1,4 @@
 <script setup>
-import { Head } from '@inertiajs/vue3'
 import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import Welcome from '@/Components/Welcome.vue'
 
@@ -27,9 +26,8 @@ defineProps({
 
 <template>
   <LayoutAuthenticated title="Dashboard">
-    <Head title="Dashboard" />
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiChartTimelineVariant" title="Dashboard" main>
+      <SectionTitleLineWithButton :icon="mdiChartTimelineVariant" title="Dashboard" main> &nbsp;
       </SectionTitleLineWithButton>
       <Welcome :total-submitted="totalSubmitted" :total-lapsed="totalLapsed" :total-owing="totalOwing" />
     </SectionMain>

@@ -8,14 +8,14 @@ const year = new Date().getFullYear();
 <template>
   <footer class="py-2 px-6" :class="containerMaxW">
     <BaseLevel>
-      <div class="text-center md:text-left">
+      <div class="text-center md:text-left text-sm">
         <b
           >&copy; {{ year }},
           <a href="https://www.sita.ws/" target="_blank">Sāmoa IT Association</a>.</b
         >
         <slot />
       </div>
-      <div class="md:py-2">
+      <div class="md:py-2 text-sm">
         Developed by Sāmoa Stack Overflow.
       </div>
     </BaseLevel>
