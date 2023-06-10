@@ -7,7 +7,7 @@ import TwoFactorAuthenticationForm from '@/Pages/Profile/Partials/TwoFactorAuthe
 import UpdatePasswordForm from '@/Pages/Profile/Partials/UpdatePasswordForm.vue'
 import UpdateProfileInformationForm from '@/Pages/Profile/Partials/UpdateProfileInformationForm.vue'
 import {
-  mdiChartTimelineVariant,
+  mdiAccount,
 } from "@mdi/js";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
@@ -21,7 +21,7 @@ defineProps({
 <template>
   <LayoutAuthenticated title="Profile">
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiChartTimelineVariant" title="Profile" main> &nbsp;
+      <SectionTitleLineWithButton :icon="mdiAccount" title="Profile" main> &nbsp;
       </SectionTitleLineWithButton>
       <Welcome :total-submitted="totalSubmitted" :total-lapsed="totalLapsed" :total-owing="totalOwing" />
 

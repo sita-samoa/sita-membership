@@ -2,7 +2,7 @@
 import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import SignupSummary from '@/Components/SignupSummary.vue'
 import {
-  mdiChartTimelineVariant,
+  mdiBadgeAccountHorizontalOutline,
 } from "@mdi/js";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
@@ -13,7 +13,7 @@ defineProps(['member', 'options', 'auditLog'])
 <template>
   <LayoutAuthenticated title="Summary">
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiChartTimelineVariant" title="Summary" main> &nbsp;
+      <SectionTitleLineWithButton :icon="mdiBadgeAccountHorizontalOutline" title="Summary" main> &nbsp;
       </SectionTitleLineWithButton>
       <SignupSummary :member="member" :options="options" />
     </SectionMain>

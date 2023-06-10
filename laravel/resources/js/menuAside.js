@@ -4,9 +4,8 @@ import {
   mdiGithub,
   mdiLock,
   mdiAlertCircle,
-  mdiSquareEditOutline,
-  mdiTable,
   mdiViewList,
+  mdiClipboardText,
   mdiTelevisionGuide,
   mdiResponsive,
   mdiPalette,
@@ -22,18 +21,18 @@ export default [
   {
     route: 'members.signup',
     label: 'Sign Up',
-    icon: mdiTable,
+    icon: mdiClipboardText,
   },
   {
     route: 'members.index',
     label: 'Members',
-    icon: mdiSquareEditOutline,
+    icon: mdiViewList,
   },
-  {
-    route: 'demo',
-    icon: mdiMonitor,
-    label: 'Demo Dashboard',
-  },
+  // {
+  //   route: 'demo',
+  //   icon: mdiChartTimelineVariant,
+  //   label: 'Demo',
+  // },
   // {
   //   route: "/ui",
   //   label: "UI",

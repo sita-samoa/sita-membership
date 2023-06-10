@@ -2,7 +2,7 @@
 import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import Welcome from '@/Components/Welcome.vue'
 import {
-  mdiChartTimelineVariant,
+  mdiMonitor,
 } from "@mdi/js";
 import SectionMain from "@/Components/SectionMain.vue";
 import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
@@ -26,7 +26,7 @@ defineProps({
 <template>
   <LayoutAuthenticated title="Dashboard">
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiChartTimelineVariant" title="Dashboard" main> &nbsp;
+      <SectionTitleLineWithButton :icon="mdiMonitor" title="Dashboard" main> &nbsp;
       </SectionTitleLineWithButton>
       <Welcome :total-submitted="totalSubmitted" :total-lapsed="totalLapsed" :total-owing="totalOwing" />
     </SectionMain>

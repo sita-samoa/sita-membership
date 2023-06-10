@@ -3,13 +3,7 @@ import { Link, useForm } from '@inertiajs/vue3'
 import {
   Alert,
   Button,
-  // Input,
   Table,
-  // TableHead,
-  // TableBody,
-  // TableHeadCell,
-  // TableRow,
-  // TableCell,
 } from 'flowbite-vue'
 import { ref, nextTick, onMounted } from 'vue'
 import InputLabel from './InputLabel.vue'
