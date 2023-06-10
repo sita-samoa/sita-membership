@@ -1,22 +1,21 @@
 <script setup>
 import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
-import SignupSummary from '../../Components/SignupSummary.vue'
+import SignupSummary from '@/Components/SignupSummary.vue'
+import {
+  mdiChartTimelineVariant,
+} from "@mdi/js";
+import SectionMain from "@/Components/SectionMain.vue";
+import SectionTitleLineWithButton from "@/Components/SectionTitleLineWithButton.vue";
 
 defineProps(['member', 'options', 'auditLog'])
 </script>
 
 <template>
   <LayoutAuthenticated title="Summary">
-    <template #header>
-      <h2 class="font-semibold text-xl text-gray-800 leading-tight">Summary</h2>
-    </template>
-
-    <div class="py-12">
-      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-          <SignupSummary :member="member" :options="options" />
-        </div>
-      </div>
-    </div>
+    <SectionMain>
+      <SectionTitleLineWithButton :icon="mdiChartTimelineVariant" title="Summary" main> &nbsp;
+      </SectionTitleLineWithButton>
+      <SignupSummary :member="member" :options="options" />
+    </SectionMain>
   </LayoutAuthenticated>
 </template>
