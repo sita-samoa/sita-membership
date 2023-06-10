@@ -64,19 +64,19 @@ onUnmounted(() => {
         <AuthenticationCardLogo />
 
         <FormField label="Name" label-for="name" help="Please enter your name">
-          <FormControl v-model="form.name" id="name" :icon="mdiAccount" autocomplete="name" type="text" required />
+          <FormControl id="name" v-model="form.name" :icon="mdiAccount" autocomplete="name" type="text" required />
         </FormField>
 
         <FormField label="Email" label-for="email" help="Please enter your email">
-          <FormControl v-model="form.email" id="email" :icon="mdiEmail" autocomplete="email" type="email" required />
+          <FormControl id="email" v-model="form.email" :icon="mdiEmail" autocomplete="email" type="email" required />
         </FormField>
 
         <FormField label="Password" label-for="password" help="Please enter new password">
-          <FormControl v-model="form.password" id="password" :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" required />
+          <FormControl id="password" v-model="form.password" :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" required />
         </FormField>
 
         <FormField label="Confirm Password" label-for="password_confirmation" help="Please confirm your password">
-          <FormControl v-model="form.password_confirmation" id="password_confirmation" :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" required />
+          <FormControl id="password_confirmation" v-model="form.password_confirmation" :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" required />
         </FormField>
 
         <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">

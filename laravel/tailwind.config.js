@@ -1,6 +1,6 @@
 /* eslint-env node */
 
-const plugin = require("tailwindcss/plugin");
+const plugin = require('tailwindcss/plugin')
 
 module.exports = {
   content: ['./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php', './vendor/laravel/jetstream/**/*.blade.php', './storage/framework/views/*.php', './resources/views/**/*.blade.php', './resources/js/**/*.vue', './resources/js/**/*.js', 'node_modules/flowbite-vue/**/*.{js,jsx,ts,tsx}', 'node_modules/flowbite/**/*.{js,jsx,ts,tsx}'],
@@ -39,9 +39,6 @@ module.exports = {
         'fade-out': 'fade-out 250ms ease-in-out',
         'fade-in': 'fade-in 250ms ease-in-out',
       },
-      // fontFamily: {
-      //   sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-      // },
       colors: {
         primary: '#047D95',
       },

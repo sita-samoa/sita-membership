@@ -79,11 +79,11 @@ const submit = () => {
         <AuthenticationCardLogo />
 
         <FormField label="Email" label-for="email" help="Please enter your email">
-          <FormControl v-model="form.email" :icon="mdiAccount" id="email" autocomplete="email" type="email" required />
+          <FormControl id="email" v-model="form.email" :icon="mdiAccount" autocomplete="email" type="email" required />
         </FormField>
 
         <FormField label="Password" label-for="password" help="Please enter your password">
-          <FormControl v-model="form.password" :icon="mdiAsterisk" type="password" id="password" autocomplete="current-password" required />
+          <FormControl id="password" v-model="form.password" :icon="mdiAsterisk" type="password" autocomplete="current-password" required />
         </FormField>
 
         <FormCheckRadioGroup v-model="form.remember" name="remember" :options="{ remember: 'Remember' }" />

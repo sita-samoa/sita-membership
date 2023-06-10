@@ -68,7 +68,7 @@ const menuClick = (event, item) => {
         <FlashMessages class="mx-6" />
         <slot />
       </main>
-      <FooterBar> </FooterBar>
+      <FooterBar />
     </div>
   </div>
 </template>

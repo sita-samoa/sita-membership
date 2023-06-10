@@ -47,15 +47,15 @@ const submit = () => {
         <AuthenticationCardLogo />
 
         <FormField label="Email" label-for="email" help="Please enter your email">
-          <FormControl v-model="form.email" :icon="mdiEmail" autocomplete="email" type="email" id="email" required />
+          <FormControl id="email" v-model="form.email" :icon="mdiEmail" autocomplete="email" type="email" required />
         </FormField>
 
         <FormField label="Password" label-for="password" help="Please enter new password">
-          <FormControl v-model="form.password" :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" id="password" required />
+          <FormControl id="password" v-model="form.password" :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" required />
         </FormField>
 
         <FormField label="Confirm Password" label-for="password_confirmation" help="Please confirm new password">
-          <FormControl v-model="form.password_confirmation" :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" id="password_confirmation" required />
+          <FormControl id="password_confirmation" v-model="form.password_confirmation" :icon="mdiFormTextboxPassword" type="password" autocomplete="new-password" required />
         </FormField>
 
         <BaseDivider />

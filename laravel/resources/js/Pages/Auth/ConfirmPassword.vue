@@ -43,7 +43,7 @@ const submit = () => {
         </FormField>
 
         <FormField label="Password" label-for="password" help="Please enter your password to confirm">
-          <FormControl id="password" @set-ref="passwordInput = $event" v-model="form.password" type="password" required autocomplete="current-password" />
+          <FormControl id="password" v-model="form.password" type="password" required autocomplete="current-password" @set-ref="passwordInput = $event" />
         </FormField>
 
         <BaseDivider />

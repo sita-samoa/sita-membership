@@ -57,11 +57,11 @@ const submit = () => {
         </FormField>
 
         <FormField v-if="!recovery" label="Code" label-for="code" help="Please enter one-time code">
-          <FormControl id="code" @set-ref="codeInput = $event" v-model="form.code" type="text" inputmode="numeric" autofocus autocomplete="one-time-code" />
+          <FormControl id="code" v-model="form.code" type="text" inputmode="numeric" autofocus autocomplete="one-time-code" @set-ref="codeInput = $event" />
         </FormField>
 
         <FormField v-else label="Recovery Code" label-for="recovery_code" help="Please enter recovery code">
-          <FormControl id="recovery_code" @set-ref="recoveryCodeInput = $event" v-model="form.recovery_code" type="text" class="mt-1 block w-full" autocomplete="one-time-code" />
+          <FormControl id="recovery_code" v-model="form.recovery_code" type="text" class="mt-1 block w-full" autocomplete="one-time-code" @set-ref="recoveryCodeInput = $event" />
         </FormField>
 
         <BaseDivider />

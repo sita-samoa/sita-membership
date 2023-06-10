@@ -62,7 +62,7 @@ function format(amount) {
 
     <!-- exec dash -->
     <CardBox v-if="$page.props.user.permissions.canReadAny" is-hoverable>
-      <CardBoxComponentTitle title="Executive Dashboard"> </CardBoxComponentTitle>
+      <CardBoxComponentTitle title="Executive Dashboard" />
 
       <Link href="/members?membership_status_id=2" as="button">
         <Button class="p-3 mt-3 mr-3">Pending Endorsements ({{ totalSubmitted }})</Button>
