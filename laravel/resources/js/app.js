@@ -47,7 +47,7 @@ styleStore.setStyle()
 if (
   (!localStorage[darkModeKey] &&
     window.matchMedia("(prefers-color-scheme: dark)").matches) ||
-  localStorage[darkModeKey] === "1"
+    localStorage[darkModeKey] === "1"
 ) {
   styleStore.setDarkMode(true);
 }

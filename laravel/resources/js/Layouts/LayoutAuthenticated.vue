@@ -4,7 +4,6 @@ import { mdiForwardburger, mdiBackburger, mdiMenu } from "@mdi/js";
 import { ref } from "vue";
 import menuAside from "@/menuAside.js";
 import menuNavBar from "@/menuNavBar.js";
-import { useMainStore } from "@/Stores/main.js";
 import { useStyleStore } from "@/Stores/style.js";
 import BaseIcon from "@/Components/BaseIcon.vue";
 import NavBar from "@/Components/NavBar.vue";
@@ -16,13 +15,6 @@ import FlashMessages from '@/Components/FlashMessages.vue'
 defineProps({
   title: String,
 })
-
-useMainStore().setUser({
-  name: "John Doe",
-  email: "john@example.com",
-  avatar:
-    "https://avatars.dicebear.com/api/avataaars/example.svg?options[top][]=shortHair&options[accessoriesChance]=93",
-});
 
 const layoutAsidePadding = "xl:pl-60";
 
