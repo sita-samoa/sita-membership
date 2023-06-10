@@ -11,6 +11,7 @@ import NavBar from "@/Components/NavBar.vue";
 import NavBarItemPlain from "@/Components/NavBarItemPlain.vue";
 import AsideMenu from "@/Components/AsideMenu.vue";
 import FooterBar from "@/Components/FooterBar.vue";
+import FlashMessages from '@/Components/FlashMessages.vue'
 
 defineProps({
   title: String,
@@ -90,14 +91,14 @@ const menuClick = (event, item) => {
         @aside-lg-close-click="isAsideLgActive = false"
       />
 
-        <!-- Page Heading -->
-        <header v-if="$slots.header" class="bg-white shadow">
-          <FlashMessages />
-          <slot name="header" />
-        </header>
+      <!-- Page Heading -->
+      <header v-if="$slots.header" class="bg-white shadow">
+        <slot name="header" />
+      </header>
 
-        <!-- Page Content -->
-        <main>
+      <!-- Page Content -->
+      <main>
+          <FlashMessages class="mx-6" />
           <slot />
         </main>
       <FooterBar>
