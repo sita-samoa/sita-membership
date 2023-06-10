@@ -34,7 +34,7 @@ Route::get('/', function () {
 });
 
 Route::get('/demo', function () {
-    return Inertia::render('HomeView');
+    return Inertia::render('Demo/HomeView');
 })->middleware(['auth', 'verified'])->name('demo');
 
 Route::middleware([
