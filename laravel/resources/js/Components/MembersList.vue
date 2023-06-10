@@ -114,9 +114,9 @@ watch(filterStatus, value => {
   <div v-if="!props.list.total">No matches found. Try changing the filter.</div>
   <div v-else class="mb-3">Showing {{ props.list.from }} to {{ props.list.to }} of {{ props.list.total }} results.</div>
 
-  <div class="flex flex-wrap">
-    <!-- Member list-->
-    <MemberSummaryCard v-for="member in props.list.data" :key="member.id" class="mb-3 mr-3" :member="member" />
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+    <MemberSummaryCard v-for="member in props.list.data" :key="member.id" :member="member" />
   </div>
 
   <!-- Pagination -->
