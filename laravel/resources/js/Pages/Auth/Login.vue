@@ -13,6 +13,29 @@ import BaseButtons from '@/Components/BaseButtons.vue'
 import FormValidationErrors from '@/Components/FormValidationErrors.vue'
 import NotificationBarInCard from '@/Components/NotificationBarInCard.vue'
 import BaseLevel from '@/Components/BaseLevel.vue'
+import ApplicationMark from '@/Components/ApplicationMark.vue'
+import { useReCaptcha } from 'vue-recaptcha-v3'
+import { onMounted, onUnmounted } from 'vue'
+
+const { executeRecaptcha, recaptchaLoaded, instance } = useReCaptcha()
+const recaptcha = async () => {
+  await recaptchaLoaded()
+  form.captcha_token = await executeRecaptcha('login')
+  submit()
+}
+
+onMounted(async () => {
+  await recaptchaLoaded()
+  if (instance.value) {
+    instance.value.showBadge()
+  }
+})
+
+onUnmounted(() => {
+  if (instance.value) {
+    instance.value.hideBadge()
+  }
+})
 
 const props = defineProps({
   canResetPassword: Boolean,
@@ -25,7 +48,8 @@ const props = defineProps({
 const form = useForm({
   email: '',
   password: '',
-  remember: []
+  remember: [],
+  captcha_token: '',
 })
 
 const submit = () => {
@@ -51,7 +75,7 @@ const submit = () => {
       <CardBox
         :class="cardClass"
         is-form
-        @submit.prevent="submit"
+        @submit.prevent="recaptcha"
       >
         <FormValidationErrors />
 
@@ -61,6 +85,8 @@ const submit = () => {
         >
           {{ status }}
         </NotificationBarInCard>
+
+        <ApplicationMark class="block h-14 w-auto mb-6" />
 
         <FormField
           label="Email"

@@ -10,6 +10,7 @@ import BaseButton from "@/Components/BaseButton.vue";
 import FormValidationErrors from "@/Components/FormValidationErrors.vue";
 import NotificationBarInCard from "@/Components/NotificationBarInCard.vue";
 import BaseLevel from "@/Components/BaseLevel.vue";
+import ApplicationMark from '@/Components/ApplicationMark.vue'
 
 const props = defineProps({
   status: {
@@ -18,7 +19,7 @@ const props = defineProps({
   },
 });
 
-const form = useForm();
+const form = useForm({});
 
 const verificationLinkSent = computed(
   () => props.status === "verification-link-sent"
@@ -42,6 +43,8 @@ const submit = () => {
           provided during registration.
         </NotificationBarInCard>
 
+        <ApplicationMark class="block h-14 w-auto mb-6" />
+
         <FormField>
           <div class="mb-4 text-sm text-gray-600">
             Thanks for signing up! Before getting started, could you verify your
@@ -60,9 +63,11 @@ const submit = () => {
             :class="{ 'opacity-25': form.processing }"
             :disabled="form.processing"
           />
-          <Link :href="route('logout')" method="post" as="button">
-            Logout
-          </Link>
+          <div>
+            <Link :href="route('profile.show')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"> Edit Profile</Link>
+
+            <Link :href="route('logout')" method="post" as="button" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 ml-2"> Log Out </Link>
+          </div>
         </BaseLevel>
       </CardBox>
     </SectionFullScreen>

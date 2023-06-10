@@ -1,40 +1,58 @@
 <script setup>
-import { useForm, usePage, Head } from "@inertiajs/vue3";
-import { computed } from "vue";
+import { useForm, Head } from "@inertiajs/vue3";
+import { onMounted, onUnmounted } from "vue";
 import { mdiAccount, mdiEmail, mdiFormTextboxPassword } from "@mdi/js";
 import LayoutGuest from "@/Layouts/LayoutGuest.vue";
 import SectionFullScreen from "@/Components/SectionFullScreen.vue";
 import CardBox from "@/Components/CardBox.vue";
-import FormCheckRadioGroup from "@/Components/FormCheckRadioGroup.vue";
 import FormField from "@/Components/FormField.vue";
 import FormControl from "@/Components/FormControl.vue";
 import BaseDivider from "@/Components/BaseDivider.vue";
 import BaseButton from "@/Components/BaseButton.vue";
 import BaseButtons from "@/Components/BaseButtons.vue";
 import FormValidationErrors from "@/Components/FormValidationErrors.vue";
+import ApplicationMark from '@/Components/ApplicationMark.vue'
+import Checkbox from '@/Components/Checkbox.vue'
+import { useReCaptcha } from 'vue-recaptcha-v3'
+import InputLabel from '@/Components/InputLabel.vue'
+import InputError from '@/Components/InputError.vue'
 
 const form = useForm({
   name: "",
   email: "",
   password: "",
   password_confirmation: "",
-  terms: [],
+  terms: false,
+  captcha_token: '',
 });
 
-const hasTermsAndPrivacyPolicyFeature = computed(
-  () => usePage().props.jetstream?.hasTermsAndPrivacyPolicyFeature
-);
-
 const submit = () => {
-  form
-    .transform((data) => ({
-      ...data,
-      terms: form.terms && form.terms.length,
-    }))
-    .post(route("register"), {
-      onFinish: () => form.reset("password", "password_confirmation"),
-    });
+  form.post(route('register'), {
+    onFinish: () => form.reset('password', 'password_confirmation'),
+  })
 };
+
+const { executeRecaptcha, recaptchaLoaded, instance } = useReCaptcha()
+const recaptcha = async () => {
+  await recaptchaLoaded()
+  form.captcha_token = await executeRecaptcha('register')
+  submit()
+}
+
+
+onMounted(async () => {
+  await recaptchaLoaded()
+  if (instance.value) {
+    instance.value.showBadge()
+  }
+})
+
+onUnmounted(() => {
+  if (instance.value) {
+    instance.value.hideBadge()
+  }
+})
+
 </script>
 
 <template>
@@ -43,12 +61,16 @@ const submit = () => {
 
     <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
       <CardBox
-        :class="cardClass"
-        class="my-24"
-        is-form
-        @submit.prevent="submit"
+      :class="cardClass"
+      class="my-24"
+      is-form
+      @submit.prevent="recaptcha"
       >
+
+
         <FormValidationErrors />
+
+        <ApplicationMark class="block h-14 w-auto mb-6" />
 
         <FormField label="Name" label-for="name" help="Please enter your name">
           <FormControl
@@ -106,12 +128,17 @@ const submit = () => {
           />
         </FormField>
 
-        <FormCheckRadioGroup
-          v-if="hasTermsAndPrivacyPolicyFeature"
-          v-model="form.terms"
-          name="remember"
-          :options="{ agree: 'I agree to the Terms' }"
-        />
+        <div v-if="$page.props.jetstream.hasTermsAndPrivacyPolicyFeature" class="mt-4">
+          <InputLabel for="terms">
+            <span class="pb-3">Terms and Conditions</span>
+            <div class="flex items-center mt-2">
+              <Checkbox id="terms" v-model:checked="form.terms" class="text-primary" name="terms" required />
+
+              <div class="ml-2 text-xs"><strong>Applicants Declaration:</strong> I declare that all information is true and correct, and if admitted to the Society, I understand that I am bound to the Rules, regulations and Codes of the Society as amended from time to time.</div>
+            </div>
+            <InputError class="mt-2" :message="form.errors.terms" />
+          </InputLabel>
+        </div>
 
         <BaseDivider />
 

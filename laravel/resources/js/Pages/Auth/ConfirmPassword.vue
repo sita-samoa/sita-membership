@@ -9,6 +9,7 @@ import FormField from '@/Components/FormField.vue'
 import BaseDivider from '@/Components/BaseDivider.vue'
 import BaseButton from '@/Components/BaseButton.vue'
 import FormValidationErrors from '@/Components/FormValidationErrors.vue'
+import ApplicationMark from '@/Components/ApplicationMark.vue'
 
 const form = useForm({
   password: ''
@@ -41,6 +42,8 @@ const submit = () => {
         @submit.prevent="submit"
       >
         <FormValidationErrors />
+
+        <ApplicationMark class="block h-14 w-auto mb-6" />
 
         <FormField>
           <div class="mb-4 text-sm text-gray-600">

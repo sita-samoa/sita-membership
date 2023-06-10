@@ -11,6 +11,7 @@ import BaseButton from '@/Components/BaseButton.vue'
 import FormValidationErrors from '@/Components/FormValidationErrors.vue'
 import NotificationBarInCard from '@/Components/NotificationBarInCard.vue'
 import BaseLevel from '@/Components/BaseLevel.vue'
+import ApplicationMark from '@/Components/ApplicationMark.vue'
 
 defineProps({
   status: {
@@ -49,6 +50,8 @@ const submit = () => {
         >
           {{ status }}
         </NotificationBarInCard>
+
+        <ApplicationMark class="block h-14 w-auto mb-3" />
 
         <FormField>
           <div class="mb-4 text-sm text-gray-600">
