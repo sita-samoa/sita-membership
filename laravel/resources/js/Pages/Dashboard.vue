@@ -1,7 +1,6 @@
 <script setup>
 import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import Welcome from '@/Components/Welcome.vue'
-
 import {
   mdiChartTimelineVariant,
 } from "@mdi/js";
