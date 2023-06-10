@@ -35,7 +35,7 @@ function format(amount) {
 <template>
   <!-- welcome and sign up -->
   <div class="grid grid-cols-1 gap-6 mb-6 lg:grid-cols-2">
-    <CardBox>
+    <CardBox is-hoverable>
       <CardBoxComponentTitle :title="'Tālofa ' + usePage().props.auth.user.name">
         <BaseButton :icon="mdiReload" color="whiteDark" rounded-full />
       </CardBoxComponentTitle>
@@ -61,7 +61,7 @@ function format(amount) {
     </CardBox>
 
     <!-- exec dash -->
-    <CardBox v-if="$page.props.user.permissions.canReadAny">
+    <CardBox v-if="$page.props.user.permissions.canReadAny" is-hoverable>
       <CardBoxComponentTitle title="Executive Dashboard"> </CardBoxComponentTitle>
 
       <Link href="/members?membership_status_id=2" as="button">
