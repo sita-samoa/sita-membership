@@ -5,16 +5,19 @@ export default [
     route: 'dashboard.index',
     icon: mdiMonitor,
     label: 'Dashboard',
+    permissionKey: null,
   },
   {
     route: 'members.signup',
     label: 'Sign Up',
     icon: mdiClipboardText,
+    permissionKey: null,
   },
   {
     route: 'members.index',
     label: 'Members',
     icon: mdiViewList,
+    permissionKey: 'canReadAny',
   },
   // {
   //   route: 'demo',

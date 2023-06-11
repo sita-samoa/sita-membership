@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
 import { useStyleStore } from '@/Stores/style.js'
 import { mdiMinus, mdiPlus } from '@mdi/js'
 import { getButtonColor } from '@/colors.js'
@@ -33,6 +33,14 @@ const componentClass = computed(() => [props.isDropdownList ? 'py-3 px-6 text-sm
 
 const hasDropdown = computed(() => !!props.item.menu)
 
+const hidden = computed(() => {
+  const permissionKey = props.item.permissionKey ? props.item.permissionKey : ''
+  if (permissionKey === 'canReadAny') {
+    return ! usePage().props.user.permissions.canReadAny
+  }
+  return false
+})
+
 const menuClick = event => {
   emit('menu-click', event, props.item)
 
@@ -43,7 +51,7 @@ const menuClick = event => {
 </script>
 
 <template>
-  <li>
+  <li v-if="! hidden">
     <component :is="item.route ? Link : 'a'" :href="itemHref" :target="item.target ?? null" class="flex cursor-pointer" :class="componentClass" @click="menuClick">
       <BaseIcon v-if="item.icon" :path="item.icon" class="flex-none" :class="activeInactiveStyle" w="w-16" :size="18" />
       <span class="grow text-ellipsis line-clamp-1" :class="[{ 'pr-12': !hasDropdown }, activeInactiveStyle]">{{ item.label }}</span>
