@@ -86,16 +86,18 @@ const submit = () => {
           <FormControl id="password" v-model="form.password" :icon="mdiAsterisk" type="password" autocomplete="current-password" required />
         </FormField>
 
-        <FormCheckRadioGroup v-model="form.remember" name="remember" :options="{ remember: 'Remember' }" />
+        <BaseLevel>
+          <FormCheckRadioGroup v-model="form.remember" name="remember" :options="{ remember: 'Remember' }" />
+          <Link :href="route('password.request')" class="text-sm"> Forgot password? </Link>
+        </BaseLevel>
 
         <BaseDivider />
 
         <BaseLevel>
           <BaseButtons>
             <BaseButton type="submit" color="info" label="Login" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" />
-            <BaseButton v-if="canResetPassword" route-name="password.request" color="info" outline label="Remind" />
+            <BaseButton route-name="register" color="info" outline label="Create an account" />
           </BaseButtons>
-          <Link :href="route('register')"> Register </Link>
         </BaseLevel>
       </CardBox>
     </SectionFullScreen>

@@ -1,5 +1,5 @@
 <script setup>
-import { useForm, Head } from '@inertiajs/vue3'
+import { useForm, Head, Link } from '@inertiajs/vue3'
 import { onMounted, onUnmounted } from 'vue'
 import { mdiAccount, mdiEmail, mdiFormTextboxPassword } from '@mdi/js'
 import LayoutGuest from '@/Layouts/LayoutGuest.vue'
@@ -9,7 +9,7 @@ import FormField from '@/Components/FormField.vue'
 import FormControl from '@/Components/FormControl.vue'
 import BaseDivider from '@/Components/BaseDivider.vue'
 import BaseButton from '@/Components/BaseButton.vue'
-import BaseButtons from '@/Components/BaseButtons.vue'
+import BaseLevel from '@/Components/BaseLevel.vue'
 import FormValidationErrors from '@/Components/FormValidationErrors.vue'
 import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
 import Checkbox from '@/Components/Checkbox.vue'
@@ -93,10 +93,10 @@ onUnmounted(() => {
 
         <BaseDivider />
 
-        <BaseButtons>
+        <BaseLevel>
           <BaseButton type="submit" color="info" label="Register" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" />
-          <BaseButton route-name="login" color="info" outline label="Login" />
-        </BaseButtons>
+          <Link :href="route('login')" class="text-sm"> Have an account? </Link>
+        </BaseLevel>
       </CardBox>
     </SectionFullScreen>
   </LayoutGuest>

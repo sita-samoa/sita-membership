@@ -54,8 +54,8 @@ const submit = () => {
         <BaseDivider />
 
         <BaseLevel>
-          <BaseButton type="submit" color="info" label="Email link" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" />
-          <Link :href="route('login')"> Back to login </Link>
+          <BaseButton type="submit" color="info" label="Send link" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" />
+          <Link :href="route('login')" class="text-sm"> Back to login </Link>
         </BaseLevel>
       </CardBox>
     </SectionFullScreen>
