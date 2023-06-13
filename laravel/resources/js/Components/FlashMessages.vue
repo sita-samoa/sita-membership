@@ -14,7 +14,7 @@ watch(
 
 <template>
   <div>
-    <div v-if="$page.props.flash.success && show" class="flex items-center justify-between max-w-3xl mb-8 bg-green-500 rounded">
+    <div v-if="$page.props.flash.success && show" class="flex items-center justify-between max-w-3xl bg-green-500 rounded">
       <div class="flex items-center">
         <svg class="flex-shrink-0 w-4 h-4 ml-4 mr-2 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="0 11 2 9 7 14 18 3 20 5 7 18" /></svg>
         <div class="py-4 text-sm font-medium text-white">{{ $page.props.flash.success }}</div>
@@ -30,9 +30,6 @@ watch(
         <div v-else class="py-4 text-sm font-medium text-white">
           <span v-if="Object.keys($page.props.errors).length === 1">There is one form error.</span>
           <span v-else>There are {{ Object.keys($page.props.errors).length }} form errors.</span>
-          <!-- <ol class="mt-2 list-decimal list-inside">
-            <li v-for="error in $page.props.errors">{{ error }}</li>
-          </ol> -->
         </div>
       </div>
       <button type="button" class="p-2 mr-2 group" @click="show = false">

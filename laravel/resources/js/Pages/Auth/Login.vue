@@ -1,26 +1,22 @@
 <script setup>
-import { Head, Link, useForm } from '@inertiajs/vue3'
-import AuthenticationCard from '@/Components/AuthenticationCard.vue'
-import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
-import Checkbox from '@/Components/Checkbox.vue'
-import InputError from '@/Components/InputError.vue'
-import InputLabel from '@/Components/InputLabel.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
-import TextInput from '@/Components/TextInput.vue'
+import { useForm, Head, Link } from '@inertiajs/vue3'
+import { mdiAccount, mdiAsterisk } from '@mdi/js'
+import LayoutGuest from '@/Layouts/LayoutGuest.vue'
+import SectionFullScreen from '@/Components/SectionFullScreen.vue'
+import CardBox from '@/Components/CardBox.vue'
+import FormCheckRadioGroup from '@/Components/FormCheckRadioGroup.vue'
+import FormField from '@/Components/FormField.vue'
+import FormControl from '@/Components/FormControl.vue'
+import BaseDivider from '@/Components/BaseDivider.vue'
+import BaseButton from '@/Components/BaseButton.vue'
+import BaseButtons from '@/Components/BaseButtons.vue'
+import FormValidationErrors from '@/Components/FormValidationErrors.vue'
+import NotificationBarInCard from '@/Components/NotificationBarInCard.vue'
+import BaseLevel from '@/Components/BaseLevel.vue'
 import { useReCaptcha } from 'vue-recaptcha-v3'
 import { onMounted, onUnmounted } from 'vue'
+import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
 
-defineProps({
-  canResetPassword: Boolean,
-  status: String,
-})
-
-const form = useForm({
-  email: '',
-  password: '',
-  remember: false,
-  captcha_token: '',
-})
 const { executeRecaptcha, recaptchaLoaded, instance } = useReCaptcha()
 const recaptcha = async () => {
   await recaptchaLoaded()
@@ -41,11 +37,26 @@ onUnmounted(() => {
   }
 })
 
+const props = defineProps({
+  canResetPassword: Boolean,
+  status: {
+    type: String,
+    default: null,
+  },
+})
+
+const form = useForm({
+  email: '',
+  password: '',
+  remember: [],
+  captcha_token: '',
+})
+
 const submit = () => {
   form
     .transform(data => ({
       ...data,
-      remember: form.remember ? 'on' : '',
+      remember: form.remember && form.remember.length ? 'on' : '',
     }))
     .post(route('login'), {
       onFinish: () => form.reset('password'),
@@ -54,42 +65,41 @@ const submit = () => {
 </script>
 
 <template>
-  <Head title="Log in" />
+  <LayoutGuest>
+    <Head title="Login" />
 
-  <AuthenticationCard>
-    <template #logo>
-      <AuthenticationCardLogo />
-    </template>
+    <SectionFullScreen v-slot="{ cardClass }" bg="purplePink">
+      <CardBox :class="cardClass" is-form @submit.prevent="recaptcha">
+        <FormValidationErrors />
 
-    <div v-if="status" class="mb-4 font-medium text-sm text-green-600">
-      {{ status }}
-    </div>
+        <NotificationBarInCard v-if="status" color="info">
+          {{ status }}
+        </NotificationBarInCard>
 
-    <form @submit.prevent="recaptcha">
-      <div>
-        <InputLabel for="email" value="Email" />
-        <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" required autofocus autocomplete="username" />
-        <InputError class="mt-2" :message="form.errors.email" />
-      </div>
+        <AuthenticationCardLogo />
 
-      <div class="mt-4">
-        <InputLabel for="password" value="Password" />
-        <TextInput id="password" v-model="form.password" type="password" class="mt-1 block w-full" required autocomplete="current-password" />
-        <InputError class="mt-2" :message="form.errors.password" />
-      </div>
+        <FormField label="Email" label-for="email" help="Please enter your email">
+          <FormControl id="email" v-model="form.email" :icon="mdiAccount" autocomplete="email" type="email" required />
+        </FormField>
 
-      <div class="block mt-4">
-        <label class="flex items-center">
-          <Checkbox v-model:checked="form.remember" name="remember" />
-          <span class="ml-2 text-sm text-gray-600">Remember me</span>
-        </label>
-      </div>
+        <FormField label="Password" label-for="password" help="Please enter your password">
+          <FormControl id="password" v-model="form.password" :icon="mdiAsterisk" type="password" autocomplete="current-password" required />
+        </FormField>
 
-      <div class="flex items-center justify-end mt-4">
-        <Link v-if="canResetPassword" :href="route('password.request')" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"> Forgot your password? </Link>
+        <BaseLevel>
+          <FormCheckRadioGroup v-model="form.remember" name="remember" :options="{ remember: 'Remember' }" />
+          <Link :href="route('password.request')" class="text-sm"> Forgot password? </Link>
+        </BaseLevel>
 
-        <PrimaryButton class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing"> Log in </PrimaryButton>
-      </div>
-    </form>
-  </AuthenticationCard>
+        <BaseDivider />
+
+        <BaseLevel>
+          <BaseButtons>
+            <BaseButton type="submit" color="info" label="Login" :class="{ 'opacity-25': form.processing }" :disabled="form.processing" />
+            <BaseButton route-name="register" color="info" outline label="Create an account" />
+          </BaseButtons>
+        </BaseLevel>
+      </CardBox>
+    </SectionFullScreen>
+  </LayoutGuest>
 </template>

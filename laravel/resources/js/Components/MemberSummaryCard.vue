@@ -49,7 +49,7 @@ switch (props.member.membership_status_id) {
 const linkData = { member: props.member.id, tab: 1 }
 </script>
 <template>
-  <the-card class="sm:w-full">
+  <the-card variant="horizontal">
     <Link :href="route(props.linkRoute, linkData)">
       <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         <span v-if="props.member.title_id">{{ props.member.title.title }}</span> {{ member_name }}

@@ -6,6 +6,7 @@ import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import AcceptModal from '@/Components/AcceptModal.vue'
+import CardBox from '@/Components/CardBox.vue'
 
 const props = defineProps(['member', 'options'])
 
@@ -48,26 +49,26 @@ const application_ready_for_submission = props.options.completion.overall.status
 </script>
 
 <template>
-  <div class="p-6 lg:p-8 bg-white border-b border-gray-200">
+  <CardBox>
     <!-- Alerts -->
-    <Alert v-if="application_status_id === 0" type="info" class="mb-2">
+    <Alert v-if="application_status_id === 0" type="info" class="mb-6">
       <strong>Draft</strong><br />
       Complete your signup and press Submit.
     </Alert>
 
-    <Alert v-if="application_status_id === 2" type="info" class="mb-2">
+    <Alert v-if="application_status_id === 2" type="info" class="mb-6">
       <strong>Submitted</strong><br />
       Your application has been submitted and is under review.
     </Alert>
 
-    <Alert v-if="application_status_id === 3" type="info" class="mb-2">
+    <Alert v-if="application_status_id === 3" type="info" class="mb-6">
       <strong>Endorsed</strong><br />
       Your application has been endorsed and is awaiting settlement.
     </Alert>
 
-    <MemberSummaryCard :member="props.member" link-route="members.signup.index" class="mb-3" />
+    <MemberSummaryCard :member="props.member" link-route="members.signup.index" class="mb-6" />
 
-    <list-group class="w-full mb-3">
+    <list-group class="w-full">
       <Link v-for="(c, index) in completion" :href="route('members.signup.index', { member: props.member.id, tab: index.replace('part', '') })">
         <list-group-item>
           <template #prefix>
@@ -79,26 +80,23 @@ const application_ready_for_submission = props.options.completion.overall.status
       </Link>
     </list-group>
 
-    <!-- Action buttons -->
-    <p v-show="!application_ready_for_submission" class="w-full my-3 ml-2 text-sm text-gray-500">Please ensure all sections are completed before submitting</p>
+    <template #footer>
+      <p v-show="!application_ready_for_submission" class="w-full mb-6 ml-2 text-sm text-gray-500">Please ensure all sections are completed before submitting</p>
 
-    <Button v-if="application_status_id <= 1" class="w-full mb-3" :disabled="!(application_ready_for_submission || $page.props.user.permissions.canSubmit) || form.processing" default @click.prevent="submit">Submit</Button>
+      <!-- Action buttons -->
+      <Button v-if="application_status_id <= 1" class="w-full mb-6" :disabled="!(application_ready_for_submission || $page.props.user.permissions.canSubmit) || form.processing" default @click.prevent="submit">Submit</Button>
+      <Button v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" class="w-full mb-6" :disabled="form.processing" default @click.prevent="endorse">Endorse</Button>
+      <Button v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" class="w-full mb-6" :disabled="form.processing" default @click.prevent="showAcceptanceModal = true">Accept</Button>
+      <Button v-if="(application_status_id === 5 || application_status_id === 6) && $page.props.user.permissions.canAccept" class="w-full mb-6" color="green" :disabled="form.processing" default @click.prevent="showActivateModal = true">Activate Membership</Button>
+      <Button v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" class="w-full mb-6" :disabled="form.processing" default @click.prevent="sendSubReminder">Send sub reminder</Button>
+      <Button v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" class="w-full mb-6" :disabled="form.processing" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
 
-    <Button v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" class="w-full mb-3" :disabled="form.processing" default @click.prevent="endorse">Endorse</Button>
+      <!-- Audit log link -->
+      <Link :href="route('members.audit.index', { member: member.id })" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
 
-    <Button v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" class="w-full mb-3" :disabled="form.processing" default @click.prevent="showAcceptanceModal = true">Accept</Button>
-
-    <Button v-if="(application_status_id === 5 || application_status_id === 6) && $page.props.user.permissions.canAccept" class="w-full mb-3" color="green" :disabled="form.processing" default @click.prevent="showActivateModal = true">Activate Membership</Button>
-
-    <Button v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" class="w-full mb-3" :disabled="form.processing" default @click.prevent="sendSubReminder">Send sub reminder</Button>
-
-    <Button v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" class="w-full mb-3" :disabled="form.processing" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</Button>
-
-    <!-- Audit log link -->
-    <Link :href="route('members.audit.index', { member: member.id })" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
-
-    <!-- Dialog Modals -->
-    <AcceptModal :show="showAcceptanceModal" :member-id="member.id" @close="showAcceptanceModal = false" />
-    <AcceptModal :show="showActivateModal" :member-id="member.id" heading-text="Activate Membership" button-text="Activate" @close="showActivateModal = false" />
-  </div>
+      <!-- Dialog Modals -->
+      <AcceptModal :show="showAcceptanceModal" :member-id="member.id" @close="showAcceptanceModal = false" />
+      <AcceptModal :show="showActivateModal" :member-id="member.id" heading-text="Activate Membership" button-text="Activate" @close="showActivateModal = false" />
+    </template>
+  </CardBox>
 </template>

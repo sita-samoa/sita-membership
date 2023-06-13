@@ -33,6 +33,10 @@ Route::get('/', function () {
     ]);
 });
 
+Route::get('/demo', function () {
+    return Inertia::render('Demo/HomeView');
+})->middleware(['auth', 'verified'])->name('demo');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),

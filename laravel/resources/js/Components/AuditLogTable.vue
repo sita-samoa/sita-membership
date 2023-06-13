@@ -7,6 +7,7 @@ import DialogModal from '@/Components/DialogModal.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 import InputLabel from '@/Components/InputLabel.vue'
 import Pagination from '@/Components/Pagination.vue'
+import CardBox from '@/Components/CardBox.vue'
 
 dayjs.extend(relativeTime)
 
@@ -45,7 +46,7 @@ function toReadable(model) {
 }
 </script>
 <template>
-  <div v-if="auditLog.data.length" class="relative overflow-x-auto p-6">
+  <CardBox v-if="auditLog.data.length">
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mb-5">
       <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
@@ -79,7 +80,7 @@ function toReadable(model) {
 
     <!-- Pagination -->
     <Pagination :links="auditLog.links" />
-  </div>
+  </CardBox>
   <div v-else class="relative overflow-x-auto p-6">No audit to display. Check back later.</div>
 
   <div class="w-full flex justify-end p-6">
