@@ -22,13 +22,17 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
-        Validator::make($input, [
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
-            'captcha_token' => [new Recaptcha()],
-        ])->validate();
+            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '', ];
+        if (!app()->environment('testing')) {
+            // Skip ReCaptcha Validation during Testing
+            // @todo: remove and mock reCaptcha during testing instead
+            $rules['captcha_token'] = ['required', 'string', new Recaptcha()];
+        }
+        Validator::make($input, $rules)->validate();
 
         return DB::transaction(function () use ($input) {
             return tap(User::create([

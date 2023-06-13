@@ -18,6 +18,9 @@ use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
+    // field needed to only validate recaptcha once (login ran twice because of MFA)
+    protected $isFirstCall = false;
+
     /**
      * Register any application services.
      */
@@ -40,11 +43,15 @@ class FortifyServiceProvider extends ServiceProvider
             $user = User::where('email', $request->email)->first();
 
             if ($user && Hash::check($request->password, $user->password)) {
-                Validator::make(
-                    [$request->captcha_token],
-                    ['captcha_token' => [new Recaptcha()],
-                    ]
-                )->validate();
+                // 2nd part of condition: Skip ReCaptcha Validation during Testing
+                // @todo: remove and mock reCaptcha during testing instead
+                if (!$this->isFirstCall && !app()->environment('testing')) {
+                    $this->isFirstCall = true;
+                    Validator::make(
+                        ['captcha_token' => $request->captcha_token],
+                        ['captcha_token' => ['required', 'string', new Recaptcha()]]
+                    )->validate();
+                }
 
                 return $user;
             } else {

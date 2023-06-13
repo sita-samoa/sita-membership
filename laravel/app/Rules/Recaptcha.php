@@ -2,29 +2,16 @@
 
 namespace App\Rules;
 
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Facades\Http;
 
-class Recaptcha implements Rule
+class Recaptcha implements ValidationRule
 {
     /**
-     * Create a new rule instance.
-     *
-     * @return void
+     * Run the validation rule.
      */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
-     */
-    public function passes($attribute, $value)
+    public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         $endpoint = config('services.google_recaptcha');
 
@@ -33,16 +20,8 @@ class Recaptcha implements Rule
             'response' => $value,
         ])->json();
 
-        return $response['success'] && $response['score'] > 0.5;
-    }
-
-    /**
-     * Get the validation error message.
-     *
-     * @return string
-     */
-    public function message()
-    {
-        return 'Something went wrong. Please contact us through the SITA website.';
+        if (!$response['success'] || $response['score'] <= 0.5) {
+            $fail('Something went wrong. Please contact us through the SITA website.');
+        }
     }
 }
