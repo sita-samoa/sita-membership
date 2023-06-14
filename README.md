@@ -70,6 +70,14 @@ npm run lint # shows warnings and tries to fix
 npm run format # tries to fix js/vue problems
 ```
 
+## SSL support on dev
+
+You run your dev with SSL support use the following command
+
+```
+docker compose -f docker-compose.yml -f docker-compose.ssl.yml up -d
+```
+
 ## On Prod
 
 Ensure that the following commands are run on a cron
@@ -83,6 +91,14 @@ php artisan queue:work # for running queues
 
 ```
 
+Also if using SSL update the following environment variables accordingly. Here
+example.com is used as an example domain
+
+```
+DOMAIN=example.com
+EMAIL=your@email.com
+CERT_RESOLVER=letsencrypt
+```
 
 ## Resources
 
@@ -90,6 +106,7 @@ php artisan queue:work # for running queues
 * [Laravel vite](https://laravel.com/docs/10.x/vite)
 * [Github Project](https://github.com/orgs/sita-samoa/projects/1)
 * [Icons](https://pictogrammers.com/library/mdi/)
+* [SSL support](https://github.com/bubelov/traefik-letsencrypt-compose)
 
 **Common commands**
 
