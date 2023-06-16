@@ -72,7 +72,7 @@ npm run format # tries to fix js/vue problems
 
 ## SSL support on dev
 
-You run your dev with SSL support use the following command
+To run your dev with SSL support use the following command
 
 ```
 docker compose -f docker-compose.yml -f docker-compose.ssl.yml up -d

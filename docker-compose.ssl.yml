@@ -19,7 +19,7 @@ services:
       - traefik.http.routers.${PROJECT_NAME}_pma.tls.certresolver=${CERT_RESOLVER}
 
   traefik:
-    image: traefik:2.4.8
+    # image: traefik:2.4.8
     command:
       # Try to enable this if something isn't working.
       # Chances are, Traefik will tell you why.
@@ -62,11 +62,11 @@ services:
       - ./docker-init/data/letsencrypt:/letsencrypt
       - /var/run/docker.sock:/var/run/docker.sock:ro
 
-  whoami:
-    image: containous/whoami
-    container_name: "${PROJECT_NAME}_whoami"
-    labels:
-      - traefik.http.routers.https.rule=Host(`whoami.${PROJECT_BASE_URL}`)
-      - traefik.http.routers.https.entrypoints=https
-      - traefik.http.routers.https.tls=true
-      - traefik.http.routers.https.tls.certresolver=${CERT_RESOLVER}
+  # whoami:
+  #   image: containous/whoami
+  #   container_name: "${PROJECT_NAME}_whoami"
+  #   labels:
+  #     - traefik.http.routers.https.rule=Host(`whoami.${PROJECT_BASE_URL}`)
+  #     - traefik.http.routers.https.entrypoints=https
+  #     - traefik.http.routers.https.tls=true
+  #     - traefik.http.routers.https.tls.certresolver=${CERT_RESOLVER}
