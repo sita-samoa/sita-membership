@@ -1,6 +1,7 @@
 <script setup>
 import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
 import Welcome from '@/Components/Welcome.vue'
+import MailingListDisplay from '@/Components/MailingListDisplay.vue'
 import { mdiMonitor } from '@mdi/js'
 import SectionMain from '@/Components/SectionMain.vue'
 import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue'
@@ -18,6 +19,10 @@ defineProps({
     type: Number,
     default: 0,
   },
+  mailingLists: {
+    type: Object,
+    default: []
+  }
 })
 </script>
 
@@ -26,6 +31,7 @@ defineProps({
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiMonitor" title="Dashboard" main> &nbsp; </SectionTitleLineWithButton>
       <Welcome :total-submitted="totalSubmitted" :total-lapsed="totalLapsed" :total-owing="totalOwing" />
+      <MailingListDisplay :mailingLists="mailingLists"/>
     </SectionMain>
   </LayoutAuthenticated>
 </template>
