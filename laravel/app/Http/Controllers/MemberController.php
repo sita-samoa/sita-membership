@@ -38,7 +38,7 @@ class MemberController extends Controller
 
         $members = Member::orderBy('first_name')
             ->when(
-                $membership_status_id['membership_status_id'] !== null,
+                $membership_status_id && isset($membership_status_id['membership_status_id']),
                 fn ($query) => $query->where($membership_status_id)
             )
             ->when(
