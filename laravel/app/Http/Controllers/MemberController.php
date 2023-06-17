@@ -43,10 +43,10 @@ class MemberController extends Controller
             )
             ->when(
                 $search,
-                fn ($query) => $query->where('first_name', 'like', '%' . $search . '%')
-                    ->orWhere('last_name', 'like', '%' . $search . '%')
-                    ->orWhere('job_title', 'like', '%' . $search . '%')
-                    ->orWhere('current_employer', 'like', '%' . $search . '%')
+                fn ($query) => $query->where('first_name', 'like', '%'.$search.'%')
+                    ->orWhere('last_name', 'like', '%'.$search.'%')
+                    ->orWhere('job_title', 'like', '%'.$search.'%')
+                    ->orWhere('current_employer', 'like', '%'.$search.'%')
             )
             ->with('membershipType', 'title', 'membershipStatus')
             ->paginate(10)
