@@ -56,7 +56,7 @@ services:
       - traefik.http.middlewares.to-https.redirectscheme.scheme=https
       - traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_USER}:${TRAEFIK_PASSWORD_HASH}
     ports:
-      - 8000:80
+      # - 8000:80
       - 443:443
     volumes:
       - ./docker-init/data/letsencrypt:/letsencrypt

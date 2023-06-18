@@ -75,7 +75,11 @@ npm run format # tries to fix js/vue problems
 To run your dev with SSL support use the following command
 
 ```
+# start containers
 docker compose -f docker-compose.yml -f docker-compose.ssl.yml up -d
+
+# stop containers
+docker compose -f docker-compose.yml -f docker-compose.ssl.yml stop
 ```
 
 ## On Prod
