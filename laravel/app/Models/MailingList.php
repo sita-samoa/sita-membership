@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class MailingList extends Model
 {
@@ -14,8 +14,8 @@ class MailingList extends Model
         'title',
     ];
 
-    public function member(): BelongsTo
+    public function members(): BelongsToMany
     {
-        return $this->belongsTo(Member::class);
+        return $this->belongsToMany(Member::class, 'member_mailing_preferences', 'mailing_list_id', 'member_id')->withPivot('subscribed');
     }
 }
