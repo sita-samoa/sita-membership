@@ -1,10 +1,7 @@
 <script setup>
-import { Link, usePage } from '@inertiajs/vue3'
-import { Alert, Button } from 'flowbite-vue'
-
-import { mdiReload } from '@mdi/js'
+import { Link } from '@inertiajs/vue3'
+import { Button } from 'flowbite-vue'
 import CardBox from '@/Components/CardBox.vue'
-import BaseButton from '@/Components/BaseButton.vue'
 import CardBoxComponentTitle from '@/Components/CardBoxComponentTitle.vue'
 
 const props = defineProps({
