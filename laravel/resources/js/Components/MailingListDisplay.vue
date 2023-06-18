@@ -16,11 +16,8 @@ const props = defineProps({
 <template>
     <CardBox v-if="$page.props.user.permissions.canReadAny" is-hoverable>
       <CardBoxComponentTitle title="Mailing Lists" />
-      <section className="flex flex-row" v-for="count, title in props.mailingLists">
-      <Link as="button">
-        <Button class="p-3 mt-3 mr-3">{{ title }} ({{ count }})</Button>
+      <Link v-for="obj, id in props.mailingLists" :href="`/mailing-lists?id=${id}`" as="button" >
+        <Button class="p-3 mt-3 mr-3 relative">{{ obj[0] }}&nbsp; <span className="bg-zinc-300 text-blue-500 absolute translate-x-2 -translate-y-2 top-0 right-0 py-0.5 px-2.5 shadow-md rounded-full text-sm">{{ obj[1] }}</span></Button>
       </Link>
-      </section>
-
     </CardBox>
 </template>

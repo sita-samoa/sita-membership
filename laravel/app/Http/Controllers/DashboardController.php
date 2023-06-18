@@ -33,7 +33,7 @@ class DashboardController extends Controller
         foreach ($mailing_list as $m) {
             $list = MemberMailingPreference::where('mailing_list_id', $m->id);
             $count = $list->where('subscribed', true)->count();
-            $mailing_list_statistics[$m->title] = $count;
+            $mailing_list_statistics[$m->id] = [$m->title, $count];
         }
 
         return Inertia::render('Dashboard', [
