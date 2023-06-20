@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -67,7 +68,27 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //
+        // @todo - Add user policy
+
+        $validated = $request->validate([
+            'name' => ['required', 'max:50'],
+            'email' => ['required', 'max:50', 'email', Rule::unique('users')->ignore($user->id)],
+            'password' => ['nullable'],
+            // 'owner' => ['required', 'boolean'],
+            // 'photo' => ['nullable', 'image'],
+        ]);
+
+        $user->update($validated);
+
+        if ($request->file('photo')) {
+            $user->update(['photo_path' => $request->file('photo')->store('users')]);
+        }
+
+        if ($request->get('password')) {
+            $user->update(['password' => $request->get('password')]);
+        }
+
+        return redirect()->back()->with('success', 'User updated.');
     }
 
     /**
