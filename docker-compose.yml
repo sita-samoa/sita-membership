@@ -184,16 +184,16 @@ services:
     labels:
     - "traefik.http.routers.${PROJECT_NAME}_pma.rule=Host(`pma.${PROJECT_BASE_URL}`)"
 
-  pma_testing:
-    image: phpmyadmin/phpmyadmin
-    container_name: "${PROJECT_NAME}_pma_testing"
-    environment:
-      PMA_HOST: mariadb_testing
-      PMA_USER: $DB_USER
-      PMA_PASSWORD: $DB_PASSWORD
-      UPLOAD_LIMIT: 1G
-    labels:
-    - "traefik.http.routers.${PROJECT_NAME}_pma_testing.rule=Host(`pma_testing.${PROJECT_BASE_URL}`)"
+  # pma_testing:
+  #   image: phpmyadmin/phpmyadmin
+  #   container_name: "${PROJECT_NAME}_pma_testing"
+  #   environment:
+  #     PMA_HOST: mariadb_testing
+  #     PMA_USER: $DB_USER
+  #     PMA_PASSWORD: $DB_PASSWORD
+  #     UPLOAD_LIMIT: 1G
+  #   labels:
+  #   - "traefik.http.routers.${PROJECT_NAME}_pma_testing.rule=Host(`pma_testing.${PROJECT_BASE_URL}`)"
 
 #  solr:
 #    image: wodby/solr:$SOLR_TAG
@@ -326,7 +326,7 @@ services:
     command: --api.insecure=true --providers.docker
     ports:
     - '${PROJECT_PORT}:80'
-#    - '8080:8080' # Dashboard
+    - '8080:8080' # Dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 
