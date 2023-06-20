@@ -17,7 +17,6 @@ use App\Repositories\MemberRepository;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Request as FacadesRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -34,18 +33,28 @@ class MemberController extends Controller
     {
         $this->authorize('viewAny', Member::class);
 
+        $search = $request->input('search');
+        $membership_status_id = $request->only('membership_status_id');
+
+        $members = Member::orderBy('first_name')
+            ->when(
+                $membership_status_id && isset($membership_status_id['membership_status_id']),
+                fn ($query) => $query->where($membership_status_id)
+            )
+            ->when(
+                $search,
+                fn ($query) => $query->where('first_name', 'like', '%'.$search.'%')
+                    ->orWhere('last_name', 'like', '%'.$search.'%')
+                    ->orWhere('job_title', 'like', '%'.$search.'%')
+                    ->orWhere('current_employer', 'like', '%'.$search.'%')
+            )
+            ->with('membershipType', 'title', 'membershipStatus')
+            ->paginate(10)
+            ->withQueryString();
+
         return Inertia::render('Members/Index', [
-            'filters' => FacadesRequest::all('membership_status_id'),
-            'members' => Member::orderBy('first_name')
-                ->when(
-                    FacadesRequest::input('membership_status_id'),
-                    function ($query) {
-                        $query->where(FacadesRequest::only('membership_status_id'));
-                    }
-                )
-                ->with('membershipType', 'title', 'membershipStatus')
-                ->paginate(10)
-                ->withQueryString(),
+            'filters' => $request->only('membership_status_id', 'search'),
+            'members' => $members,
         ]);
     }
 

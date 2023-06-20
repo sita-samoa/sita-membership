@@ -1,0 +1,72 @@
+version: "3.7"
+services:
+  nginx:
+    labels:
+      - traefik.http.routers.${PROJECT_NAME}_nginx.entrypoints=https
+      - traefik.http.routers.${PROJECT_NAME}_nginx.tls=true
+      - traefik.http.routers.${PROJECT_NAME}_nginx.tls.certresolver=${CERT_RESOLVER}
+
+  mailhog:
+    labels:
+      - traefik.http.routers.${PROJECT_NAME}_mailhog.entrypoints=https
+      - traefik.http.routers.${PROJECT_NAME}_mailhog.tls=true
+      - traefik.http.routers.${PROJECT_NAME}_mailhog.tls.certresolver=${CERT_RESOLVER}
+
+  pma:
+    labels:
+      - traefik.http.routers.${PROJECT_NAME}_pma.entrypoints=https
+      - traefik.http.routers.${PROJECT_NAME}_pma.tls=true
+      - traefik.http.routers.${PROJECT_NAME}_pma.tls.certresolver=${CERT_RESOLVER}
+
+  traefik:
+    # image: traefik:2.4.8
+    command:
+      # Try to enable this if something isn't working.
+      # Chances are, Traefik will tell you why.
+      # Be careful in production as it exposes the traffic you might not want to expose.
+      #--log.level=DEBUG
+
+      - --entrypoints.http.address=:80
+      - --entrypoints.https.address=:443
+
+      - --providers.docker=true
+
+      - --api=true
+
+      # LetsEncrypt Staging Server - uncomment when testing
+      # - --certificatesResolvers.letsencrypt.acme.caServer=https://acme-staging-v02.api.letsencrypt.org/directory
+
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge=true
+      - --certificatesresolvers.letsencrypt.acme.httpchallenge.entrypoint=http
+      - --certificatesresolvers.letsencrypt.acme.email=${EMAIL}
+      - --certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json
+    labels:
+      # Redirect all HTTP traffic to HTTPS
+      - traefik.http.routers.to-https.rule=HostRegexp(`{host:.+}`)
+      - traefik.http.routers.to-https.entrypoints=http
+      - traefik.http.routers.to-https.middlewares=to-https
+
+      - traefik.http.routers.traefik.rule=Host(`traefik.${PROJECT_BASE_URL}`)
+      - traefik.http.routers.traefik.entrypoints=https
+      - traefik.http.routers.traefik.middlewares=auth
+      - traefik.http.routers.traefik.service=api@internal
+      - traefik.http.routers.traefik.tls=true
+      - traefik.http.routers.traefik.tls.certresolver=${CERT_RESOLVER}
+
+      - traefik.http.middlewares.to-https.redirectscheme.scheme=https
+      - traefik.http.middlewares.auth.basicauth.users=${TRAEFIK_USER}:${TRAEFIK_PASSWORD_HASH}
+    ports:
+      # - 8000:80
+      - 443:443
+    volumes:
+      - ./docker-init/data/letsencrypt:/letsencrypt
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+
+  # whoami:
+  #   image: containous/whoami
+  #   container_name: "${PROJECT_NAME}_whoami"
+  #   labels:
+  #     - traefik.http.routers.https.rule=Host(`whoami.${PROJECT_BASE_URL}`)
+  #     - traefik.http.routers.https.entrypoints=https
+  #     - traefik.http.routers.https.tls=true
+  #     - traefik.http.routers.https.tls.certresolver=${CERT_RESOLVER}

@@ -23,6 +23,7 @@ ehthumbs.db
 # Ignore docker files
 docker-compose.override.yml
 docker-init/files
+docker-init/data
 mariadb-init/
 
 # and some random server stuff
