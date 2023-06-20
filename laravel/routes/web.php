@@ -9,6 +9,7 @@ use App\Http\Controllers\MemberRefereeController;
 use App\Http\Controllers\MemberSupportingDocumentController;
 use App\Http\Controllers\MemberWorkExperienceController;
 use App\Http\Controllers\SignupController;
+use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -110,4 +111,8 @@ Route::middleware([
     // Members Pages
     Route::resource('members', MemberController::class)
         ->only(['store', 'show', 'update', 'index']);
+
+    // Users Pages
+    Route::resource('users', UserController::class)
+        ->only(['index']);
 });
