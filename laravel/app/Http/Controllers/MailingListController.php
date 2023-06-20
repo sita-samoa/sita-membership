@@ -15,8 +15,11 @@ class MailingListController extends Controller
     public function index(Request $request): Response
     {
         //
+        $this->authorize('viewAny', Member::class);
+        
+        $id = 1;
         $lists = MailingList::get();
-        $ml = MailingList::find(1);
+        $ml = MailingList::find($id);
         if ($request->query('id') != null) {
             $id = $request->query('id');
             $ml = MailingList::where('id', $id)->first();
@@ -34,6 +37,7 @@ class MailingListController extends Controller
         return Inertia::render('MailingLists/Index', [
             'mailingLists' => $lists,
             'members' => $members,
+            'mailingId' => $id,
         ]);
     }
 
