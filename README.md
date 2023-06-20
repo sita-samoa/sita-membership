@@ -95,7 +95,7 @@ php artisan queue:work # for running queues
 
 ```
 
-Also if using SSL update the following environment variables accordingly. Here
+Also if using SSL update the following variables accordingly in .env. Here
 example.com is used as an example domain
 
 ```
