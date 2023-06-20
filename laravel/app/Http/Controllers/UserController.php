@@ -16,17 +16,17 @@ class UserController extends Controller
         $this->authorize('viewAny', Member::class);
 
         return Inertia::render('Users/Index', [
-            // 'filters' => $request->all('membership_status_id'),
-            // 'members' => Member::orderBy('first_name')
-            // ->when(
-            //     $request->input('membership_status_id'),
-            //     function ($query) {
-            //         $query->where(FacadesRequest::only('membership_status_id'));
-            //     }
-            // )
-            //     ->with('membershipType', 'title', 'membershipStatus')
-            //     ->paginate(10)
-            //     ->withQueryString(),
+            'filters' => $request->all('membership_status_id'),
+            'users' => User::orderBy('name')
+                // ->when(
+                //     $request->input('membership_status_id'),
+                //     function ($query) {
+                //         $query->where(FacadesRequest::only('membership_status_id'));
+                //     }
+                // )
+                // ->with('membershipType', 'title', 'membershipStatus')
+                ->paginate(10)
+                ->withQueryString(),
         ]);
     }
 

@@ -4,6 +4,7 @@ import { computed, ref, watch } from 'vue'
 import { Dropdown, ListGroup, ListGroupItem } from 'flowbite-vue'
 import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
 import Pagination from '@/Components/Pagination.vue'
+import PaginationCount from '@/Components/PaginationCount.vue'
 import AccountCircleIcon from 'vue-material-design-icons/AccountCircle.vue'
 import FileIcon from 'vue-material-design-icons/File.vue'
 import SendCheckIcon from 'vue-material-design-icons/SendCheck.vue'
@@ -111,8 +112,7 @@ watch(filterStatus, value => {
   </dropdown>
 
   <!-- No results message -->
-  <div v-if="!props.list.total">No matches found. Try changing the filter.</div>
-  <div v-else class="mb-3">Showing {{ props.list.from }} to {{ props.list.to }} of {{ props.list.total }} results.</div>
+  <PaginationCount :from="props.list.from" :to="props.list.to" :total="props.list.total" />
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
     <MemberSummaryCard v-for="member in props.list.data" :key="member.id" :member="member" />
