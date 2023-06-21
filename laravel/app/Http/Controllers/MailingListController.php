@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\MailingList;
+use App\Models\MemberMailingPreference;
+use App\Models\Member;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -17,27 +19,27 @@ class MailingListController extends Controller
         //
         $this->authorize('viewAny', Member::class);
         
-        $id = 1;
         $lists = MailingList::get();
-        $ml = MailingList::find($id);
-        if ($request->query('id') != null) {
-            $id = $request->query('id');
-            $ml = MailingList::where('id', $id)->first();
-            if ($ml == null) {
-                abort(404);
-            }
-        }
-        $members = [];
-        foreach ($ml->members as $member) {
-            if ($member->pivot->subscribed) {
-                array_push($members, $member);
-            }
-        }
+        $req_id = $request->get('id');
+        $id =  $req_id != null ? $req_id : MemberMailingPreference::first()->id;
+        $member_preferences = MemberMailingPreference::where('mailing_list_id', $id)
+            ->where('subscribed', true)->get('member_id');
+
+        $all_members = Member::whereIn('id', $member_preferences);
+        
+        $all_emails = implode('; ',$all_members->pluck('home_email')->map(function ($item){
+            return (string) $item;
+        })->toArray());
+        $members = $all_members->with(['mailingLists' => function($query)
+        {
+            $query->orderByPivot('updated_at', 'desc');
+        }])->paginate(10);
 
         return Inertia::render('MailingLists/Index', [
             'mailingLists' => $lists,
             'members' => $members,
-            'mailingId' => $id,
+            'mailingId' => (int) $id,
+            'all_emails' => $all_emails
         ]);
     }
 

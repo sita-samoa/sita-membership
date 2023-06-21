@@ -8,6 +8,7 @@ const props = defineProps({
   mailingLists: Object,
   members: Object,
   mailingId: Number,
+  all_emails: String,
 })
 
 </script>
@@ -15,7 +16,7 @@ const props = defineProps({
   <LayoutAuthenticated title="Mailing Lists">
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiEmail" title="Mailing Lists" main> &nbsp; </SectionTitleLineWithButton>
-      <MailingListView :mailingLists="mailingLists" :members="members" :mailingId="mailingId"  />
+      <MailingListView :mailingLists="mailingLists" :allEmails="all_emails" :members="members" :mailingId="mailingId"  />
     </SectionMain>
   </LayoutAuthenticated>
 </template>

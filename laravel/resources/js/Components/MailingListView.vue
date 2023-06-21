@@ -1,11 +1,12 @@
 <script setup>
-import { usePage, router } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
 import { computed, ref, watch } from 'vue';
-import { Dropdown, ListGroup, ListGroupItem, Badge } from 'flowbite-vue'
+import { Dropdown, ListGroup, ListGroupItem, Badge, Tooltip } from 'flowbite-vue'
+import ClipboardIcon from 'vue-material-design-icons/Clipboard.vue'
+import Pagination from '@/Components/Pagination.vue'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
-import SectionTitle from '@/Components/SectionTitle.vue'
 
 dayjs.extend(relativeTime)
 dayjs.extend(utc)
@@ -71,8 +72,20 @@ const membershipType = {
   5: 'Fellow'
 }
 
+function copySingleEmail(email){
+  navigator.clipboard.writeText(email)
+}
+
+function getMemberMailingListPreferenceDateField(value){
+  if(value){
+    return 'updated_at'
+  }else{
+    return 'created_at'
+  }
+}
+
 function getSubscriptionDate(date){
-  return dayjs(date).local().fromNow(dayjs())
+  return dayjs(date).fromNow()
 }
 
 watch(filterStatus, value => {
@@ -98,14 +111,12 @@ watch(filterStatus, value => {
         </list-group-item>
       </list-group>
     </dropdown>
-    <!-- <MemberSummaryCard v-for="member in props.members" :key="member.id" :member="member" /> -->
-
     <!-- No results message -->
-    <div v-if="props.members.length > 0">
+    <div v-if="props.members.data.length > 0">
 
-      <!-- <div v-else class="mb-3">Showing {{ props.list.from }} to {{ props.list.to }} of {{ props.list.total }} results.</div> -->
+      <div class="mb-3">Showing {{ props.members.from }} to {{ props.members.to }} of {{ props.members.total }} results.</div>
       <section class="min-w-full pr-4 mx-auto">
-        <div class="flex flex-col mt-3">
+        <div class="flex flex-col mt-3 mb-3">
           <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div class="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
               <div class="overflow-hidden border border-gray-200 dark:border-gray-700 md:rounded-lg">
@@ -143,7 +154,7 @@ watch(filterStatus, value => {
                     </tr>
                   </thead>
                   <tbody class="bg-white divide-y divide-gray-200 dark:divide-gray-700 dark:bg-gray-900">
-                    <tr :key="member.id" v-for="member in props.members">
+                    <tr :key="member.id" v-for="member in props.members.data">
                       <td class="px-4 py-4 text-sm font-medium whitespace-nowrap">
                         <div>
                           <h2 class="font-medium text-gray-800 dark:text-white ">{{ member.first_name }} {{
@@ -151,11 +162,19 @@ watch(filterStatus, value => {
                           }}</h2>
                         </div>
                       </td>
-                      <td class="px-12 py-4 text-sm font-medium whitespace-nowrap">
+                      <td class="px-12 py-4 text-sm font-medium whitespace-nowrap flex w-auto justify-start items-center">
                         <div
-                          class="inline px-3 py-1 text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
-                          {{ member.home_email }}
+                          class="inline px-3 py-1 w-auto text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
+                         {{member.home_email}} 
                         </div>
+                        <Tooltip trigger="click">
+                          <template #trigger>
+                            <clipboard-icon @click="() => copySingleEmail(member.home_email)" class="w-5 h-5 cursor-pointer text-emerald-500 dark:text-slate-300"></clipboard-icon>        
+                          </template>
+                          <template #content>
+                            <span>Copied</span>
+                          </template>
+                        </Tooltip>
                       </td>
                       <td class="px-4 py-4 text-sm whitespace-nowrap">
                         <div>
@@ -172,7 +191,7 @@ watch(filterStatus, value => {
 
                       <td class="px-4 py-4 text-sm whitespace-nowrap">
                         <div>
-                          <h4 class="text-gray-700 dark:text-gray-200">{{ getSubscriptionDate(member.pivot.updated_at)  }}</h4>
+                          <h4 class="text-gray-700 dark:text-gray-200">{{ getSubscriptionDate(member.mailing_lists[0].pivot[getMemberMailingListPreferenceDateField(member.mailing_lists[0].pivot.updated_at)])  }}</h4>
                         </div>
                       </td>
 
@@ -194,43 +213,13 @@ watch(filterStatus, value => {
           </div>
         </div>
 
-        <div class="mt-6 sm:flex sm:items-center sm:justify-between ">
-          <div class="text-sm text-gray-500 dark:text-gray-400">
-            Page <span class="font-medium text-gray-700 dark:text-gray-100">1 of 10</span>
-          </div>
-
-          <div class="flex items-center mt-4 gap-x-4 sm:mt-0">
-            <a href="#"
-              class="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 15.75L3 12m0 0l3.75-3.75M3 12h18" />
-              </svg>
-
-              <span>
-                previous
-              </span>
-            </a>
-
-            <a href="#"
-              class="flex items-center justify-center w-1/2 px-5 py-2 text-sm text-gray-700 capitalize transition-colors duration-200 bg-white border rounded-md sm:w-auto gap-x-2 hover:bg-gray-100 dark:bg-gray-900 dark:text-gray-200 dark:border-gray-700 dark:hover:bg-gray-800">
-              <span>
-                Next
-              </span>
-
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                stroke="currentColor" class="w-5 h-5 rtl:-scale-x-100">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3" />
-              </svg>
-            </a>
-          </div>
-        </div>
+      <!-- Pagination -->
+      <Pagination :links="props.members.links" />
       </section>
     </div>
     <div v-else>
       <p>No members are subscribed to this mailing list.</p>
     </div>
   </div>
+</template>
 
-  <!-- Pagination -->
-  <!-- <Pagination :links="props.list.links" /> --></template>
