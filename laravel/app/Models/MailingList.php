@@ -16,6 +16,11 @@ class MailingList extends Model
 
     public function members(): BelongsToMany
     {
-        return $this->belongsToMany(Member::class, 'member_mailing_preferences', 'mailing_list_id', 'member_id')->withPivot('subscribed', 'updated_at');
+        return $this->belongsToMany(
+            Member::class,
+            'member_mailing_preferences',
+            'mailing_list_id',
+            'member_id'
+        )->withPivot('subscribed', 'updated_at');
     }
 }

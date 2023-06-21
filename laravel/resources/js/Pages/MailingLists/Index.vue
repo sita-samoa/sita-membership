@@ -10,13 +10,12 @@ const props = defineProps({
   mailingId: Number,
   all_emails: String,
 })
-
 </script>
 <template>
   <LayoutAuthenticated title="Mailing Lists">
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiEmail" title="Mailing Lists" main> &nbsp; </SectionTitleLineWithButton>
-      <MailingListView :mailingLists="mailingLists" :allEmails="all_emails" :members="members" :mailingId="mailingId"  />
+      <MailingListView :mailing-lists="mailingLists" :all-emails="all_emails" :members="members" :mailing-id="mailingId" />
     </SectionMain>
   </LayoutAuthenticated>
 </template>

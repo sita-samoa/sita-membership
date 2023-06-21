@@ -211,7 +211,12 @@ class Member extends Model implements Auditable
 
     public function mailingLists(): BelongsToMany
     {
-        return $this->belongsToMany(MailingList::class, 'member_mailing_preferences', 'member_id', 'mailing_list_id')->withPivot('subscribed', 'created_at');
+        return $this->belongsToMany(
+            MailingList::class,
+            'member_mailing_preferences',
+            'member_id',
+            'mailing_list_id'
+        )->withPivot('subscribed', 'created_at');
     }
 
     public function membershipStatuses(): HasMany

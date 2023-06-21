@@ -18,13 +18,13 @@ class MembersTableSeeder extends Seeder
         Member::factory()
             ->count($members_num)
             ->create();
-        
+
         // add members to mailing lists
-        for($i = 0; $i < $members_num; $i++){
+        for ($i = 0; $i < $members_num; $i++) {
             MemberMailingPreference::create([
-                "member_id" => $i + 1,
-                "mailing_list_id" => rand(1,2),
-                "subscribed" => rand(0, 1)
+                'member_id' => $i + 1,
+                'mailing_list_id' => rand(1, 2),
+                'subscribed' => rand(0, 1),
             ]);
         }
     }

@@ -21,8 +21,8 @@ defineProps({
   },
   mailingLists: {
     type: Object,
-    default: []
-  }
+    default: [],
+  },
 })
 </script>
 
@@ -31,7 +31,7 @@ defineProps({
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiMonitor" title="Dashboard" main> &nbsp; </SectionTitleLineWithButton>
       <Welcome :total-submitted="totalSubmitted" :total-lapsed="totalLapsed" :total-owing="totalOwing" />
-      <MailingListDisplay :mailingLists="mailingLists"/>
+      <MailingListDisplay :mailing-lists="mailingLists" />
     </SectionMain>
   </LayoutAuthenticated>
 </template>

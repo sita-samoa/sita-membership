@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\MailingList;
-use App\Models\MemberMailingPreference;
 use App\Models\Member;
+use App\Models\MemberMailingPreference;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -18,20 +18,19 @@ class MailingListController extends Controller
     {
         //
         $this->authorize('viewAny', Member::class);
-        
+
         $lists = MailingList::get();
         $req_id = $request->get('id');
-        $id =  $req_id != null ? $req_id : MemberMailingPreference::first()->id;
+        $id = $req_id != null ? $req_id : MemberMailingPreference::first()->id;
         $member_preferences = MemberMailingPreference::where('mailing_list_id', $id)
             ->where('subscribed', true)->get('member_id');
 
         $all_members = Member::whereIn('id', $member_preferences);
-        
-        $all_emails = implode('; ',$all_members->pluck('home_email')->map(function ($item){
+
+        $all_emails = implode('; ', $all_members->pluck('home_email')->map(function ($item) {
             return (string) $item;
         })->toArray());
-        $members = $all_members->with(['mailingLists' => function($query)
-        {
+        $members = $all_members->with(['mailingLists' => function ($query) {
             $query->orderByPivot('updated_at', 'desc');
         }])->paginate(10);
 
@@ -39,7 +38,7 @@ class MailingListController extends Controller
             'mailingLists' => $lists,
             'members' => $members,
             'mailingId' => (int) $id,
-            'all_emails' => $all_emails
+            'all_emails' => $all_emails,
         ]);
     }
 
