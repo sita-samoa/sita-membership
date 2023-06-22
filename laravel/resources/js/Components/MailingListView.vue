@@ -1,8 +1,9 @@
 <script setup>
 import { router } from '@inertiajs/vue3'
 import { computed, ref, watch, reactive } from 'vue'
-import { Dropdown, ListGroup, ListGroupItem, Badge } from 'flowbite-vue'
+import { Dropdown, ListGroup, ListGroupItem, Badge, Button } from 'flowbite-vue'
 import ClipboardIcon from 'vue-material-design-icons/Clipboard.vue'
+import ClipboardMultipleIcon from 'vue-material-design-icons/ClipboardMultiple.vue'
 import TooltipTrigger from './TooltipTrigger.vue'
 import Pagination from '@/Components/Pagination.vue'
 import dayjs from 'dayjs'
@@ -16,6 +17,7 @@ const props = defineProps({
   mailingLists: Object,
   members: Object,
   mailingId: Number,
+  allEmails: String,
 })
 
 const filterName = computed(() => {
@@ -77,6 +79,10 @@ function copySingleEmail(email) {
   navigator.clipboard.writeText(email)
 }
 
+function copyAllEmails(){
+  navigator.clipboard.writeText(props.allEmails)
+}
+
 function getMemberMailingListPreferenceDateField(value) {
   if (value) {
     return 'updated_at'
@@ -104,14 +110,23 @@ watch(filterStatus, value => {
 <template>
   <div class="grid grid-cols-1 gap-6 mb-6">
     <h1 class="text-xl bold mb-0 pb-0">{{ currentMailingList.title }}</h1>
-    <!-- Filter dropdown -->
-    <dropdown :text="filterName" class="mt-3">
-      <list-group>
-        <list-group-item v-for="list in props.mailingLists" :key="list.id" @click="filterStatus = list.id">
-          {{ capitalize(list.code) }}
-        </list-group-item>
-      </list-group>
-    </dropdown>
+    <div class="flex justify-between w-full h-auto items-center">
+      <!-- Filter dropdown -->
+      <dropdown :text="filterName" class="mt-3">
+        <list-group>
+          <list-group-item v-for="list in props.mailingLists" :key="list.id" @click="filterStatus = list.id">
+            {{ capitalize(list.code) }}
+          </list-group-item>
+        </list-group>
+      </dropdown>
+      <TooltipTrigger @trigger="() => copyAllEmails()" :duration="1000" text="Copied All">
+        <Button color="green" size="lg">
+          <div class="flex">
+            <clipboard-multiple-icon></clipboard-multiple-icon>&nbsp;Copy all emails 
+          </div>
+        </Button>
+      </TooltipTrigger>
+    </div>
     <!-- No results message -->
     <div v-if="props.members.data.length > 0">
       <div class="mb-3">Showing {{ props.members.from }} to {{ props.members.to }} of {{ props.members.total }} results.</div>
@@ -149,8 +164,8 @@ watch(filterStatus, value => {
                         <div class="inline px-3 py-1 w-auto text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
                           {{ member.home_email }}
                         </div>
-                        <TooltipTrigger :show="false" :duration="500" text="Copied">
-                          <clipboard-icon class="w-5 h-5 cursor-pointer text-emerald-500 dark:text-slate-300" @click="() => copySingleEmail(member.home_email)" />
+                        <TooltipTrigger @trigger="() => copySingleEmail(member.home_email)" :show="false" :duration="800" text="Copied">
+                          <clipboard-icon class="w-5 h-5 cursor-pointer text-emerald-500 dark:text-slate-300"/>
                         </TooltipTrigger>
                       </td>
                       <td class="px-4 py-4 text-sm whitespace-nowrap">
