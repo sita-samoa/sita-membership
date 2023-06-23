@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -70,23 +70,9 @@ class UserController extends Controller
     {
         // @todo - Add user policy
 
-        $validated = $request->validate([
-            'name' => ['required', 'max:50'],
-            'email' => ['required', 'max:50', 'email', Rule::unique('users')->ignore($user->id)],
-            'password' => ['nullable'],
-            // 'owner' => ['required', 'boolean'],
-            // 'photo' => ['nullable', 'image'],
-        ]);
+        $rep = new UpdateUserProfileInformation();
 
-        $user->update($validated);
-
-        if ($request->file('photo')) {
-            $user->update(['photo_path' => $request->file('photo')->store('users')]);
-        }
-
-        if ($request->get('password')) {
-            $user->update(['password' => $request->get('password')]);
-        }
+        $rep->update($user, $request->only(['name', 'email', 'photo']));
 
         return redirect()->back()->with('success', 'User updated.');
     }

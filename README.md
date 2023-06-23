@@ -70,6 +70,14 @@ npm run lint # shows warnings and tries to fix
 npm run format # tries to fix js/vue problems
 ```
 
+## Personal images
+
+To display them run the following comand to create a symlink
+
+```
+php artisan storage:link
+```
+
 ## SSL support on dev
 
 To run your dev with SSL support use the following command

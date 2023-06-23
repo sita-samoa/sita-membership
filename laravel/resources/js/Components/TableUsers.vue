@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref} from 'vue'
 import { Link, useForm, usePage, router } from '@inertiajs/vue3'
 import { Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
 import dayjs from 'dayjs'
@@ -12,6 +12,7 @@ import BaseButtons from '@/Components/BaseButtons.vue'
 import BaseButton from '@/Components/BaseButton.vue'
 import Pagination from '@/Components/Pagination.vue'
 import PaginationCount from '@/Components/PaginationCount.vue'
+import InputLabel from '@/Components/InputLabel.vue'
 import InputError from '@/Components/InputError.vue'
 import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue'
 import DialogModal from '@/Components/DialogModal.vue'
@@ -19,6 +20,11 @@ import AddButton from '@/Components/AddButton.vue'
 import DeleteButton from '@/Components/DeleteButton.vue'
 import UpdateButton from '@/Components/UpdateButton.vue'
 import CancelButton from '@/Components/CancelButton.vue'
+import TextInput from '@/Components/TextInput.vue'
+import FormSection from '@/Components/FormSection.vue'
+import PrimaryButton from '@/Components/PrimaryButton.vue'
+import SecondaryButton from '@/Components/SecondaryButton.vue'
+import UserAvatar from '@/Components/UserAvatar.vue'
 
 const props = defineProps({
   checkable: {
@@ -37,10 +43,10 @@ const isModalDangerActive = ref(false)
 
 const checkedRows = ref([])
 const form = useForm({
+  _method: 'PUT',
   name: null,
   email: null,
-  // password: null,
-  // photo: null,
+  photo: null,
 })
 
 const remove = (arr, cb) => {
@@ -96,6 +102,11 @@ function edit(item) {
 
   form.name = selectedUser.value.name
   form.email = selectedUser.value.email
+  form.photo = selectedUser.value.photo
+
+  if (selectedUser.profile_photo_path) {
+    photoPreview.value = profile_photo_path
+  }
   showModal()
 }
 function submit() {
@@ -111,15 +122,15 @@ function submit() {
   })
 }
 function update() {
-  form.put(route('users.update', itemId.value ), {
+  if (photoInput.value) {
+    form.photo = photoInput.value.files[0]
+  }
+
+  form.post(route('users.update', itemId.value ), {
     preserveScroll: true,
     resetOnSuccess: false,
     onSuccess() {
-      // let item = listData.find(i => i.id === itemId.value)
-      // item.qualification = form.qualification
-      // item.year_attained = form.year_attained
-      // item.institution = form.institution
-      // item.country_iso2 = form.country_iso2
+      clearPhotoFileInput()
 
       // reset form
       closeModalAndResetForm()
@@ -143,6 +154,44 @@ function deleteItem() {
     },
   })
 }
+
+const verificationLinkSent = ref(null)
+const photoPreview = ref(null)
+const photoInput = ref(null)
+
+const selectNewPhoto = () => {
+  photoInput.value.click()
+}
+
+const updatePhotoPreview = () => {
+  const photo = photoInput.value.files[0]
+
+  if (!photo) return
+
+  const reader = new FileReader()
+
+  reader.onload = e => {
+    photoPreview.value = e.target.result
+  }
+
+  reader.readAsDataURL(photo)
+}
+
+const deletePhoto = () => {
+  router.delete(route('current-user-photo.destroy'), {
+    preserveScroll: true,
+    onSuccess: () => {
+      photoPreview.value = null
+      clearPhotoFileInput()
+    },
+  })
+}
+
+const clearPhotoFileInput = () => {
+  if (photoInput.value?.value) {
+    photoInput.value.value = null
+  }
+}
 </script>
 
 <template>
@@ -154,17 +203,52 @@ function deleteItem() {
       </div>
     </template>
     <template #content>
-      <form @submit.prevent="update">
-        <div class="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
-          <Input v-model="form.name" label="Name" />
-          <InputError class="mt-2" :message="form.errors.name" />
-          <Input v-model="form.email" label="Email" />
-          <InputError class="mt-2" :message="form.errors.email" />
-          <Input v-model="form.password" type="password" autocomplete="new-password" label="Password" />
-          <InputError class="mt-2" :message="form.errors.password" />
-          <file-input v-model="form.photo" type="file" accept="image/*" label="Photo" />
-        </div>
-      </form>
+      <FormSection @submitted="update">
+        <template #title> Profile Information </template>
+
+        <template #description> Update your account's profile information and email address. </template>
+
+        <template #form>
+
+          <!-- Profile Photo -->
+          <div class="col-span-6 sm:col-span-4">
+            <!-- Profile Photo File Input -->
+            <input ref="photoInput" type="file" class="hidden" @change="updatePhotoPreview" />
+
+            <InputLabel for="photo" value="Photo" />
+
+            <!-- Current Profile Photo -->
+            <div v-show="!photoPreview" class="mt-2">
+              <img :src="selectedUser.profile_photo_url" :alt="selectedUser.name" class="rounded-full h-20 w-20 object-cover" />
+            </div>
+
+            <!-- New Profile Photo Preview -->
+            <div v-show="photoPreview" class="mt-2">
+              <span class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center" :style="'background-image: url(\'' + photoPreview + '\');'" />
+            </div>
+
+            <SecondaryButton class="mt-2 mr-2" type="button" @click.prevent="selectNewPhoto"> Select A New Photo </SecondaryButton>
+
+            <SecondaryButton v-if="selectedUser.profile_photo_path" type="button" class="mt-2" @click.prevent="deletePhoto"> Remove Photo </SecondaryButton>
+
+            <InputError :message="form.errors.photo" class="mt-2" />
+          </div>
+          <!-- Name -->
+          <div class="col-span-6 sm:col-span-4">
+            <InputLabel for="name" value="Name" />
+            <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" autocomplete="name" />
+            <InputError :message="form.errors.name" class="mt-2" />
+          </div>
+
+          <!-- Email -->
+          <div class="col-span-6 sm:col-span-4">
+            <InputLabel for="email" value="Email" />
+            <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" autocomplete="username" />
+            <InputError :message="form.errors.email" class="mt-2" />
+          </div>
+        </template>
+
+      </FormSection>
     </template>
     <template #footer >
       <CancelButton @click="closeModalAndResetForm" />
@@ -196,6 +280,8 @@ function deleteItem() {
     <thead>
       <tr>
         <th v-if="checkable" />
+        <th v-if="checkable" />
+        <th />
         <th>Name</th>
         <th>Email</th>
         <th>Verified</th>
@@ -206,6 +292,9 @@ function deleteItem() {
     <tbody>
       <tr v-for="client in props.users.data" :key="client.id">
         <TableCheckboxCell v-if="checkable" @checked="checked($event, client)" />
+        <td class="border-b-0 lg:w-6 before:hidden">
+          <UserAvatar :username="client.name" :avatar="client.profile_photo_url" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
+        </td>
         <td data-label="Name">
           {{ client.name }}
         </td>
