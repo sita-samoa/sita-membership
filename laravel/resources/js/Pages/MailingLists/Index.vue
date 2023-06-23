@@ -8,14 +8,15 @@ const props = defineProps({
   mailingLists: Object,
   members: Object,
   mailingId: Number,
-  all_emails: String,
+  allEmails: String,
+  subData: Object,
 })
 </script>
 <template>
   <LayoutAuthenticated title="Mailing Lists">
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiEmail" title="Mailing Lists" main> &nbsp; </SectionTitleLineWithButton>
-      <MailingListView :mailing-lists="mailingLists" :all-emails="all_emails" :members="members" :mailing-id="mailingId" />
+      <MailingListView :sub-data="subData" :mailing-lists="mailingLists" :all-emails="allEmails" :members="members" :mailing-id="mailingId" />
     </SectionMain>
   </LayoutAuthenticated>
 </template>

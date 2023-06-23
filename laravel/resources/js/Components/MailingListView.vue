@@ -4,8 +4,10 @@ import { computed, ref, watch, reactive } from 'vue'
 import { Dropdown, ListGroup, ListGroupItem, Badge, Button } from 'flowbite-vue'
 import ClipboardIcon from 'vue-material-design-icons/Clipboard.vue'
 import ClipboardMultipleIcon from 'vue-material-design-icons/ClipboardMultiple.vue'
-import TooltipTrigger from './TooltipTrigger.vue'
+import { mdiEmailMinus, mdiEmailPlus } from '@mdi/js'
+import TooltipTrigger from '@/Components/TooltipTrigger.vue'
 import Pagination from '@/Components/Pagination.vue'
+import CardBoxWidget from '@/Components/CardBoxWidget.vue'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
@@ -18,12 +20,35 @@ const props = defineProps({
   members: Object,
   mailingId: Number,
   allEmails: String,
+  subData: Object
 })
 
 const filterName = computed(() => {
   const status = parseInt(filterStatus.value)
   const ml = props.mailingLists.find(ml => ml.id == status)
   return capitalize(ml.code)
+})
+
+const subStats = computed(() => {
+  const { month_subs, last_month_subs, month_unsubs, last_month_unsubs } = props.subData
+  const subsPercentage = ((month_subs - last_month_subs) / last_month_subs) * 100
+  const unsubsPercentage = ((month_unsubs - last_month_unsubs) / last_month_unsubs) * 100
+  return [
+    {
+      trend: Math.abs(subsPercentage).toFixed(2) + "%", 
+      trendType: subsPercentage < 0 ? 'down' : subsPercentage > 0 ? 'up' : null,
+      icon: mdiEmailPlus,
+      color: 'text-green-500',
+      number: month_subs
+    },
+    {
+      trend: Math.abs(unsubsPercentage).toFixed(2) + "%",
+      trendType: unsubsPercentage < 0 ? 'up' : unsubsPercentage > 0 ? 'down' : null,
+      icon: mdiEmailMinus,
+      color: 'text-red-500',
+      number: month_unsubs
+    }
+  ]
 })
 
 const capitalize = str => str.replace(/\b\w/g, l => l.toUpperCase())
@@ -110,6 +135,10 @@ watch(filterStatus, value => {
 <template>
   <div class="grid grid-cols-1 gap-6 mb-6">
     <h1 class="text-xl bold mb-0 pb-0">{{ currentMailingList.title }}</h1>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <CardBoxWidget :trend="subStats[0].trend" :trend-type="subStats[0].trendType" :color="subStats[0].color" :icon="subStats[0].icon" :number="subStats[0].number" label="New Subscriptions" :showSecondaryIcon="false"/>
+      <CardBoxWidget :trend="subStats[1].trend" :trend-type="subStats[1].trendType" :color="subStats[1].color" :icon="subStats[1].icon" :number="subStats[1].number" label="Opted Out" :showSecondaryIcon="false"/>
+    </div>
     <div class="flex justify-between w-full h-auto items-center">
       <!-- Filter dropdown -->
       <dropdown :text="filterName" class="mt-3">
