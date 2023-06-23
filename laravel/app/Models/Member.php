@@ -216,7 +216,7 @@ class Member extends Model implements Auditable
             'member_mailing_preferences',
             'member_id',
             'mailing_list_id'
-        )->withPivot('subscribed', 'created_at');
+        )->withPivot('subscribed', 'created_at', 'updated_at');
     }
 
     public function membershipStatuses(): HasMany

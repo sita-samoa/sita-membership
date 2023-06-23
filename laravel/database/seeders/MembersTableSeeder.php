@@ -4,8 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
-use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Illuminate\Database\Seeder;
 
 class MembersTableSeeder extends Seeder
 {
@@ -29,7 +29,7 @@ class MembersTableSeeder extends Seeder
                 'mailing_list_id' => rand(1, 2),
                 'subscribed' => rand(0, 1),
                 'created_at' => $current->toDateString(),
-                'updated_at' => $date
+                'updated_at' => $date,
             ]);
         }
     }

@@ -15,7 +15,6 @@ class MailingListController extends Controller
 {
     public function __construct(public MailingListRepository $rep = new MailingListRepository())
     {
-        
     }
 
     /**
@@ -29,19 +28,19 @@ class MailingListController extends Controller
         $lists = MailingList::get();
         $req_id = $request->get('id');
         $id = $req_id != null ? $req_id : MemberMailingPreference::first()->id;
-        
+
         $all_members = $this->rep->getAllSubscribedMembers($id);
         $all_emails = $this->rep->getAllEmails($all_members);
 
         $members = $all_members->with(['mailingLists' => function ($query) {
             $query->orderByPivot('updated_at', 'desc');
         }])->paginate(10);
-        
+
         $fromDate = Carbon::now()->startOfMonth()->toDateString();
         $tillDate = Carbon::now()->endOfMonth()->toDateString();
         $fromDateLastMonth = Carbon::now()->subMonth()->startOfMonth()->toDateString();
         $tillDateLastMonth = Carbon::now()->subMonth()->endOfMonth()->toDateString();
-    
+
         $last_month_subs = $this->rep->getSubStatusCount($id, true, $fromDateLastMonth, $tillDateLastMonth);
         $this_month_subs = $this->rep->getSubStatusCount($id, true, $fromDate, $tillDate);
         $this_month_unsubs = $this->rep->getSubStatusCount($id, false, $fromDate, $tillDate);
@@ -56,8 +55,8 @@ class MailingListController extends Controller
                 'month_subs' => $this_month_subs,
                 'month_unsubs' => $this_month_unsubs,
                 'last_month_subs' => $last_month_subs,
-                'last_month_unsubs' => $last_month_unsubs
-            ]
+                'last_month_unsubs' => $last_month_unsubs,
+            ],
         ]);
     }
 

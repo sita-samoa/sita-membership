@@ -33,20 +33,23 @@ const subStats = computed(() => {
   const { month_subs, last_month_subs, month_unsubs, last_month_unsubs } = props.subData
   const subsPercentage = ((month_subs - last_month_subs) / last_month_subs) * 100
   const unsubsPercentage = ((month_unsubs - last_month_unsubs) / last_month_unsubs) * 100
+  const monthLabel = dayjs().format('MMMM')
   return [
     {
       trend: Math.abs(subsPercentage).toFixed(2) + "%", 
       trendType: subsPercentage < 0 ? 'down' : subsPercentage > 0 ? 'up' : null,
       icon: mdiEmailPlus,
       color: 'text-green-500',
-      number: month_subs
+      number: month_subs,
+      label: `New Subscribers - ${monthLabel}`
     },
     {
       trend: Math.abs(unsubsPercentage).toFixed(2) + "%",
       trendType: unsubsPercentage < 0 ? 'up' : unsubsPercentage > 0 ? 'down' : null,
       icon: mdiEmailMinus,
       color: 'text-red-500',
-      number: month_unsubs
+      number: month_unsubs,
+      label: `Opted Out - ${monthLabel}`
     }
   ]
 })
@@ -108,16 +111,9 @@ function copyAllEmails(){
   navigator.clipboard.writeText(props.allEmails)
 }
 
-function getMemberMailingListPreferenceDateField(value) {
-  if (value) {
-    return 'updated_at'
-  } else {
-    return 'created_at'
-  }
-}
-
 function getSubscriptionDate(date) {
-  return dayjs(date).fromNow()
+  // return dayjs(date).fromNow()
+  return date
 }
 
 watch(filterStatus, value => {
@@ -136,8 +132,8 @@ watch(filterStatus, value => {
   <div class="grid grid-cols-1 gap-6 mb-6">
     <h1 class="text-xl bold mb-0 pb-0">{{ currentMailingList.title }}</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-      <CardBoxWidget :trend="subStats[0].trend" :trend-type="subStats[0].trendType" :color="subStats[0].color" :icon="subStats[0].icon" :number="subStats[0].number" label="New Subscriptions" :showSecondaryIcon="false"/>
-      <CardBoxWidget :trend="subStats[1].trend" :trend-type="subStats[1].trendType" :color="subStats[1].color" :icon="subStats[1].icon" :number="subStats[1].number" label="Opted Out" :showSecondaryIcon="false"/>
+      <CardBoxWidget :trend="subStats[0].trend" :trend-type="subStats[0].trendType" :color="subStats[0].color" :icon="subStats[0].icon" :number="subStats[0].number" :label="subStats[0].label" :showSecondaryIcon="false"/>
+      <CardBoxWidget :trend="subStats[1].trend" :trend-type="subStats[1].trendType" :color="subStats[1].color" :icon="subStats[1].icon" :number="subStats[1].number" :label="subStats[1].label" :showSecondaryIcon="false"/>
     </div>
     <div class="flex justify-between w-full h-auto items-center">
       <!-- Filter dropdown -->
@@ -210,7 +206,7 @@ watch(filterStatus, value => {
 
                       <td class="px-4 py-4 text-sm whitespace-nowrap">
                         <div>
-                          <h4 class="text-gray-700 dark:text-gray-200">{{ getSubscriptionDate(member.mailing_lists[0].pivot[getMemberMailingListPreferenceDateField(member.mailing_lists[0].pivot.updated_at)]) }}</h4>
+                          <h4 class="text-gray-700 dark:text-gray-200">{{ getSubscriptionDate(member.mailing_lists[0].pivot.updated_at)}}</h4>
                         </div>
                       </td>
                     </tr>
