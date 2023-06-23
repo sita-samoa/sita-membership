@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref } from 'vue'
 
 const props = defineProps({
   duration: Number,
@@ -10,14 +10,13 @@ const emit = defineEmits(['trigger'])
 
 const show = ref(false)
 
-function showTooltip(){
+function showTooltip() {
   show.value = true
   emit('trigger')
   setTimeout(() => {
     show.value = false
   }, props.duration)
 }
-
 </script>
 <template>
   <div class="relative">

@@ -43,7 +43,7 @@ defineProps({
   showSecondaryIcon: {
     type: Boolean,
     default: true,
-  }
+  },
 })
 </script>
 

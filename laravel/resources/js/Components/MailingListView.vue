@@ -20,7 +20,7 @@ const props = defineProps({
   members: Object,
   mailingId: Number,
   allEmails: String,
-  subData: Object
+  subData: Object,
 })
 
 const filterName = computed(() => {
@@ -36,21 +36,21 @@ const subStats = computed(() => {
   const monthLabel = dayjs().format('MMMM')
   return [
     {
-      trend: Math.abs(subsPercentage).toFixed(2) + "%", 
+      trend: Math.abs(subsPercentage).toFixed(2) + '%',
       trendType: subsPercentage < 0 ? 'down' : subsPercentage > 0 ? 'up' : null,
       icon: mdiEmailPlus,
       color: 'text-green-500',
       number: month_subs,
-      label: `New Subscribers - ${monthLabel}`
+      label: `New Subscribers - ${monthLabel}`,
     },
     {
-      trend: Math.abs(unsubsPercentage).toFixed(2) + "%",
+      trend: Math.abs(unsubsPercentage).toFixed(2) + '%',
       trendType: unsubsPercentage < 0 ? 'up' : unsubsPercentage > 0 ? 'down' : null,
       icon: mdiEmailMinus,
       color: 'text-red-500',
       number: month_unsubs,
-      label: `Opted Out - ${monthLabel}`
-    }
+      label: `Opted Out - ${monthLabel}`,
+    },
   ]
 })
 
@@ -107,7 +107,7 @@ function copySingleEmail(email) {
   navigator.clipboard.writeText(email)
 }
 
-function copyAllEmails(){
+function copyAllEmails() {
   navigator.clipboard.writeText(props.allEmails)
 }
 
@@ -132,8 +132,8 @@ watch(filterStatus, value => {
   <div class="grid grid-cols-1 gap-6 mb-6">
     <h1 class="text-xl bold mb-0 pb-0">{{ currentMailingList.title }}</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-      <CardBoxWidget :trend="subStats[0].trend" :trend-type="subStats[0].trendType" :color="subStats[0].color" :icon="subStats[0].icon" :number="subStats[0].number" :label="subStats[0].label" :showSecondaryIcon="false"/>
-      <CardBoxWidget :trend="subStats[1].trend" :trend-type="subStats[1].trendType" :color="subStats[1].color" :icon="subStats[1].icon" :number="subStats[1].number" :label="subStats[1].label" :showSecondaryIcon="false"/>
+      <CardBoxWidget :trend="subStats[0].trend" :trend-type="subStats[0].trendType" :color="subStats[0].color" :icon="subStats[0].icon" :number="subStats[0].number" :label="subStats[0].label" :showSecondaryIcon="false" />
+      <CardBoxWidget :trend="subStats[1].trend" :trend-type="subStats[1].trendType" :color="subStats[1].color" :icon="subStats[1].icon" :number="subStats[1].number" :label="subStats[1].label" :showSecondaryIcon="false" />
     </div>
     <div class="flex justify-between w-full h-auto items-center">
       <!-- Filter dropdown -->
@@ -146,9 +146,7 @@ watch(filterStatus, value => {
       </dropdown>
       <TooltipTrigger @trigger="() => copyAllEmails()" :duration="1000" text="Copied All">
         <Button color="green" size="lg">
-          <div class="flex">
-            <clipboard-multiple-icon></clipboard-multiple-icon>&nbsp;Copy all emails 
-          </div>
+          <div class="flex"><clipboard-multiple-icon></clipboard-multiple-icon>&nbsp;Copy all emails</div>
         </Button>
       </TooltipTrigger>
     </div>
@@ -190,7 +188,7 @@ watch(filterStatus, value => {
                           {{ member.home_email }}
                         </div>
                         <TooltipTrigger @trigger="() => copySingleEmail(member.home_email)" :show="false" :duration="800" text="Copied">
-                          <clipboard-icon class="w-5 h-5 cursor-pointer text-emerald-500 dark:text-slate-300"/>
+                          <clipboard-icon class="w-5 h-5 cursor-pointer text-emerald-500 dark:text-slate-300" />
                         </TooltipTrigger>
                       </td>
                       <td class="px-4 py-4 text-sm whitespace-nowrap">
@@ -206,7 +204,7 @@ watch(filterStatus, value => {
 
                       <td class="px-4 py-4 text-sm whitespace-nowrap">
                         <div>
-                          <h4 class="text-gray-700 dark:text-gray-200">{{ getSubscriptionDate(member.mailing_lists[0].pivot.updated_at)}}</h4>
+                          <h4 class="text-gray-700 dark:text-gray-200">{{ getSubscriptionDate(member.mailing_lists[0].pivot.updated_at) }}</h4>
                         </div>
                       </td>
                     </tr>
