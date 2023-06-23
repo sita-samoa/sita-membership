@@ -5,12 +5,19 @@ namespace App\Http\Controllers;
 use App\Models\MailingList;
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
+use App\Repositories\MailingListRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class MailingListController extends Controller
 {
+    public function __construct(public MailingListRepository $rep = new MailingListRepository())
+    {
+        
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -22,23 +29,35 @@ class MailingListController extends Controller
         $lists = MailingList::get();
         $req_id = $request->get('id');
         $id = $req_id != null ? $req_id : MemberMailingPreference::first()->id;
-        $member_preferences = MemberMailingPreference::where('mailing_list_id', $id)
-            ->where('subscribed', true)->get('member_id');
+        
+        $all_members = $this->rep->getAllSubscribedMembers($id);
+        $all_emails = $this->rep->getAllEmails($all_members);
 
-        $all_members = Member::whereIn('id', $member_preferences);
-
-        $all_emails = implode('; ', $all_members->pluck('home_email')->map(function ($item) {
-            return (string) $item;
-        })->toArray());
         $members = $all_members->with(['mailingLists' => function ($query) {
             $query->orderByPivot('updated_at', 'desc');
         }])->paginate(10);
+        
+        $fromDate = Carbon::now()->startOfMonth()->toDateString();
+        $tillDate = Carbon::now()->endOfMonth()->toDateString();
+        $fromDateLastMonth = Carbon::now()->subMonth()->startOfMonth()->toDateString();
+        $tillDateLastMonth = Carbon::now()->subMonth()->endOfMonth()->toDateString();
+    
+        $last_month_subs = $this->rep->getSubStatusCount($id, true, $fromDateLastMonth, $tillDateLastMonth);
+        $this_month_subs = $this->rep->getSubStatusCount($id, true, $fromDate, $tillDate);
+        $this_month_unsubs = $this->rep->getSubStatusCount($id, false, $fromDate, $tillDate);
+        $last_month_unsubs = $this->rep->getSubStatusCount($id, false, $fromDateLastMonth, $tillDateLastMonth);
 
         return Inertia::render('MailingLists/Index', [
             'mailingLists' => $lists,
             'members' => $members,
             'mailingId' => (int) $id,
-            'all_emails' => $all_emails,
+            'allEmails' => $all_emails,
+            'subData' => [
+                'month_subs' => $this_month_subs,
+                'month_unsubs' => $this_month_unsubs,
+                'last_month_subs' => $last_month_subs,
+                'last_month_unsubs' => $last_month_unsubs
+            ]
         ]);
     }
 
