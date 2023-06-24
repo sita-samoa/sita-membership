@@ -99,7 +99,7 @@ function closeModalAndResetForm() {
 function showModal() {
   showFormModal.value = true
 }
-function edit(item) {
+function showEditForm(item) {
   selectedUser.value = item
   itemId.value = selectedUser.value.id
 
@@ -112,6 +112,12 @@ function edit(item) {
     photoPreview.value = profile_photo_path
   }
   showModal()
+}
+function showDeleteForm(item) {
+  selectedUser.value = item
+  itemId.value = selectedUser.value.id
+
+  showConfirmationModal.value = true
 }
 function submit() {
   form.post(route('users.store', itemId.value ), {
@@ -138,7 +144,11 @@ function deleteItem() {
   form.delete(route('users.destroy', itemId.value), {
     preserveScroll: true,
     resetOnSuccess: false,
-    onSuccess() { },
+    onSuccess() {
+      showConfirmationModal.value = false
+      // reset form
+      closeModalAndResetForm()
+    },
   })
 }
 
@@ -264,8 +274,8 @@ watch(
         </td>
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton color="info" :icon="mdiEye" small @click="edit(client)" />
-            <BaseButton color="danger" :icon="mdiTrashCan" small @click="isModalDangerActive = true" />
+            <BaseButton color="info" :icon="mdiEye" small @click="showEditForm(client)" />
+            <BaseButton color="danger" :icon="mdiTrashCan" small @click="showDeleteForm(client)" />
           </BaseButtons>
         </td>
       </tr>
@@ -355,10 +365,6 @@ watch(
       </div>
     </template>
   </DialogModal>
-  <DeleteConfirmationModal :show="showConfirmationModal" @delete="deleteItem" @close="showConfirmationModal = false" />
 
-  <CardBoxModal v-model="isModalDangerActive" title="Please confirm" button="danger" has-cancel>
-    <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-    <p>This is sample modal</p>
-  </CardBoxModal>
+  <DeleteConfirmationModal :show="showConfirmationModal" @delete="deleteItem" @close="showConfirmationModal = false" />
 </template>
