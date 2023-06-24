@@ -1,7 +1,8 @@
 <script setup>
-import { computed, ref} from 'vue'
+import { computed, ref, watch } from 'vue'
 import { Link, useForm, usePage, router } from '@inertiajs/vue3'
 import { Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
+import debounce from 'lodash/debounce'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { mdiEye, mdiTrashCan } from '@mdi/js'
@@ -25,6 +26,7 @@ import FormSection from '@/Components/FormSection.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 import UserAvatar from '@/Components/UserAvatar.vue'
+import SearchFilter from '@/Components/SearchFilter.vue'
 
 const props = defineProps({
   checkable: {
@@ -72,7 +74,6 @@ const checked = (isChecked, client) => {
   }
 }
 
-const listData = props.users
 const itemId = ref(-1)
 
 const showFormModal = ref(false)
@@ -101,7 +102,6 @@ function showModal() {
 function edit(item) {
   selectedUser.value = item
   itemId.value = selectedUser.value.id
-  // let item = listData.find(i => i.id === id)
 
   form.name = selectedUser.value.name
   form.email = selectedUser.value.email
@@ -115,14 +115,7 @@ function edit(item) {
 }
 function submit() {
   form.post(route('users.store', itemId.value ), {
-    onSuccess(res) {
-      // let formCopy = Object.assign({}, form)
-      // formCopy.id = res.props.flash.data.id
-      // listData.push(formCopy)
-
-      // // reset form
-      // closeModalAndResetForm()
-    },
+    onSuccess() { },
   })
 }
 function update() {
@@ -145,21 +138,10 @@ function deleteItem() {
   form.delete(route('users.destroy', itemId.value), {
     preserveScroll: true,
     resetOnSuccess: false,
-    onSuccess() {
-      // for (var i = 0; i < listData.length; i++) {
-      //   if (listData[i].id === itemId.value) {
-      //     listData.splice(i, 1)
-      //   }
-      // }
-
-      // // reset form
-      // closeModalAndResetForm()
-      // showConfirmationModal.value = false
-    },
+    onSuccess() { },
   })
 }
 
-const verificationLinkSent = ref(null)
 const photoPreview = ref(null)
 const photoInput = ref(null)
 
@@ -196,9 +178,102 @@ const clearPhotoFileInput = () => {
     photoInput.value.value = null
   }
 }
+
+const searchForm = useForm({
+  search: usePage().props.filters.search,
+  role: usePage().props.filters.role
+})
+
+function reset() {
+  searchForm.search = ''
+  searchForm.role = ''
+}
+
+watch(
+  () => searchForm,
+  debounce(function () {
+    searchForm.get(
+      route('users.index'),
+      {
+        search: searchForm.search,
+        role: searchForm.role
+      },
+      { preserveState: true }
+    )
+  }, 500),
+  { deep: true }
+)
 </script>
 
 <template>
+
+  <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">
+    <span v-for="checkedRow in checkedRows" :key="checkedRow.id" class="inline-block px-2 py-1 rounded-sm mr-2 text-sm bg-gray-100 dark:bg-slate-700">
+      {{ checkedRow.name }}
+    </span>
+  </div>
+
+  <!-- Search filter -->
+  <SearchFilter v-model="searchForm.search" @reset="reset">
+    <div class="col-span-6 sm:col-span-4 m-6">
+      <InputLabel for="role" value="Role" />
+      <select id="role" v-model="searchForm.role" class="mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+        <option :value="null" />
+        <option v-for="role in props.availableRoles" :value="role.key">{{ role.name }}</option>
+      </select>
+    </div>
+  </SearchFilter>
+
+  <!-- No results message -->
+  <PaginationCount :from="props.users.from" :to="props.users.to" :total="props.users.total" itemText="users" />
+
+  <table class="mb-3">
+    <thead>
+      <tr>
+        <th v-if="checkable" />
+        <th v-if="checkable" />
+        <th />
+        <th>Name</th>
+        <th>Email</th>
+        <th>Role</th>
+        <th>Verified</th>
+        <th>Created</th>
+        <th />
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="client in props.users.data" :key="client.id">
+        <TableCheckboxCell v-if="checkable" @checked="checked($event, client)" />
+        <td class="border-b-0 lg:w-6 before:hidden">
+          <UserAvatar :username="client.name" :avatar="client.profile_photo_url" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
+        </td>
+        <td data-label="Name">
+          {{ client.name }}
+        </td>
+        <td data-label="Email">
+          {{ client.email }}
+        </td>
+        <td data-label="Role">
+          {{ client.role?.name }}
+        </td>
+        <td data-label="Verified" class="lg:w-1 whitespace-nowrap">
+          <small v-if="client.email_verified_at" class="text-gray-500 dark:text-slate-400" :title="client.email_verified_at">{{ dayjs(client.email_verified_at).fromNow() }}</small>
+        </td>
+        <td data-label="Created" class="lg:w-1 whitespace-nowrap">
+          <small class="text-gray-500 dark:text-slate-400" :title="client.created_at">{{ dayjs(client.created_at).fromNow() }}</small>
+        </td>
+        <td class="before:hidden lg:w-1 whitespace-nowrap">
+          <BaseButtons type="justify-start lg:justify-end" no-wrap>
+            <BaseButton color="info" :icon="mdiEye" small @click="edit(client)" />
+            <BaseButton color="danger" :icon="mdiTrashCan" small @click="isModalDangerActive = true" />
+          </BaseButtons>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <Pagination :links="props.users.links" />
+
   <DialogModal :show="showFormModal">
     <template #title>
       <div class="flex items-center text-lg">
@@ -258,7 +333,6 @@ const clearPhotoFileInput = () => {
             <InputError :message="form.errors.password" class="mt-2" />
           </div>
 
-
           <!-- Role -->
           <div class="col-span-6 sm:col-span-4">
             <InputLabel for="role" value="Role" />
@@ -287,60 +361,4 @@ const clearPhotoFileInput = () => {
     <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
     <p>This is sample modal</p>
   </CardBoxModal>
-
-  <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">
-    <span v-for="checkedRow in checkedRows" :key="checkedRow.id" class="inline-block px-2 py-1 rounded-sm mr-2 text-sm bg-gray-100 dark:bg-slate-700">
-      {{ checkedRow.name }}
-    </span>
-  </div>
-
-  <!-- No results message -->
-  <PaginationCount :from="props.users.from" :to="props.users.to" :total="props.users.total" itemText="users" />
-
-  <table class="mb-3">
-    <thead>
-      <tr>
-        <th v-if="checkable" />
-        <th v-if="checkable" />
-        <th />
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Verified</th>
-        <th>Created</th>
-        <th />
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="client in props.users.data" :key="client.id">
-        <TableCheckboxCell v-if="checkable" @checked="checked($event, client)" />
-        <td class="border-b-0 lg:w-6 before:hidden">
-          <UserAvatar :username="client.name" :avatar="client.profile_photo_url" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
-        </td>
-        <td data-label="Name">
-          {{ client.name }}
-        </td>
-        <td data-label="Email">
-          {{ client.email }}
-        </td>
-        <td data-label="Role">
-          {{ client.role?.name }}
-        </td>
-        <td data-label="Verified" class="lg:w-1 whitespace-nowrap">
-          <small v-if="client.email_verified_at" class="text-gray-500 dark:text-slate-400" :title="client.email_verified_at">{{ dayjs(client.email_verified_at).fromNow() }}</small>
-        </td>
-        <td data-label="Created" class="lg:w-1 whitespace-nowrap">
-          <small class="text-gray-500 dark:text-slate-400" :title="client.created_at">{{ dayjs(client.created_at).fromNow() }}</small>
-        </td>
-        <td class="before:hidden lg:w-1 whitespace-nowrap">
-          <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton color="info" :icon="mdiEye" small @click="edit(client)" />
-            <BaseButton color="danger" :icon="mdiTrashCan" small @click="isModalDangerActive = true" />
-          </BaseButtons>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <Pagination :links="props.users.links" />
 </template>

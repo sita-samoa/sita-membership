@@ -16,18 +16,30 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
+        // @todo - only allow admin
         $this->authorize('viewAny', Member::class);
 
+        $search = $request->input('search');
+        $role = $request->input('role');
+
+        if ($role) {
+            $team = Team::first();
+            $ids = $team->users()->where('role', $role)->get(['user_id']);
+            $ids_only = array_column($ids->all(), 'user_id');
+        }
+
         return Inertia::render('Users/Index', [
-            'filters' => $request->all('membership_status_id'),
+            'filters' => $request->all('search', 'role'),
             'users' => User::orderBy('name')
-                // ->when(
-                //     $request->input('membership_status_id'),
-                //     function ($query) {
-                //         $query->where(FacadesRequest::only('membership_status_id'));
-                //     }
-                // )
-                // ->with('membershipType', 'title', 'membershipStatus')
+                ->when(
+                    $search,
+                    fn ($query) => $query->where('name', 'like', '%' . $search . '%')
+                        ->orWhere('email', 'like', '%' . $search . '%')
+                )
+                ->when(
+                    $role,
+                    fn ($query) => $query->whereIn('id', $ids_only)
+                )
                 ->paginate(10)
                 ->withQueryString(),
             'availableRoles' => array_values(Jetstream::$roles),
