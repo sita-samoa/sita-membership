@@ -22,6 +22,7 @@ class UserController extends Controller
         $search = $request->input('search');
         $role = $request->input('role');
 
+        $ids_only = [];
         if ($role) {
             $team = Team::first();
             $ids = $team->users()->where('role', $role)->get(['user_id']);
@@ -32,13 +33,13 @@ class UserController extends Controller
             'filters' => $request->all('search', 'role'),
             'users' => User::orderBy('name')
                 ->when(
+                    $role,
+                    fn ($query) => $query->whereIn('id', $ids_only)
+                )
+                ->when(
                     $search,
                     fn ($query) => $query->where('name', 'like', '%' . $search . '%')
                         ->orWhere('email', 'like', '%' . $search . '%')
-                )
-                ->when(
-                    $role,
-                    fn ($query) => $query->whereIn('id', $ids_only)
                 )
                 ->paginate(10)
                 ->withQueryString(),
