@@ -1,14 +1,12 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
-import { Link, useForm, usePage, router } from '@inertiajs/vue3'
-import { Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
+import { useForm, usePage, router } from '@inertiajs/vue3'
+import { Input, Tabs, Tab } from 'flowbite-vue'
 import debounce from 'lodash/debounce'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { mdiEye, mdiTrashCan } from '@mdi/js'
-import CardBoxModal from '@/Components/CardBoxModal.vue'
+import { mdiPencil, mdiTrashCan } from '@mdi/js'
 import TableCheckboxCell from '@/Components/TableCheckboxCell.vue'
-import BaseLevel from '@/Components/BaseLevel.vue'
 import BaseButtons from '@/Components/BaseButtons.vue'
 import BaseButton from '@/Components/BaseButton.vue'
 import Pagination from '@/Components/Pagination.vue'
@@ -23,7 +21,6 @@ import UpdateButton from '@/Components/UpdateButton.vue'
 import CancelButton from '@/Components/CancelButton.vue'
 import TextInput from '@/Components/TextInput.vue'
 import FormSection from '@/Components/FormSection.vue'
-import PrimaryButton from '@/Components/PrimaryButton.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 import UserAvatar from '@/Components/UserAvatar.vue'
 import SearchFilter from '@/Components/SearchFilter.vue'
@@ -273,7 +270,7 @@ watch(
         </td>
         <td class="before:hidden lg:w-1 whitespace-nowrap">
           <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton color="info" :icon="mdiEye" small @click="showEditForm(client)" />
+            <BaseButton color="info" :icon="mdiPencil" small @click="showEditForm(client)" />
             <BaseButton color="danger" :icon="mdiTrashCan" small @click="showDeleteForm(client)" />
           </BaseButtons>
         </td>

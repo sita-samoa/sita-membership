@@ -16,8 +16,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        // @todo - only allow admin
-        $this->authorize('viewAny', Member::class);
+        $this->authorize('viewAny', User::class);
 
         $search = $request->input('search');
         $role = $request->input('role');
@@ -60,7 +59,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // @todo - Add user policy
+        $this->authorize('update', $user);
 
         $rep = new UpdateUserProfileInformation();
 
@@ -96,6 +95,8 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        $this->authorize('destroy', $user);
+
         $user->delete();
 
         return redirect()->back()->with('success', 'User deleted.');

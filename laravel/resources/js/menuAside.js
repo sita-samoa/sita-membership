@@ -23,7 +23,7 @@ export default [
     route: 'users.index',
     label: 'Users',
     icon: mdiAccountGroup,
-    permissionKey: 'canReadAny',
+    permissionKey: 'canManageUsers',
   },
   // {
   //   route: 'demo',

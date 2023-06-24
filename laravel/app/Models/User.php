@@ -100,6 +100,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 'canAccept' => $this->can('accept', $member),
                 'canSendSubReminder' => $this->can('sendSubReminder', $member),
                 'canSendPastDueSubReminder' => $this->can('sendPastDueSubReminder', $member),
+                'canManageUsers' => $this->can('viewAny', self::class),
             ];
         }
 
@@ -113,6 +114,7 @@ class User extends Authenticatable implements MustVerifyEmail
             'canAccept' => false,
             'canSendSubReminder' => false,
             'canSendPastDueSubReminder' => false,
+            'canManageUsers' => $this->can('viewAny', self::class),
         ];
     }
 }

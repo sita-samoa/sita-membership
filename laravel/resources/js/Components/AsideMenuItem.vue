@@ -35,10 +35,15 @@ const hasDropdown = computed(() => !!props.item.menu)
 
 const hidden = computed(() => {
   const permissionKey = props.item.permissionKey ? props.item.permissionKey : ''
-  if (permissionKey === 'canReadAny') {
-    return !usePage().props.user.permissions.canReadAny
+  switch (permissionKey) {
+    case 'canManageUsers':
+      return !usePage().props.user.permissions.canManageUsers
+      return false
+    case 'canReadAny':
+      return !usePage().props.user.permissions.canReadAny
+    default:
+      return false
   }
-  return false
 })
 
 const menuClick = event => {
