@@ -61,6 +61,9 @@ class UserController extends Controller
         $role = $request->input('role');
         if ($role) {
             $team = Team::first();
+            if ($user->belongsToTeam($team)) {
+                $team->removeUser($user);
+            }
             $user->teams()->attach($team, $request->only(['role']));
         }
 
