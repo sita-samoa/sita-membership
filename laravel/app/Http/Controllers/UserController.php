@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Fortify\UpdateUserProfileInformation;
+use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -55,6 +56,12 @@ class UserController extends Controller
         if ($request->input('password')) {
             $user->password = $request->input('password');
             $user->save();
+        }
+
+        $role = $request->input('role');
+        if ($role) {
+            $team = Team::first();
+            $user->teams()->attach($team, $request->only(['role']));
         }
 
         return redirect()->back()->with('success', 'User updated.');
