@@ -58,13 +58,23 @@ class UserController extends Controller
             $user->save();
         }
 
-        $role = $request->input('role');
-        if ($role) {
-            $team = Team::first();
-            if ($user->belongsToTeam($team)) {
-                $team->removeUser($user);
+
+        if ($role = $request->input('role')) {
+            // if its -1 remove it
+            // if its the same dont do anything
+            if (isset($user->role['key']) && $role === $user->role['key']) {
+                // do nothing
             }
-            $user->teams()->attach($team, $request->only(['role']));
+            else {
+                // its changed
+                $team = Team::first();
+                if ($user->belongsToTeam($team)) {
+                    $team->removeUser($user);
+                }
+                if ($role !== "-1") {
+                    $user->teams()->attach($team, $request->only(['role']));
+                }
+            }
         }
 
         return redirect()->back()->with('success', 'User updated.');
