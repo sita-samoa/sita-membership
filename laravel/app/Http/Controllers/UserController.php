@@ -6,6 +6,7 @@ use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Laravel\Jetstream\Jetstream;
 
 class UserController extends Controller
 {
@@ -28,37 +29,14 @@ class UserController extends Controller
                 // ->with('membershipType', 'title', 'membershipStatus')
                 ->paginate(10)
                 ->withQueryString(),
+            'availableRoles' => array_values(Jetstream::$roles),
         ]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
     }
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
     {
         //
     }
@@ -73,6 +51,11 @@ class UserController extends Controller
         $rep = new UpdateUserProfileInformation();
 
         $rep->update($user, $request->only(['name', 'email', 'photo']));
+
+        if ($request->input('password')) {
+            $user->password = $request->input('password');
+            $user->save();
+        }
 
         return redirect()->back()->with('success', 'User updated.');
     }

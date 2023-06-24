@@ -114,5 +114,5 @@ Route::middleware([
 
     // Users Pages
     Route::resource('users', UserController::class)
-        ->only(['store', 'update', 'index']);
+        ->only(['update', 'index']);
 });

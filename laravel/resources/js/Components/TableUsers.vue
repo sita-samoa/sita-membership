@@ -33,6 +33,7 @@ const props = defineProps({
   },
   filters: Array,
   users: Object,
+  availableRoles: Array,
 })
 
 dayjs.extend(relativeTime)
@@ -47,6 +48,7 @@ const form = useForm({
   name: null,
   email: null,
   photo: null,
+  password: null,
 })
 
 const remove = (arr, cb) => {
@@ -206,7 +208,7 @@ const clearPhotoFileInput = () => {
       <FormSection @submitted="update">
         <template #title> Profile Information </template>
 
-        <template #description> Update your account's profile information and email address. </template>
+        <template #description> Update the account's profile information and email address. </template>
 
         <template #form>
 
@@ -245,6 +247,13 @@ const clearPhotoFileInput = () => {
             <InputLabel for="email" value="Email" />
             <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" autocomplete="username" />
             <InputError :message="form.errors.email" class="mt-2" />
+          </div>
+
+          <!-- Password -->
+          <div class="col-span-6 sm:col-span-4">
+            <InputLabel for="password" value="Password" />
+            <TextInput id="password" v-model="form.password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
+            <InputError :message="form.errors.password" class="mt-2" />
           </div>
         </template>
 

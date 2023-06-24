@@ -5,7 +5,7 @@ import SectionMain from '@/Components/SectionMain.vue'
 import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue'
 import TableUsers from '@/Components/TableUsers.vue'
 
-defineProps(['filters', 'users'])
+defineProps(['filters', 'users', 'availableRoles'])
 </script>
 
 <template>
