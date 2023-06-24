@@ -28,7 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email',
+        'name', 'email', 'password',
     ];
 
     /**
@@ -65,11 +65,6 @@ class User extends Authenticatable implements MustVerifyEmail
     public function members(): HasMany
     {
         return $this->hasMany(Member::class);
-    }
-
-    public function setPasswordAttribute($password)
-    {
-        $this->attributes['password'] = Hash::needsRehash($password) ? Hash::make($password) : $password;
     }
 
     public function getRoleAttribute()

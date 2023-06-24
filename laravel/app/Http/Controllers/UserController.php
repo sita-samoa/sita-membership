@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Laravel\Jetstream\Jetstream;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -66,8 +69,14 @@ class UserController extends Controller
         $rep->update($user, $request->only(['name', 'email', 'photo']));
 
         if ($request->input('password')) {
-            $user->password = $request->input('password');
-            $user->save();
+            $input = $request->only('password');
+
+            // Make ResetUserPassword class happy and mock a confirmation
+            $input = array_merge($input, [
+                'password_confirmation' => $request->input('password'),
+            ]);
+            $reset = new ResetUserPassword();
+            $reset->reset($user, $input);
         }
 
         if ($role = $request->input('role')) {
