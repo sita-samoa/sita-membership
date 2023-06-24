@@ -12,7 +12,7 @@ defineProps(['filters', 'users', 'availableRoles'])
   <LayoutAuthenticated title="Users">
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiAccountGroup" title="Users" main> &nbsp; </SectionTitleLineWithButton>
-      <TableUsers :filters="filters" :users="users" />
+      <TableUsers :filters="filters" :users="users" :availableRoles="availableRoles" />
     </SectionMain>
   </LayoutAuthenticated>
 </template>

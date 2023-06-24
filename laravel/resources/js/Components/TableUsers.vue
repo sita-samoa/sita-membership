@@ -49,6 +49,7 @@ const form = useForm({
   email: null,
   photo: null,
   password: null,
+  role: null,
 })
 
 const remove = (arr, cb) => {
@@ -105,6 +106,7 @@ function edit(item) {
   form.name = selectedUser.value.name
   form.email = selectedUser.value.email
   form.photo = selectedUser.value.photo
+  form.role = ''
 
   if (selectedUser.profile_photo_path) {
     photoPreview.value = profile_photo_path
@@ -254,6 +256,16 @@ const clearPhotoFileInput = () => {
             <InputLabel for="password" value="Password" />
             <TextInput id="password" v-model="form.password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
             <InputError :message="form.errors.password" class="mt-2" />
+          </div>
+
+
+          <!-- Password -->
+          <div class="col-span-6 sm:col-span-4">
+            <InputLabel for="role" value="Role" />
+            <select id="role" v-model="form.role" class="mt-1 w-full">
+              <option :value="null" />
+              <option v-for="role in props.availableRoles" :value="role.key">{{ role.name }}</option>
+            </select>
           </div>
         </template>
 
