@@ -28,7 +28,7 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', 'email'
+        'name', 'email',
     ];
 
     /**
@@ -59,7 +59,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $appends = [
         'profile_photo_url',
-        'role'
+        'role',
     ];
 
     public function members(): HasMany
@@ -72,13 +72,15 @@ class User extends Authenticatable implements MustVerifyEmail
         $this->attributes['password'] = Hash::needsRehash($password) ? Hash::make($password) : $password;
     }
 
-    public function getRoleAttribute() {
-        if ($role = $this->teamRole(Team::first())) {
+    public function getRoleAttribute()
+    {
+        if (($role = $this->teamRole(Team::first())) instanceof \Laravel\Jetstream\Role) {
             return [
                 'key' => $role->key,
-                'name' => $role->name
+                'name' => $role->name,
             ];
         }
+
         return null;
     }
 

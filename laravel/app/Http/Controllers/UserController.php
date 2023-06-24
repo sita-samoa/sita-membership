@@ -38,8 +38,8 @@ class UserController extends Controller
                 )
                 ->when(
                     $search,
-                    fn ($query) => $query->where('name', 'like', '%' . $search . '%')
-                        ->orWhere('email', 'like', '%' . $search . '%')
+                    fn ($query) => $query->where('name', 'like', '%'.$search.'%')
+                        ->orWhere('email', 'like', '%'.$search.'%')
                 )
                 ->paginate(10)
                 ->withQueryString(),
@@ -71,20 +71,18 @@ class UserController extends Controller
             $user->save();
         }
 
-
         if ($role = $request->input('role')) {
             // if its -1 remove it
             // if its the same dont do anything
             if (isset($user->role['key']) && $role === $user->role['key']) {
                 // do nothing
-            }
-            else {
+            } else {
                 // its changed
                 $team = Team::first();
                 if ($user->belongsToTeam($team)) {
                     $team->removeUser($user);
                 }
-                if ($role !== "-1") {
+                if ($role !== '-1') {
                     $user->teams()->attach($team, $request->only(['role']));
                 }
             }

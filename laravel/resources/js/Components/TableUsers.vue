@@ -120,8 +120,8 @@ function showDeleteForm(item) {
   showConfirmationModal.value = true
 }
 function submit() {
-  form.post(route('users.store', itemId.value ), {
-    onSuccess() { },
+  form.post(route('users.store', itemId.value), {
+    onSuccess() {},
   })
 }
 function update() {
@@ -129,7 +129,7 @@ function update() {
     form.photo = photoInput.value.files[0]
   }
 
-  form.post(route('users.update', itemId.value ), {
+  form.post(route('users.update', itemId.value), {
     preserveScroll: true,
     resetOnSuccess: false,
     onSuccess() {
@@ -191,7 +191,7 @@ const clearPhotoFileInput = () => {
 
 const searchForm = useForm({
   search: usePage().props.filters.search,
-  role: usePage().props.filters.role
+  role: usePage().props.filters.role,
 })
 
 function reset() {
@@ -206,7 +206,7 @@ watch(
       route('users.index'),
       {
         search: searchForm.search,
-        role: searchForm.role
+        role: searchForm.role,
       },
       { preserveState: true }
     )
@@ -216,7 +216,6 @@ watch(
 </script>
 
 <template>
-
   <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">
     <span v-for="checkedRow in checkedRows" :key="checkedRow.id" class="inline-block px-2 py-1 rounded-sm mr-2 text-sm bg-gray-100 dark:bg-slate-700">
       {{ checkedRow.name }}
@@ -298,7 +297,6 @@ watch(
         <template #description> Update the account's profile information and email address. </template>
 
         <template #form>
-
           <!-- Profile Photo -->
           <div class="col-span-6 sm:col-span-4">
             <!-- Profile Photo File Input -->
@@ -352,10 +350,9 @@ watch(
             </select>
           </div>
         </template>
-
       </FormSection>
     </template>
-    <template #footer >
+    <template #footer>
       <CancelButton @click="closeModalAndResetForm" />
 
       <div>
