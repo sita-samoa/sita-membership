@@ -114,5 +114,5 @@ Route::middleware([
 
     // Users Pages
     Route::resource('users', UserController::class)
-        ->only(['update', 'index', 'destroy']);
+        ->only(['update', 'index', 'destroy', 'store']);
 });

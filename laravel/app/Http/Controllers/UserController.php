@@ -2,16 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Fortify\CreateNewUser;
+use App\Actions\Fortify\PasswordValidationRules;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\Team;
 use App\Models\User;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
 use Laravel\Jetstream\Jetstream;
 
 class UserController extends Controller
 {
+    use PasswordValidationRules;
+
     /**
      * Display a listing of the resource.
      */
@@ -52,7 +59,59 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = array_merge(
+            $request->only('name', 'email', 'password', 'photo'),
+            [
+                'password_confirmation' => $request->input('password'),
+            ]
+        );
+
+        $rules = [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => $this->passwordRules(),
+            'photo' => 'nullable|image',
+        ];
+
+        $validated = Validator::make($input, $rules)->validate();
+
+        DB::transaction(function () use ($validated, $request) {
+            return tap(User::create([
+                'name' => $validated['name'],
+                'email' => $validated['email'],
+                'password' => Hash::make($validated['password']),
+                'photo_path' => $request->file('photo') ? $request->file('photo')->store('users') : null,
+            ]), function (User $user) {
+                $user->ownedTeams()->save(Team::forceCreate([
+                    'user_id' => $user->id,
+                    'name' => explode(' ', $user->name, 2)[0] . "'s Team",
+                    'personal_team' => true,
+                ]));
+            });
+        });
+
+        // $input = array_merge($request->only('name', 'email', 'password'), [
+        //     'password_confirmation' => $request->input('password'),
+        //     'terms' => 'accepted',
+        // ]);
+        // $newUser->create($input);
+
+        // $validated = $request->validate([
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+        //     'password' => $this->passwordRules(),
+        //     'photo' => 'nullable|image',
+        // ]);
+
+        // $user = new User();
+        // $user->fill($validated);
+
+        // $user->password = Hash::make($validated['password']);
+        // $user->password_confirmation = Hash::make($validated['password']);
+        // $user->photo_path = $request->file('photo') ? $request->file('photo')->store('users') : null;
+        // $user->save();
+
+        return redirect()->back()->with('success', 'User created.');
     }
 
     /**
@@ -102,7 +161,7 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $this->authorize('destroy', $user);
+        $this->authorize('delete', $user);
 
         $user->delete();
 
