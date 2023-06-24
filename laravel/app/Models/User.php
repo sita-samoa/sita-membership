@@ -59,6 +59,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $appends = [
         'profile_photo_url',
+        'role'
     ];
 
     public function members(): HasMany
@@ -69,6 +70,16 @@ class User extends Authenticatable implements MustVerifyEmail
     public function setPasswordAttribute($password)
     {
         $this->attributes['password'] = Hash::needsRehash($password) ? Hash::make($password) : $password;
+    }
+
+    public function getRoleAttribute() {
+        if ($role = $this->teamRole(Team::first())) {
+            return [
+                'key' => $role->key,
+                'name' => $role->name
+            ];
+        }
+        return null;
     }
 
     public function getPermissionsAttribute()

@@ -106,7 +106,7 @@ function edit(item) {
   form.name = selectedUser.value.name
   form.email = selectedUser.value.email
   form.photo = selectedUser.value.photo
-  form.role = ''
+  form.role = selectedUser.value.role?.key
 
   if (selectedUser.profile_photo_path) {
     photoPreview.value = profile_photo_path
@@ -259,10 +259,10 @@ const clearPhotoFileInput = () => {
           </div>
 
 
-          <!-- Password -->
+          <!-- Role -->
           <div class="col-span-6 sm:col-span-4">
             <InputLabel for="role" value="Role" />
-            <select id="role" v-model="form.role" class="mt-1 w-full">
+            <select id="role" v-model="form.role" class="mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
               <option :value="null" />
               <option v-for="role in props.availableRoles" :value="role.key">{{ role.name }}</option>
             </select>
@@ -305,6 +305,7 @@ const clearPhotoFileInput = () => {
         <th />
         <th>Name</th>
         <th>Email</th>
+        <th>Role</th>
         <th>Verified</th>
         <th>Created</th>
         <th />
@@ -321,6 +322,9 @@ const clearPhotoFileInput = () => {
         </td>
         <td data-label="Email">
           {{ client.email }}
+        </td>
+        <td data-label="Role">
+          {{ client.role?.name }}
         </td>
         <td data-label="Verified" class="lg:w-1 whitespace-nowrap">
           <small v-if="client.email_verified_at" class="text-gray-500 dark:text-slate-400" :title="client.email_verified_at">{{ dayjs(client.email_verified_at).fromNow() }}</small>
