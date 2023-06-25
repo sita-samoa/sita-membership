@@ -116,7 +116,7 @@ Route::middleware([
     // Users Pages
     Route::resource('users', UserController::class)
         ->only(['update', 'index', 'destroy', 'store']);
-  
+
     // Mailing List
     Route::resource('mailing-lists', MailingListController::class)
         ->only(['index']);
