@@ -8,6 +8,7 @@ use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\Team;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -102,6 +103,10 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
+        if (App::environment('demo') && $user->isDemoUser()) {
+            return redirect()->back()->with('error', 'Updating the demo user is not allowed.');
+        }
+
         $this->authorize('update', $user);
 
         $rep = new UpdateUserProfileInformation();
@@ -144,6 +149,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if (App::environment('demo') && $user->isDemoUser()) {
+            return redirect()->back()->with('error', 'Deleting the demo user is not allowed.');
+        }
+
         if ($user->isSuperUser()) {
             return redirect()->back()->with('error', 'Deleting the super user is not allowed.');
         }

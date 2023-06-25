@@ -112,8 +112,20 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function isSuperUser()
+    public function isSuperUser(): bool
     {
         return $this->id === 1;
+    }
+
+    public function isDemoUser(): bool
+    {
+        $demo_users = [
+            'demo@example.com',
+            'executive@example.com',
+            'coordinator@example.com',
+            'editor@example.com',
+        ];
+
+        return in_array($this->email, $demo_users);
     }
 }

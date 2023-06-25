@@ -90,6 +90,13 @@ docker compose -f docker-compose.yml -f docker-compose.ssl.yml up -d
 docker compose -f docker-compose.yml -f docker-compose.ssl.yml stop
 ```
 
+## Environements
+
+Update the laravel .env file to the following values as needed
+
+local - for local development
+demo - for a uat or demo site (demo users cannot be deleted)
+
 ## On Prod
 
 Ensure that the following commands are run on a cron

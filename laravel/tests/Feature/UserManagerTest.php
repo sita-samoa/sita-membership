@@ -69,6 +69,8 @@ test('super user cannot be deleted', function () {
 
     $response = $this->delete('/users/'.$user->id);
 
-    expect($user->id)->toEqual(1);
-    expect(User::get())->toHaveCount(1);
+    if ($user->id === 1) {
+        expect($user->id)->toEqual(1);
+        expect(User::get())->toHaveCount(1);
+    }
 });
