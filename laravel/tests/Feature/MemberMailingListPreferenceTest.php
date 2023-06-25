@@ -17,7 +17,7 @@ test('test member subscribes to mailing list', function () {
         ['mailing_list_id' => 1, 'subscribe' => true]
     );
     $response->assertStatus(302);
-    expect($member->mailingLists()->first()->subscribed)->toEqual(true);
+    expect($member->mailingLists()->first()->pivot->subscribed)->toEqual(true);
 });
 
 test('test member unsubscribes from mailing list', function () {
@@ -35,5 +35,5 @@ test('test member unsubscribes from mailing list', function () {
         ['mailing_list_id' => 1, 'subscribe' => false]
     );
     $response->assertStatus(302);
-    expect($member->mailingLists()->first()->subscribed)->toEqual(false);
+    expect($member->mailingLists()->first()->pivot->subscribed)->toEqual(false);
 });
