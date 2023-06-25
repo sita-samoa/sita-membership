@@ -59,12 +59,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $input = array_merge(
-            $request->only('name', 'email', 'password', 'photo'),
-            [
-                'password_confirmation' => $request->input('password'),
-            ]
-        );
 
         $rules = [
             'name' => ['required', 'string', 'max:255'],
@@ -73,14 +67,20 @@ class UserController extends Controller
             'photo' => 'nullable|image',
         ];
 
+        $input = array_merge(
+            $request->only('name', 'email', 'password', 'photo'),
+            [
+                'password_confirmation' => $request->input('password'),
+            ]
+        );
+
         $validated = Validator::make($input, $rules)->validate();
 
-        DB::transaction(function () use ($validated, $request) {
+        $user = DB::transaction(function () use ($validated) {
             return tap(User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
                 'password' => Hash::make($validated['password']),
-                'photo_path' => $request->file('photo') ? $request->file('photo')->store('users') : null,
             ]), function (User $user) {
                 $user->ownedTeams()->save(Team::forceCreate([
                     'user_id' => $user->id,
@@ -90,26 +90,11 @@ class UserController extends Controller
             });
         });
 
-        // $input = array_merge($request->only('name', 'email', 'password'), [
-        //     'password_confirmation' => $request->input('password'),
-        //     'terms' => 'accepted',
-        // ]);
-        // $newUser->create($input);
 
-        // $validated = $request->validate([
-        //     'name' => ['required', 'string', 'max:255'],
-        //     'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        //     'password' => $this->passwordRules(),
-        //     'photo' => 'nullable|image',
-        // ]);
-
-        // $user = new User();
-        // $user->fill($validated);
-
-        // $user->password = Hash::make($validated['password']);
-        // $user->password_confirmation = Hash::make($validated['password']);
-        // $user->photo_path = $request->file('photo') ? $request->file('photo')->store('users') : null;
-        // $user->save();
+        if (isset($validated['photo'])) {
+            $user->updateProfilePhoto($validated['photo']);
+            $user->save();
+        }
 
         return redirect()->back()->with('success', 'User created.');
     }

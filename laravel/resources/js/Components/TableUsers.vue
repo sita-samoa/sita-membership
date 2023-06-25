@@ -118,6 +118,9 @@ function showDeleteForm(item) {
 }
 function submit() {
   form._method = ''
+  if (photoInput.value) {
+    form.photo = photoInput.value.files[0]
+  }
   form.post(route('users.store', itemId.value), {
     onSuccess() {
       clearPhotoFileInput()
@@ -226,18 +229,20 @@ watch(
     </span>
   </div>
 
-  <!-- Search filter -->
-  <SearchFilter v-model="searchForm.search" @reset="reset">
-    <div class="col-span-6 sm:col-span-4 m-6">
-      <InputLabel for="role" value="Role" />
-      <select id="role" v-model="searchForm.role" class="mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
-        <option :value="null" />
-        <option v-for="role in props.availableRoles" :value="role.key">{{ role.name }}</option>
-      </select>
-    </div>
-  </SearchFilter>
+  <div class="flex justify-between">
+    <!-- Search filter -->
+    <SearchFilter v-model="searchForm.search" @reset="reset">
+      <div class="col-span-6 sm:col-span-4 m-6">
+        <InputLabel for="role" value="Role" />
+        <select id="role" v-model="searchForm.role" class="mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+          <option :value="null" />
+          <option v-for="role in props.availableRoles" :value="role.key">{{ role.name }}</option>
+        </select>
+      </div>
+    </SearchFilter>
 
-  <Button class="p-3 mt-3" color="alternative" @click.prevent="showModal">Add User</Button>
+    <Button size="sm" color="alternative" @click.prevent="showModal">Add User</Button>
+  </div>
 
   <!-- No results message -->
   <PaginationCount :from="props.users.from" :to="props.users.to" :total="props.users.total" itemText="users" />
