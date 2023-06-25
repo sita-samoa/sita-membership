@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { useForm, usePage, router } from '@inertiajs/vue3'
-import { Input, Tabs, Tab } from 'flowbite-vue'
+import { Input, Button } from 'flowbite-vue'
 import debounce from 'lodash/debounce'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -117,11 +117,18 @@ function showDeleteForm(item) {
   showConfirmationModal.value = true
 }
 function submit() {
+  form._method = ''
   form.post(route('users.store', itemId.value), {
-    onSuccess() {},
+    onSuccess() {
+      clearPhotoFileInput()
+
+      // reset form
+      closeModalAndResetForm()
+    },
   })
 }
 function update() {
+  form._method = 'PUT'
   if (photoInput.value) {
     form.photo = photoInput.value.files[0]
   }
@@ -229,6 +236,8 @@ watch(
       </select>
     </div>
   </SearchFilter>
+
+  <Button class="p-3 mt-3" color="alternative" @click.prevent="showModal">Add User</Button>
 
   <!-- No results message -->
   <PaginationCount :from="props.users.from" :to="props.users.to" :total="props.users.total" itemText="users" />
