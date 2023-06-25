@@ -24,6 +24,8 @@ import FormSection from '@/Components/FormSection.vue'
 import SecondaryButton from '@/Components/SecondaryButton.vue'
 import UserAvatar from '@/Components/UserAvatar.vue'
 import SearchFilter from '@/Components/SearchFilter.vue'
+import BaseLevel from '@/Components/BaseLevel.vue'
+import CardBox from '@/Components/CardBox.vue'
 
 const props = defineProps({
   checkable: {
@@ -229,9 +231,9 @@ watch(
     </span>
   </div>
 
-  <div class="flex justify-between">
-    <!-- Search filter -->
-    <SearchFilter v-model="searchForm.search" @reset="reset">
+  <!-- Search filter -->
+  <BaseLevel class="mb-3">
+    <SearchFilter v-model="searchForm.search" @reset="reset" class="mr-3">
       <div class="col-span-6 sm:col-span-4 m-6">
         <InputLabel for="role" value="Role" />
         <select id="role" v-model="searchForm.role" class="mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
@@ -241,57 +243,58 @@ watch(
       </div>
     </SearchFilter>
 
-    <Button size="sm" color="alternative" @click.prevent="showModal">Add User</Button>
-  </div>
+    <BaseButton type="submit" color="info" @click.prevent="showModal" label="Add User" />
+  </BaseLevel>
 
   <!-- No results message -->
   <PaginationCount :from="props.users.from" :to="props.users.to" :total="props.users.total" itemText="users" />
 
-  <table class="mb-3">
-    <thead>
-      <tr>
-        <th v-if="checkable" />
-        <th v-if="checkable" />
-        <th />
-        <th>Name</th>
-        <th>Email</th>
-        <th>Role</th>
-        <th>Verified</th>
-        <th>Created</th>
-        <th />
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="client in props.users.data" :key="client.id">
-        <TableCheckboxCell v-if="checkable" @checked="checked($event, client)" />
-        <td class="border-b-0 lg:w-6 before:hidden">
-          <UserAvatar :username="client.name" :avatar="client.profile_photo_url" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
-        </td>
-        <td data-label="Name">
-          {{ client.name }}
-        </td>
-        <td data-label="Email">
-          {{ client.email }}
-        </td>
-        <td data-label="Role">
-          {{ client.role?.name }}
-        </td>
-        <td data-label="Verified" class="lg:w-1 whitespace-nowrap">
-          <small v-if="client.email_verified_at" class="text-gray-500 dark:text-slate-400" :title="client.email_verified_at">{{ dayjs(client.email_verified_at).fromNow() }}</small>
-        </td>
-        <td data-label="Created" class="lg:w-1 whitespace-nowrap">
-          <small class="text-gray-500 dark:text-slate-400" :title="client.created_at">{{ dayjs(client.created_at).fromNow() }}</small>
-        </td>
-        <td class="before:hidden lg:w-1 whitespace-nowrap">
-          <BaseButtons type="justify-start lg:justify-end" no-wrap>
-            <BaseButton color="info" :icon="mdiPencil" small @click="showEditForm(client)" />
-            <BaseButton color="danger" :icon="mdiTrashCan" small @click="showDeleteForm(client)" />
-          </BaseButtons>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
+  <CardBox class="mb-3">
+    <table class="mb-3">
+      <thead>
+        <tr>
+          <th v-if="checkable" />
+          <th v-if="checkable" />
+          <th />
+          <th>Name</th>
+          <th>Email</th>
+          <th>Role</th>
+          <th>Verified</th>
+          <th>Created</th>
+          <th />
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="client in props.users.data" :key="client.id">
+          <TableCheckboxCell v-if="checkable" @checked="checked($event, client)" />
+          <td class="border-b-0 lg:w-6 before:hidden">
+            <UserAvatar :username="client.name" :avatar="client.profile_photo_url" class="w-24 h-24 mx-auto lg:w-6 lg:h-6" />
+          </td>
+          <td data-label="Name">
+            {{ client.name }}
+          </td>
+          <td data-label="Email">
+            {{ client.email }}
+          </td>
+          <td data-label="Role">
+            {{ client.role?.name }}
+          </td>
+          <td data-label="Verified" class="lg:w-1 whitespace-nowrap">
+            <small v-if="client.email_verified_at" class="text-gray-500 dark:text-slate-400" :title="client.email_verified_at">{{ dayjs(client.email_verified_at).fromNow() }}</small>
+          </td>
+          <td data-label="Created" class="lg:w-1 whitespace-nowrap">
+            <small class="text-gray-500 dark:text-slate-400" :title="client.created_at">{{ dayjs(client.created_at).fromNow() }}</small>
+          </td>
+          <td class="before:hidden lg:w-1 whitespace-nowrap">
+            <BaseButtons type="justify-start lg:justify-end" no-wrap>
+              <BaseButton color="info" :icon="mdiPencil" small @click="showEditForm(client)" />
+              <BaseButton color="danger" :icon="mdiTrashCan" small @click="showDeleteForm(client)" />
+            </BaseButtons>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </CardBox>
   <Pagination :links="props.users.links" />
 
   <DialogModal :show="showFormModal">
