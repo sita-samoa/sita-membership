@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\MailingListController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberQualificationController;
 use App\Http\Controllers\MemberRefereeController;
@@ -115,4 +116,8 @@ Route::middleware([
     // Users Pages
     Route::resource('users', UserController::class)
         ->only(['update', 'index', 'destroy', 'store']);
+  
+    // Mailing List
+    Route::resource('mailing-lists', MailingListController::class)
+        ->only(['index']);
 });

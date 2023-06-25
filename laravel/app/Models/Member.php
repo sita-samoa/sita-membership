@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -208,9 +209,14 @@ class Member extends Model implements Auditable
         return $this->hasMany(MemberSupportingDocument::class);
     }
 
-    public function mailingLists(): HasMany
+    public function mailingLists(): BelongsToMany
     {
-        return $this->hasMany(MemberMailingPreference::class);
+        return $this->belongsToMany(
+            MailingList::class,
+            'member_mailing_preferences',
+            'member_id',
+            'mailing_list_id'
+        )->withPivot('subscribed', 'created_at', 'updated_at');
     }
 
     public function membershipStatuses(): HasMany

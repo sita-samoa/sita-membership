@@ -95,7 +95,7 @@ const logout = () => {
                         <!-- Team Switcher -->
                         <div class="block px-4 py-2 text-xs text-gray-400">Switch Teams</div>
 
-                        <template v-for="team in $page.props.auth.user.all_teams" :key="team.id">
+                        <div v-for="team in $page.props.auth.user.all_teams" :key="team.id">
                           <form @submit.prevent="switchToTeam(team)">
                             <DropdownLink as="button">
                               <div class="flex items-center">
@@ -107,7 +107,7 @@ const logout = () => {
                               </div>
                             </DropdownLink>
                           </form>
-                        </template>
+                        </div>
                       </template>
                     </div>
                   </template>
@@ -215,7 +215,7 @@ const logout = () => {
                 <!-- Team Switcher -->
                 <div class="block px-4 py-2 text-xs text-gray-400">Switch Teams</div>
 
-                <template v-for="team in $page.props.auth.user.all_teams" :key="team.id">
+                <div v-for="team in $page.props.auth.user.all_teams" :key="team.id">
                   <form @submit.prevent="switchToTeam(team)">
                     <ResponsiveNavLink as="button">
                       <div class="flex items-center">
@@ -226,7 +226,7 @@ const logout = () => {
                       </div>
                     </ResponsiveNavLink>
                   </form>
-                </template>
+                </div>
               </template>
             </div>
           </div>

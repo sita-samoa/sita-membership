@@ -78,7 +78,7 @@ watch(
 )
 </script>
 <template>
-  <SearchFilter v-model="form.search" :displayText="'Show - ' + filterName" placeholder="Search by name, job  or employer" @reset="reset">
+  <SearchFilter v-model="form.search" :display-text="'Show - ' + filterName" placeholder="Search by name, job  or employer" @reset="reset">
     <list-group>
       <list-group-item @click="form.membership_status_id = ''">
         <template #prefix>

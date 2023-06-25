@@ -1,4 +1,4 @@
-import { mdiMonitor, mdiGithub, mdiViewList, mdiClipboardText, mdiAccountGroup } from '@mdi/js'
+import { mdiMonitor, mdiGithub, mdiViewList, mdiClipboardText, mdiAccountGroup, mdiEmail } from '@mdi/js'
 
 export default [
   {
@@ -24,6 +24,12 @@ export default [
     label: 'Users',
     icon: mdiAccountGroup,
     permissionKey: 'canManageUsers',
+  },
+  {
+    route: 'mailing-lists.index',
+    label: 'Mailing Lists',
+    icon: mdiEmail,
+    permissionKey: 'canReadAny',
   },
   // {
   //   route: 'demo',
