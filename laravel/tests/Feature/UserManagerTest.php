@@ -40,3 +40,35 @@ test('can access with role', function (string $role) {
 // @todo test list displayed
 // @todo test filter works
 // @todo test pagination works
+
+test('user can be created', function () {
+    $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+
+    $response = $this->post('/users', [
+        'name' => 'Test User',
+        'email' => 'test@user.com',
+        'password' => 'Pa$$w0rd1234',
+    ]);
+
+    expect(User::get())->toHaveCount(2);
+    expect(User::latest('id')->first()->name)->toEqual('Test User');
+});
+
+test('users can be deleted', function () {
+    $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+
+    $user2 = User::factory()->withPersonalTeam()->create();
+
+    $response = $this->delete('/users/'.$user2->id);
+
+    expect(User::get())->toHaveCount(1);
+});
+
+test('super user cannot be deleted', function () {
+    $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+
+    $response = $this->delete('/users/'.$user->id);
+
+    expect($user->id)->toEqual(1);
+    expect(User::get())->toHaveCount(1);
+});

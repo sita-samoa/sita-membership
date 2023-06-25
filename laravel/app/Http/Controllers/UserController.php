@@ -2,16 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\Fortify\UpdateUserProfileInformation;
 use App\Models\Team;
 use App\Models\User;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
 use Laravel\Jetstream\Jetstream;
 
@@ -84,12 +83,11 @@ class UserController extends Controller
             ]), function (User $user) {
                 $user->ownedTeams()->save(Team::forceCreate([
                     'user_id' => $user->id,
-                    'name' => explode(' ', $user->name, 2)[0] . "'s Team",
+                    'name' => explode(' ', $user->name, 2)[0]."'s Team",
                     'personal_team' => true,
                 ]));
             });
         });
-
 
         if (isset($validated['photo'])) {
             $user->updateProfilePhoto($validated['photo']);
@@ -146,6 +144,10 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
+        if ($user->isSuperUser()) {
+            return redirect()->back()->with('error', 'Deleting the super user is not allowed.');
+        }
+
         $this->authorize('delete', $user);
 
         $user->delete();

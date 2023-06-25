@@ -111,4 +111,9 @@ class User extends Authenticatable implements MustVerifyEmail
             'canManageUsers' => $this->can('viewAny', self::class),
         ];
     }
+
+    public function isSuperUser()
+    {
+        return $this->id === 1;
+    }
 }
