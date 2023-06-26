@@ -1,11 +1,11 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3'
 import { Alert, Button } from 'flowbite-vue'
-
-import { mdiReload } from '@mdi/js'
+import { mdiSendCheck, mdiClockOutline, mdiCurrencyUsd, mdiReload } from '@mdi/js'
 import CardBox from '@/Components/CardBox.vue'
 import BaseButton from '@/Components/BaseButton.vue'
 import CardBoxComponentTitle from '@/Components/CardBoxComponentTitle.vue'
+import CardBoxWidget from '@/Components/CardBoxWidget.vue'
 
 defineProps({
   totalSubmitted: {
@@ -21,15 +21,6 @@ defineProps({
     default: 0,
   },
 })
-
-function format(amount) {
-  let WSTala = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-  })
-
-  return WSTala.format(amount)
-}
 </script>
 
 <template>
@@ -59,20 +50,16 @@ function format(amount) {
         </div>
       </div>
     </CardBox>
+  </div>
 
-    <!-- exec dash -->
-    <CardBox v-if="$page.props.user.permissions.canReadAny" is-hoverable>
-      <CardBoxComponentTitle title="Executive Dashboard" />
+  <!-- exec dash -->
+  <div v-if="$page.props.user.permissions.canReadAny">
+    <CardBoxComponentTitle title="Executive Dashboard" />
 
-      <Link href="/members?membership_status_id=2" as="button">
-        <Button class="p-3 mt-3 mr-3">Pending Endorsements ({{ totalSubmitted }})</Button>
-      </Link>
-
-      <Link href="/members?membership_status_id=5" as="button">
-        <Button class="p-3 my-3">Lapsed Membership ({{ totalLapsed }})</Button>
-      </Link>
-
-      <p>Estimated Total Owing: {{ format(totalOwing) }}</p>
-    </CardBox>
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
+      <CardBoxWidget is-hoverable color="text-emerald-500" :icon="mdiSendCheck" :number="totalSubmitted" label="Pending Endorsements" href="/members?membership_status_id=2" />
+      <CardBoxWidget is-hoverable color="text-blue-500" :icon="mdiClockOutline" :number="totalLapsed" label="Lapsed Membership" href="/members?membership_status_id=5" />
+      <CardBoxWidget is-hoverable color="text-red-500" :icon="mdiCurrencyUsd" :number="totalOwing" prefix="$" label="Estimated Total Owing" href="/members?membership_status_id=5" />
+    </div>
   </div>
 </template>
