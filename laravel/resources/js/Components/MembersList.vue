@@ -137,7 +137,7 @@ watch(
     <span v-else> Showing {{ props.list.from }} to {{ props.list.to }} of {{ props.list.total }} results. </span>
   </div>
 
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <MemberSummaryCard v-for="member in props.list.data" :key="member.id" :member="member" />
   </div>
 
