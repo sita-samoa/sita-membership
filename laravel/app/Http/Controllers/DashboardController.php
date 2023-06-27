@@ -41,6 +41,7 @@ class DashboardController extends Controller
             'totalLapsed' => Member::where('membership_status_id', MembershipStatus::LAPSED->value)->count(),
             'totalOwing' => $totalOwing,
             'mailingLists' => $mailing_list_statistics,
+            'totalEndorsed' => Member::where('membership_status_id', MembershipStatus::ENDORSED->value)->count(),
         ]);
     }
 }

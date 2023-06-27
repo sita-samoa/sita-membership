@@ -27,22 +27,35 @@ const member_name = computed(() => {
 })
 
 let badgeType = 'default'
+
 switch (props.member.membership_status_id) {
   case 1:
     // draft
-    badgeType = 'yellow'
+    badgeType = 'default'
     break
   case 2:
     // submitted
-    badgeType = 'pink'
+    badgeType = 'yellow'
     break
   case 3:
     // endorsed
-    badgeType = 'dark'
+    badgeType = 'indigo'
     break
   case 4:
     // accepted
-    badgeType = 'green'
+    badgeType = 'purple'
+    break
+  case 5:
+    // lapsed
+    badgeType = 'pink'
+    break
+  case 6:
+    // expired
+    badgeType = 'red'
+    break
+  case 7:
+    // banned
+    badgeType = 'dark'
     break
 }
 
@@ -57,7 +70,7 @@ const linkData = { member: props.member.id, tab: 1 }
 
       <div class="flex mb-3">
         <Badge v-if="props.member.membership_status" :type="badgeType"> {{ props.member.membership_status.title }}</Badge>
-        <Badge v-else type="yellow">Draft</Badge>
+        <Badge v-else type="default">Draft</Badge>
         <Badge type="default">{{ props.member.membership_type.title }}</Badge>
       </div>
 

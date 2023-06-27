@@ -1,6 +1,6 @@
 <script setup>
 import { usePage } from '@inertiajs/vue3'
-import { mdiSendCheck, mdiClockOutline, mdiCurrencyUsd, mdiClipboardText } from '@mdi/js'
+import { mdiSendCheck, mdiClockOutline, mdiCurrencyUsd, mdiClipboardText, mdiDecagram } from '@mdi/js'
 import BaseButton from '@/Components/BaseButton.vue'
 import CardBoxComponentTitle from '@/Components/CardBoxComponentTitle.vue'
 import CardBoxWidget from '@/Components/CardBoxWidget.vue'
@@ -17,6 +17,10 @@ defineProps({
     default: 0,
   },
   totalOwing: {
+    type: Number,
+    default: 0,
+  },
+  totalEndorsed: {
     type: Number,
     default: 0,
   },
@@ -46,9 +50,10 @@ defineProps({
   <div v-if="$page.props.user.permissions.canReadAny">
     <CardBoxComponentTitle title="Members" />
 
-    <div class="grid grid-cols-1 gap-6 lg:grid-cols-3 mb-6">
-      <CardBoxWidget is-hoverable color="text-emerald-500" :icon="mdiSendCheck" :number="totalSubmitted" label="Pending Endorsements" href="/members?membership_status_id=2" />
-      <CardBoxWidget is-hoverable color="text-blue-500" :icon="mdiClockOutline" :number="totalLapsed" label="Lapsed Membership" href="/members?membership_status_id=5" />
+    <div class="grid grid-cols-1 gap-6 lg:grid-cols-2 mb-6">
+      <CardBoxWidget is-hoverable color="text-yellow-200" :icon="mdiSendCheck" :number="totalSubmitted" label="Pending Endorsements" href="/members?membership_status_id=2" />
+      <CardBoxWidget is-hoverable color="text-pink-500" :icon="mdiClockOutline" :number="totalLapsed" label="Lapsed Membership" href="/members?membership_status_id=5" />
+      <CardBoxWidget is-hoverable color="text-indigo-500" :icon="mdiDecagram" :number="totalEndorsed" label="Pending Acceptance" href="/members?membership_status_id=3" />
       <CardBoxWidget is-hoverable color="text-red-500" :icon="mdiCurrencyUsd" :number="totalOwing" prefix="$" label="Estimated Total Owing" href="/members?membership_status_id=5" />
     </div>
   </div>
