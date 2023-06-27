@@ -2,6 +2,8 @@
 import { computed } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import { TheCard, Badge } from 'flowbite-vue'
+import { mdiSendCheck, mdiFile, mdiCheckDecagram, mdiClockOutline, mdiDecagram, mdiClockAlertOutline, mdiAccountOff } from '@mdi/js'
+import BaseIcon from '@/Components/BaseIcon.vue'
 
 const props = defineProps({
   member: {
@@ -27,35 +29,43 @@ const member_name = computed(() => {
 })
 
 let badgeType = 'default'
+let badgeIcon = mdiSendCheck
 
 switch (props.member.membership_status_id) {
   case 1:
     // draft
     badgeType = 'default'
+    badgeIcon = mdiFile
     break
   case 2:
     // submitted
     badgeType = 'yellow'
+    badgeIcon = mdiSendCheck
     break
   case 3:
     // endorsed
     badgeType = 'indigo'
+    badgeIcon = mdiDecagram
     break
   case 4:
     // accepted
     badgeType = 'purple'
+    badgeIcon = mdiCheckDecagram
     break
   case 5:
     // lapsed
     badgeType = 'pink'
+    badgeIcon = mdiClockOutline
     break
   case 6:
     // expired
     badgeType = 'red'
+    badgeIcon = mdiClockAlertOutline
     break
   case 7:
     // banned
     badgeType = 'dark'
+    badgeIcon = mdiAccountOff
     break
 }
 
@@ -69,7 +79,12 @@ const linkData = { member: props.member.id, tab: 1 }
       </h5>
 
       <div class="flex mb-3">
-        <Badge v-if="props.member.membership_status" :type="badgeType"> {{ props.member.membership_status.title }}</Badge>
+        <Badge v-if="props.member.membership_status" :type="badgeType">
+          <template #icon>
+            <BaseIcon :path="badgeIcon" />
+          </template>
+          {{ props.member.membership_status.title }}
+        </Badge>
         <Badge v-else type="default">Draft</Badge>
         <Badge type="default">{{ props.member.membership_type.title }}</Badge>
       </div>
