@@ -40,11 +40,16 @@ class DashboardController extends Controller
         $canReadAny = Auth::user()->permissions['canReadAny'];
 
         return Inertia::render('Dashboard', [
-            'totalSubmitted' => $canReadAny ? Member::where('membership_status_id', MembershipStatus::SUBMITTED->value)->count() : 0,
-            'totalLapsed' => $canReadAny ? Member::where('membership_status_id', MembershipStatus::LAPSED->value)->count() : 0,
-            'totalOwing' => $canReadAny ? $totalOwing : 0,
-            'mailingLists' => $canReadAny ? $mailing_list_statistics : [],
-            'totalEndorsed' => $canReadAny ? Member::where('membership_status_id', MembershipStatus::ENDORSED->value)->count() : [],
+            'totalSubmitted' => $canReadAny ?
+                Member::where('membership_status_id', MembershipStatus::SUBMITTED->value)->count() : 0,
+            'totalLapsed' => $canReadAny ?
+                Member::where('membership_status_id', MembershipStatus::LAPSED->value)->count() : 0,
+            'totalOwing' => $canReadAny ?
+                $totalOwing : 0,
+            'mailingLists' => $canReadAny ?
+                $mailing_list_statistics : [],
+            'totalEndorsed' => $canReadAny ?
+                Member::where('membership_status_id', MembershipStatus::ENDORSED->value)->count() : [],
         ]);
     }
 }
