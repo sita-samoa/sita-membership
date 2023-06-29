@@ -44,6 +44,7 @@ class DashboardController extends Controller
             'totalLapsed' => $canReadAny ? Member::where('membership_status_id', MembershipStatus::LAPSED->value)->count() : 0,
             'totalOwing' => $canReadAny ? $totalOwing : 0,
             'mailingLists' => $canReadAny ? $mailing_list_statistics : [],
+            'totalEndorsed' => $canReadAny ? Member::where('membership_status_id', MembershipStatus::ENDORSED->value)->count() : [],
         ]);
     }
 }
