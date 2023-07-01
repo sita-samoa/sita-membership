@@ -90,10 +90,10 @@ class MemberRepository extends Repository
     }
 
     /**
-     * Filter member list
+     * Filter member list.
      *
-     * @param array $membership_status_id
-     * @param string $search
+     * @param  array  $membership_status_id
+     * @param  string  $search
      * @return Collection
      */
     public function filterMembers($membership_status_id, $search)
@@ -101,15 +101,17 @@ class MemberRepository extends Repository
         return Member::orderBy('first_name')
             ->when(
                 $membership_status_id,
-                fn ($query) => $query->where('membership_status_id',
-                $membership_status_id)
+                fn ($query) => $query->where(
+                    'membership_status_id',
+                    $membership_status_id
+                )
             )
             ->when(
                 $search,
-                fn ($query) => $query->where('first_name', 'like', '%' . $search . '%')
-                    ->orWhere('last_name', 'like', '%' . $search . '%')
-                    ->orWhere('job_title', 'like', '%' . $search . '%')
-                    ->orWhere('current_employer', 'like', '%' . $search . '%')
+                fn ($query) => $query->where('first_name', 'like', '%'.$search.'%')
+                    ->orWhere('last_name', 'like', '%'.$search.'%')
+                    ->orWhere('job_title', 'like', '%'.$search.'%')
+                    ->orWhere('current_employer', 'like', '%'.$search.'%')
             );
     }
 }

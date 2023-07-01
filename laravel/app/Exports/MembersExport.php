@@ -13,7 +13,8 @@ class MembersExport implements FromCollection, WithMapping, WithHeadings
     public function __construct(
         public readonly string $member_status_id,
         public readonly string $search
-    ) {}
+    ) {
+    }
 
     public function headings(): array
     {
@@ -45,7 +46,7 @@ class MembersExport implements FromCollection, WithMapping, WithHeadings
     }
 
     /**
-     * @var Member $member
+     * @var Member
      */
     public function map($member): array
     {
@@ -72,16 +73,17 @@ class MembersExport implements FromCollection, WithMapping, WithHeadings
             $member->note,
             $member->created_at,
             $member->updated_at,
-            $member->user->name." (".$member->user_id.")",
+            $member->user->name.' ('.$member->user_id.')',
         ];
     }
 
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         $rep = new MemberRepository();
+
         return $rep->filterMembers($this->member_status_id, $this->search)->get();
     }
 }

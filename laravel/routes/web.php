@@ -56,7 +56,7 @@ Route::middleware([
 
     // Member export
     Route::get('/members/export', [MemberController::class, 'export'])
-    ->name('members.export');
+        ->name('members.export');
 
     // Member actions
     Route::put('/members/{member}/submit', [MemberController::class, 'submit'])

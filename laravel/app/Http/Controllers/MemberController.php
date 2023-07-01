@@ -348,6 +348,7 @@ class MemberController extends Controller
         $search = $request->input('search');
 
         $export = new MembersExport($membership_status_id ?? '', $search ?? '');
+
         return Excel::download($export, 'members.xlsx');
     }
 }
