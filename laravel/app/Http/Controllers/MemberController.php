@@ -36,27 +36,19 @@ class MemberController extends Controller
         $this->authorize('viewAny', Member::class);
 
         $search = $request->input('search');
-        $membership_status_id = $request->only('membership_status_id');
+        $membership_status_id = $request->input('membership_status_id');
 
-        $members = Member::orderBy('first_name')
-            ->when(
-                $membership_status_id && isset($membership_status_id['membership_status_id']),
-                fn ($query) => $query->where($membership_status_id)
-            )
-            ->when(
-                $search,
-                fn ($query) => $query->where('first_name', 'like', '%'.$search.'%')
-                    ->orWhere('last_name', 'like', '%'.$search.'%')
-                    ->orWhere('job_title', 'like', '%'.$search.'%')
-                    ->orWhere('current_employer', 'like', '%'.$search.'%')
-            )
+        $rep = new MemberRepository();
+        $members = $rep->filterMembers($membership_status_id, $search);
+
+        $pagedMembers = $members
             ->with('membershipType', 'title', 'membershipStatus')
             ->paginate(10)
             ->withQueryString();
 
         return Inertia::render('Members/Index', [
             'filters' => $request->only('membership_status_id', 'search'),
-            'members' => $members,
+            'members' => $pagedMembers,
         ]);
     }
 
@@ -348,10 +340,14 @@ class MemberController extends Controller
         //
     }
 
-    public function export()
+    public function export(Request $request)
     {
         $this->authorize('viewAny', Member::class);
 
-        return Excel::download(new MembersExport, 'members.xlsx');
+        $membership_status_id = $request->input('membership_status_id');
+        $search = $request->input('search');
+
+        $export = new MembersExport($membership_status_id ?? '', $search ?? '');
+        return Excel::download($export, 'members.xlsx');
     }
 }

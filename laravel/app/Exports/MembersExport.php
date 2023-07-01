@@ -3,12 +3,18 @@
 namespace App\Exports;
 
 use App\Models\Member;
+use App\Repositories\MemberRepository;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
 class MembersExport implements FromCollection, WithMapping, WithHeadings
 {
+    public function __construct(
+        public readonly string $member_status_id,
+        public readonly string $search
+    ) {}
+
     public function headings(): array
     {
         return [
@@ -34,7 +40,7 @@ class MembersExport implements FromCollection, WithMapping, WithHeadings
             'note',
             'created_at',
             'updated_at',
-            'added_by',
+            'added_by_id',
         ];
     }
 
@@ -75,6 +81,7 @@ class MembersExport implements FromCollection, WithMapping, WithHeadings
     */
     public function collection()
     {
-        return Member::all();
+        $rep = new MemberRepository();
+        return $rep->filterMembers($this->member_status_id, $this->search)->get();
     }
 }
