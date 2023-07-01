@@ -62,7 +62,7 @@ const form = useForm({
 function download() {
   const search = form.search || ''
   const membership_status_id = form.membership_status_id || ''
-  const url = route('members.export') + '?search=' + search + "&membership_status_id=" + membership_status_id
+  const url = route('members.export') + '?search=' + search + '&membership_status_id=' + membership_status_id
   // Do this because inertia form.get does not work
   window.open(url, '_blank')
 }
@@ -75,13 +75,10 @@ function reset() {
 watch(
   () => form,
   debounce(function () {
-    form.get(
-      route('members.index'),
-      {
-        search: form.search,
-        membership_status_id: form.membership_status_id,
-      }
-    )
+    form.get(route('members.index'), {
+      search: form.search,
+      membership_status_id: form.membership_status_id,
+    })
   }, 500),
   { deep: true }
 )
@@ -144,9 +141,7 @@ watch(
   <BaseLevel mobile>
     <ResultsSummary :total="props.list.total" :from="props.list.from" :to="props.list.to" />
     <div class="mb-3 text-small" @click="download">
-      <a title="Download" href="#" >
-        <BaseIcon :path="mdiDownload" /> Download
-      </a>
+      <a title="Download" href="#"> <BaseIcon :path="mdiDownload" /> Download </a>
     </div>
   </BaseLevel>
 
