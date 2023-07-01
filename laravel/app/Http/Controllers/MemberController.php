@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MembershipStatus;
+use App\Exports\MembersExport;
 use App\Models\MailingList;
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
@@ -19,6 +20,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MemberController extends Controller
 {
@@ -344,5 +346,12 @@ class MemberController extends Controller
     public function destroy(Member $member)
     {
         //
+    }
+
+    public function export()
+    {
+        $this->authorize('viewAny', Member::class);
+
+        return Excel::download(new MembersExport, 'members.xlsx');
     }
 }
