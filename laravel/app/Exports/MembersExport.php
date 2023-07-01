@@ -32,6 +32,9 @@ class MembersExport implements FromCollection, WithMapping, WithHeadings
             'work_email',
             'other_membership',
             'note',
+            'created_at',
+            'updated_at',
+            'added_by',
         ];
     }
 
@@ -61,6 +64,9 @@ class MembersExport implements FromCollection, WithMapping, WithHeadings
             $member->work_email,
             $member->other_membership,
             $member->note,
+            $member->created_at,
+            $member->updated_at,
+            $member->user->name." (".$member->user_id.")",
         ];
     }
 
