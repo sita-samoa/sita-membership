@@ -72,7 +72,7 @@ switch (props.member.membership_status_id) {
 const linkData = { member: props.member.id, tab: 1 }
 </script>
 <template>
-  <the-card variant="horizontal">
+  <the-card variant="horizontal" :img-src="'https://api.dicebear.com/6.x/initials/svg?backgroundColor=30cbef&scale=50&seed=' + member_name" :alt="member_name">
     <Link :href="route(props.linkRoute, linkData)">
       <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
         <span v-if="props.member.title_id">{{ props.member.title.title }}</span> {{ member_name }}

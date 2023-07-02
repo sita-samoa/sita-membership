@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MembershipStatus;
+use App\Exports\MembersExport;
 use App\Models\MailingList;
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
@@ -19,6 +20,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MemberController extends Controller
 {
@@ -34,27 +36,19 @@ class MemberController extends Controller
         $this->authorize('viewAny', Member::class);
 
         $search = $request->input('search');
-        $membership_status_id = $request->only('membership_status_id');
+        $membership_status_id = $request->input('membership_status_id');
 
-        $members = Member::orderBy('first_name')
-            ->when(
-                $membership_status_id && isset($membership_status_id['membership_status_id']),
-                fn ($query) => $query->where($membership_status_id)
-            )
-            ->when(
-                $search,
-                fn ($query) => $query->where('first_name', 'like', '%'.$search.'%')
-                    ->orWhere('last_name', 'like', '%'.$search.'%')
-                    ->orWhere('job_title', 'like', '%'.$search.'%')
-                    ->orWhere('current_employer', 'like', '%'.$search.'%')
-            )
+        $rep = new MemberRepository();
+        $members = $rep->filterMembers($membership_status_id, $search);
+
+        $pagedMembers = $members
             ->with('membershipType', 'title', 'membershipStatus')
             ->paginate(10)
             ->withQueryString();
 
         return Inertia::render('Members/Index', [
             'filters' => $request->only('membership_status_id', 'search'),
-            'members' => $members,
+            'members' => $pagedMembers,
         ]);
     }
 
@@ -344,5 +338,17 @@ class MemberController extends Controller
     public function destroy(Member $member)
     {
         //
+    }
+
+    public function export(Request $request)
+    {
+        $this->authorize('viewAny', Member::class);
+
+        $membership_status_id = $request->input('membership_status_id');
+        $search = $request->input('search');
+
+        $export = new MembersExport($membership_status_id ?? '', $search ?? '');
+
+        return Excel::download($export, 'members.xlsx');
     }
 }
