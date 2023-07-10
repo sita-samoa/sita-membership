@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\MailingList;
 use App\Models\Member;
-use App\Models\MemberMailingPreference;
 use App\Models\MembershipType;
 use App\Repositories\MailingListRepository;
 use Carbon\Carbon;
@@ -32,12 +31,12 @@ class MailingListController extends Controller
         $member_types = MembershipType::all();
 
         $all_members = $this->rep->getAllSubscribedMembers($id);
-        
+
         $membership_type_id = $request->get('membershipTypeId');
-        if($membership_type_id != null && $membership_type_id != 0){
+        if ($membership_type_id != null && $membership_type_id != 0) {
             $all_members = $all_members->where('membership_type_id', $membership_type_id);
         }
-        
+
         $all_emails = $this->rep->getAllEmails($all_members);
         $members = $all_members->with(['mailingLists' => function ($query) {
             $query->orderByPivot('updated_at', 'desc');
