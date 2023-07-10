@@ -6,7 +6,9 @@ import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.
 import MailingListView from '@/Components/MailingListView.vue'
 const props = defineProps({
   mailingLists: Object,
+  membershipTypes: Object,
   members: Object,
+  membershipTypeId: Number,
   mailingId: Number,
   allEmails: String,
   subData: Object,
@@ -16,7 +18,7 @@ const props = defineProps({
   <LayoutAuthenticated title="Mailing Lists">
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiEmail" title="Mailing Lists" main> &nbsp; </SectionTitleLineWithButton>
-      <MailingListView :sub-data="subData" :mailing-lists="mailingLists" :all-emails="allEmails" :members="members" :mailing-id="mailingId" />
+      <MailingListView :sub-data="subData" :member-types="membershipTypes" :mailing-lists="mailingLists" :all-emails="allEmails" :members="members" :mailing-id="mailingId" :membership-type-id="membershipTypeId" />
     </SectionMain>
   </LayoutAuthenticated>
 </template>
