@@ -89,8 +89,8 @@ function getBadge(application_status_id) {
   return badgeType
 }
 
-function getMembershipType(id){
-  if(id === 0) return 'All'
+function getMembershipType(id) {
+  if (id === 0) return 'All'
   return props.memberTypes.find(mt => mt.id === id).title
 }
 
@@ -121,7 +121,7 @@ watch([filterStatus, membershipTypeId], ([filterStatusValue, membershipTypeIdVal
     route('mailing-lists.index'),
     {
       id: filterStatusValue,
-      membershipTypeId: membershipTypeIdValue
+      membershipTypeId: membershipTypeIdValue,
     },
     {
       preserveState: true,
@@ -148,9 +148,7 @@ watch([filterStatus, membershipTypeId], ([filterStatusValue, membershipTypeIdVal
         </dropdown>
         <dropdown :text="getMembershipType(membershipTypeId)" class="mt-3 md:ml-3">
           <list-group>
-            <list-group-item :key="0" @click="membershipTypeId = 0">
-              All
-            </list-group-item>
+            <list-group-item :key="0" @click="membershipTypeId = 0"> All </list-group-item>
             <list-group-item v-for="type in props.memberTypes" :key="type.id" @click="membershipTypeId = type.id">
               {{ type.title }}
             </list-group-item>
