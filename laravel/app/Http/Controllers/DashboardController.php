@@ -7,6 +7,7 @@ use App\Models\MailingList;
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
 use App\Models\MembershipType;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -36,11 +37,19 @@ class DashboardController extends Controller
             $mailing_list_statistics[$m->id] = [$m->title, $count];
         }
 
+        $canReadAny = Auth::user()->permissions['canReadAny'];
+
         return Inertia::render('Dashboard', [
-            'totalSubmitted' => Member::where('membership_status_id', MembershipStatus::SUBMITTED->value)->count(),
-            'totalLapsed' => Member::where('membership_status_id', MembershipStatus::LAPSED->value)->count(),
-            'totalOwing' => $totalOwing,
-            'mailingLists' => $mailing_list_statistics,
+            'totalSubmitted' => $canReadAny ?
+                Member::where('membership_status_id', MembershipStatus::SUBMITTED->value)->count() : 0,
+            'totalLapsed' => $canReadAny ?
+                Member::where('membership_status_id', MembershipStatus::LAPSED->value)->count() : 0,
+            'totalOwing' => $canReadAny ?
+                $totalOwing : 0,
+            'mailingLists' => $canReadAny ?
+                $mailing_list_statistics : [],
+            'totalEndorsed' => $canReadAny ?
+                Member::where('membership_status_id', MembershipStatus::ENDORSED->value)->count() : [],
         ]);
     }
 }

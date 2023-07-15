@@ -112,8 +112,7 @@ function copyAllEmails() {
 }
 
 function getSubscriptionDate(date) {
-  // return dayjs(date).fromNow()
-  return date
+  return dayjs(date).fromNow()
 }
 
 watch(filterStatus, value => {

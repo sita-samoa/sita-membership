@@ -1,11 +1,11 @@
 <script setup>
-import { router, usePage, useForm } from '@inertiajs/vue3'
+import { router, usePage, useForm, Link } from '@inertiajs/vue3'
 import { computed, onMounted, watch } from 'vue'
 import { Dropdown, ListGroup, ListGroupItem } from 'flowbite-vue'
 import debounce from 'lodash/debounce'
 import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
 import Pagination from '@/Components/Pagination.vue'
-import PaginationCount from '@/Components/PaginationCount.vue'
+import { mdiDownload, mdiSendCheck, mdiFile, mdiCheckDecagram, mdiClockOutline, mdiDecagram, mdiClockAlertOutline, mdiAccountOff, mdiConsoleLine } from '@mdi/js'
 import AccountCircleIcon from 'vue-material-design-icons/AccountCircle.vue'
 import FileIcon from 'vue-material-design-icons/File.vue'
 import SendCheckIcon from 'vue-material-design-icons/SendCheck.vue'
@@ -15,8 +15,11 @@ import ClockAlertOutlineIcon from 'vue-material-design-icons/ClockAlertOutline.v
 import ClockOutlineIcon from 'vue-material-design-icons/ClockOutline.vue'
 import AccountOffIcon from 'vue-material-design-icons/AccountOff.vue'
 import SearchFilter from '@/Components/SearchFilter.vue'
+import BaseLevel from '@/Components/BaseLevel.vue'
+import BaseIcon from '@/Components/BaseIcon.vue'
 
 import { initDropdowns } from 'flowbite'
+import ResultsSummary from './ResultsSummary.vue'
 
 // initialize components based on data attribute selectors
 onMounted(() => {
@@ -56,8 +59,15 @@ const form = useForm({
   membership_status_id: usePage().props.filters.membership_status_id || '',
 })
 
+function download() {
+  const search = form.search || ''
+  const membership_status_id = form.membership_status_id || ''
+  const url = route('members.export') + '?search=' + search + '&membership_status_id=' + membership_status_id
+  // Do this because inertia form.get does not work
+  window.open(url, '_blank')
+}
+
 function reset() {
-  // form.reset()
   form.search = ''
   form.membership_status_id = ''
 }
@@ -65,14 +75,10 @@ function reset() {
 watch(
   () => form,
   debounce(function () {
-    form.get(
-      route('members.index'),
-      {
-        search: form.search,
-        membership_status_id: form.membership_status_id,
-      },
-      { preserveState: true }
-    )
+    form.get(route('members.index'), {
+      search: form.search,
+      membership_status_id: form.membership_status_id,
+    })
   }, 500),
   { deep: true }
 )
@@ -131,10 +137,15 @@ watch(
     </list-group>
   </SearchFilter>
 
-  <!-- No results message -->
-  <PaginationCount :from="props.list.from" :to="props.list.to" :total="props.list.total" />
+  <!-- Results summary -->
+  <BaseLevel mobile>
+    <ResultsSummary :total="props.list.total" :from="props.list.from" :to="props.list.to" />
+    <div class="mb-3 text-small" @click="download">
+      <a title="Download" href="#"> <BaseIcon :path="mdiDownload" /> Download </a>
+    </div>
+  </BaseLevel>
 
-  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
     <MemberSummaryCard v-for="member in props.list.data" :key="member.id" :member="member" />
   </div>
 

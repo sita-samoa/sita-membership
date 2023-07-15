@@ -30,8 +30,6 @@ Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
     ]);
 });
 
@@ -54,6 +52,10 @@ Route::middleware([
 
     Route::post('/members/signup', [MemberController::class, 'storeSignup'])
         ->name('members.signup.store');
+
+    // Member export
+    Route::get('/members/export', [MemberController::class, 'export'])
+        ->name('members.export');
 
     // Member actions
     Route::put('/members/{member}/submit', [MemberController::class, 'submit'])
