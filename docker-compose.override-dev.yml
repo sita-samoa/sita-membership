@@ -1,40 +1,40 @@
 version: "3.7"
 
 services:
-  mariadb:
-    image: wodby/mariadb:$MARIADB_TAG
-    container_name: "${PROJECT_NAME}_mariadb"
-    stop_grace_period: 30s
-    environment:
-      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
-      MYSQL_DATABASE: $DB_NAME
-      MYSQL_USER: $DB_USER
-      MYSQL_PASSWORD: $DB_PASSWORD
-#    volumes:
-#      - ./mariadb-init:/docker-entrypoint-initdb.d # Place init .sql file(s) here.
-#      - /path/to/mariadb/data/on/host:/var/lib/mysql # Use bind mount
-
-#   mariadb_testing:
+#   mariadb:
 #     image: wodby/mariadb:$MARIADB_TAG
-#     container_name: "${PROJECT_NAME}_mariadb_testing"
+#     container_name: "${PROJECT_NAME}_mariadb"
 #     stop_grace_period: 30s
 #     environment:
 #       MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
-#       MYSQL_DATABASE: laravel_testing
+#       MYSQL_DATABASE: $DB_NAME
 #       MYSQL_USER: $DB_USER
 #       MYSQL_PASSWORD: $DB_PASSWORD
 # #    volumes:
 # #      - ./mariadb-init:/docker-entrypoint-initdb.d # Place init .sql file(s) here.
 # #      - /path/to/mariadb/data/on/host:/var/lib/mysql # Use bind mount
 
+  mariadb_testing:
+    image: wodby/mariadb:$MARIADB_TAG
+    container_name: "${PROJECT_NAME}_mariadb_testing"
+    stop_grace_period: 30s
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+      MYSQL_DATABASE: laravel_testing
+      MYSQL_USER: $DB_USER
+      MYSQL_PASSWORD: $DB_PASSWORD
+#    volumes:
+#      - ./mariadb-init:/docker-entrypoint-initdb.d # Place init .sql file(s) here.
+#      - /path/to/mariadb/data/on/host:/var/lib/mysql # Use bind mount
+
   php:
     # image: wodby/drupal-php:$PHP_TAG
-    image: wodby/php:$PHP_TAG
-    container_name: "${PROJECT_NAME}_php"
+    # image: wodby/php:$PHP_TAG
+    # container_name: "${PROJECT_NAME}_php"
     environment:
       # APP_KEY: $APP_KEY
-      # LARAVEL_APP_DEBUG: 'true'
-      # SSMTP_MAILHUB: mailhog:1025
+      LARAVEL_APP_DEBUG: 'true'
+      SSMTP_MAILHUB: mailhog:1025
 #      SSMTP_MAILHUB: opensmtpd:25
       PHP_SENDMAIL_PATH: '"/usr/bin/dos2unix -u | /usr/sbin/ssmtp -t -f"'
       # DB_HOST: $DB_HOST
@@ -45,11 +45,11 @@ services:
       PHP_FPM_USER: wodby
       PHP_FPM_GROUP: wodby
       APP_URL: "http://${PROJECT_BASE_URL}:${PROJECT_PORT}"
-      # MAIL_HOST: mailhog
-      # ADMIN_NAME: admin
-      # ADMIN_PASSWORD: password
-      # ADMIN_EMAIL: admin@example.com
-      # ADMIN_TEAM: "SITA Online"
+      MAIL_HOST: mailhog
+      ADMIN_NAME: admin
+      ADMIN_PASSWORD: password
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_TEAM: "SITA Online"
 #      DB_DRIVER: $DB_DRIVER
 #      DRUSH_OPTIONS_URI: "http://${PROJECT_BASE_URL}:${PROJECT_PORT}"
 #      PHP_FPM_USER: wodby
@@ -87,31 +87,31 @@ services:
 # #    - drupal:/var/www/html
 
   nginx:
-    image: wodby/nginx:$NGINX_TAG
-    container_name: "${PROJECT_NAME}_nginx"
-    depends_on:
-    - php
+    # image: wodby/nginx:$NGINX_TAG
+    # container_name: "${PROJECT_NAME}_nginx"
+    # depends_on:
+    # - php
     environment:
-      # NGINX_STATIC_OPEN_FILE_CACHE: "off"
-      # NGINX_ERROR_LOG_LEVEL: debug
+      NGINX_STATIC_OPEN_FILE_CACHE: "off"
+      NGINX_ERROR_LOG_LEVEL: debug
       NGINX_BACKEND_HOST: php
       # NGINX_SERVER_ROOT: /var/www/html/web
       NGINX_SERVER_ROOT: /var/www/html/laravel/public
       NGINX_VHOST_PRESET: $NGINX_VHOST_PRESET
     #      NGINX_DRUPAL_FILE_PROXY_URL: http://example.com
-    volumes:
-    - ./:/var/www/html:cached
+    # volumes:
+    # - ./:/var/www/html:cached
 ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/drupal/local#docker-for-mac
 #    - drupal:/var/www/html
-    labels:
-    - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
+    # labels:
+    # - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
 
-  # mailhog:
-  #   image: mailhog/mailhog
-  #   container_name: "${PROJECT_NAME}_mailhog"
-  #   labels:
-  #   - "traefik.http.services.${PROJECT_NAME}_mailhog.loadbalancer.server.port=8025"
-  #   - "traefik.http.routers.${PROJECT_NAME}_mailhog.rule=Host(`mailhog.${PROJECT_BASE_URL}`)"
+  mailhog:
+    image: mailhog/mailhog
+    container_name: "${PROJECT_NAME}_mailhog"
+    labels:
+    - "traefik.http.services.${PROJECT_NAME}_mailhog.loadbalancer.server.port=8025"
+    - "traefik.http.routers.${PROJECT_NAME}_mailhog.rule=Host(`mailhog.${PROJECT_BASE_URL}`)"
 
 #  postgres:
 #    image: wodby/postgres:$POSTGRES_TAG
@@ -174,16 +174,16 @@ services:
 #    labels:
 #    - "traefik.http.routers.${PROJECT_NAME}_adminer.rule=Host(`adminer.${PROJECT_BASE_URL}`)"
 
-  # pma:
-  #   image: phpmyadmin/phpmyadmin
-  #   container_name: "${PROJECT_NAME}_pma"
-  #   environment:
-  #     PMA_HOST: $DB_HOST
-  #     PMA_USER: $DB_USER
-  #     PMA_PASSWORD: $DB_PASSWORD
-  #     UPLOAD_LIMIT: 1G
-  #   labels:
-  #   - "traefik.http.routers.${PROJECT_NAME}_pma.rule=Host(`pma.${PROJECT_BASE_URL}`)"
+  pma:
+    image: phpmyadmin/phpmyadmin
+    container_name: "${PROJECT_NAME}_pma"
+    environment:
+      PMA_HOST: $DB_HOST
+      PMA_USER: $DB_USER
+      PMA_PASSWORD: $DB_PASSWORD
+      UPLOAD_LIMIT: 1G
+    labels:
+    - "traefik.http.routers.${PROJECT_NAME}_pma.rule=Host(`pma.${PROJECT_BASE_URL}`)"
 
   # pma_testing:
   #   image: phpmyadmin/phpmyadmin
@@ -244,20 +244,20 @@ services:
 #      WEAVER_WORKER_TIMEOUT: 90
 #      WEAVER_CONVERSION_FALLBACK: "false"
 
-  # node:
-  #   image: wodby/node:$NODE_TAG
-  #   container_name: "${PROJECT_NAME}_node"
-  #   working_dir: /var/www/html/laravel/
-  #   labels:
-  #   - "traefik.http.services.${PROJECT_NAME}_node.loadbalancer.server.port=3000"
-  #   - "traefik.http.routers.${PROJECT_NAME}_node.rule=Host(`node.${PROJECT_BASE_URL}`)"
-  #   expose:
-  #   - "3000"
-  #   ports:
-  #   - 5173:5173
-  #   volumes:
-  #   - ./:/var/www/html
-  #   command: sh -c 'npm install && npm run dev'
+  node:
+    image: wodby/node:$NODE_TAG
+    container_name: "${PROJECT_NAME}_node"
+    working_dir: /var/www/html/laravel/
+    labels:
+    - "traefik.http.services.${PROJECT_NAME}_node.loadbalancer.server.port=3000"
+    - "traefik.http.routers.${PROJECT_NAME}_node.rule=Host(`node.${PROJECT_BASE_URL}`)"
+    expose:
+    - "3000"
+    ports:
+    - 5173:5173
+    volumes:
+    - ./:/var/www/html
+    command: sh -c 'npm install && npm run dev'
 
 #  blackfire:
 #    image: blackfire/blackfire
@@ -327,7 +327,7 @@ services:
     command: --api.insecure=true --providers.docker
     ports:
     - '${PROJECT_PORT}:80'
-    # - '8080:8080' # Dashboard
+    - '8080:8080' # Dashboard
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
 

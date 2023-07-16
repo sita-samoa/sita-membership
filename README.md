@@ -10,6 +10,12 @@ and docker compose to use the commands below.
 ### Getting Started
 
 ```
+# clone the repo
+git clone ...
+
+# setup docker compose
+cp docker-compose.override-dev.yml docker-compose.override.yml
+
 # start up containers
 docker compose up -d
 
