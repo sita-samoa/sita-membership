@@ -37,6 +37,11 @@ class MailingListController extends Controller
             $all_members = $all_members->where('membership_type_id', $membership_type_id);
         }
 
+        $membership_status_id = $request->get('membershipStatusId');
+        if ($membership_status_id != null && $membership_status_id != 0) {
+            $all_members = $all_members->where('membership_status_id', $membership_status_id);
+        }
+
         $all_emails = $this->rep->getAllEmails($all_members);
         $members = $all_members->with(['mailingLists' => function ($query) {
             $query->orderByPivot('updated_at', 'desc');
@@ -57,6 +62,7 @@ class MailingListController extends Controller
             'membershipTypes' => $member_types,
             'members' => $members,
             'membershipTypeId' => (int) $membership_type_id ?? 0,
+            'membershipStatusId' => (int) $membership_status_id ?? 0,
             'mailingId' => (int) $id,
             'allEmails' => $all_emails,
             'subData' => [
