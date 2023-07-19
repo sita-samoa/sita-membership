@@ -211,14 +211,11 @@ function reset() {
 watch(
   () => searchForm,
   debounce(function () {
-    searchForm.get(
-      route('users.index'),
-      {
-        search: searchForm.search,
-        role: searchForm.role,
-      },
-      { preserveState: true }
-    )
+    searchForm.get(route('users.index'), {
+      search: searchForm.search,
+      role: searchForm.role,
+      preserveState: true,
+    })
   }, 500),
   { deep: true }
 )
@@ -226,7 +223,7 @@ watch(
 
 <template>
   <div v-if="checkedRows.length" class="p-3 bg-gray-100/50 dark:bg-slate-800">
-    <span v-for="checkedRow in checkedRows" :key="checkedRow.id" class="inline-block px-2 py-1 rounded-sm mr-2 text-sm bg-gray-100 dark:bg-slate-700">
+    <span v-for="checkedRow in checkedRows" :key="checkedRow.id" class="inline-block px-2 py-1 mr-2 text-sm bg-gray-100 rounded-sm dark:bg-slate-700">
       {{ checkedRow.name }}
     </span>
   </div>
@@ -234,9 +231,9 @@ watch(
   <!-- Search filter -->
   <BaseLevel class="mb-3">
     <SearchFilter v-model="searchForm.search" @reset="reset" class="mr-3">
-      <div class="col-span-6 sm:col-span-4 m-6">
+      <div class="col-span-6 m-6 sm:col-span-4">
         <InputLabel for="role" value="Role" />
-        <select id="role" v-model="searchForm.role" class="mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+        <select id="role" v-model="searchForm.role" class="w-full mt-1 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600">
           <option :value="null" />
           <option v-for="role in props.availableRoles" :value="role.key">{{ role.name }}</option>
         </select>
@@ -320,12 +317,12 @@ watch(
 
             <!-- Current Profile Photo -->
             <div v-show="!photoPreview" class="mt-2">
-              <img :src="selectedUser.profile_photo_url" :alt="selectedUser.name" class="rounded-full h-20 w-20 object-cover" />
+              <img :src="selectedUser.profile_photo_url" :alt="selectedUser.name" class="object-cover w-20 h-20 rounded-full" />
             </div>
 
             <!-- New Profile Photo Preview -->
             <div v-show="photoPreview" class="mt-2">
-              <span class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center" :style="'background-image: url(\'' + photoPreview + '\');'" />
+              <span class="block w-20 h-20 bg-center bg-no-repeat bg-cover rounded-full" :style="'background-image: url(\'' + photoPreview + '\');'" />
             </div>
 
             <SecondaryButton class="mt-2 mr-2" type="button" @click.prevent="selectNewPhoto"> Select A New Photo </SecondaryButton>
@@ -337,28 +334,28 @@ watch(
           <!-- Name -->
           <div class="col-span-6 sm:col-span-4">
             <InputLabel for="name" value="Name" />
-            <TextInput id="name" v-model="form.name" type="text" class="mt-1 block w-full" autocomplete="name" />
+            <TextInput id="name" v-model="form.name" type="text" class="block w-full mt-1" autocomplete="name" />
             <InputError :message="form.errors.name" class="mt-2" />
           </div>
 
           <!-- Email -->
           <div class="col-span-6 sm:col-span-4">
             <InputLabel for="email" value="Email" />
-            <TextInput id="email" v-model="form.email" type="email" class="mt-1 block w-full" autocomplete="username" />
+            <TextInput id="email" v-model="form.email" type="email" class="block w-full mt-1" autocomplete="username" />
             <InputError :message="form.errors.email" class="mt-2" />
           </div>
 
           <!-- Password -->
           <div class="col-span-6 sm:col-span-4">
             <InputLabel for="password" value="Password" />
-            <TextInput id="password" v-model="form.password" type="password" class="mt-1 block w-full" autocomplete="current-password" />
+            <TextInput id="password" v-model="form.password" type="password" class="block w-full mt-1" autocomplete="current-password" />
             <InputError :message="form.errors.password" class="mt-2" />
           </div>
 
           <!-- Role -->
           <div class="col-span-6 sm:col-span-4">
             <InputLabel for="role" value="Role" />
-            <select id="role" v-model="form.role" class="mt-1 w-full border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 rounded-md shadow-sm">
+            <select id="role" v-model="form.role" class="w-full mt-1 border-gray-300 rounded-md shadow-sm dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600">
               <option value="-1" />
               <option v-for="role in props.availableRoles" :value="role.key">{{ role.name }}</option>
             </select>
