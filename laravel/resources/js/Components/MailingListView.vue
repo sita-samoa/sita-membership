@@ -11,6 +11,7 @@ import CardBoxWidget from '@/Components/CardBoxWidget.vue'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
+import BaseLevel from '@/Components/BaseLevel.vue'
 
 dayjs.extend(relativeTime)
 dayjs.extend(utc)
@@ -62,7 +63,9 @@ const capitalize = str => str.replace(/\b\w/g, l => l.toUpperCase())
 const filterStatus = ref(props.mailingId ?? 1)
 
 const membershipTypeId = ref(props.membershipTypeId ?? 0)
-const membershipStatusId = ref(props.membershipStatusId ?? 0)
+// Set Accepted status as the default
+const ACCEPTED_STATUS_ID = 4
+const membershipStatusId = ref(ACCEPTED_STATUS_ID)
 
 const currentMailingList = computed(() => {
   return props.mailingLists.find(ml => ml.id == filterStatus.value)
@@ -144,39 +147,48 @@ watch([filterStatus, membershipTypeId, membershipStatusId], ([filterStatusValue,
       <CardBoxWidget :trend="subStats[0].trend" :trend-type="subStats[0].trendType" :color="subStats[0].color" :icon="subStats[0].icon" :number="subStats[0].number" :label="subStats[0].label" :show-secondary-icon="false" />
       <CardBoxWidget :trend="subStats[1].trend" :trend-type="subStats[1].trendType" :color="subStats[1].color" :icon="subStats[1].icon" :number="subStats[1].number" :label="subStats[1].label" :show-secondary-icon="false" />
     </div>
-    <div class="flex justify-between w-full h-auto items-center">
-      <div>
+    <BaseLevel>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
         <!-- Filter dropdown -->
-        <dropdown :text="filterName" class="mt-3">
-          <list-group>
-            <list-group-item v-for="list in props.mailingLists" :key="list.id" @click="filterStatus = list.id">
-              {{ capitalize(list.code) }}
-            </list-group-item>
-          </list-group>
-        </dropdown>
-        <dropdown :text="getMembershipType(membershipTypeId)" class="mt-3 ml-1 md:ml-3">
-          <list-group>
-            <list-group-item :key="0" @click="membershipTypeId = 0"> All </list-group-item>
-            <list-group-item v-for="type in props.memberTypes" :key="type.id" @click="membershipTypeId = type.id">
-              {{ type.title }}
-            </list-group-item>
-          </list-group>
-        </dropdown>
-        <dropdown :text="getMembershipStatus(membershipStatusId)" class="mt-3 ml-1 md:ml-3">
-          <list-group>
-            <list-group-item :key="0" @click="membershipStatusId = 0"> All </list-group-item>
-            <list-group-item v-for="type in Object.keys(applicationStatus)" :key="type" @click="membershipStatusId = type">
-              {{ getMembershipStatus(type) }}
-            </list-group-item>
-          </list-group>
-        </dropdown>
+        <div class="mr-3">
+          Filters | Mailing list:
+          <dropdown :text="filterName" class="mt-3">
+            <list-group>
+              <list-group-item v-for="list in props.mailingLists" :key="list.id" @click="filterStatus = list.id">
+                {{ capitalize(list.code) }}
+              </list-group-item>
+            </list-group>
+          </dropdown>
+        </div>
+        <div class="mr-3">
+          Member Status:
+          <dropdown :text="getMembershipStatus(membershipStatusId)" class="mt-3 ml-1 md:ml-3">
+            <list-group>
+              <list-group-item :key="0" @click="membershipStatusId = 0"> All </list-group-item>
+              <list-group-item v-for="type in Object.keys(applicationStatus)" :key="type" @click="membershipStatusId = type">
+                {{ getMembershipStatus(type) }}
+              </list-group-item>
+            </list-group>
+          </dropdown>
+        </div>
+        <div class="mr-3">
+          Member Type:
+          <dropdown :text="getMembershipType(membershipTypeId)" class="mt-3 ml-1 md:ml-3">
+            <list-group>
+              <list-group-item :key="0" @click="membershipTypeId = 0"> All </list-group-item>
+              <list-group-item v-for="type in props.memberTypes" :key="type.id" @click="membershipTypeId = type.id">
+                {{ type.title }}
+              </list-group-item>
+            </list-group>
+          </dropdown>
+        </div>
       </div>
       <TooltipTrigger :duration="1000" text="Copied All" @trigger="() => copyAllEmails()">
         <Button color="green" size="lg">
           <div class="flex"><clipboard-multiple-icon />&nbsp;Copy all emails</div>
         </Button>
       </TooltipTrigger>
-    </div>
+    </BaseLevel>
     <!-- No results message -->
     <div v-if="props.members.data.length > 0">
       <div class="mb-3">Showing {{ props.members.from }} to {{ props.members.to }} of {{ props.members.total }} results.</div>
