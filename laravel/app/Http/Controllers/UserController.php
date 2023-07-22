@@ -95,6 +95,13 @@ class UserController extends Controller
             $user->save();
         }
 
+        if ($role = $request->input('role')) {
+            $team = Team::first();
+            if ($role !== '-1') {
+                $user->teams()->attach($team, $request->only(['role']));
+            }
+        }
+
         return redirect()->back()->with('success', 'User created.');
     }
 
