@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MailingList;
 use App\Models\Member;
-use App\Models\MemberMailingPreference;
+use App\Models\MembershipType;
 use App\Repositories\MailingListRepository;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -27,11 +27,22 @@ class MailingListController extends Controller
 
         $lists = MailingList::get();
         $req_id = $request->get('id');
-        $id = $req_id != null ? $req_id : MemberMailingPreference::first()->id;
+        $id = $req_id != null ? $req_id : MailingList::first()->id;
+        $member_types = MembershipType::all();
 
         $all_members = $this->rep->getAllSubscribedMembers($id);
-        $all_emails = $this->rep->getAllEmails($all_members);
 
+        $membership_type_id = $request->get('membershipTypeId');
+        if ($membership_type_id != null && $membership_type_id != 0) {
+            $all_members = $all_members->where('membership_type_id', $membership_type_id);
+        }
+
+        $membership_status_id = $request->get('membershipStatusId');
+        if ($membership_status_id != null && $membership_status_id != 0) {
+            $all_members = $all_members->where('membership_status_id', $membership_status_id);
+        }
+
+        $all_emails = $this->rep->getAllEmails($all_members);
         $members = $all_members->with(['mailingLists' => function ($query) {
             $query->orderByPivot('updated_at', 'desc');
         }])->paginate(10);
@@ -48,14 +59,17 @@ class MailingListController extends Controller
 
         return Inertia::render('MailingLists/Index', [
             'mailingLists' => $lists,
+            'membershipTypes' => $member_types,
             'members' => $members,
+            'membershipTypeId' => (int) $membership_type_id ?? 0,
+            'membershipStatusId' => (int) $membership_status_id ?? 0,
             'mailingId' => (int) $id,
             'allEmails' => $all_emails,
             'subData' => [
-                'month_subs' => $this_month_subs,
-                'month_unsubs' => $this_month_unsubs,
-                'last_month_subs' => $last_month_subs,
-                'last_month_unsubs' => $last_month_unsubs,
+                'month_subs' => $this_month_subs ?? 0,
+                'month_unsubs' => $this_month_unsubs ?? 0,
+                'last_month_subs' => $last_month_subs ?? 0,
+                'last_month_unsubs' => $last_month_unsubs ?? 0,
             ],
         ]);
     }
