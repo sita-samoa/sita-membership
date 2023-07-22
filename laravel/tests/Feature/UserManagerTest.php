@@ -2,6 +2,7 @@
 
 use App\Models\Team;
 use App\Models\User;
+use Maatwebsite\Excel\Concerns\ToArray;
 
 test('user without role cannot access', function () {
     $this->actingAs($user = User::factory()->create());
@@ -41,18 +42,26 @@ test('can access with role', function (string $role) {
 // @todo test filter works
 // @todo test pagination works
 
-test('user can be created', function () {
+test('user can be created', function (string $role) {
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
     $response = $this->post('/users', [
         'name' => 'Test User',
         'email' => 'test@user.com',
         'password' => 'Pa$$w0rd1234',
+        'role' => $role,
     ]);
 
     expect(User::get())->toHaveCount(2);
-    expect(User::latest('id')->first()->name)->toEqual('Test User');
-});
+    /**
+     * @var User $new_user
+     */
+    $new_user = User::latest('id')->first();
+    expect($new_user->name)->toEqual('Test User');
+    $team = Team::first();
+    expect($new_user->fresh()->hasTeamRole($team, $role))->toBeTrue();
+
+})->with(['admin', 'editor', 'executive', 'coordinator']);
 
 test('users can be deleted', function () {
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
@@ -73,4 +82,6 @@ test('super user cannot be deleted', function () {
         expect($user->id)->toEqual(1);
         expect(User::get())->toHaveCount(1);
     }
+
+    $response->assertStatus(302);
 });
