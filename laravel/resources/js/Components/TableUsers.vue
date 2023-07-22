@@ -118,6 +118,10 @@ function showDeleteForm(item) {
 
   showConfirmationModal.value = true
 }
+function hideDeleteForm() {
+  itemId.value = -1
+  showConfirmationModal.value = false
+}
 function submit() {
   form._method = ''
   if (photoInput.value) {
@@ -374,5 +378,5 @@ watch(
     </template>
   </DialogModal>
 
-  <DeleteConfirmationModal :show="showConfirmationModal" @delete="deleteItem" @close="showConfirmationModal = false" />
+  <DeleteConfirmationModal :show="showConfirmationModal" @delete="deleteItem" @close="hideDeleteForm" />
 </template>
