@@ -70,6 +70,14 @@ npm run lint # shows warnings and tries to fix
 npm run format # tries to fix js/vue problems
 ```
 
+## Personal images
+
+To display them run the following comand to create a symlink
+
+```
+php artisan storage:link
+```
+
 ## SSL support on dev
 
 To run your dev with SSL support use the following command
@@ -81,6 +89,13 @@ docker compose -f docker-compose.yml -f docker-compose.ssl.yml up -d
 # stop containers
 docker compose -f docker-compose.yml -f docker-compose.ssl.yml stop
 ```
+
+## Environements
+
+Update the laravel .env file to the following values as needed
+
+local - for local development
+demo - for a uat or demo site (demo users cannot be deleted)
 
 ## On Prod
 

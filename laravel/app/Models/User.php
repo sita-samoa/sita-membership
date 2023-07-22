@@ -58,11 +58,24 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     protected $appends = [
         'profile_photo_url',
+        'role',
     ];
 
     public function members(): HasMany
     {
         return $this->hasMany(Member::class);
+    }
+
+    public function getRoleAttribute()
+    {
+        if (($role = $this->teamRole(Team::first())) instanceof \Laravel\Jetstream\Role) {
+            return [
+                'key' => $role->key,
+                'name' => $role->name,
+            ];
+        }
+
+        return null;
     }
 
     public function getPermissionsAttribute()
@@ -81,6 +94,7 @@ class User extends Authenticatable implements MustVerifyEmail
                 'canAccept' => $this->can('accept', $member),
                 'canSendSubReminder' => $this->can('sendSubReminder', $member),
                 'canSendPastDueSubReminder' => $this->can('sendPastDueSubReminder', $member),
+                'canManageUsers' => $this->can('viewAny', self::class),
             ];
         }
 
@@ -94,6 +108,24 @@ class User extends Authenticatable implements MustVerifyEmail
             'canAccept' => false,
             'canSendSubReminder' => false,
             'canSendPastDueSubReminder' => false,
+            'canManageUsers' => $this->can('viewAny', self::class),
         ];
+    }
+
+    public function isSuperUser(): bool
+    {
+        return $this->id === 1;
+    }
+
+    public function isDemoUser(): bool
+    {
+        $demo_users = [
+            'demo@example.com',
+            'executive@example.com',
+            'coordinator@example.com',
+            'editor@example.com',
+        ];
+
+        return in_array($this->email, $demo_users);
     }
 }
