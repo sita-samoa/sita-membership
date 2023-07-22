@@ -2,7 +2,6 @@
 
 use App\Models\Team;
 use App\Models\User;
-use Maatwebsite\Excel\Concerns\ToArray;
 
 test('user without role cannot access', function () {
     $this->actingAs($user = User::factory()->create());
@@ -60,7 +59,6 @@ test('user can be created', function (string $role) {
     expect($new_user->name)->toEqual('Test User');
     $team = Team::first();
     expect($new_user->fresh()->hasTeamRole($team, $role))->toBeTrue();
-
 })->with(['admin', 'editor', 'executive', 'coordinator']);
 
 test('users can be deleted', function () {
