@@ -17,6 +17,17 @@ createInertiaApp({
   title: title => `${title} - ${appName}`,
   resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
   setup({ el, App, props, plugin }) {
+    /**
+     * Track Page and Send to Google Analytic
+     * */
+    if (process.env.NODE_ENV === 'production') {
+      const googleAnalyticsGa4 = props.initialPage.props.google_analytics_ga4
+      router.on('navigate', () => {
+        gtag('js', new Date())
+        gtag('config', googleAnalyticsGa4)
+      })
+    }
+
     const captchaKey = props.initialPage.props.recaptcha_site_key
     return (
       createApp({ render: () => h(App, props) })
@@ -41,14 +52,4 @@ styleStore.setStyle()
 /* Dark mode */
 if ((!localStorage[darkModeKey] && window.matchMedia('(prefers-color-scheme: dark)').matches) || localStorage[darkModeKey] === '1') {
   styleStore.setDarkMode(true)
-}
-
-/**
- * Track Page and Send to Google Analytic
- * */
-if (process.env.NODE_ENV === 'production') {
-  router.on('navigate', () => {
-    gtag('js', new Date())
-    gtag('config', 'G-883B9EVYML')
-  })
 }

@@ -37,9 +37,6 @@ composer build
 # and this command to setup demo users and members for dev (must run after composer build)
 composer dev
 
-# on prod you need to run this on a cron to process the queue
-php artisan queue:work database --tries=1
-
 # register for a google recaptcha site key and secret here
 https://www.google.com/recaptcha/admin/create
 
@@ -96,19 +93,22 @@ Update the laravel .env file to the following values as needed
 
 local - for local development
 demo - for a uat or demo site (demo users cannot be deleted)
+production - for production site
 
-## On Prod
+## On Production
 
 Ensure that the following commands are run on a cron
 
 ```
-# run every minute
-php artisan schedule:work # for scheduled tasks
+# run every minute - for scheduled tasks
+php artisan schedule:work
 
-# run every 5 minutes
-php artisan queue:work # for running queues
+# run every 5 minutes - for running queues
+php artisan queue:work database --tries=1 --max-time=30 --stop-when-empty
 
 ```
+
+Also set APP_ENV=production and GOOGLE_ANALYTICS_GA4. This will ensure Google Analytics works correctly.
 
 Also if using SSL update the following variables accordingly in .env. Here
 example.com is used as an example domain

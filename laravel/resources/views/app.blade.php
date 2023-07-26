@@ -20,7 +20,7 @@
     @inertia
 
     @production
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-883B9EVYML"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google_analytics.ga4', '')}}"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
 
