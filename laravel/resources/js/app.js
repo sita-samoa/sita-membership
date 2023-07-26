@@ -4,7 +4,7 @@ import { createPinia } from 'pinia'
 import { useStyleStore } from '@/Stores/style.js'
 import { darkModeKey } from '@/config.js'
 import { createApp, h } from 'vue'
-import { createInertiaApp } from '@inertiajs/vue3'
+import { createInertiaApp, router } from '@inertiajs/vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
 import { VueReCaptcha } from 'vue-recaptcha-v3'
@@ -17,6 +17,17 @@ createInertiaApp({
   title: title => `${title} - ${appName}`,
   resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
   setup({ el, App, props, plugin }) {
+    /**
+     * Track Page and Send to Google Analytic
+     * */
+    if (process.env.NODE_ENV === 'production') {
+      const googleAnalyticsGa4 = props.initialPage.props.google_analytics_ga4
+      router.on('navigate', () => {
+        gtag('js', new Date())
+        gtag('config', googleAnalyticsGa4)
+      })
+    }
+
     const captchaKey = props.initialPage.props.recaptcha_site_key
     return (
       createApp({ render: () => h(App, props) })
