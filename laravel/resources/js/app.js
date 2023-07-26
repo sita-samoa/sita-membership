@@ -8,7 +8,6 @@ import { createInertiaApp } from '@inertiajs/vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
 import { VueReCaptcha } from 'vue-recaptcha-v3'
-import VueGtag from 'vue-gtag'
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
 
@@ -26,9 +25,6 @@ createInertiaApp({
         .use(VueReCaptcha, { siteKey: captchaKey, loaderOptions: { autoHideBadge: true } })
         /* eslint no-undef: 0 */
         .use(ZiggyVue, Ziggy)
-        .use(VueGtag, {
-          config: { id: 'G-883B9EVYML' },
-        })
         .mount(el)
     )
   },
@@ -45,4 +41,14 @@ styleStore.setStyle()
 /* Dark mode */
 if ((!localStorage[darkModeKey] && window.matchMedia('(prefers-color-scheme: dark)').matches) || localStorage[darkModeKey] === '1') {
   styleStore.setDarkMode(true)
+}
+
+/**
+ * Track Page and Send to Google Analytic
+ * */
+if (process.env.NODE_ENV === 'production') {
+  Inertia.on('navigate', event => {
+    gtag('js', new Date())
+    gtag('config', 'G-883B9EVYML')
+  })
 }
