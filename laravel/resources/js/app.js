@@ -4,7 +4,7 @@ import { createPinia } from 'pinia'
 import { useStyleStore } from '@/Stores/style.js'
 import { darkModeKey } from '@/config.js'
 import { createApp, h } from 'vue'
-import { createInertiaApp } from '@inertiajs/vue3'
+import { createInertiaApp, router } from '@inertiajs/vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
 import { VueReCaptcha } from 'vue-recaptcha-v3'
@@ -47,7 +47,7 @@ if ((!localStorage[darkModeKey] && window.matchMedia('(prefers-color-scheme: dar
  * Track Page and Send to Google Analytic
  * */
 if (process.env.NODE_ENV === 'production') {
-  Inertia.on('navigate', event => {
+  router.on('navigate', () => {
     gtag('js', new Date())
     gtag('config', 'G-883B9EVYML')
   })
