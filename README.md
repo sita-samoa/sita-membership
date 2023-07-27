@@ -110,6 +110,8 @@ php artisan queue:work database --tries=1 --max-time=30 --stop-when-empty
 
 Also set APP_ENV=production and GOOGLE_ANALYTICS_GA4. This will ensure Google Analytics works correctly.
 
+Set MAIL_BACKUPS_TO_ADDRESS to be notified of backup statuses.
+
 Also if using SSL update the following variables accordingly in .env. Here
 example.com is used as an example domain
 
