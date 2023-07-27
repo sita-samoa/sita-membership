@@ -56,6 +56,7 @@ class JetstreamServiceProvider extends ServiceProvider
             'member:send_sub_reminder',
             'member:mark_active',
             'member:submit_incomplete',
+            'user:manage',
         ])->description('Administrator users can perform any action.');
 
         // If you remove this role make sure to update the Pest tests

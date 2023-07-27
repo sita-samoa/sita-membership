@@ -37,4 +37,8 @@ return [
         'secret_key' => env('GOOGLE_RECAPTCHA_SECRET_KEY'),
     ],
 
+    'google_analytics' => [
+        'ga4' => env('GOOGLE_ANALYTICS_GA4'),
+    ],
+
 ];

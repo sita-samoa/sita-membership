@@ -1,6 +1,6 @@
 <script setup>
 import { router } from '@inertiajs/vue3'
-import { computed, ref, watch, reactive } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { Dropdown, ListGroup, ListGroupItem, Badge, Button } from 'flowbite-vue'
 import ClipboardIcon from 'vue-material-design-icons/Clipboard.vue'
 import ClipboardMultipleIcon from 'vue-material-design-icons/ClipboardMultiple.vue'
@@ -11,13 +11,17 @@ import CardBoxWidget from '@/Components/CardBoxWidget.vue'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
+import BaseLevel from '@/Components/BaseLevel.vue'
 
 dayjs.extend(relativeTime)
 dayjs.extend(utc)
 
 const props = defineProps({
   mailingLists: Object,
+  memberTypes: Object,
   members: Object,
+  membershipTypeId: Number,
+  membershipStatusId: Number,
   mailingId: Number,
   allEmails: String,
   subData: Object,
@@ -58,6 +62,11 @@ const capitalize = str => str.replace(/\b\w/g, l => l.toUpperCase())
 
 const filterStatus = ref(props.mailingId ?? 1)
 
+const membershipTypeId = ref(props.membershipTypeId ?? 0)
+// Set Accepted status as the default
+const ACCEPTED_STATUS_ID = 4
+const membershipStatusId = ref(ACCEPTED_STATUS_ID)
+
 const currentMailingList = computed(() => {
   return props.mailingLists.find(ml => ml.id == filterStatus.value)
 })
@@ -85,6 +94,16 @@ function getBadge(application_status_id) {
   return badgeType
 }
 
+function getMembershipType(id) {
+  if (id === 0) return 'All'
+  return props.memberTypes.find(mt => mt.id === id).title
+}
+
+function getMembershipStatus(id) {
+  if (id === 0) return 'All'
+  return applicationStatus[id]
+}
+
 const applicationStatus = {
   1: 'Draft',
   2: 'Submitted',
@@ -93,14 +112,6 @@ const applicationStatus = {
   5: 'Lapsed',
   6: 'Expired',
   7: 'Banned',
-}
-
-const membershipType = {
-  1: 'Full',
-  2: 'Associate',
-  3: 'Affiliate',
-  4: 'Student',
-  5: 'Fellow',
 }
 
 function copySingleEmail(email) {
@@ -115,11 +126,13 @@ function getSubscriptionDate(date) {
   return dayjs(date).fromNow()
 }
 
-watch(filterStatus, value => {
+watch([filterStatus, membershipTypeId, membershipStatusId], ([filterStatusValue, membershipTypeIdValue, membershipStatusIdValue]) => {
   router.get(
     route('mailing-lists.index'),
     {
-      id: value,
+      id: filterStatusValue,
+      membershipTypeId: membershipTypeIdValue,
+      membershipStatusId: membershipStatusIdValue,
     },
     {
       preserveState: true,
@@ -130,25 +143,52 @@ watch(filterStatus, value => {
 <template>
   <div class="grid grid-cols-1 gap-6 mb-6">
     <h1 class="text-xl bold mb-0 pb-0">{{ currentMailingList.title }}</h1>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-      <CardBoxWidget :trend="subStats[0].trend" :trend-type="subStats[0].trendType" :color="subStats[0].color" :icon="subStats[0].icon" :number="subStats[0].number" :label="subStats[0].label" :showSecondaryIcon="false" />
-      <CardBoxWidget :trend="subStats[1].trend" :trend-type="subStats[1].trendType" :color="subStats[1].color" :icon="subStats[1].icon" :number="subStats[1].number" :label="subStats[1].label" :showSecondaryIcon="false" />
+    <div v-if="subStats != null" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+      <CardBoxWidget :trend="subStats[0].trend" :trend-type="subStats[0].trendType" :color="subStats[0].color" :icon="subStats[0].icon" :number="subStats[0].number" :label="subStats[0].label" :show-secondary-icon="false" />
+      <CardBoxWidget :trend="subStats[1].trend" :trend-type="subStats[1].trendType" :color="subStats[1].color" :icon="subStats[1].icon" :number="subStats[1].number" :label="subStats[1].label" :show-secondary-icon="false" />
     </div>
-    <div class="flex justify-between w-full h-auto items-center">
-      <!-- Filter dropdown -->
-      <dropdown :text="filterName" class="mt-3">
-        <list-group>
-          <list-group-item v-for="list in props.mailingLists" :key="list.id" @click="filterStatus = list.id">
-            {{ capitalize(list.code) }}
-          </list-group-item>
-        </list-group>
-      </dropdown>
-      <TooltipTrigger @trigger="() => copyAllEmails()" :duration="1000" text="Copied All">
+    <BaseLevel>
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+        <!-- Filter dropdown -->
+        <div class="mr-3">
+          Filters | Mailing list:
+          <dropdown :text="filterName" class="mt-3">
+            <list-group>
+              <list-group-item v-for="list in props.mailingLists" :key="list.id" @click="filterStatus = list.id">
+                {{ capitalize(list.code) }}
+              </list-group-item>
+            </list-group>
+          </dropdown>
+        </div>
+        <div class="mr-3">
+          Member Status:
+          <dropdown :text="getMembershipStatus(membershipStatusId)" class="mt-3 ml-1 md:ml-3">
+            <list-group>
+              <list-group-item :key="0" @click="membershipStatusId = 0"> All </list-group-item>
+              <list-group-item v-for="type in Object.keys(applicationStatus)" :key="type" @click="membershipStatusId = type">
+                {{ getMembershipStatus(type) }}
+              </list-group-item>
+            </list-group>
+          </dropdown>
+        </div>
+        <div class="mr-3">
+          Member Type:
+          <dropdown :text="getMembershipType(membershipTypeId)" class="mt-3 ml-1 md:ml-3">
+            <list-group>
+              <list-group-item :key="0" @click="membershipTypeId = 0"> All </list-group-item>
+              <list-group-item v-for="type in props.memberTypes" :key="type.id" @click="membershipTypeId = type.id">
+                {{ type.title }}
+              </list-group-item>
+            </list-group>
+          </dropdown>
+        </div>
+      </div>
+      <TooltipTrigger :duration="1000" text="Copied All" @trigger="() => copyAllEmails()">
         <Button color="green" size="lg">
-          <div class="flex"><clipboard-multiple-icon></clipboard-multiple-icon>&nbsp;Copy all emails</div>
+          <div class="flex"><clipboard-multiple-icon />&nbsp;Copy all emails</div>
         </Button>
       </TooltipTrigger>
-    </div>
+    </BaseLevel>
     <!-- No results message -->
     <div v-if="props.members.data.length > 0">
       <div class="mb-3">Showing {{ props.members.from }} to {{ props.members.to }} of {{ props.members.total }} results.</div>
@@ -186,13 +226,13 @@ watch(filterStatus, value => {
                         <div class="inline px-3 py-1 w-auto text-sm font-normal rounded-full text-emerald-500 gap-x-2 bg-emerald-100/60 dark:bg-gray-800">
                           {{ member.home_email }}
                         </div>
-                        <TooltipTrigger @trigger="() => copySingleEmail(member.home_email)" :show="false" :duration="800" text="Copied">
+                        <TooltipTrigger :show="false" :duration="800" text="Copied" @trigger="() => copySingleEmail(member.home_email)">
                           <clipboard-icon class="w-5 h-5 cursor-pointer text-emerald-500 dark:text-slate-300" />
                         </TooltipTrigger>
                       </td>
                       <td class="px-4 py-4 text-sm whitespace-nowrap">
                         <div>
-                          <Badge type="default">{{ membershipType[member.membership_type_id] }}</Badge>
+                          <Badge type="default">{{ getMembershipType(member.membership_type_id) ?? 'N/A' }}</Badge>
                         </div>
                       </td>
                       <td class="px-4 py-4 text-sm whitespace-nowrap">
@@ -219,7 +259,8 @@ watch(filterStatus, value => {
       </section>
     </div>
     <div v-else>
-      <p>No members are subscribed to this mailing list.</p>
+      <p v-if="props.members.data.length < 1 && membershipTypeId == 0 && membershipStatusId == 0">No members are subscribed to this mailing list.</p>
+      <p v-else>No match for current filter.</p>
     </div>
   </div>
 </template>

@@ -11,7 +11,7 @@ defineProps(['auditLog', 'member_id'])
 <template>
   <LayoutAuthenticated title="Audit Log">
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiSecurity" title="Audig Log" main> &nbsp; </SectionTitleLineWithButton>
+      <SectionTitleLineWithButton :icon="mdiSecurity" title="Audit Log" main> &nbsp; </SectionTitleLineWithButton>
       <AuditLogTable :audit-log="auditLog" :member_id="member_id" />
     </SectionMain>
   </LayoutAuthenticated>
