@@ -13,22 +13,28 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        // Mark members as lapsed.
+        $schedule->call(function () {
+            $rep = new MemberMembershipStatusRepository();
+            $rep->markAsLapsed();
+        })->daily();
+
+        // Schedule backups.
+        $schedule->command('backup:clean')->daily()->at('01:00');
+        $schedule->command('backup:run')->daily()->at('01:30');
+
+        // Reminders for sub.
         $schedule->call(function () {
             $rep = new MemberMembershipStatusRepository();
             $rep->sendExpiringMembershipReminders(1);
         })->weekly();
 
+        // Reminders for expiring and past due subs.
         $schedule->call(function () {
             $rep = new MemberMembershipStatusRepository();
             $rep->sendExpiringMembershipReminders(3);
             $rep->sendPastDueSubReminders();
         })->monthly();
-
-        $schedule->call(function () {
-            // Mark members as lapsed.
-            $rep = new MemberMembershipStatusRepository();
-            $rep->markAsLapsed();
-        })->daily();
     }
 
     /**
