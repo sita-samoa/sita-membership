@@ -1,0 +1,14 @@
+name: Main
+on:
+  push:
+    branches:
+      - '**'
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+  call-workflow1:
+    if: ${{ github.event_name != 'pull_request' }}
+    uses: ./.github/workflows/laravel.yml
