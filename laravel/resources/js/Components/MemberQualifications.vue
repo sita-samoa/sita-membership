@@ -152,7 +152,7 @@ function deleteItem() {
       <Input v-model="form.qualification" placeholder="enter your qualification" label="Qualification" class="mb-2" />
       <InputError class="mt-2" :message="form.errors.qualification" />
 
-      <Input v-model="form.year_attained" name="year_attained" type="number" placeholder="enter your year attended" label="Year attended" class="mb-2" />
+      <Input v-model="form.year_attained" name="year_attained" type="number" placeholder="enter year attained" label="Year attained" class="mb-2" />
       <InputError class="mt-2" :message="form.errors.year_attained" />
 
       <Input v-model="form.institution" placeholder="enter your institution" label="Institution" class="mb-2" />
