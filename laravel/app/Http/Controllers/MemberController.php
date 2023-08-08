@@ -202,6 +202,26 @@ class MemberController extends Controller
     }
 
     /**
+     * Accept member application.
+     */
+    public function reject(Member $member, Request $request): RedirectResponse
+    {
+        $this->authorize('reject', $member);
+
+        $validated = $request->validate([
+            'reason' => 'required|string',
+        ]);
+
+        $this->rep->reject(
+            $member,
+            $request->user(),
+            $validated['reason']
+        );
+
+        return redirect()->back()->with('success', 'Application Rejected');
+    }
+
+    /**
      * Send a sub reminder to member.
      */
     public function sendSubReminder(Member $member): RedirectResponse

@@ -62,6 +62,12 @@ class MemberRepository extends Repository
         return $this->recordAction($member, $user, $to_date, $receipt_number);
     }
 
+    public function reject(Member $member, User $user, string $reason = '')
+    {
+        $member->membership_status_id = MembershipStatus::BANNED->value;
+        $member->save();
+    }
+
     public function markOptionalFlagAsViewed(Member $member, string $flag)
     {
         if ($flag == 'viewed_other_memberships') {
