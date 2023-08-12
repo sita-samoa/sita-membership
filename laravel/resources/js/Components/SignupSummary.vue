@@ -6,6 +6,7 @@ import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import AcceptModal from '@/Components/AcceptModal.vue'
+import RejectionModal from '@/Components/RejectionModal.vue'
 import CardBox from '@/Components/CardBox.vue'
 
 const props = defineProps(['member', 'options'])
@@ -13,6 +14,7 @@ const props = defineProps(['member', 'options'])
 const completion = props.options.completion.data
 const showAcceptanceModal = ref(false)
 const showActivateModal = ref(false)
+const showRejectionModal = ref(false)
 
 const form = useForm({})
 
@@ -66,6 +68,11 @@ const application_ready_for_submission = props.options.completion.overall.status
       Your application has been endorsed and is awaiting settlement.
     </Alert>
 
+    <Alert v-if="application_status_id === 8" type="danger" class="mb-6">
+      <strong>Rejected</strong><br />
+      Your application has been rejected. See below for more information.
+    </Alert>
+
     <MemberSummaryCard :member="props.member" link-route="members.signup.index" class="mb-6" />
 
     <list-group class="w-full">
@@ -85,7 +92,8 @@ const application_ready_for_submission = props.options.completion.overall.status
 
       <!-- Action buttons -->
       <Button v-if="application_status_id <= 1" class="w-full mb-6" :disabled="!(application_ready_for_submission || $page.props.user.permissions.canSubmit) || form.processing" default @click.prevent="submit">Submit</Button>
-      <Button v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" class="w-full mb-6" :disabled="form.processing" default @click.prevent="endorse">Endorse</Button>
+      <Button v-if="application_status_id === 2 && $page.props.user.permissions.canEndorse" class="w-full mb-3" :disabled="form.processing" default @click.prevent="endorse">Endorse</Button>
+      <Button v-if="application_status_id === 2 && $page.props.user.permissions.canReject" class="w-full mb-6 bg-red-500 hover:bg-red-400" :disabled="form.processing" default @click.prevent="showRejectionModal = true">Reject</Button>
       <Button v-if="application_status_id === 3 && $page.props.user.permissions.canAccept" class="w-full mb-6" :disabled="form.processing" default @click.prevent="showAcceptanceModal = true">Accept</Button>
       <Button v-if="(application_status_id === 5 || application_status_id === 6) && $page.props.user.permissions.canAccept" class="w-full mb-6" color="green" :disabled="form.processing" default @click.prevent="showActivateModal = true">Activate Membership</Button>
       <Button v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" class="w-full mb-6" :disabled="form.processing" default @click.prevent="sendSubReminder">Send sub reminder</Button>
@@ -97,6 +105,7 @@ const application_ready_for_submission = props.options.completion.overall.status
       <!-- Dialog Modals -->
       <AcceptModal :show="showAcceptanceModal" :member-id="member.id" @close="showAcceptanceModal = false" />
       <AcceptModal :show="showActivateModal" :member-id="member.id" heading-text="Activate Membership" button-text="Activate" @close="showActivateModal = false" />
+      <RejectionModal :show="showRejectionModal" :member-id="member.id" @close="showRejectionModal = false" />
     </template>
   </CardBox>
 </template>
