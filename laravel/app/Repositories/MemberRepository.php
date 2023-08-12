@@ -64,7 +64,7 @@ class MemberRepository extends Repository
 
     public function reject(Member $member, User $user, string $reason = '')
     {
-        $member->membership_status_id = MembershipStatus::BANNED->value;
+        $member->membership_status_id = MembershipStatus::REJECTED->value;
         $member->save();
     }
 

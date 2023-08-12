@@ -125,6 +125,11 @@ class DatabaseSeeder extends Seeder
             'code' => 'banned',
             'title' => 'Banned',
         ]);
+        DB::table('membership_statuses')->insert([
+            'id' => 8,
+            'code' => 'rejected',
+            'title' => 'Rejected',
+        ]);
 
         // add mailing list options
         DB::table('mailing_lists')->insert([

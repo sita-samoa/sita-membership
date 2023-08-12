@@ -11,4 +11,5 @@ enum MembershipStatus: int
     case LAPSED = 5;
     case EXPIRED = 6;
     case BANNED = 7;
+    case REJECTED = 8;
 }
