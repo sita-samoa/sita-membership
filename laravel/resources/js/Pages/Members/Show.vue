@@ -12,7 +12,7 @@ defineProps(['member', 'options', 'data'])
   <LayoutAuthenticated title="Summary">
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiBadgeAccountHorizontalOutline" title="Summary" main> &nbsp; </SectionTitleLineWithButton>
-      <SignupSummary :member="member" :options="options" :data="data"/>
+      <SignupSummary :member="member" :options="options" :data="data" />
     </SectionMain>
   </LayoutAuthenticated>
 </template>
