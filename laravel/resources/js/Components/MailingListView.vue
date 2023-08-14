@@ -112,6 +112,7 @@ const applicationStatus = {
   5: 'Lapsed',
   6: 'Expired',
   7: 'Banned',
+  8: 'Rejected',
 }
 
 function copySingleEmail(email) {

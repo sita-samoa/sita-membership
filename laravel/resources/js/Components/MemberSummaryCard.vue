@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { Link } from '@inertiajs/vue3'
 import { TheCard, Badge } from 'flowbite-vue'
-import { mdiSendCheck, mdiFile, mdiCheckDecagram, mdiClockOutline, mdiDecagram, mdiClockAlertOutline, mdiAccountOff } from '@mdi/js'
+import { mdiSendCheck, mdiFile, mdiCheckDecagram, mdiClockOutline, mdiDecagram, mdiClockAlertOutline, mdiAccountOff, mdiAccountCancel } from '@mdi/js'
 import BaseIcon from '@/Components/BaseIcon.vue'
 
 const props = defineProps({
@@ -66,6 +66,11 @@ switch (props.member.membership_status_id) {
     // banned
     badgeType = 'dark'
     badgeIcon = mdiAccountOff
+    break
+  case 8:
+    // banned
+    badgeType = 'red'
+    badgeIcon = mdiAccountCancel
     break
 }
 

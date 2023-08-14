@@ -17,6 +17,7 @@ import AccountOffIcon from 'vue-material-design-icons/AccountOff.vue'
 import SearchFilter from '@/Components/SearchFilter.vue'
 import BaseLevel from '@/Components/BaseLevel.vue'
 import BaseIcon from '@/Components/BaseIcon.vue'
+import AccountCancelIcon from 'vue-material-design-icons/AccountCancel.vue'
 
 import { initDropdowns } from 'flowbite'
 import ResultsSummary from './ResultsSummary.vue'
@@ -50,6 +51,8 @@ const filterName = computed(() => {
       return 'Expired'
     case 7:
       return 'Banned'
+    case 8:
+      return 'Rejected'
   }
   return 'All'
 })
@@ -133,6 +136,12 @@ watch(
           <AccountOffIcon />
         </template>
         Banned
+      </list-group-item>
+      <list-group-item @click="form.membership_status_id = 8">
+        <template #prefix>
+          <AccountCancelIcon />
+        </template>
+        Rejected
       </list-group-item>
     </list-group>
   </SearchFilter>

@@ -5,7 +5,6 @@ import { Input } from 'flowbite-vue'
 import InputError from '@/Components/InputError.vue'
 import CancelButton from '@/Components/CancelButton.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
-import { stringifyExpression } from '@vue/compiler-core'
 
 const props = defineProps({
   show: {
@@ -29,11 +28,11 @@ const props = defineProps({
 const emits = defineEmits(['close'])
 
 const form = useForm({
-  reason: ""
+  reason: '',
 })
 
 function reject() {
-  form.post(route('members.reject', props.memberId), {
+  form.put(route('members.reject', props.memberId), {
     resetOnSuccess: false,
     onSuccess() {
       emits('close')
