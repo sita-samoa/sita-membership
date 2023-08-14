@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Enums\MembershipStatus;
+use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\User;
 use App\Notifications\ExpiringSubReminder;
@@ -211,6 +212,40 @@ class MemberMembershipStatusRepository extends Repository
             // Mark as lapsed.
             // Note: Lapsed membership reminders will be sent by sendPastDueSubReminders().
             $member->membership_status_id = MembershipStatus::LAPSED->value;
+            $member->save();
+
+            $rep->recordAction($member, $admin_user);
+        }
+    }
+
+    /**
+     * Revert members from rejected to draft.
+     *
+     * @return void
+     */
+    public function revertRejectedToDraft()
+    {
+        $rep = new MemberRepository();
+        $ids = [];
+
+        $admin_user = User::first();
+        // Get rejected members.
+        $statuses = Member::where('membership_status_id', MembershipStatus::REJECTED->value);
+        foreach ($statuses as $status) {
+            $member = $status->member;
+            if ($member->membership_status_id === MembershipStatus::REJECTED->value) {
+                $id = $member->id;
+                // Make sure we dont have duplicate member ids (in case it was Activated twice)
+                if (!array_key_exists($id, $ids)) {
+                    $ids[$id] = $status;
+                }
+            }
+        }
+
+        foreach ($ids as $status) {
+            $member = $status->member;
+            // Mark as draft
+            $member->membership_status_id = MembershipStatus::DRAFT->value;
             $member->save();
 
             $rep->recordAction($member, $admin_user);

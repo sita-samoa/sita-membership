@@ -19,6 +19,12 @@ class Kernel extends ConsoleKernel
             $rep->markAsLapsed();
         })->daily();
 
+        // Revert rejected members to draft status
+        $schedule->call(function () {
+            $rep = new MemberMembershipStatusRepository();
+            $rep->revertRejectedToDraft();
+        })->everyFifteenMinutes();
+
         // Schedule backups.
         $schedule->command('backup:clean')->daily()->at('01:00');
         $schedule->command('backup:run')->daily()->at('01:30');
