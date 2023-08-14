@@ -69,7 +69,7 @@ class JetstreamServiceProvider extends ServiceProvider
         Jetstream::role('executive', 'Executive', [
             'member:read_any',
             'member:endorse',
-            'member:reject'
+            'member:reject',
         ])->description('SITA Executive users have the ability to read member details and endorse applications.');
 
         Jetstream::role('coordinator', 'Coordinator', [

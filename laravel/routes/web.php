@@ -64,6 +64,9 @@ Route::middleware([
     Route::put('/members/{member}/endorse', [MemberController::class, 'endorse'])
         ->name('members.endorse');
 
+    Route::put('/members/{member}/reject', [MemberController::class, 'reject'])
+        ->name('members.reject');
+
     Route::put('/members/{member}/accept', [MemberController::class, 'accept'])
         ->name('members.accept');
 

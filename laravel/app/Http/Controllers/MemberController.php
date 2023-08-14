@@ -7,11 +7,13 @@ use App\Exports\MembersExport;
 use App\Models\MailingList;
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
+use App\Models\MemberRejectionStatus;
 use App\Models\MembershipType;
 use App\Models\Team;
 use App\Notifications\AcceptanceNotification;
 use App\Notifications\EndorsementNotification;
 use App\Notifications\PastDueSubReminder;
+use App\Notifications\RejectionNotification;
 use App\Notifications\SubReminder;
 use App\Repositories\MemberMembershipStatusRepository;
 use App\Repositories\MemberRepository;
@@ -202,7 +204,7 @@ class MemberController extends Controller
     }
 
     /**
-     * Accept member application.
+     * Reject member application.
      */
     public function reject(Member $member, Request $request): RedirectResponse
     {
@@ -214,11 +216,34 @@ class MemberController extends Controller
 
         $this->rep->reject(
             $member,
-            $request->user(),
             $validated['reason']
         );
 
+        $this->rep->recordAction($member, $request->user());
+
+        // Send rejection notifications.
+        $team = Team::first();
+        $users = $team->allUsers();
+        foreach ($users as $user) {
+            if ($team->userHasPermission($user, 'member:reject')) {
+                $user->notify(new RejectionNotification($member, $validated['reason']));
+            }
+        }
+
         return redirect()->back()->with('success', 'Application Rejected');
+    }
+
+    /**
+     * Get Rejection Reason.
+     */
+    public function getRejectionReason(Member $member)
+    {
+        if ($member->membership_status_id == MembershipStatus::REJECTED->value) {
+            $status = MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first();
+            if ($status['reason'] != null) {
+                return $status['reason'];
+            }
+        }
     }
 
     /**
@@ -301,10 +326,18 @@ class MemberController extends Controller
             $relations[] = 'title';
         }
 
+        $reason = null;
+        if ($member->membership_status_id === MembershipStatus::REJECTED->value) {
+            $reason = $this->getRejectionReason($member);
+        }
+
         return Inertia::render('Members/Show', [
             'member' => $member->load($relations),
             'options' => [
                 'completion' => $member->completions,
+            ],
+            'data' => [
+                'reason' => $reason,
             ],
         ]);
     }
