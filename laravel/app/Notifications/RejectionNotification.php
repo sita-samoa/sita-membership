@@ -36,10 +36,11 @@ class RejectionNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage())
-            ->subject('Signup rejected')
+            ->subject('SITA Membership Application Rejected')
             ->greeting("Tālofa {$this->member->user->name}!")
             ->line('A signup request has been rejected. Due to the following reason:')
             ->line($this->reason)
+            ->line('Your application status was reverted back to Draft. Please provide more information pertaining to the above reason.')
             ->action('View details', route('members.show', $this->member->id));
     }
 

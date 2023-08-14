@@ -221,14 +221,8 @@ class MemberController extends Controller
 
         $this->rep->recordAction($member, $request->user());
 
-        // Send rejection notifications.
-        $team = Team::first();
-        $users = $team->allUsers();
-        foreach ($users as $user) {
-            if ($team->userHasPermission($user, 'member:reject')) {
-                $user->notify(new RejectionNotification($member, $validated['reason']));
-            }
-        }
+        // Send rejection notification.
+        $member->user->notify(new RejectionNotification($member, $validated['reason']));
 
         return redirect()->back()->with('success', 'Application Rejected');
     }
