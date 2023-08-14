@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\MemberMembershipStatus;
+use App\Models\MemberRejectionStatus;
 use App\Models\User;
 use App\Notifications\ExpiringSubReminder;
 use App\Notifications\PastDueSubReminder;
@@ -223,14 +224,18 @@ class MemberMembershipStatusRepository extends Repository
      *
      * @return void
      */
-    public function revertRejectedToDraft()
+    public function revertRejectedToDraft($limit = 10)
     {
         $rep = new MemberRepository();
         $ids = [];
 
         $admin_user = User::first();
         // Get rejected members.
-        $statuses = Member::where('membership_status_id', MembershipStatus::REJECTED->value);
+        $statuses = MemberMembershipStatus::where('membership_status_id', MembershipStatus::REJECTED->value)
+            ->latest()
+            ->limit($limit)
+            ->get();
+
         foreach ($statuses as $status) {
             $member = $status->member;
             if ($member->membership_status_id === MembershipStatus::REJECTED->value) {
@@ -244,6 +249,10 @@ class MemberMembershipStatusRepository extends Repository
 
         foreach ($ids as $status) {
             $member = $status->member;
+            // Make rejection reason inactive
+            $mrs = MemberRejectionStatus::where('member_id', $id)->first();
+            $mrs->status = false;
+            $mrs->save();
             // Mark as draft
             $member->membership_status_id = MembershipStatus::DRAFT->value;
             $member->save();
