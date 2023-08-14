@@ -9,7 +9,7 @@ import AcceptModal from '@/Components/AcceptModal.vue'
 import RejectionModal from '@/Components/RejectionModal.vue'
 import CardBox from '@/Components/CardBox.vue'
 
-const props = defineProps(['member', 'options'])
+const props = defineProps(['member', 'options', 'data'])
 
 const completion = props.options.completion.data
 const showAcceptanceModal = ref(false)
@@ -70,7 +70,10 @@ const application_ready_for_submission = props.options.completion.overall.status
 
     <Alert v-if="application_status_id === 8" type="danger" class="mb-6">
       <strong>Rejected</strong><br />
-      Your application has been rejected. See below for more information.
+      Your application has been rejected. See below for more information:
+      <ul class="list-group" v-if="props.data.reason != null">
+        <li class="list-item mt-2">{{ props.data.reason }}</li>
+      </ul>
     </Alert>
 
     <MemberSummaryCard :member="props.member" link-route="members.signup.index" class="mb-6" />
