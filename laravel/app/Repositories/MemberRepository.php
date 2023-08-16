@@ -9,6 +9,9 @@ use App\Models\MemberRejectionStatus;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use LaravelDaily\Invoices\Invoice;
+use LaravelDaily\Invoices\Classes\Buyer;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
 
 class MemberRepository extends Repository
 {
@@ -74,7 +77,13 @@ class MemberRepository extends Repository
             )
         );
 
-        return $this->recordAction($member, $user, $to_date, $receipt_number);
+        $this->recordAction($member, $user, $to_date, $receipt_number);
+
+        // generate invoice and store
+
+        // send email notification to user with link to invoice page
+
+        // allow pdf download
     }
 
     public function reject(Member $member, string $reason)
@@ -141,5 +150,30 @@ class MemberRepository extends Repository
                     });
                 }
             });
+    }
+
+    /**
+     * Generate Invoice for membership subscription.
+     *
+     * @param  Member  $member
+     * @return Collection
+     */
+    public function generateInvoice(Member $member) {
+        $customer = new Buyer([
+            'name'          => $member->first_name . ' ' . $member->last_name,
+            'custom_fields' => [
+                'email' => $member->home_email,
+            ],
+        ]);
+
+        $item = (new InvoiceItem())->title('SITA Membership Subscription')
+          ->pricePerUnit($member->membershipType->annual_cost);
+
+        $invoice = Invoice::make()
+            ->buyer($customer)
+            ->taxRate(15)
+            ->addItem($item);
+
+        return $invoice->stream();
     }
 }
