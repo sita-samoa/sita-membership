@@ -103,6 +103,17 @@ npm run lint # shows warnings and tries to fix
 npm run format # tries to fix js/vue problems
 ```
 
+## Backups
+
+
+```
+# To take a backup run the following command
+php artisan backup:run
+
+# to clean out old backups
+php artisan backup:clean
+```
+
 ## User images
 
 To display them run the following comand to create a symlink
@@ -164,6 +175,7 @@ CERT_RESOLVER=letsencrypt
 * [Github Project](https://github.com/orgs/sita-samoa/projects/1)
 * [Icons](https://pictogrammers.com/library/mdi/)
 * [SSL support](https://github.com/bubelov/traefik-letsencrypt-compose)
+* [Laravel Backup](https://github.com/spatie/laravel-backup)
 
 **Common commands**
 
