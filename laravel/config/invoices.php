@@ -6,7 +6,7 @@ return [
         /*
          * Carbon date format
          */
-        'format' => 'Y-m-d',
+        'format' => 'd/m/Y',
 
         /*
          * Due date for payment since invoice's date.
@@ -15,20 +15,20 @@ return [
     ],
 
     'serial_number' => [
-        'series'   => 'SUB',
+        'series'   => '',
         'sequence' => 1,
 
         /*
          * Sequence will be padded accordingly, for ex. 00001
          */
-        'sequence_padding' => 5,
+        'sequence_padding' => 0,
         'delimiter'        => '.',
 
         /*
          * Supported tags {SERIES}, {DELIMITER}, {SEQUENCE}
          * Example: SUB.00001
          */
-        'format' => '{SERIES}{DELIMITER}{SEQUENCE}',
+        'format' => '#{SEQUENCE}',
     ],
 
     'currency' => [
@@ -57,7 +57,7 @@ return [
          * By default empty.
          * Example: 1,999.00
          */
-        'thousands_separator' => '',
+        'thousands_separator' => ',',
 
         /*
          * Supported tags {VALUE}, {SYMBOL}, {CODE}
@@ -88,7 +88,7 @@ return [
          */
         'attributes' => [
             'name'          => 'Samoa Information Technology Association',
-            'address'       => '5723+RC4, Vaivase, Apia, Samoa',
+            'address'       => 'Vaivase, Apia, Samoa',
             'code'          => '41-1985581',
             'vat'           => '123456789',
             'phone'         => '760-355-3930',
@@ -106,7 +106,7 @@ return [
 
     'dompdf_options' => [
         'enable_php' => true,
-        /**
+        /*
          * Do not write log.html or make it optional
          *  @see https://github.com/dompdf/dompdf/issues/2810
          */
