@@ -1,13 +1,13 @@
 # SITA Membership database
 
-SITA Membership database using Laravel 10 and Jet stream inertia (vuejs)
+SITA Membership database with Laravel 10 and Jet stream Inertia (Vuejs) and Tailwind.
 
-## Dev environment with [docker4drupal](https://github.com/wodby/docker4drupal/releases)
+### Dev environment with [docker4drupal](https://github.com/wodby/docker4drupal/releases)
 
 This repository has been set up to work with docker compose. You need docker
 and docker compose to use the commands below.
 
-### Getting Started
+## Getting Started
 
 ```
 # start up containers
@@ -54,6 +54,42 @@ Once installed you can access the dev site on
 
 Click "Register" and register a new account then use it to log in.
 
+## Incident Response
+
+Please use the following information to response to any cybersecurity incidents.
+
+### Who do I contact?
+
+Please do not post to the issue queue or public forums. Appreciate if you can
+send an email to sita-exec@sita.ws or president@sita.ws
+
+### Steps while under attack
+
+* Notify contact person above
+* Isolate and block using Web Application Firewall
+* Scale up infrustructure
+
+#### Steps when compromised
+
+* Provision new server
+* Restore site
+
+## Contributing
+
+We are always looking for help. You can contribute to this project in multiple ways:
+
+* Coding - Feel free to review the issue queue and open up a Pull Request.
+* Code review
+* Testing
+* Reporting bugs
+* Suggesting enhancements
+* Documentation
+* Joining Samoa Stackoverflow
+
+## Coding style and etiqueue
+
+We have linting for PHP and JS which should take care of most things. Please be respectful when adding code comments and responding to feedback.
+
 ## Linting
 
 ```
@@ -67,7 +103,18 @@ npm run lint # shows warnings and tries to fix
 npm run format # tries to fix js/vue problems
 ```
 
-## Personal images
+## Backups
+
+
+```
+# To take a backup run the following command
+php artisan backup:run
+
+# to clean out old backups
+php artisan backup:clean
+```
+
+## User images
 
 To display them run the following comand to create a symlink
 
@@ -87,13 +134,13 @@ docker compose -f docker-compose.yml -f docker-compose.ssl.yml up -d
 docker compose -f docker-compose.yml -f docker-compose.ssl.yml stop
 ```
 
-## Environements
+## Environments
 
 Update the laravel .env file to the following values as needed
 
-local - for local development
-demo - for a uat or demo site (demo users cannot be deleted)
-production - for production site
+* local - for local development
+* demo - for a uat or demo site (demo users cannot be deleted)
+* production - for production site
 
 ## On Production
 
@@ -128,6 +175,7 @@ CERT_RESOLVER=letsencrypt
 * [Github Project](https://github.com/orgs/sita-samoa/projects/1)
 * [Icons](https://pictogrammers.com/library/mdi/)
 * [SSL support](https://github.com/bubelov/traefik-letsencrypt-compose)
+* [Laravel Backup](https://github.com/spatie/laravel-backup)
 
 **Common commands**
 
@@ -166,13 +214,15 @@ php artisan make:test UserTest --pest
 
 **Tips**
 
-Use aliases
+Use bash aliases in your local dev
 
 ```
 # docker compose aliases
 alias dc="docker compose"
-alias dup="docker compose up -d && docker compose logs php"
+alias dup="docker compose up -d"
+alias dlup="docker compose up -d && docker compose logs php"
 alias dphp="docker compose exec php sh"
 alias dnode="docker compose exec node bash"
+alias dlnode="docker compose logs -f node"
 alias dstop="docker compose stop"
 ```
