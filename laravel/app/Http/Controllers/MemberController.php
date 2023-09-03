@@ -247,13 +247,13 @@ class MemberController extends Controller
     }
 
     /**
-     * Converts Member Status from Rejected to Draft
+     * Converts Member Status from Rejected to Draft.
      */
     public function convertRejectToDraft(Member $member)
     {
         $this->authorize('submit', $member);
 
-        if($member->membership_status_id == MembershipStatus::REJECTED->value){
+        if ($member->membership_status_id == MembershipStatus::REJECTED->value) {
             $member->membership_status_id = MembershipStatus::DRAFT->value;
             $member->save();
         }

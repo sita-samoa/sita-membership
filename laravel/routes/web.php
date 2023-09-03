@@ -83,7 +83,7 @@ Route::middleware([
         ->name('members.view-flag');
 
     Route::put('/members/{member}/convert-to-draft', [MemberController::class, 'convertRejectToDraft'])
-    ->name('members.convert-to-draft');
+        ->name('members.convert-to-draft');
 
     // Member work experience
     Route::resource('member-work-experiences', MemberWorkExperienceController::class)

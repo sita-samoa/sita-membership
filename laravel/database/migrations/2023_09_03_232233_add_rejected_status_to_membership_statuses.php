@@ -11,12 +11,12 @@ return new class extends Migration
     public function up(): void
     {
         DB::table('membership_statuses')->insert(
-            array(
+            [
                 'id' => 8,
                 'title' => 'Rejected',
-                'code' => 'rejected'
-            )
-            );
+                'code' => 'rejected',
+            ]
+        );
     }
 
     /**
