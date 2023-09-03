@@ -85,7 +85,7 @@ class MemberRepository extends Repository
         $membership_status =
             MemberMembershipStatus::where(['member_id' => $member->id, 'receipt_number' => $receipt_number])->first();
 
-        if ($member->membership_type_id != MembershipTypeEnum::STUDENT && $member->membership_type_id != MembershipTypeEnum::FELLOW) {
+        if (!in_array($member->membership_type_id, [MembershipTypeEnum::STUDENT->value, MembershipTypeEnum::FELLOW->value])) {
             $this->generateInvoiceAndNotifyUser($member, $membership_status);
         }
     }
@@ -171,8 +171,11 @@ class MemberRepository extends Repository
             ],
         ]);
 
-        $item = (new InvoiceItem())->title('SITA Membership Subscription')
-            ->pricePerUnit(MembershipType::where('id', $member->membership_type_id)->first()->annual_cost);
+        $membership_type = MembershipType::where('id', $member->membership_type_id)->first();
+        $annual_cost = $membership_type->annual_cost;
+
+        $item = (new InvoiceItem())->title('SITA Membership Subscription - '.$membership_type->title)
+            ->pricePerUnit($annual_cost);
 
         $end_date = Carbon::parse($membership_status->to_date);
         $start_date = Carbon::now();
