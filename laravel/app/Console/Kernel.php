@@ -23,7 +23,7 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $rep = new MemberMembershipStatusRepository();
             $rep->revertRejectedToDraft();
-        })->everyFifteenMinutes();
+        })->everyFiveMinutes();
 
         // Schedule backups.
         $schedule->command('backup:clean')->daily()->at('01:00');
