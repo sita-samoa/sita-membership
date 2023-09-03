@@ -247,6 +247,21 @@ class MemberController extends Controller
     }
 
     /**
+     * Converts Member Status from Rejected to Draft
+     */
+    public function convertRejectToDraft(Member $member)
+    {
+        $this->authorize('submit', $member);
+
+        if($member->membership_status_id == MembershipStatus::REJECTED->value){
+            $member->membership_status_id = MembershipStatus::DRAFT->value;
+            $member->save();
+        }
+
+        return redirect()->back()->with('success', 'Appllication Status updated to DRAFT.');
+    }
+
+    /**
      * Send a sub reminder to member.
      */
     public function sendSubReminder(Member $member): RedirectResponse

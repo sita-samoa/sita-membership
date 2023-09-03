@@ -82,6 +82,9 @@ Route::middleware([
     Route::put('/members/{member}/view-flag', [MemberController::class, 'markOptionalFlagAsViewed'])
         ->name('members.view-flag');
 
+    Route::put('/members/{member}/convert-to-draft', [MemberController::class, 'convertRejectToDraft'])
+    ->name('members.convert-to-draft');
+
     // Member work experience
     Route::resource('member-work-experiences', MemberWorkExperienceController::class)
         ->only(['store', 'update', 'destroy']);

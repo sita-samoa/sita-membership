@@ -38,6 +38,11 @@ function sendPastDueSubReminder() {
     resetOnSuccess: false,
   })
 }
+function convertToDraft() {
+  form.put(route('members.convert-to-draft', props.member.id), {
+    resetOnSuccess: false,
+  })
+}
 
 const application_status_id = computed(() => {
   let m = props.member
@@ -72,8 +77,10 @@ const application_ready_for_submission = props.options.completion.overall.status
       <strong>Rejected</strong><br />
       Your application was rejected. See below for more information:
       <ul v-if="props.data.reason != null" class="list-group">
-        <li class="list-item mt-2">{{ props.data.reason }}</li>
+        <li class="list-item mt-2">"{{ props.data.reason }}"</li>
       </ul>
+      <br />
+      <p v-if="application_status_id === 8" class="underline bold cursor-pointer" @click="convertToDraft">I understand and I would like to proceed to update my membership application</p>
     </Alert>
 
     <MemberSummaryCard :member="props.member" link-route="members.signup.index" class="mb-6" />
