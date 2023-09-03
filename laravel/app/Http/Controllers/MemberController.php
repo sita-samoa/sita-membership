@@ -128,6 +128,12 @@ class MemberController extends Controller
         $member->membership_status_id = MembershipStatus::SUBMITTED->value;
         $member->save();
 
+        // find any old rejection reasons and mark inactive
+        $mrs = MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first();
+        if ($mrs != null) {
+            $mrs->status = false;
+            $mrs->save();
+        }
         // add record to member membership status
         $this->rep->recordAction($member, $request->user());
         // Send endorsement notifications.
@@ -232,12 +238,12 @@ class MemberController extends Controller
      */
     public function getRejectionReason(Member $member)
     {
-        if ($member->membership_status_id == MembershipStatus::REJECTED->value) {
-            $status = MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first();
-            if ($status['reason'] != null) {
-                return $status['reason'];
-            }
+        $status = MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first();
+        if ($status['reason'] != null) {
+            return $status['reason'];
         }
+
+        return null;
     }
 
     /**
@@ -321,7 +327,7 @@ class MemberController extends Controller
         }
 
         $reason = null;
-        if ($member->membership_status_id === MembershipStatus::REJECTED->value) {
+        if (MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first() != null) {
             $reason = $this->getRejectionReason($member);
         }
 

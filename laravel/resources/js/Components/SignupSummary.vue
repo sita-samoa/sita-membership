@@ -68,10 +68,10 @@ const application_ready_for_submission = props.options.completion.overall.status
       Your application has been endorsed and is awaiting settlement.
     </Alert>
 
-    <Alert v-if="application_status_id === 8" type="danger" class="mb-6">
+    <Alert v-if="application_status_id === 8 || props.data.reason != null" type="danger" class="mb-6">
       <strong>Rejected</strong><br />
-      Your application has been rejected. See below for more information:
-      <ul class="list-group" v-if="props.data.reason != null">
+      Your application was rejected. See below for more information:
+      <ul v-if="props.data.reason != null" class="list-group">
         <li class="list-item mt-2">{{ props.data.reason }}</li>
       </ul>
     </Alert>
