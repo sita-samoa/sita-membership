@@ -85,7 +85,12 @@ class MemberRepository extends Repository
         $membership_status =
             MemberMembershipStatus::where(['member_id' => $member->id, 'receipt_number' => $receipt_number])->first();
 
-        if (!in_array($member->membership_type_id, [MembershipTypeEnum::STUDENT->value, MembershipTypeEnum::FELLOW->value])) {
+        if (
+            !in_array(
+                $member->membership_type_id,
+                [MembershipTypeEnum::STUDENT->value, MembershipTypeEnum::FELLOW->value]
+            )
+        ) {
             $this->generateInvoiceAndNotifyUser($member, $membership_status);
         }
     }
