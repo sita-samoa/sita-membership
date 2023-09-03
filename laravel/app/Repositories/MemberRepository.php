@@ -3,15 +3,18 @@
 namespace App\Repositories;
 
 use App\Enums\MembershipStatus;
+use App\Enums\MembershipType as MembershipTypeEnum;
 use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\MemberRejectionStatus;
+use App\Models\MembershipType;
 use App\Models\User;
+use App\Notifications\Invoice as NotificationsInvoice;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
-use LaravelDaily\Invoices\Invoice;
 use LaravelDaily\Invoices\Classes\Buyer;
 use LaravelDaily\Invoices\Classes\InvoiceItem;
+use LaravelDaily\Invoices\Invoice;
 
 class MemberRepository extends Repository
 {
@@ -79,11 +82,12 @@ class MemberRepository extends Repository
 
         $this->recordAction($member, $user, $to_date, $receipt_number);
 
-        // generate invoice and store
+        $membership_status =
+            MemberMembershipStatus::where(['member_id' => $member->id, 'receipt_number' => $receipt_number])->first();
 
-        // send email notification to user with link to invoice page
-
-        // allow pdf download
+        if ($member->membership_type_id != MembershipTypeEnum::STUDENT && $member->membership_type_id != MembershipTypeEnum::FELLOW) {
+            $this->generateInvoiceAndNotifyUser($member, $membership_status);
+        }
     }
 
     public function reject(Member $member, string $reason)
@@ -155,24 +159,42 @@ class MemberRepository extends Repository
     /**
      * Generate Invoice for membership subscription.
      *
-     * @param  Member  $member
      * @return Collection
      */
-    public function generateInvoice(Member $member) {
+    public function generateInvoiceAndNotifyUser(Member $member, MemberMembershipStatus $membership_status)
+    {
         $customer = new Buyer([
-            'name'          => $member->first_name . ' ' . $member->last_name,
+            'name' => $member->first_name.' '.$member->last_name,
+            'phone' => $member->home_mobile,
             'custom_fields' => [
                 'email' => $member->home_email,
             ],
         ]);
 
         $item = (new InvoiceItem())->title('SITA Membership Subscription')
-          ->pricePerUnit($member->membershipType->annual_cost);
+            ->pricePerUnit(MembershipType::where('id', $member->membership_type_id)->first()->annual_cost);
+
+        $end_date = Carbon::parse($membership_status->to_date);
+        $start_date = Carbon::now();
+        $days_to_pay = abs($end_date->diffInDays($start_date));
 
         $invoice = Invoice::make()
+            ->name('Samoa Information Technology Association Invoice')
+            ->date(Carbon::now())
+            ->status('due')
+            ->sequence($membership_status->receipt_number)
+            ->currencySymbol('$')
+            ->currencyCode('Tala')
+            ->dateFormat('d/m/Y')
+            ->payUntilDays($days_to_pay)
+            ->logo(public_path('imgs/logo.png'))
+            ->filename('SITA Invoice '.$customer->name.' '.Carbon::now()->format('d-m-Y'))
             ->buyer($customer)
-            ->taxRate(15)
             ->addItem($item);
+
+        $invoice->save('public');
+
+        $member->user->notify(new NotificationsInvoice($member, $invoice));
 
         return $invoice->stream();
     }
