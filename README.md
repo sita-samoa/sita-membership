@@ -66,7 +66,7 @@ send an email to sita-exec@sita.ws or president@sita.ws
 ### Steps while under attack
 
 * Notify contact person above
-* Isolate and block using WAF
+* Isolate and block using Web Application Firewall
 * Scale up infrustructure
 
 #### Steps when compromised
@@ -76,7 +76,7 @@ send an email to sita-exec@sita.ws or president@sita.ws
 
 ## Contributing
 
-We are always looking for help. You can contribute to this project and multiple ways:
+We are always looking for help. You can contribute to this project in multiple ways:
 
 * Coding - Feel free to review the issue queue and open up a Pull Request.
 * Code review
@@ -134,7 +134,7 @@ docker compose -f docker-compose.yml -f docker-compose.ssl.yml up -d
 docker compose -f docker-compose.yml -f docker-compose.ssl.yml stop
 ```
 
-## Environements
+## Environments
 
 Update the laravel .env file to the following values as needed
 
