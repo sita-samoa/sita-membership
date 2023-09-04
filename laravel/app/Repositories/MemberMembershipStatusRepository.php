@@ -216,42 +216,4 @@ class MemberMembershipStatusRepository extends Repository
             $rep->recordAction($member, $admin_user);
         }
     }
-
-    /**
-     * Revert members from rejected to draft.
-     *
-     * @return void
-     */
-    public function revertRejectedToDraft($limit = 10)
-    {
-        $rep = new MemberRepository();
-        $ids = [];
-
-        $admin_user = User::first();
-        // Get rejected members.
-        $statuses = MemberMembershipStatus::where('membership_status_id', MembershipStatus::REJECTED->value)
-            ->latest()
-            ->limit($limit)
-            ->get();
-
-        foreach ($statuses as $status) {
-            $member = $status->member;
-            if ($member->membership_status_id === MembershipStatus::REJECTED->value) {
-                $id = $member->id;
-                // Make sure we dont have duplicate member ids (in case it was Activated twice)
-                if (!array_key_exists($id, $ids)) {
-                    $ids[$id] = $status;
-                }
-            }
-        }
-
-        foreach ($ids as $status) {
-            $member = $status->member;
-            // Mark as draft
-            $member->membership_status_id = MembershipStatus::DRAFT->value;
-            $member->save();
-
-            $rep->recordAction($member, $admin_user);
-        }
-    }
 }
