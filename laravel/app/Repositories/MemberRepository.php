@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\MemberMembershipStatus;
+use App\Models\MemberRejectionStatus;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
@@ -60,6 +61,15 @@ class MemberRepository extends Repository
         );
 
         return $this->recordAction($member, $user, $to_date, $receipt_number);
+    }
+
+    public function reject(Member $member, string $reason)
+    {
+        $member->membership_status_id = MembershipStatus::REJECTED->value;
+        $member->save();
+
+        $member_rejected = new MemberRejectionStatus(['member_id' => $member->id, 'reason' => $reason]);
+        $member_rejected->save();
     }
 
     public function markOptionalFlagAsViewed(Member $member, string $flag)

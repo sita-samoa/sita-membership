@@ -64,6 +64,9 @@ Route::middleware([
     Route::put('/members/{member}/endorse', [MemberController::class, 'endorse'])
         ->name('members.endorse');
 
+    Route::put('/members/{member}/reject', [MemberController::class, 'reject'])
+        ->name('members.reject');
+
     Route::put('/members/{member}/accept', [MemberController::class, 'accept'])
         ->name('members.accept');
 
@@ -78,6 +81,9 @@ Route::middleware([
 
     Route::put('/members/{member}/view-flag', [MemberController::class, 'markOptionalFlagAsViewed'])
         ->name('members.view-flag');
+
+    Route::put('/members/{member}/convert-to-draft', [MemberController::class, 'convertRejectToDraft'])
+        ->name('members.convert-to-draft');
 
     // Member work experience
     Route::resource('member-work-experiences', MemberWorkExperienceController::class)

@@ -7,11 +7,13 @@ use App\Exports\MembersExport;
 use App\Models\MailingList;
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
+use App\Models\MemberRejectionStatus;
 use App\Models\MembershipType;
 use App\Models\Team;
 use App\Notifications\AcceptanceNotification;
 use App\Notifications\EndorsementNotification;
 use App\Notifications\PastDueSubReminder;
+use App\Notifications\RejectionNotification;
 use App\Notifications\SubReminder;
 use App\Repositories\MemberMembershipStatusRepository;
 use App\Repositories\MemberRepository;
@@ -126,6 +128,12 @@ class MemberController extends Controller
         $member->membership_status_id = MembershipStatus::SUBMITTED->value;
         $member->save();
 
+        // find any old rejection reasons and mark inactive
+        $mrs = MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first();
+        if ($mrs != null) {
+            $mrs->status = false;
+            $mrs->save();
+        }
         // add record to member membership status
         $this->rep->recordAction($member, $request->user());
         // Send endorsement notifications.
@@ -199,6 +207,58 @@ class MemberController extends Controller
         );
 
         return redirect()->back()->with('success', 'Application Accepted');
+    }
+
+    /**
+     * Reject member application.
+     */
+    public function reject(Member $member, Request $request): RedirectResponse
+    {
+        $this->authorize('reject', $member);
+
+        $validated = $request->validate([
+            'reason' => 'required|string',
+        ]);
+
+        $this->rep->reject(
+            $member,
+            $validated['reason']
+        );
+
+        $this->rep->recordAction($member, $request->user());
+
+        // Send rejection notification.
+        $member->user->notify(new RejectionNotification($member, $validated['reason']));
+
+        return redirect()->back()->with('success', 'Application Rejected');
+    }
+
+    /**
+     * Get Rejection Reason.
+     */
+    public function getRejectionReason(Member $member)
+    {
+        $status = MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first();
+        if ($status['reason'] != null) {
+            return $status['reason'];
+        }
+
+        return null;
+    }
+
+    /**
+     * Converts Member Status from Rejected to Draft.
+     */
+    public function convertRejectToDraft(Member $member)
+    {
+        $this->authorize('submit', $member);
+
+        if ($member->membership_status_id == MembershipStatus::REJECTED->value) {
+            $member->membership_status_id = MembershipStatus::DRAFT->value;
+            $member->save();
+        }
+
+        return redirect()->back()->with('success', 'Appllication Status updated to DRAFT.');
     }
 
     /**
@@ -281,10 +341,18 @@ class MemberController extends Controller
             $relations[] = 'title';
         }
 
+        $reason = null;
+        if (MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first() != null) {
+            $reason = $this->getRejectionReason($member);
+        }
+
         return Inertia::render('Members/Show', [
             'member' => $member->load($relations),
             'options' => [
                 'completion' => $member->completions,
+            ],
+            'data' => [
+                'reason' => $reason,
             ],
         ]);
     }

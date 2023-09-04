@@ -14,7 +14,7 @@ watch(
 
 <template>
   <div>
-    <div v-if="$page.props.flash.success && show" class="flex items-center justify-between max-w-3xl bg-green-500 rounded">
+    <div v-if="$page.props.flash.success && show" class="flex items-center justify-between max-w-5xl bg-green-500 rounded mx-auto">
       <div class="flex items-center">
         <svg class="flex-shrink-0 w-4 h-4 ml-4 mr-2 fill-white" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><polygon points="0 11 2 9 7 14 18 3 20 5 7 18" /></svg>
         <div class="py-4 text-sm font-medium text-white">{{ $page.props.flash.success }}</div>

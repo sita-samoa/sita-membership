@@ -77,6 +77,19 @@ class MemberPolicy
     }
 
     /**
+     * Determine whether the user reject a membership.
+     */
+    public function reject(User $user, Member $member): bool
+    {
+        $team = Team::first();
+
+        return $user->hasTeamPermission($team, 'member:reject') &&
+            (
+                $member->membership_status_id != MembershipStatus::BANNED->value
+            );
+    }
+
+    /**
      * Determine whether the user can send reminder.
      *
      * Must have the permission and status must be Accepted
