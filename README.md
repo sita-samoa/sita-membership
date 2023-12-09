@@ -47,6 +47,9 @@ sita-membership.docker.localhost
 GOOGLE_RECAPTCHA_SITE_KEY=YOUR_GOOGLE_RECAPTCHA_SITE_KEY
 GOOGLE_RECAPTCHA_SECRET_KEY=YOUR_GOOGLE_RECAPTCHA_SECRET_KEY
 
+# for scheduled events use the following command to process them
+php artisan schedule:run
+
 ```
 
 Once installed you can access the dev site on
@@ -144,11 +147,11 @@ Update the laravel .env file to the following values as needed
 
 ## On Production
 
-Ensure that the following commands are run on a cron
+Ensure that the following commands are run on a cron see https://laravel.com/docs/10.x/scheduling#running-the-scheduler
 
 ```
 # run every minute - for scheduled tasks
-php artisan schedule:work
+php artisan schedule:run
 
 # run every 5 minutes - for running queues
 php artisan queue:work database --tries=1 --max-time=30 --stop-when-empty
