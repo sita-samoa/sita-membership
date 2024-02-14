@@ -19,7 +19,7 @@ services:
     stop_grace_period: 30s
     environment:
       MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
-      MYSQL_DATABASE: laravel_testing
+      MYSQL_DATABASE: laravel
       MYSQL_USER: $DB_USER
       MYSQL_PASSWORD: $DB_PASSWORD
 #    volumes:
