@@ -87,7 +87,7 @@ We are always looking for help. You can contribute to this project in multiple w
 * Reporting bugs
 * Suggesting enhancements
 * Documentation
-* Joining Samoa Stackoverflow
+* Joining Sāmoa Code Hub
 
 ## Coding style and etiqueue
 

@@ -12,7 +12,7 @@ const year = new Date().getFullYear()
         <b>&copy; {{ year }}, <a href="https://www.sita.ws/" target="_blank">Sāmoa IT Association</a>.</b>
         <slot />
       </div>
-      <div class="md:py-2 text-sm">Developed by Sāmoa Stack Overflow.</div>
+      <div class="md:py-2 text-sm">Developed by Sāmoa Code Hub.</div>
     </BaseLevel>
   </footer>
 </template>
