@@ -2,12 +2,45 @@
 
 SITA Membership database with Laravel 10 and Jet stream Inertia (Vuejs) and Tailwind.
 
+## Incident Response
+
+Please use the following information to response to any cybersecurity incidents.
+
+### Who do I contact?
+
+Please do not post to the issue queue or public forums. Appreciate if you can
+send an email to sita-exec@sita.ws or president@sita.ws
+
+### Steps while under attack
+
+* Notify contact person above
+* Isolate and block using Web Application Firewall
+* Scale up infrustructure
+
+#### Steps when compromised
+
+* Provision new server
+* Restore site
+
+## Contributing
+
+We are always looking for help. You can contribute to this project in multiple ways:
+
+* Coding - Feel free to review the issue queue and open up a Pull Request.
+* Code review
+* Testing
+* Reporting bugs
+* Suggesting enhancements
+* Documentation
+* Joining Sāmoa Code Hub
+
+
 ### Dev environment with [docker4drupal](https://github.com/wodby/docker4drupal/releases)
 
 This repository has been set up to work with docker compose. You need docker
 and docker compose to use the commands below.
 
-## Getting Started
+## Getting started
 
 ```
 # start up containers
@@ -22,8 +55,9 @@ cd laravel
 # install dependencies
 composer install
 
-# cp env and configure
-cp .env.example .env
+# cp env.dev and configure
+# verify db configs
+cp .env.dev .env
 
 # run initialisation commands
 php artisan migrate
@@ -56,38 +90,6 @@ Once installed you can access the dev site on
 `sita-membership.docker.localhost:8000`
 
 Click "Register" and register a new account then use it to log in.
-
-## Incident Response
-
-Please use the following information to response to any cybersecurity incidents.
-
-### Who do I contact?
-
-Please do not post to the issue queue or public forums. Appreciate if you can
-send an email to sita-exec@sita.ws or president@sita.ws
-
-### Steps while under attack
-
-* Notify contact person above
-* Isolate and block using Web Application Firewall
-* Scale up infrustructure
-
-#### Steps when compromised
-
-* Provision new server
-* Restore site
-
-## Contributing
-
-We are always looking for help. You can contribute to this project in multiple ways:
-
-* Coding - Feel free to review the issue queue and open up a Pull Request.
-* Code review
-* Testing
-* Reporting bugs
-* Suggesting enhancements
-* Documentation
-* Joining Sāmoa Code Hub
 
 ## Coding style and etiqueue
 
