@@ -19,8 +19,12 @@ import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
 
 const { executeRecaptcha, recaptchaLoaded, instance } = useReCaptcha()
 const recaptcha = async () => {
-  await recaptchaLoaded()
-  form.captcha_token = await executeRecaptcha('login')
+  // This variable is setup from node not Laravel .env file
+  //  when npm run build is run.
+  if (process.env.NODE_ENV === 'production') {
+    await recaptchaLoaded() 
+    form.captcha_token = await executeRecaptcha('login')
+  }
   submit()
 }
 

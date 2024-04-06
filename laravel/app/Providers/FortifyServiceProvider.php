@@ -43,9 +43,11 @@ class FortifyServiceProvider extends ServiceProvider
             $user = User::where('email', $request->email)->first();
 
             if ($user && Hash::check($request->password, $user->password)) {
-                // 2nd part of condition: Skip ReCaptcha Validation during Testing
-                // @todo: remove and mock reCaptcha during testing instead
-                if (!$this->isFirstCall && !app()->environment('testing')) {
+                // 2nd part of condition: Skip ReCaptcha Validation 
+                //  during Testing and Lccal dev
+                //  @todo: remove and mock reCaptcha during testing instead
+                if (!$this->isFirstCall && 
+                    !(app()->environment('testing') || app()->environment('local'))) {
                     $this->isFirstCall = true;
                     Validator::make(
                         ['captcha_token' => $request->captcha_token],
