@@ -15,11 +15,9 @@ class MailingListRepository extends Repository
         return Member::whereIn('id', $member_preferences);
     }
 
-    public function getAllEmails($members)
+    public function getAllEmails($members): string
     {
-        return implode('; ', $members->pluck('home_email')->map(function ($item) {
-            return (string) $item;
-        })->toArray());
+        return implode('; ', $members->pluck('home_email')->map(fn ($item) => (string) $item)->toArray());
     }
 
     public function getSubStatusCount($id, $status, $fromDate, $tillDate)
