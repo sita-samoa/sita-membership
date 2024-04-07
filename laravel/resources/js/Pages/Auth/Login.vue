@@ -22,7 +22,7 @@ const recaptcha = async () => {
   // This variable is setup from node not Laravel .env file
   //  when npm run build is run.
   if (process.env.NODE_ENV === 'production') {
-    await recaptchaLoaded() 
+    await recaptchaLoaded()
     form.captcha_token = await executeRecaptcha('login')
   }
   submit()
