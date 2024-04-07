@@ -47,8 +47,7 @@ class FortifyServiceProvider extends ServiceProvider
                 //  during Testing and Lccal dev
                 //  @todo: remove and mock reCaptcha during testing instead
                 if (
-                    !$this->isFirstCall &&
-                    !(app()->environment('testing') || app()->environment('local'))
+                    !$this->isFirstCall && app()->environment('production')
                 ) {
                     $this->isFirstCall = true;
                     Validator::make(
