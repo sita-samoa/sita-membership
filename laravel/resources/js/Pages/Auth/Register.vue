@@ -85,7 +85,7 @@ onUnmounted(() => {
             <div class="flex items-center mt-2">
               <Checkbox id="terms" v-model:checked="form.terms" class="text-primary" name="terms" required />
 
-              <div class="ml-2 text-xs"><strong>Applicants Declaration:</strong> I declare that all information is true and correct, and if admitted to the Society, I understand that I am bound to the Rules, regulations and Codes of the Society as amended from time to time.</div>
+              <div class="ml-2 text-xs"><strong>Applicants Declaration:</strong> I declare that all information is true and correct, and if admitted to the Association, I understand that I am bound to the Rules, regulations and Codes of the Association as amended from time to time.</div>
             </div>
             <InputError class="mt-2" :message="form.errors.terms" />
           </InputLabel>
