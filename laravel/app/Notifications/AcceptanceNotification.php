@@ -37,7 +37,7 @@ class AcceptanceNotification extends Notification implements ShouldQueue
     {
         return (new MailMessage())
             ->subject('Signup endorsed')
-            ->greeting("Tālofa!")
+            ->greeting('Tālofa!')
             ->line('A signup request has been endorsed. Please review
                 for your Acceptance.')
             ->line('Before accepting please ensure:')
