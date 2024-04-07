@@ -4,7 +4,7 @@ SITA Membership database with Laravel 10 and Jet stream Inertia (Vuejs) and Tail
 
 ## Incident Response
 
-Please use the following information to response to any cybersecurity incidents.
+Use the following information to respond to any cybersecurity incidents.
 
 ### Who do I contact?
 
