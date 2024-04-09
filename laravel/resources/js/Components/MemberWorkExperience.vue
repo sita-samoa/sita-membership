@@ -27,6 +27,7 @@ const form = useForm({
   responsibilities: null,
   from_date: null,
   to_date: null,
+  is_current: false,
 })
 
 function closeModal() {
@@ -44,6 +45,7 @@ function showModal(workExperience) {
     form.responsibilities = workExperience.responsibilities
     form.from_date = workExperience.from_date
     form.to_date = workExperience.to_date
+    form.is_current = workExperience.is_current
     organisation.value.focus()
   })
 }
@@ -149,6 +151,18 @@ function deleteItem() {
         <input id="to_date" v-model="form.to_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" />
       </div>
       <InputError class="mt-2 mb-4" :message="form.errors.to_date" />
+
+      <!-- Is Current -->
+      <InputLabel for="is_current" value="Current" class="mb-2" />
+      <div class="relative max-w-sm mb-3">
+        <input
+        id="is_current"
+        v-model="form.is_current"
+        :checked="form.is_current"
+        type="checkbox"
+        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
+        placeholder="Select date" /></div>
+      <InputError class="mt-2 mb-4" :message="form.errors.is_current" />
     </template>
     <template #footer>
       <div>

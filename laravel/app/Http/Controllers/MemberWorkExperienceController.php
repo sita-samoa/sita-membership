@@ -35,6 +35,7 @@ class MemberWorkExperienceController extends Controller
             'responsibilities' => 'required|max:255',
             'from_date' => 'required|date|before:to_date',
             'to_date' => 'required|date',
+            'is_current' => 'boolean',
         ]);
 
         MemberWorkExperience::create($attributes);
@@ -71,6 +72,7 @@ class MemberWorkExperienceController extends Controller
             'responsibilities' => ['required', 'max:255'],
             'from_date' => ['required', 'date'],
             'to_date' => ['required', 'date'],
+            'is_current' => 'boolean',
         ]);
 
         $memberWorkExperience->update($attributes);

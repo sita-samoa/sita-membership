@@ -39,7 +39,8 @@ class SignupController extends Controller
                 'position',
                 'responsibilities',
                 'from_date',
-                'to_date'
+                'to_date',
+                'is_current',
             )->where('member_id', $member->id)->get(),
             'supportingDocuments' => $member->supportingDocuments()
                 ->where('to_delete', false)

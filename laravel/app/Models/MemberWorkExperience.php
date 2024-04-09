@@ -20,6 +20,7 @@ class MemberWorkExperience extends Model implements Auditable
         'responsibilities',
         'from_date',
         'to_date',
+        'is_current',
     ];
 
     public function member(): BelongsTo
