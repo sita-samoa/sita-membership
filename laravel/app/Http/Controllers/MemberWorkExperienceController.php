@@ -33,8 +33,8 @@ class MemberWorkExperienceController extends Controller
             'organisation' => 'required|max:255',
             'position' => 'required|max:255',
             'responsibilities' => 'required|max:255',
-            'from_date' => 'required|date|before:to_date',
-            'to_date' => 'required|date',
+            'from_date' => 'required|date',
+            'to_date' => 'nullable|date|after:from_date',
             'is_current' => 'boolean',
         ]);
 
@@ -66,13 +66,13 @@ class MemberWorkExperienceController extends Controller
     public function update(Request $request, MemberWorkExperience $memberWorkExperience)
     {
         $attributes = request()->validate([
-            'member_id' => ['required', 'numeric'],
-            'organisation' => ['required', 'max:255'],
-            'position' => ['required', 'max:255'],
-            'responsibilities' => ['required', 'max:255'],
-            'from_date' => ['required', 'date'],
-            'to_date' => ['required', 'date'],
-            'is_current' => 'boolean',
+            'member_id' => "required|numeric",
+            'organisation' => "required|max:255",
+            'position' => "required|max:255",
+            'responsibilities' => "required|max:255",
+            'from_date' => "required|date",
+            'to_date' => "nullable|date|after:from_date",
+            'is_current' => "boolean",
         ]);
 
         $memberWorkExperience->update($attributes);
