@@ -7,6 +7,18 @@ use Illuminate\Http\Request;
 
 class MemberWorkExperienceController extends Controller
 {
+    private function getValidationRules(Request $request) {
+        return [
+            'member_id' => "required|numeric",
+            'organisation' => "required|max:255",
+            'position' => "required|max:255",
+            'responsibilities' => "required|max:255",
+            'from_date' => "required|date",
+            'to_date' => $request['is_current'] ? 'nullable|date|after:from_date' : 'required|date|after:from_date',
+            'is_current' => "boolean",
+        ];
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -28,15 +40,7 @@ class MemberWorkExperienceController extends Controller
      */
     public function store(Request $request)
     {
-        $attributes = request()->validate([
-            'member_id' => 'required|numeric',
-            'organisation' => 'required|max:255',
-            'position' => 'required|max:255',
-            'responsibilities' => 'required|max:255',
-            'from_date' => 'required|date',
-            'to_date' => 'nullable|date|after:from_date',
-            'is_current' => 'boolean',
-        ]);
+        $attributes = request()->validate($this->getValidationRules($request));
 
         MemberWorkExperience::create($attributes);
 
@@ -65,15 +69,7 @@ class MemberWorkExperienceController extends Controller
      */
     public function update(Request $request, MemberWorkExperience $memberWorkExperience)
     {
-        $attributes = request()->validate([
-            'member_id' => "required|numeric",
-            'organisation' => "required|max:255",
-            'position' => "required|max:255",
-            'responsibilities' => "required|max:255",
-            'from_date' => "required|date",
-            'to_date' => "nullable|date|after:from_date",
-            'is_current' => "boolean",
-        ]);
+        $attributes = request()->validate($this->getValidationRules($request));
 
         $memberWorkExperience->update($attributes);
 

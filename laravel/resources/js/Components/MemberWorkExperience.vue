@@ -108,7 +108,7 @@ function deleteItem() {
             </th>
             <td class="px-6 py-4">{{ workExperience.position }}</td>
             <td class="px-6 py-4">{{ workExperience.responsibilities }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ workExperience.from_date }} to {{ workExperience.to_date }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">{{ workExperience.from_date }}<span v-show="!workExperience.is_current"> to {{ workExperience.to_date }}</span></td>
           </tr>
         </tbody>
       </table>
