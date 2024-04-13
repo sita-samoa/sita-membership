@@ -6,12 +6,10 @@ use App\Models\MemberWorkExperience;
 
 class MemberWorkExperienceRepository extends Repository
 {
-
     /**
      * Check if member has current work experience.
      *
      * @param  Member  $member
-     * @return bool
      */
     public function hasCurrentWorkExperience(int $member_id): bool
     {
@@ -25,8 +23,7 @@ class MemberWorkExperienceRepository extends Repository
     /**
      * Count the current work experience of a member.
      *
-     * @param datatype $member_id description
-     * @return int
+     * @param  datatype  $member_id description
      */
     public function countCurrentWorkExperience(int $member_id, int $exclude_id = 0): int
     {
@@ -38,8 +35,7 @@ class MemberWorkExperienceRepository extends Repository
         }
 
         return MemberWorkExperience::where('member_id', $member_id)
-          ->where('is_current', true)
-          ->count();
+            ->where('is_current', true)
+            ->count();
     }
-
 }

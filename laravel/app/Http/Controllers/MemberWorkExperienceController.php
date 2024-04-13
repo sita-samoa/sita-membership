@@ -11,16 +11,17 @@ class MemberWorkExperienceController extends Controller
     public const ERROR_MESSAGE =
         'You already marked a work experience as current. Unmark it before creating a new one.';
 
-    private function getValidationRules(Request $request) {
+    private function getValidationRules(Request $request)
+    {
 
         return [
-            'member_id' => "required|numeric",
-            'organisation' => "required|max:255",
-            'position' => "required|max:255",
-            'responsibilities' => "required|max:255",
-            'from_date' => "required|date",
+            'member_id' => 'required|numeric',
+            'organisation' => 'required|max:255',
+            'position' => 'required|max:255',
+            'responsibilities' => 'required|max:255',
+            'from_date' => 'required|date',
             'to_date' => $request['is_current'] ? 'nullable|date' : 'required|date|after:from_date',
-            'is_current' => "boolean",
+            'is_current' => 'boolean',
         ];
     }
 
@@ -58,9 +59,9 @@ class MemberWorkExperienceController extends Controller
         }
 
         MemberWorkExperience::create($attributes);
+
         return redirect()->back()
             ->with('success', 'Work experience added.');
-
     }
 
     /**
@@ -97,6 +98,7 @@ class MemberWorkExperienceController extends Controller
         }
 
         $memberWorkExperience->update($attributes);
+
         return redirect()->back()
             ->with('success', 'Work experience saved.');
     }
@@ -111,5 +113,4 @@ class MemberWorkExperienceController extends Controller
         return redirect()->back()
             ->with('success', 'Work experience deleted.');
     }
-
 }

@@ -63,9 +63,7 @@ test('cannot add more than 1 record with is_current set to true', function () {
     // Assert that no validation errors are present.
     $response->assertValid();
     $response->assertSessionHas('error');
-
 });
-
 
 test('cannot update second work experience to set is_current as true', function () {
     $this->actingAs($user = User::factory()->create());
@@ -116,7 +114,6 @@ test('cannot update second work experience to set is_current as true', function 
     // Assert that no validation errors are present.
     $response->assertValid();
     $response->assertSessionHas('error');
-
 });
 
 test('to_date comes after from_date', function () {
@@ -137,7 +134,6 @@ test('to_date comes after from_date', function () {
     $response->assertStatus(302);
     // Assert that validation errors are present.
     $response->assertInvalid(['to_date']);
-
 });
 
 test('to_date is required when is_current is false', function () {
@@ -157,9 +153,7 @@ test('to_date is required when is_current is false', function () {
     $response->assertStatus(302);
     // Assert that validation errors are present.
     $response->assertInvalid(['to_date']);
-
 });
-
 
 test('to_date is not required when is_current is true', function () {
 
@@ -178,6 +172,4 @@ test('to_date is not required when is_current is true', function () {
     $response->assertStatus(302);
     // Assert that validation errors are present.
     $response->assertValid();
-
 });
-
