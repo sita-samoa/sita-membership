@@ -3,18 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\MemberWorkExperience;
+use App\Repositories\MemberWorkExperienceRepository;
 use Illuminate\Http\Request;
 
 class MemberWorkExperienceController extends Controller
 {
+    public const ERROR_MESSAGE = 'You already marked a work experience as current.';
+
     private function getValidationRules(Request $request) {
+
         return [
             'member_id' => "required|numeric",
             'organisation' => "required|max:255",
             'position' => "required|max:255",
             'responsibilities' => "required|max:255",
             'from_date' => "required|date",
-            'to_date' => $request['is_current'] ? 'nullable|date|after:from_date' : 'required|date|after:from_date',
+            'to_date' => 'required_without:is_current|nullable|date|after:from_date',
             'is_current' => "boolean",
         ];
     }
@@ -42,10 +46,20 @@ class MemberWorkExperienceController extends Controller
     {
         $attributes = request()->validate($this->getValidationRules($request));
 
-        MemberWorkExperience::create($attributes);
+        $rep = new MemberWorkExperienceRepository();
+        $member_id = $attributes['member_id'];
+        $is_current = $attributes['is_current'];
+        $count = $rep->countCurrentWorkExperience($member_id);
 
+        if ($is_current && $count == 1) {
+            return redirect()->back()
+                ->with('error', self::ERROR_MESSAGE);
+        }
+
+        MemberWorkExperience::create($attributes);
         return redirect()->back()
             ->with('success', 'Work experience added.');
+
     }
 
     /**
@@ -71,8 +85,17 @@ class MemberWorkExperienceController extends Controller
     {
         $attributes = request()->validate($this->getValidationRules($request));
 
-        $memberWorkExperience->update($attributes);
+        $rep = new MemberWorkExperienceRepository();
+        $member_id = $attributes['member_id'];
+        $is_current = $attributes['is_current'];
+        $count = $rep->countCurrentWorkExperience($member_id);
 
+        if ($is_current && $count == 1 || $count > 1) {
+            return redirect()->back()
+                ->with('error', self::ERROR_MESSAGE);
+        }
+
+        $memberWorkExperience->update($attributes);
         return redirect()->back()
             ->with('success', 'Work experience saved.');
     }
@@ -87,4 +110,5 @@ class MemberWorkExperienceController extends Controller
         return redirect()->back()
             ->with('success', 'Work experience deleted.');
     }
+
 }
