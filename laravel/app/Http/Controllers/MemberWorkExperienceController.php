@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\MemberWorkExperience;
-use App\Repositories\MemberWorkExperienceRepository;
 use Illuminate\Http\Request;
 
 class MemberWorkExperienceController extends Controller
@@ -47,17 +46,6 @@ class MemberWorkExperienceController extends Controller
     public function store(Request $request)
     {
         $attributes = request()->validate($this->getValidationRules($request));
-
-        $rep = new MemberWorkExperienceRepository();
-        $member_id = $attributes['member_id'];
-        $is_current = $attributes['is_current'];
-        $count = $rep->countCurrentWorkExperience($member_id);
-
-        if ($is_current && $count == 1) {
-            return redirect()->back()
-                ->with('error', self::ERROR_MESSAGE);
-        }
-
         MemberWorkExperience::create($attributes);
 
         return redirect()->back()
@@ -86,17 +74,6 @@ class MemberWorkExperienceController extends Controller
     public function update(Request $request, MemberWorkExperience $memberWorkExperience)
     {
         $attributes = request()->validate($this->getValidationRules($request));
-
-        $rep = new MemberWorkExperienceRepository();
-        $member_id = $attributes['member_id'];
-        $is_current = $attributes['is_current'];
-        $count = $rep->countCurrentWorkExperience($member_id);
-
-        if ($is_current && $count == 1 || $count > 1) {
-            return redirect()->back()
-                ->with('error', self::ERROR_MESSAGE);
-        }
-
         $memberWorkExperience->update($attributes);
 
         return redirect()->back()
