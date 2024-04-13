@@ -8,7 +8,8 @@ use Illuminate\Http\Request;
 
 class MemberWorkExperienceController extends Controller
 {
-    public const ERROR_MESSAGE = 'You already marked a work experience as current.';
+    public const ERROR_MESSAGE =
+        'You already marked a work experience as current. Unmark it before creating a new one.';
 
     private function getValidationRules(Request $request) {
 
@@ -18,7 +19,7 @@ class MemberWorkExperienceController extends Controller
             'position' => "required|max:255",
             'responsibilities' => "required|max:255",
             'from_date' => "required|date",
-            'to_date' => 'required_without:is_current|nullable|date|after:from_date',
+            'to_date' => $request['is_current'] ? 'nullable|date' : 'required_without:is_current|date|after:from_date',
             'is_current' => "boolean",
         ];
     }
