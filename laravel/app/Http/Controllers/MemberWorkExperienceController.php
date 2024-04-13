@@ -19,7 +19,7 @@ class MemberWorkExperienceController extends Controller
             'position' => "required|max:255",
             'responsibilities' => "required|max:255",
             'from_date' => "required|date",
-            'to_date' => $request['is_current'] ? 'nullable|date' : 'required_without:is_current|date|after:from_date',
+            'to_date' => $request['is_current'] ? 'nullable|date' : 'required|date|after:from_date',
             'is_current' => "boolean",
         ];
     }
