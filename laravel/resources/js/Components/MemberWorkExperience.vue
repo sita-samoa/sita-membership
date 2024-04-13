@@ -108,16 +108,9 @@ function deleteItem() {
             </th>
             <td class="px-6 py-4">{{ workExperience.position }}</td>
             <td class="px-6 py-4">{{ workExperience.responsibilities }}</td>
-            <td
-              class="px-6 py-4 whitespace-nowrap">{{
-              workExperience.from_date
-              }}<span
-              v-if="!workExperience.is_current">
-              to
-              {{
-              workExperience.to_date
-              }}</span>
-              <span v-else> to Current</span></td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ workExperience.from_date }}<span v-if="!workExperience.is_current"> to {{ workExperience.to_date }}</span> <span v-else> to Current</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -149,13 +142,7 @@ function deleteItem() {
 
       <!-- Is Current -->
       <div class="relative max-w-sm mb-3">
-        <input
-        id="is_current"
-        v-model="form.is_current"
-        :checked="form.is_current"
-        type="checkbox"
-        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-        placeholder="Select date" />
+        <input id="is_current" v-model="form.is_current" :checked="form.is_current" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" placeholder="Select date" />
         <label for="is_current" class="ml-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Currently employed here</label>
       </div>
       <InputError class="mt-2 mb-4" :message="form.errors.is_current" />
@@ -175,7 +162,6 @@ function deleteItem() {
         </div>
         <InputError class="mt-2 mb-4" :message="form.errors.to_date" />
       </span>
-
     </template>
     <template #footer>
       <div>
