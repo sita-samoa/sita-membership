@@ -2,8 +2,6 @@ name: Code Fixes
 
 on:
   workflow_call:
-  # pull_request:
-  #   branches: [main]
 
 jobs:
   php-code-styling:

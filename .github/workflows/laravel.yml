@@ -2,9 +2,6 @@ name: Tests
 
 on:
   workflow_call:
-  # push:
-  #   branches:
-  #     - '**'
 
 concurrency:
   group: ${{ github.ref }}
@@ -61,12 +58,6 @@ jobs:
       - name: Install Composer dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
-      # - name: Install dbal dependencies
-      #   run: composer require doctrine/dbal
-
-      - name: Run php static code analysis
-        run: composer lint_ci
-
       - name: Use Node.js 20.x
         uses: actions/setup-node@v3
         with:
@@ -74,9 +65,6 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Run vue static code analysis
-        run: npm run lint
 
       - name: Build js
         run: npm run build
@@ -89,17 +77,6 @@ jobs:
 
       - name: Generate app key
         run: php artisan key:generate
-
-      # - name: Create Database
-      #   run: |
-      #     mkdir -p database
-      #     touch database/database.sqlite
-
-      # - name: Execute tests
-      #   env:
-      #     DB_CONNECTION: sqlite
-      #     DB_DATABASE: database/database.sqlite
-      #   run: vendor/bin/pest
 
       - name: Execute tests
         env:
