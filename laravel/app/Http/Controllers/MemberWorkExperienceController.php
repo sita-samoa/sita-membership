@@ -7,9 +7,6 @@ use Illuminate\Http\Request;
 
 class MemberWorkExperienceController extends Controller
 {
-    public const ERROR_MESSAGE =
-        'You already marked a work experience as current. Unmark it before creating a new one.';
-
     private function getValidationRules(Request $request)
     {
 
