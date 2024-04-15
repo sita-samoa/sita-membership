@@ -3,13 +3,26 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-  call-workflow1:
-    uses: ./.github/workflows/code_fixes.yml
-  call-workflow2:
-    needs: call-workflow1
-    uses: ./.github/workflows/laravel.yml
+
+  call-code-fix-workflow:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: .github/workflows/code_fixes.yml
+
+  call-tests-workflow:
+    runs-on: ubuntu-latest
+    needs: call-code-fix-workflow
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.after }}
+
+      - name: Run Laravel tests
+        uses: .github/workflows/laravel.yml

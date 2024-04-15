@@ -27,6 +27,7 @@ const form = useForm({
   responsibilities: null,
   from_date: null,
   to_date: null,
+  is_current: false,
 })
 
 function closeModal() {
@@ -44,6 +45,7 @@ function showModal(workExperience) {
     form.responsibilities = workExperience.responsibilities
     form.from_date = workExperience.from_date
     form.to_date = workExperience.to_date
+    form.is_current = workExperience.is_current
     organisation.value.focus()
   })
 }
@@ -106,7 +108,9 @@ function deleteItem() {
             </th>
             <td class="px-6 py-4">{{ workExperience.position }}</td>
             <td class="px-6 py-4">{{ workExperience.responsibilities }}</td>
-            <td class="px-6 py-4 whitespace-nowrap">{{ workExperience.from_date }} to {{ workExperience.to_date }}</td>
+            <td class="px-6 py-4 whitespace-nowrap">
+              {{ workExperience.from_date }}<span v-if="!workExperience.is_current"> to {{ workExperience.to_date }}</span> <span v-else> to Current</span>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -136,6 +140,13 @@ function deleteItem() {
       <textarea id="message" v-model="form.responsibilities" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2" placeholder="Please provide only a brief summary of roles and responsibilities..." />
       <InputError class="mt-2 mb-4" :message="form.errors.responsibilities" />
 
+      <!-- Is Current -->
+      <div class="relative max-w-sm mb-3">
+        <input id="is_current" v-model="form.is_current" :checked="form.is_current" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" placeholder="Select date" />
+        <label for="is_current" class="ml-2 ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Currently employed here</label>
+      </div>
+      <InputError class="mt-2 mb-4" :message="form.errors.is_current" />
+
       <!-- From Date -->
       <InputLabel for="from_date" value="From Date" class="mb-2 required" />
       <div class="relative max-w-sm mb-3">
@@ -144,11 +155,13 @@ function deleteItem() {
       <InputError class="mt-2 mb-4" :message="form.errors.from_date" />
 
       <!-- To Date -->
-      <InputLabel for="to_date" value="To Date" class="mb-2 required" />
-      <div class="relative max-w-sm mb-3">
-        <input id="to_date" v-model="form.to_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" />
-      </div>
-      <InputError class="mt-2 mb-4" :message="form.errors.to_date" />
+      <span v-show="!form.is_current">
+        <InputLabel for="to_date" value="To Date" class="mb-2 required" />
+        <div class="relative max-w-sm mb-3">
+          <input id="to_date" v-model="form.to_date" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" />
+        </div>
+        <InputError class="mt-2 mb-4" :message="form.errors.to_date" />
+      </span>
     </template>
     <template #footer>
       <div>

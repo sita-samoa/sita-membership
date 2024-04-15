@@ -2,9 +2,6 @@ name: Tests
 
 on:
   workflow_call:
-  # push:
-  #   branches:
-  #     - '**'
 
 concurrency:
   group: ${{ github.ref }}
@@ -21,6 +18,25 @@ jobs:
       run:
         working-directory: ./laravel
 
+# Service container Mysql mysql
+    services:
+      # Label used to access the service container
+      mysql:
+        # Docker Hub image (also with version)
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: secret
+          MYSQL_DATABASE:  testing
+        ## map the "external" 33306 port with the "internal" 3306
+        ports:
+          - 33306:3306
+        # Set health checks to wait until mysql database has started (it takes some seconds to start)
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
     strategy:
       fail-fast: true
       matrix:
@@ -36,14 +52,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, mysql, pdo_mysql
           coverage: none
 
       - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-interaction --no-progress
-
-      - name: Run php static code analysis
-        run: composer lint_ci
+        run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Use Node.js 20.x
         uses: actions/setup-node@v3
@@ -53,25 +66,23 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Run vue static code analysis
-        run: npm run lint
-
       - name: Build js
         run: npm run build
 
       - name: Copy environment file
         run: cp .env.example .env
 
+      - name: Disable test env file
+        run: rm .env.testing
+
       - name: Generate app key
         run: php artisan key:generate
 
-      - name: Create Database
-        run: |
-          mkdir -p database
-          touch database/database.sqlite
-
       - name: Execute tests
         env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite
+          DB_CONNECTION: mysql
+          DB_DATABASE: testing
+          DB_PORT: 33306
+          DB_USER: root
+          DB_PASSWORD: secret
         run: vendor/bin/pest

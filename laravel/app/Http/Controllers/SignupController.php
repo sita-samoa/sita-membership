@@ -31,7 +31,7 @@ class SignupController extends Controller
                 'title_options' => Title::all(['id', 'code', 'title']),
                 'mailing_options' => MailingList::all(['id', 'code', 'title']),
             ],
-            'qualifications' => $member->qualifications()->get(),
+            'qualifications' => $member->qualifications()->orderBy('year_attained', 'desc')->get(),
             'referees' => $member->referees()->get(),
             'memberWorkExperiences' => MemberWorkExperience::select(
                 'id',
@@ -39,8 +39,12 @@ class SignupController extends Controller
                 'position',
                 'responsibilities',
                 'from_date',
-                'to_date'
-            )->where('member_id', $member->id)->get(),
+                'to_date',
+                'is_current',
+            )
+                ->where('member_id', $member->id)
+                ->orderBy('from_date', 'desc')
+                ->get(),
             'supportingDocuments' => $member->supportingDocuments()
                 ->where('to_delete', false)
                 ->get(['id', 'title', 'file_name', 'file_size']),
