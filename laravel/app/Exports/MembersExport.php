@@ -52,13 +52,13 @@ class MembersExport implements FromCollection, WithMapping, WithHeadings
     {
         return [
             $member->id,
-            $member->membershipStatus->title,
-            $member->membershipType->title,
-            $member->title->title,
+            $member->membershipStatus ? $member->membershipStatus->title : '',
+            $member->membershipType ? $member->membershipType->title : '',
+            $member->title ? $member->title->title : '',
             $member->first_name,
             $member->last_name,
             $member->dob,
-            $member->gender->title,
+            $member->gender ? $member->gender->title : '',
             $member->job_title,
             $member->current_employer,
             $member->home_address,
@@ -73,7 +73,7 @@ class MembersExport implements FromCollection, WithMapping, WithHeadings
             $member->note,
             $member->created_at,
             $member->updated_at,
-            $member->user->name.' ('.$member->user_id.')',
+            $member->user ? $member->user->name.' ('.$member->user_id.')' : '',
         ];
     }
 
