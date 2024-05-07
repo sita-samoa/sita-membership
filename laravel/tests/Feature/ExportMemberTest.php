@@ -26,5 +26,3 @@ test('export member with null title_id', function () {
     $response->assertHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
     $response->assertHeader('Content-Disposition', 'attachment; filename=members.xlsx');
 });
-
-

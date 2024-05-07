@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Member;
-use App\Models\MembershipType;
 use App\Models\Team;
 use App\Models\User;
 use App\Repositories\MembershipTypeRepository;

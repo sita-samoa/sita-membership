@@ -1,10 +1,8 @@
 <?php
 
 use App\Models\Member;
-use App\Models\Team;
 use App\Models\User;
 use Database\Seeders\DatabaseSeeder;
-use Illuminate\Support\Facades\Queue;
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -17,4 +15,3 @@ test('user can submit their own membership application', function () {
     $response->assertStatus(302);
     $response->assertSessionHasNoErrors();
 });
-
