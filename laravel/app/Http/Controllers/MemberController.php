@@ -17,6 +17,7 @@ use App\Notifications\RejectionNotification;
 use App\Notifications\SubReminder;
 use App\Repositories\MemberMembershipStatusRepository;
 use App\Repositories\MemberRepository;
+use App\Repositories\MembershipTypeRepository;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -194,17 +195,44 @@ class MemberController extends Controller
     {
         $this->authorize('accept', $member);
 
-        $validated = $request->validate([
-            'financial_year' => 'required|int|min:2000',
-            'receipt_number' => 'required|string',
-        ]);
+        $rep = new MembershipTypeRepository();
+        $memberships = $rep->getFreeMemberships();
+        $isFreeMembership = false;
 
-        $this->rep->accept(
-            $member,
-            $request->user(),
-            $validated['financial_year'],
-            $validated['receipt_number']
-        );
+        foreach ($memberships as $freeMembership) {
+            if ($member->membershipType->id == $freeMembership->id) {
+                $isFreeMembership = TRUE;
+                break;
+            }
+        }
+
+        if ($isFreeMembership) {
+            $validated = $request->validate([
+                'financial_year' => 'required|int|min:2000',
+                'receipt_number' => 'nullable|string',
+            ]);
+
+            $this->rep->accept(
+                $member,
+                $request->user(),
+                $validated['financial_year'],
+                $validated['receipt_number'] ?? ''
+            );
+
+        }
+        else {
+            $validated = $request->validate([
+                'financial_year' => 'required|int|min:2000',
+                'receipt_number' => 'required|string',
+            ]);
+
+            $this->rep->accept(
+                $member,
+                $request->user(),
+                $validated['financial_year'],
+                $validated['receipt_number']
+            );
+        }
 
         return redirect()->back()->with('success', 'Application Accepted');
     }

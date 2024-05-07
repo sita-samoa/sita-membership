@@ -10,4 +10,11 @@ class MembershipTypeRepository extends Repository
     {
         return MembershipType::where('code', $code)->firstOrFail();
     }
+
+    public function getFreeMemberships()
+    {
+        return MembershipType::where('annual_cost', 0)->get();
+    }
+
+
 }

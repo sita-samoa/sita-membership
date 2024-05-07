@@ -2,8 +2,10 @@
 
 use App\Enums\MembershipStatus;
 use App\Models\Member;
+use App\Models\MemberMailingPreference;
 use App\Models\Team;
 use App\Models\User;
+use App\Repositories\MembershipTypeRepository;
 use Carbon\Carbon;
 
 beforeEach(function () {
@@ -29,6 +31,37 @@ test('can mark as accepted', function ($role) {
         'receipt_number' => '111',
     ]);
     $response->assertStatus(302);
+})->with(['admin', 'coordinator']);
+
+test('can mark student as accepted', function ($role) {
+    // Get student membership id.
+    $rep = new MembershipTypeRepository();
+    $studentMembershipType = $rep->getByCode('student');
+
+    User::factory()->withPersonalTeam()->create();
+    $team = Team::first();
+
+    $this->actingAs($user = User::factory()->create());
+    $team->users()->attach(
+        $user,
+        ['role' => $role]
+    );
+
+    $member = Member::factory()->create([
+        'membership_type_id' => $studentMembershipType->id,
+        'membership_status_id' => MembershipStatus::ENDORSED->value,
+    ]);
+
+    $response = $this->put('/members/'.$member->id.'/accept', [
+        'financial_year' => Carbon::now()->year,
+        'receipt_number' => '',
+    ]);
+
+    $response->assertStatus(302);
+    // Assert that no validation errors are present.
+    $response->assertValid();
+    $response->assertSessionHas('success');
+
 })->with(['admin', 'coordinator']);
 
 test('cannot mark as accepted', function ($role) {
