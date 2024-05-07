@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\MailingList;
 use App\Models\Member;
+use App\Models\MemberMailingPreference;
 use App\Models\Team;
 use App\Models\User;
 use App\Repositories\MembershipTypeRepository;
@@ -21,13 +23,24 @@ test('test cannot submit application when incomplete', function () {
 });
 
 test('test student can submit application with limited requirements', function () {
-    $this->actingAs($user = User::factory()->create());
+    // Create user with personal team.
+    $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
-    $member = Member::factory()->create();
+    // Get student membership id.
     $rep = new MembershipTypeRepository();
-    $membershipType = $rep->getByCode('student');
-    $member->membershipType($membershipType->id);
-    $member->save();
+    $studentMembershipType = $rep->getByCode('student');
+
+    // Create member.
+    $member = Member::factory()->for($user)->create(
+        ['membership_type_id' => $studentMembershipType->id]
+    );
+
+    // Subscribe to mailing list.
+    MemberMailingPreference::create([
+        'member_id' => $member->id,
+        'mailing_list_id' => 1,
+        'subscribed' => true,
+    ]);
 
     $response = $this->put('/members/'.$member->id.'/submit');
     $response->assertStatus(302);

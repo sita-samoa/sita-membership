@@ -151,6 +151,15 @@ class Member extends Model implements Auditable
             $completion['data']['part9']['status'] = true;
         }
 
+        // Have different requirements for student.
+        if ($this->membershipType->code == 'student') {
+            $completion['data']['part4']['status'] = true;
+            $completion['data']['part5']['status'] = true;
+            $completion['data']['part6']['status'] = true;
+            $completion['data']['part7']['status'] = true;
+            $completion['data']['part8']['status'] = true;
+        }
+
         $overall = true;
         foreach ($completion['data'] as $value) {
             if (! $value['status']) {
