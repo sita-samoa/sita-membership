@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\MailingList;
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
 use App\Models\Team;

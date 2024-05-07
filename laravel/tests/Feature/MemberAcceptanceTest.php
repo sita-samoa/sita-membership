@@ -2,7 +2,6 @@
 
 use App\Enums\MembershipStatus;
 use App\Models\Member;
-use App\Models\MemberMailingPreference;
 use App\Models\Team;
 use App\Models\User;
 use App\Repositories\MembershipTypeRepository;
@@ -61,7 +60,6 @@ test('can mark student as accepted', function ($role) {
     // Assert that no validation errors are present.
     $response->assertValid();
     $response->assertSessionHas('success');
-
 })->with(['admin', 'coordinator']);
 
 test('cannot mark as accepted', function ($role) {

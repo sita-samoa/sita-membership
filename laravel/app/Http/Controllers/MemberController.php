@@ -201,7 +201,7 @@ class MemberController extends Controller
 
         foreach ($memberships as $freeMembership) {
             if ($member->membershipType->id == $freeMembership->id) {
-                $isFreeMembership = TRUE;
+                $isFreeMembership = true;
                 break;
             }
         }
@@ -218,9 +218,7 @@ class MemberController extends Controller
                 $validated['financial_year'],
                 $validated['receipt_number'] ?? ''
             );
-
-        }
-        else {
+        } else {
             $validated = $request->validate([
                 'financial_year' => 'required|int|min:2000',
                 'receipt_number' => 'required|string',

@@ -15,6 +15,4 @@ class MembershipTypeRepository extends Repository
     {
         return MembershipType::where('annual_cost', 0)->get();
     }
-
-
 }
