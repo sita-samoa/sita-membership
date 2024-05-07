@@ -1,8 +1,11 @@
 <?php
 
 use App\Models\Member;
+use App\Models\MembershipType;
 use App\Models\Team;
 use App\Models\User;
+use App\Repositories\MembershipTypeRepository;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Support\Facades\Queue;
 
 beforeEach(function () {
@@ -16,6 +19,22 @@ test('test cannot submit application when incomplete', function () {
 
     $response = $this->put('/members/'.$member->id.'/submit');
     $response->assertStatus(403);
+});
+
+test('test student can submit application with limited requirements', function () {
+    $this->actingAs($user = User::factory()->create());
+
+    $member = Member::factory()->create();
+    $rep = new MembershipTypeRepository();
+    $membershipType = $rep->getByCode('student');
+    $member->membershipType($membershipType->id);
+    $member->save();
+
+    $response = $this->put('/members/'.$member->id.'/submit');
+    $response->assertStatus(302);
+    // Assert that no validation errors are present.
+    $response->assertValid();
+    $response->assertSessionHas('success');
 });
 
 test('test group admin can submit application when incomplete', function () {
