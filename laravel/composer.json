@@ -72,10 +72,10 @@
             "./vendor/bin/phpcbf"
         ],
         "test": [
-            "./vendor/bin/pest test"
+            "./vendor/bin/pest"
         ],
         "test_single": [
-            "./vendor/bin/pest --filter MemerbSubmissionTest"
+            "./vendor/bin/pest --filter MemberSubmissionTest"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
