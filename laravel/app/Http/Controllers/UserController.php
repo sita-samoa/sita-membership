@@ -38,14 +38,15 @@ class UserController extends Controller
 
         return Inertia::render('Users/Index', [
             'filters' => $request->all('search', 'role'),
-            'users' => User::orderBy('name')
+            'users' => User::orderBy('email_verified_at')
                 ->when(
                     $role,
                     fn ($query) => $query->whereIn('id', $ids_only)
                 )
                 ->when(
                     $search,
-                    fn ($query) => $query->where('name', 'like', '%'.$search.'%')
+                    fn ($query) => $query
+                        ->where('name', 'like', '%'.$search.'%')
                         ->orWhere('email', 'like', '%'.$search.'%')
                 )
                 ->paginate(10)
@@ -62,7 +63,13 @@ class UserController extends Controller
 
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                'unique:users'
+            ],
             'password' => $this->passwordRules(),
             'photo' => 'nullable|image',
         ];
@@ -111,7 +118,9 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         if (App::environment('demo') && $user->isDemoUser()) {
-            return redirect()->back()->with('error', 'Updating the demo user is not allowed.');
+            return redirect()
+                ->back()
+                ->with('error', 'Updating the demo user is not allowed.');
         }
 
         $this->authorize('update', $user);
@@ -157,11 +166,15 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         if (App::environment('demo') && $user->isDemoUser()) {
-            return redirect()->back()->with('error', 'Deleting the demo user is not allowed.');
+            return redirect()
+                ->back()
+                ->with('error', 'Deleting the demo user is not allowed.');
         }
 
         if ($user->isSuperUser()) {
-            return redirect()->back()->with('error', 'Deleting the super user is not allowed.');
+            return redirect()
+                ->back()
+                ->with('error', 'Deleting the super user is not allowed.');
         }
 
         $this->authorize('delete', $user);
