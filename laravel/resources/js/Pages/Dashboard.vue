@@ -19,6 +19,10 @@ defineProps({
     type: Number,
     default: 0,
   },
+  totalCollected: {
+    type: Number,
+    default: 0,
+  },
   mailingLists: {
     type: Object,
     default: [],
@@ -34,7 +38,7 @@ defineProps({
   <LayoutAuthenticated title="Dashboard">
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiMonitor" title="Dashboard" main> &nbsp; </SectionTitleLineWithButton>
-      <Welcome :total-submitted="totalSubmitted" :total-lapsed="totalLapsed" :total-owing="totalOwing" :total-endorsed="totalEndorsed" />
+      <Welcome :total-submitted="totalSubmitted" :total-lapsed="totalLapsed" :total-owing="totalOwing" :total-collected="totalCollected" :total-endorsed="totalEndorsed" />
       <MailingListDisplay :mailing-lists="mailingLists" />
     </SectionMain>
   </LayoutAuthenticated>

@@ -28,7 +28,8 @@ class DashboardController extends Controller
     {
         // Calculate outstanding payment
         $totalOwing = $this->sitaOnlineService->calculateOutstandingPayment();
-
+        $totalCollected = $this->sitaOnlineService->calculateTotalCollected();
+        
         // Get number of mailing lists
         $mailing_list_statistics = [];
         $mailing_list = MailingList::get();
@@ -47,6 +48,8 @@ class DashboardController extends Controller
                 Member::where('membership_status_id', MembershipStatus::LAPSED->value)->count() : 0,
             'totalOwing' => $canReadAny ?
                 $totalOwing : 0,
+            'totalCollected' => $canReadAny ?
+                $totalCollected : 0,
             'mailingLists' => $canReadAny ?
                 $mailing_list_statistics : [],
             'totalEndorsed' => $canReadAny ?

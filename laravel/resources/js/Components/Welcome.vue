@@ -20,6 +20,10 @@ defineProps({
     type: Number,
     default: 0,
   },
+  totalCollected: {
+    type: Number,
+    default: 0,
+  },
   totalEndorsed: {
     type: Number,
     default: 0,
@@ -55,6 +59,7 @@ defineProps({
       <CardBoxWidget is-hoverable color="text-pink-500" :icon="mdiClockOutline" :number="totalLapsed" label="Lapsed Membership" href="/members?membership_status_id=5" />
       <CardBoxWidget is-hoverable color="text-indigo-500" :icon="mdiDecagram" :number="totalEndorsed" label="Pending Acceptance" href="/members?membership_status_id=3" />
       <CardBoxWidget is-hoverable color="text-red-500" :icon="mdiCurrencyUsd" :number="totalOwing" prefix="$" label="Estimated Total Owing" href="/members?membership_status_id=5" />
+      <CardBoxWidget is-hoverable color="text-red-500" :icon="mdiCurrencyUsd" :number="totalCollected" prefix="$" label="Estimated Total Collected" href="/members?membership_status_id=4" />
     </div>
   </div>
 </template>

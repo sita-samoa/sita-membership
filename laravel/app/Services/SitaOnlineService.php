@@ -21,4 +21,18 @@ class SitaOnlineService
 
         return $totalOwing;
     }
+
+    public function calculateTotalCollected()
+    {
+        $membershipType = MembershipType::get();
+        $totalFunds = 0;
+
+        foreach ($membershipType as $m) {
+            $members = Member::where('membership_status_id', MembershipStatus::ACCEPTED->value);
+            $count = $members->where('membership_type_id', $m->id)->count();
+            $totalFunds += $count * $m->annual_cost;
+        }
+
+        return $totalFunds;
+    }
 }
