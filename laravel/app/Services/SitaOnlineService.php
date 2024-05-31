@@ -5,30 +5,30 @@ namespace App\Services;
 use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\MembershipType;
+use App\Repositories\MemberRepository;
 
 class SitaOnlineService
 {
-    public function calculateOutstandingPayment()
+    public function getOustandingPayment()
     {
-        $membershipType = MembershipType::get();
-        $totalOwing = 0;
-
-        foreach ($membershipType as $m) {
-            $members = Member::where('membership_status_id', MembershipStatus::LAPSED->value);
-            $count = $members->where('membership_type_id', $m->id)->count();
-            $totalOwing += $count * $m->annual_cost;
-        }
-
-        return $totalOwing;
+        return $this->getTotalFundsByMembershipType(MembershipStatus::LAPSED);
     }
 
-    public function calculateTotalCollected()
+    public function getTotalCollected()
     {
-        $membershipType = MembershipType::get();
+        return $this->getTotalFundsByMembershipType(MembershipStatus::ACCEPTED);
+    }
+
+
+    public function getTotalFundsByMembershipType(MembershipStatus $status)
+    {
         $totalFunds = 0;
+        $membershipType = MembershipType::get();
+        $membership_status_id = $status->value;
+        $rep = new MemberRepository();
 
         foreach ($membershipType as $m) {
-            $members = Member::where('membership_status_id', MembershipStatus::ACCEPTED->value);
+            $members = $rep->getByMembershipStatusId($membership_status_id, 0);
             $count = $members->where('membership_type_id', $m->id)->count();
             $totalFunds += $count * $m->annual_cost;
         }
