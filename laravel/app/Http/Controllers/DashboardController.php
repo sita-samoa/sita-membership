@@ -6,7 +6,6 @@ use App\Enums\MembershipStatus;
 use App\Models\MailingList;
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
-use App\Models\MembershipType;
 use App\Services\SitaOnlineService;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;

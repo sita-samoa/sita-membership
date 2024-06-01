@@ -17,11 +17,9 @@ class MemberRepository extends Repository
     final public const DAYS_OF_MONTH_OF_FINANCIAL_YEAR = 30;
 
     /**
-     * Get Members by Membership Status Id
+     * Get Members by Membership Status Id.
      *
-     * @param int $membership_status_id
-     * @param int $limit - set to zero to remove limit
-     * @return Collection
+     * @param  int  $limit - set to zero to remove limit
      */
     public function getByMembershipStatusId(int $membership_status_id, int $limit = 10): Collection
     {
@@ -129,10 +127,10 @@ class MemberRepository extends Repository
             )
             ->when(
                 $search,
-                fn ($query) => $query->where('first_name', 'like', '%' . $search . '%')
-                    ->orWhere('last_name', 'like', '%' . $search . '%')
-                    ->orWhere('job_title', 'like', '%' . $search . '%')
-                    ->orWhere('current_employer', 'like', '%' . $search . '%')
+                fn ($query) => $query->where('first_name', 'like', '%'.$search.'%')
+                    ->orWhere('last_name', 'like', '%'.$search.'%')
+                    ->orWhere('job_title', 'like', '%'.$search.'%')
+                    ->orWhere('current_employer', 'like', '%'.$search.'%')
             );
     }
 }

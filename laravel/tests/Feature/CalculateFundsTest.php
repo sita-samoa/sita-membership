@@ -27,7 +27,7 @@ beforeEach(function () {
     $fellowMembership->setAnnualCost(0);
     $fellowMembership->save();
 
-    # Total owing
+    // Total owing
     $member = Member::factory()->create();
     $member->setMembershipStatus(MembershipStatus::LAPSED);
     $member->setMembershipType($fullMembership->id);
@@ -53,7 +53,7 @@ beforeEach(function () {
     $member->setMembershipType($affiliateMembership->id);
     $member->save();
 
-    # Total collected
+    // Total collected
     $member = Member::factory()->create();
     $member->setMembershipStatus(MembershipStatus::ACCEPTED);
     $member->setMembershipType($fullMembership->id);

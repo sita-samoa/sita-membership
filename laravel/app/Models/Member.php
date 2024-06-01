@@ -234,7 +234,8 @@ class Member extends Model implements Auditable
         return $this->hasMany(MemberMembershipStatus::class);
     }
 
-    public function setMembershipStatus(MembershipStatus $status) {
+    public function setMembershipStatus(MembershipStatus $status)
+    {
         $this->membership_status_id = $status->value;
     }
 

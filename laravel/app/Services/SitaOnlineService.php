@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Enums\MembershipStatus;
-use App\Models\Member;
 use App\Models\MembershipType;
 use App\Repositories\MemberRepository;
 
@@ -18,7 +17,6 @@ class SitaOnlineService
     {
         return $this->getTotalFundsByMembershipType(MembershipStatus::ACCEPTED);
     }
-
 
     public function getTotalFundsByMembershipType(MembershipStatus $status)
     {
