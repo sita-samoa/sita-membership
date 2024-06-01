@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Enums\MembershipStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -232,11 +231,6 @@ class Member extends Model implements Auditable
     public function membershipStatuses(): HasMany
     {
         return $this->hasMany(MemberMembershipStatus::class);
-    }
-
-    public function setMembershipStatus(MembershipStatus $status)
-    {
-        $this->membership_status_id = $status->value;
     }
 
     public function setMembershipType($membership_type)

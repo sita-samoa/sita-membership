@@ -29,53 +29,53 @@ beforeEach(function () {
 
     // Total owing
     $member = Member::factory()->create();
-    $member->setMembershipStatus(MembershipStatus::LAPSED);
+    $member->membership_status_id = MembershipStatus::LAPSED->value;
     $member->setMembershipType($fullMembership->id);
     $member->save();
 
     $member = Member::factory()->create();
-    $member->setMembershipStatus(MembershipStatus::LAPSED);
+    $member->membership_status_id = MembershipStatus::LAPSED->value;
     $member->setMembershipType($fullMembership->id);
     $member->save();
 
     $member = Member::factory()->create();
-    $member->setMembershipStatus(MembershipStatus::LAPSED);
+    $member->membership_status_id = MembershipStatus::LAPSED->value;
     $member->setMembershipType($fullMembership->id);
     $member->save();
 
     $member = Member::factory()->create();
-    $member->setMembershipStatus(MembershipStatus::LAPSED);
+    $member->membership_status_id = MembershipStatus::LAPSED->value;
     $member->setMembershipType($associateMembership->id);
     $member->save();
 
     $member = Member::factory()->create();
-    $member->setMembershipStatus(MembershipStatus::LAPSED);
+    $member->membership_status_id = MembershipStatus::LAPSED->value;
     $member->setMembershipType($affiliateMembership->id);
     $member->save();
 
     // Total collected
     $member = Member::factory()->create();
-    $member->setMembershipStatus(MembershipStatus::ACCEPTED);
+    $member->membership_status_id = MembershipStatus::ACCEPTED->value;
     $member->setMembershipType($fullMembership->id);
     $member->save();
 
     $member = Member::factory()->create();
-    $member->setMembershipStatus(MembershipStatus::ACCEPTED);
+    $member->membership_status_id = MembershipStatus::ACCEPTED->value;
     $member->setMembershipType($associateMembership->id);
     $member->save();
 
     $member = Member::factory()->create();
-    $member->setMembershipStatus(MembershipStatus::ACCEPTED);
+    $member->membership_status_id = MembershipStatus::ACCEPTED->value;
     $member->setMembershipType($affiliateMembership->id);
     $member->save();
 
     $member = Member::factory()->create();
-    $member->setMembershipStatus(MembershipStatus::ACCEPTED);
+    $member->membership_status_id = MembershipStatus::ACCEPTED->value;
     $member->setMembershipType($studentMembership->id);
     $member->save();
 
     $member = Member::factory()->create();
-    $member->setMembershipStatus(MembershipStatus::ACCEPTED);
+    $member->membership_status_id = MembershipStatus::ACCEPTED->value;
     $member->setMembershipType($fellowMembership->id);
     $member->save();
 });
