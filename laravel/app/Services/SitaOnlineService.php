@@ -9,7 +9,7 @@ use App\Repositories\MemberRepository;
 
 class SitaOnlineService
 {
-    public function getOustandingPayment()
+    public function getOutstandingPayment()
     {
         return $this->getTotalFundsByMembershipType(MembershipStatus::LAPSED);
     }

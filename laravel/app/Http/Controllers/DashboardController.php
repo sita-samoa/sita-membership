@@ -27,7 +27,7 @@ class DashboardController extends Controller
     public function index(): Response
     {
         // Calculate outstanding payment
-        $totalOwing = $this->sitaOnlineService->getOustandingPayment();
+        $totalOwing = $this->sitaOnlineService->getOutstandingPayment();
         $totalCollected = $this->sitaOnlineService->getTotalCollected();
 
         // Get number of mailing lists
