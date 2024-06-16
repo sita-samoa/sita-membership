@@ -28,6 +28,10 @@ class UserController extends Controller
 
         $search = $request->input('search');
         $role = $request->input('role');
+        $limit = $request->input('limit') ?? 10;
+        if ($limit > 50) {
+            $limit = 50;
+        }
 
         $ids_only = [];
         if ($role) {
@@ -48,7 +52,7 @@ class UserController extends Controller
                     fn ($query) => $query->where('name', 'like', '%'.$search.'%')
                         ->orWhere('email', 'like', '%'.$search.'%')
                 )
-                ->paginate(10)
+                ->paginate($limit)
                 ->withQueryString(),
             'availableRoles' => array_values(Jetstream::$roles),
         ]);
