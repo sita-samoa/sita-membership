@@ -41,7 +41,7 @@ class UserController extends Controller
         }
 
         return Inertia::render('Users/Index', [
-            'filters' => $request->all('search', 'role'),
+            'filters' => $request->all('search', 'role', 'limit'),
             'users' => User::orderBy('name')
                 ->when(
                     $role,

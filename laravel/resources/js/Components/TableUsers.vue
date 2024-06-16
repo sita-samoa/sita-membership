@@ -32,7 +32,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  filters: Array,
+  filters: Object,
   users: Object,
   availableRoles: Array,
 })
@@ -205,7 +205,7 @@ const clearPhotoFileInput = () => {
 const searchForm = useForm({
   search: usePage().props.filters.search,
   role: usePage().props.filters.role,
-  limit: 10,
+  limit: usePage().props.filters.limit,
 })
 
 function reset() {
@@ -220,7 +220,7 @@ watch(
     searchForm.get(route('users.index'), {
       search: searchForm.search,
       role: searchForm.role,
-      preserveState: true,
+      limit: searchForm.limit,
     })
   }, 500),
   { deep: true }
@@ -298,6 +298,16 @@ watch(
       </tbody>
     </table>
   </CardBox>
+
+  <label for="limit">Items per page:</label>
+
+  <select v-model="searchForm.limit" id="limit">
+    <option value="10">10</option>
+    <option value="25">25</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+  </select>
+
   <Pagination :links="props.users.links" />
 
   <DialogModal :show="showFormModal">
