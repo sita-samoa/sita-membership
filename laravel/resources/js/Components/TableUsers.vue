@@ -205,7 +205,7 @@ const clearPhotoFileInput = () => {
 const searchForm = useForm({
   search: usePage().props.filters.search,
   role: usePage().props.filters.role,
-  limit: usePage().props.filters.limit,
+  limit: usePage().props.filters.limit ?? 10,
 })
 
 function reset() {
@@ -298,17 +298,26 @@ watch(
       </tbody>
     </table>
   </CardBox>
+  <div class="my-8 grid grid-cols-3 gap-1 justify-evenly">
 
-  <label for="limit">Items per page:</label>
+    <div class="rounded-lg h-12 grid grid-cols-3 gap-1">
+      <label for="limit" class="py-2 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Items per page:</label>
 
-  <select v-model="searchForm.limit" id="limit">
-    <option value="10">10</option>
-    <option value="25">25</option>
-    <option value="50">50</option>
-    <option value="100">100</option>
-  </select>
+      <select
+        v-model="searchForm.limit"
+        id="limit"
+        class="mb-1 ml-2 px-4 py-3 text-gray-400 text-sm leading-4 border rounded bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+    <div class="col-span-2 rounded-lg h-12">
+      <Pagination :links="props.users.links" />
+    </div>
 
-  <Pagination :links="props.users.links" />
+  </div>
 
   <DialogModal :show="showFormModal">
     <template #title>
