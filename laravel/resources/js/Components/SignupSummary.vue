@@ -56,7 +56,6 @@ const application_status_id = computed(() => {
 const application_ready_for_submission = props.options.completion.overall.status
 
 const activeTab = ref('first')
-
 </script>
 
 <template>
@@ -91,7 +90,6 @@ const activeTab = ref('first')
 
     <fwb-tabs v-model="activeTab" class="p-5">
       <fwb-tab name="first" title="General">
-
         <!-- General details -->
         <fwb-list-group class="w-full">
           <Link v-for="(c, index) in completion" :href="route('members.signup.index', { member: props.member.id, tab: index.replace('part', '') })">
@@ -104,18 +102,14 @@ const activeTab = ref('first')
             </fwb-list-group-item>
           </Link>
         </fwb-list-group>
-
       </fwb-tab>
       <fwb-tab name="second" :title="'Payments (' + props.statuses.length + ')'">
         <member-payment :statuses="props.statuses" />
       </fwb-tab>
       <fwb-tab name="third" title="Audit">
-
         <!-- Audit log link -->
         <Link :href="route('members.audit.index', { member: member.id })" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
-
       </fwb-tab>
-
     </fwb-tabs>
 
     <template #footer>
