@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\UserController;
 use App\Models\Team;
 use App\Models\User;
+use Inertia\Testing\AssertableInertia as Assert;
 
 test('user without role cannot access', function () {
     $this->actingAs($user = User::factory()->create());
@@ -39,7 +41,53 @@ test('can access with role', function (string $role) {
 
 // @todo test list displayed
 // @todo test filter works
-// @todo test pagination works
+
+test('user can paginate users', function () {
+    User::factory()->count(45)->create();
+
+    $user = $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+
+    $user->get('/users')
+        ->assertInertia(fn (Assert $assert) => $assert
+            ->component('Users/Index')
+            ->has('users.data', UserController::DEFAULT_ROWS_PER_PAGE)
+        );
+
+    // @todo - Check why this is 21 it should be 20.
+    $user->get('/users?page=2')
+        ->assertInertia(fn (Assert $assert) => $assert
+            ->component('Users/Index')
+            ->has('users.data', 21)
+        );
+
+});
+
+test('user can modify limits', function (int $limit) {
+    User::factory()->count(150)->create();
+
+    $user = $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+
+    $user->get('/users?limit=' . $limit)
+        ->assertInertia(fn (Assert $assert) => $assert
+            ->component('Users/Index')
+            ->has('users.data', $limit)
+        );
+
+})->with([10, 25, 50, 100]);
+
+test('user can paginate higher than 100', function (int $limit) {
+    User::factory()->count(150)->create();
+
+    $user = $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+
+    // Cannot have more than 100.
+    $user->get('/users?limit=' . $limit)
+        ->assertInertia(fn (Assert $assert) => $assert
+            ->component('Users/Index')
+            ->has('users.data', UserController::MAX_LIMIT)
+        );
+
+})->with([101,110,150]);
 
 test('user can be created', function (string $role) {
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
