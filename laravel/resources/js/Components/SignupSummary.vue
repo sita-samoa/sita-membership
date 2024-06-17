@@ -8,6 +8,7 @@ import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline
 import AcceptModal from '@/Components/AcceptModal.vue'
 import RejectionModal from '@/Components/RejectionModal.vue'
 import CardBox from '@/Components/CardBox.vue'
+import MemberPayment from '@/Components/MemberPayment.vue'
 
 const props = defineProps(['member', 'options', 'data'])
 
@@ -106,7 +107,7 @@ const activeTab = ref('first')
 
       </fwb-tab>
       <fwb-tab name="second" title="Payment">
-        Lorem ipsum dolor...
+        <member-payment />
       </fwb-tab>
       <fwb-tab name="third" title="Audit">
 
@@ -114,7 +115,7 @@ const activeTab = ref('first')
         <Link :href="route('members.audit.index', { member: member.id })" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
 
       </fwb-tab>
-      
+
     </fwb-tabs>
 
     <template #footer>
