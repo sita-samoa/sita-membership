@@ -106,7 +106,7 @@ const activeTab = ref('first')
         </fwb-list-group>
 
       </fwb-tab>
-      <fwb-tab name="second" title="Payment">
+      <fwb-tab name="second" :title="'Payments (' + props.statuses.length + ')'">
         <member-payment :statuses="props.statuses" />
       </fwb-tab>
       <fwb-tab name="third" title="Audit">
