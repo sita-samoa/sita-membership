@@ -205,13 +205,13 @@ const clearPhotoFileInput = () => {
 const searchForm = useForm({
   search: usePage().props.filters.search,
   role: usePage().props.filters.role,
-  limit: usePage().props.filters.limit ?? 10,
+  limit: usePage().props.filters.limit,
 })
 
 function reset() {
   searchForm.search = ''
   searchForm.role = ''
-  searchForm.limit = ''
+  searchForm.limit = usePage().props.filters.limit
 }
 
 watch(
