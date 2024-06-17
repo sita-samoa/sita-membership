@@ -1,7 +1,7 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3'
 import DialogModal from '@/Components/DialogModal.vue'
-import { Input } from 'flowbite-vue'
+import { FwbInput } from 'flowbite-vue'
 import InputError from '@/Components/InputError.vue'
 import CancelButton from '@/Components/CancelButton.vue'
 import PrimaryButton from '@/Components/PrimaryButton.vue'
@@ -47,10 +47,10 @@ function accept() {
     <template #title>{{ props.headingText }}</template>
     <template #content>
       <div class="mb-3">Please provide the following information.</div>
-      <Input v-model="form.financial_year" required placeholder="enter payment financial year" label="Financial Year" class="mb-2" type="number" />
+      <fwb-input v-model="form.financial_year" required placeholder="enter payment financial year" label="Financial Year" class="mb-2" type="number" />
       <InputError class="mt-2" :message="form.errors.financial_year" />
 
-      <Input v-model="form.receipt_number" required placeholder="enter payment receipt #" label="Receipt #" class="mb-2" />
+      <fwb-input v-model="form.receipt_number" required placeholder="enter payment receipt #" label="Receipt #" class="mb-2" />
       <InputError class="mt-2" :message="form.errors.receipt_number" />
     </template>
     <template #footer>

@@ -1,6 +1,6 @@
 <script setup>
 import { Head, Link } from '@inertiajs/vue3'
-import { TheCard } from 'flowbite-vue'
+import { FwbCard } from 'flowbite-vue'
 import ApplicationMark from '@/Components/ApplicationMark.vue'
 import LayoutGuest from '@/Layouts/LayoutGuest.vue'
 import BaseIcon from '@/Components/BaseIcon.vue'
@@ -39,12 +39,14 @@ const styleStore = useStyleStore()
 
         <div class="my-16">
           <div class="grid grid-cols-1 md:grid-cols-1 gap-6 lg:gap-8">
-            <the-card href="#" variant="horizontal" img-src="/imgs/sita_cover.webp" img-alt="Desk">
-              <Link :href="route('dashboard.index')">
-                <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Join SITA</h5>
-                <p class="font-normal text-gray-700 dark:text-gray-400">You've reached the SITA Online portal. Use it to Sign up and join the Sāmoa Information Technology Association. Register an account to get started or login to complete your Sign up.</p>
-              </Link>
-            </the-card>
+            <fwb-card href="#" variant="horizontal" img-src="/imgs/sita_cover.webp" img-alt="Desk">
+              <div class="p-5">
+                <Link :href="route('dashboard.index')">
+                  <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Join SITA</h5>
+                  <p class="font-normal text-gray-700 dark:text-gray-400">You've reached the SITA Online portal. Use it to Sign up and join the Sāmoa Information Technology Association. Register an account to get started or login to complete your Sign up.</p>
+                </Link>
+              </div>
+            </fwb-card>
           </div>
         </div>
 

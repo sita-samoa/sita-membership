@@ -1,5 +1,5 @@
 <script setup>
-import { ListGroup, ListGroupItem } from 'flowbite-vue'
+import { FwbListGroup, FwbListGroupItem } from 'flowbite-vue'
 import PencilOutlineIcon from 'vue-material-design-icons/PencilOutline.vue'
 import CloudDownloadIcon from 'vue-material-design-icons/CloudDownload.vue'
 
@@ -13,8 +13,8 @@ function bytesToSize(bytes) {
 }
 </script>
 <template>
-  <list-group v-show="list.length" class="w-full">
-    <list-group-item v-for="item in list" @click="$emit('editItem', item.id)">
+  <fwb-list-group v-show="list.length" class="w-full">
+    <fwb-list-group-item v-for="item in list" @click="$emit('editItem', item.id)">
       <template #prefix>
         <PencilOutlineIcon fill-color="green" />
       </template>
@@ -24,6 +24,6 @@ function bytesToSize(bytes) {
           <CloudDownloadIcon fill-color="currentColor" />
         </div>
       </template>
-    </list-group-item>
-  </list-group>
+    </fwb-list-group-item>
+  </fwb-list-group>
 </template>

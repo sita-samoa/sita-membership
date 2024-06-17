@@ -1,6 +1,6 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3'
-import { Alert, Button, Table } from 'flowbite-vue'
+import { FwbAlert, FwbButton } from 'flowbite-vue'
 import { ref, nextTick, onMounted } from 'vue'
 import InputLabel from './InputLabel.vue'
 import Input from './Input.vue'
@@ -82,7 +82,7 @@ function deleteItem() {
     <h5>Work Experience</h5>
 
     <Link href="#">
-      <Button class="p-3 mt-3" color="alternative" @click.prevent="showModal">Add Work Experience</Button>
+      <fwb-Button class="p-3 mt-3" color="alternative" @click.prevent="showModal">Add Work Experience</fwb-Button>
     </Link>
 
     <div v-if="memberWorkExperiences ? memberWorkExperiences.length : false" class="relative mt-3 overflow-x-auto shadow-md sm:rounded-lg">
@@ -101,7 +101,7 @@ function deleteItem() {
         <tbody>
           <tr v-for="workExperience in memberWorkExperiences" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
             <td class="px-6 py-4 text-right">
-              <button type="button" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" @click="showModal(workExperience)"><PencilOutlineIcon fill-color="green" /></button>
+              <fwb-button type="button" class="font-medium text-blue-600 dark:text-blue-500 hover:underline" @click="showModal(workExperience)"><PencilOutlineIcon fill-color="green" /></fwb-button>
             </td>
             <th scope="row" class="px-6 py-4 font-medium text-gray-900 dark:text-white whitespace-nowrap">
               {{ workExperience.organisation }}
@@ -135,7 +135,7 @@ function deleteItem() {
       <InputError class="mt-2 mb-4" :message="form.errors.position" />
 
       <!-- Responsibilities -->
-      <Alert type="info" class="mt-3 mb-2">Please provide only a brief summary of roles and responsibilities. </Alert>
+      <fwb-Alert type="info" class="mt-3 mb-2">Please provide only a brief summary of roles and responsibilities. </fwb-Alert>
       <InputLabel for="message" value="Responsibilities" class="mb-2 required" />
       <textarea id="message" v-model="form.responsibilities" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-2" placeholder="Please provide only a brief summary of roles and responsibilities..." />
       <InputError class="mt-2 mb-4" :message="form.errors.responsibilities" />
@@ -169,9 +169,9 @@ function deleteItem() {
       </div>
       <div>
         <DeleteButton v-if="form.id" @click="showConfirmationModal = true" />
-        <button type="submit" :disabled="form.processing" class="ml-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" @click="addSaveWorkExperience">
+        <fwb-button type="submit" :disabled="form.processing" class="ml-2 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" @click="addSaveWorkExperience">
           {{ !form.id ? 'Add' : 'Update' }}
-        </button>
+        </fwb-button>
       </div>
     </template>
   </DialogModal>

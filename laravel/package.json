@@ -39,8 +39,8 @@
     },
     "dependencies": {
         "dayjs": "^1.11.7",
-        "flowbite": "^1.6.5",
-        "flowbite-vue": "^0.0.10",
+        "flowbite": "^2.3.0",
+        "flowbite-vue": "^0.1.5",
         "lodash": "^4.17.21",
         "vue-material-design-icons": "^5.2.0",
         "vue-recaptcha-v3": "^2.0.1"

@@ -1,6 +1,6 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3'
-import { Button, Input } from 'flowbite-vue'
+import { FwbButton, FwbInput } from 'flowbite-vue'
 import { computed, ref } from 'vue'
 import InputLabel from '@/Components/InputLabel.vue'
 import InputError from '@/Components/InputError.vue'
@@ -134,7 +134,7 @@ function deleteItem() {
   <div>
     <h5 class="mb-3">Academic Qualifications</h5>
 
-    <Button v-show="props.editable" class="p-3 mb-3" color="alternative" @click.prevent="showModal">Add Qualification</Button>
+    <fwb-Button v-show="props.editable" class="p-3 mb-3" color="alternative" @click.prevent="showModal">Add Qualification</fwb-Button>
 
     <!-- Member qualifications list -->
     <MemberQualificationsList :list="listData" @edit-item="edit" />
@@ -149,13 +149,13 @@ function deleteItem() {
       </div>
     </template>
     <template #content>
-      <Input v-model="form.qualification" placeholder="enter your qualification" label="Qualification" class="mb-2" />
+      <fwb-Input v-model="form.qualification" placeholder="enter your qualification" label="Qualification" class="mb-2" />
       <InputError class="mt-2" :message="form.errors.qualification" />
 
-      <Input v-model="form.year_attained" name="year_attained" type="number" placeholder="enter year attained" label="Year attained" class="mb-2" />
+      <fwb-Input v-model="form.year_attained" name="year_attained" type="number" placeholder="enter year attained" label="Year attained" class="mb-2" />
       <InputError class="mt-2" :message="form.errors.year_attained" />
 
-      <Input v-model="form.institution" placeholder="enter your institution" label="Institution" class="mb-2" />
+      <fwb-Input v-model="form.institution" placeholder="enter your institution" label="Institution" class="mb-2" />
       <InputError class="mt-2" :message="form.errors.institution" />
 
       <InputLabel for="countries" value="Country" class="mb-2" />

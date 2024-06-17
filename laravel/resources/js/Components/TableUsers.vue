@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { useForm, usePage, router } from '@inertiajs/vue3'
-import { Input, Button } from 'flowbite-vue'
+import { FwbInput } from 'flowbite-vue'
 import debounce from 'lodash/debounce'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -315,7 +315,7 @@ watch(
           <!-- Profile Photo -->
           <div class="col-span-6 sm:col-span-4">
             <!-- Profile Photo File Input -->
-            <input ref="photoInput" type="file" class="hidden" @change="updatePhotoPreview" />
+            <fwb-input ref="photoInput" type="file" class="hidden" @change="updatePhotoPreview" />
 
             <InputLabel for="photo" value="Photo" />
 

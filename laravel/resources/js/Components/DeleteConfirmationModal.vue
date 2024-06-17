@@ -1,6 +1,6 @@
 <script setup>
 import ConfirmationModal from '@/Components/ConfirmationModal.vue'
-import { Button } from 'flowbite-vue'
+import { FwbButton } from 'flowbite-vue'
 
 const emit = defineEmits(['close', 'delete'])
 
@@ -16,8 +16,8 @@ defineProps({
     <template #title> Delete </template>
     <template #content> Are you sure? </template>
     <template #footer>
-      <Button color="alternative" class="mr-3" @click="emit('close')">Cancel</Button>
-      <Button color="red" @click="emit('delete')">Do it</Button>
+      <fwb-button color="alternative" class="mr-3" @click="emit('close')">Cancel</fwb-button>
+      <fwb-button color="red" @click="emit('delete')">Do it</fwb-button>
     </template>
   </ConfirmationModal>
 </template>
