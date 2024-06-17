@@ -1,7 +1,7 @@
 <script setup>
 import { router, usePage, useForm, Link } from '@inertiajs/vue3'
 import { computed, onMounted, watch } from 'vue'
-import { Dropdown, ListGroup, ListGroupItem } from 'flowbite-vue'
+import { FwbListGroup, FwbListGroupItem } from 'flowbite-vue'
 import debounce from 'lodash/debounce'
 import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
 import Pagination from '@/Components/Pagination.vue'
@@ -88,68 +88,68 @@ watch(
 </script>
 <template>
   <SearchFilter v-model="form.search" :display-text="'Show - ' + filterName" placeholder="Search by name, job  or employer" @reset="reset">
-    <list-group>
-      <list-group-item @click="form.membership_status_id = ''">
+    <fwb-list-group>
+      <fwb-list-group-item @click="form.membership_status_id = ''">
         <template #prefix>
           <AccountCircleIcon />
         </template>
         All
-      </list-group-item>
-      <list-group-item @click="form.membership_status_id = 1">
+      </fwb-list-group-item>
+      <fwb-list-group-item @click="form.membership_status_id = 1">
         <template #prefix>
           <FileIcon />
         </template>
         Draft
-      </list-group-item>
-      <list-group-item @click="form.membership_status_id = 2">
+      </fwb-list-group-item>
+      <fwb-list-group-item @click="form.membership_status_id = 2">
         <template #prefix>
           <SendCheckIcon />
         </template>
         Submitted
-      </list-group-item>
-      <list-group-item @click="form.membership_status_id = 3">
+      </fwb-list-group-item>
+      <fwb-list-group-item @click="form.membership_status_id = 3">
         <template #prefix>
           <DecagramIcon />
         </template>
         Endorsed
-      </list-group-item>
-      <list-group-item @click="form.membership_status_id = 4">
+      </fwb-list-group-item>
+      <fwb-list-group-item @click="form.membership_status_id = 4">
         <template #prefix>
           <CheckDecagramIcon />
         </template>
         Accepted
-      </list-group-item>
-      <list-group-item @click="form.membership_status_id = 5">
+      </fwb-list-group-item>
+      <fwb-list-group-item @click="form.membership_status_id = 5">
         <template #prefix>
           <ClockOutlineIcon />
         </template>
         Lapsed
-      </list-group-item>
-      <list-group-item @click="form.membership_status_id = 6">
+      </fwb-list-group-item>
+      <fwb-list-group-item @click="form.membership_status_id = 6">
         <template #prefix>
           <ClockAlertOutlineIcon />
         </template>
         Expired
-      </list-group-item>
-      <list-group-item @click="form.membership_status_id = 7">
+      </fwb-list-group-item>
+      <fwb-list-group-item @click="form.membership_status_id = 7">
         <template #prefix>
           <AccountOffIcon />
         </template>
         Banned
-      </list-group-item>
-      <list-group-item @click="form.membership_status_id = 8">
+      </fwb-list-group-item>
+      <fwb-list-group-item @click="form.membership_status_id = 8">
         <template #prefix>
           <AccountCancelIcon />
         </template>
         Rejected
-      </list-group-item>
-    </list-group>
+      </fwb-list-group-item>
+    </fwb-list-group>
   </SearchFilter>
 
   <!-- Results summary -->
   <BaseLevel mobile>
     <ResultsSummary :total="props.list.total" :from="props.list.from" :to="props.list.to" />
-    <div class="mb-3 text-small" @click="download">
+    <div class="my-3 text-small" @click="download">
       <a title="Download" href="#"> <BaseIcon :path="mdiDownload" /> Download </a>
     </div>
   </BaseLevel>

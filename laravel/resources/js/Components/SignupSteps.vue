@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { Link, useForm, usePage, router } from '@inertiajs/vue3'
-import { Button, Progress, Input, Tabs, Tab } from 'flowbite-vue'
+import { FwbButton, FwbProgress, FwbInput, FwbTabs, FwbTab } from 'flowbite-vue'
 import MemberQualifications from '@/Components/MemberQualifications.vue'
 import MemberDocuments from '@/Components/MemberDocuments.vue'
 import MemberWorkExperience from '@/Components/MemberWorkExperience.vue'
@@ -277,16 +277,16 @@ onMounted(() => {
   <CardBox>
     <div v-if="form.isDirty && member_id" class="my-3 text-sm">There are unsaved changes. Press the "Next" button to save them.</div>
     <div class="mb-3">
-      <Progress v-if="!applicationSubmitted" :progress="progress" />
+      <fwb-Progress v-if="!applicationSubmitted" :progress="progress" />
     </div>
-    <tabs v-model="activeTab" class="p-5">
+    <fwb-tabs v-model="activeTab" class="p-5">
       <!-- class appends to content DIV for all tabs -->
-      <tab name="first" title="Membership Type" :disabled="disableTabs">
+      <fwb-tab name="first" title="Membership Type" :disabled="disableTabs">
         <form @submit.prevent="submit">
           <InputLabel for="membershipType" value="Membership Type" class="mb-4" />
 
           <div class="mb-4">
-            <div v-for="m in props.options.membership_type_options" class="flex items-center">
+            <div v-for="m in props.options.membership_type_options" class="flex items-center mb-2">
               <input :id="m.id" v-model="form.membership_type_id" type="radio" :value="m.id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
               <InputLabel :for="m.id" :value="m.title" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
             </div>
@@ -295,10 +295,10 @@ onMounted(() => {
           </div>
 
           <!-- next button -->
-          <Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</Button>
+          <fwb-Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</fwb-Button>
         </form>
-      </tab>
-      <tab name="second" title="General" :disabled="disableTabs">
+      </fwb-tab>
+      <fwb-tab name="second" title="General" :disabled="disableTabs">
         <form @submit.prevent="submit">
           <InputLabel for="title" value="Title" class="mb-4" />
           <select id="title" v-model="form.title_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3">
@@ -307,107 +307,107 @@ onMounted(() => {
           </select>
           <InputError class="mt-2" :message="form.errors.title_id" />
 
-          <Input v-model="form.first_name" placeholder="enter your first name" label="First name" class="mb-2" />
+          <fwb-Input v-model="form.first_name" placeholder="enter your first name" label="First name" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.first_name" />
 
-          <Input v-model="form.last_name" placeholder="enter your last name" label="Last name" class="mb-2" />
+          <fwb-Input v-model="form.last_name" placeholder="enter your last name" label="Last name" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.last_name" />
 
           <InputLabel for="gender" value="Gender" class="mb-4" />
-          <div v-for="g in props.options.gender_options" class="flex items-center mb-4">
+          <div v-for="g in props.options.gender_options" class="flex items-center mb-2">
             <input :id="g.id" v-model="form.gender_id" type="radio" :value="g.id" name="default-radio" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-            <InputLabel :for="g.id" :value="g.title" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
+            <InputLabel :for="g.id" :value="g.title" class="ml-2 font-medium text-gray-900 dark:text-gray-300" />
           </div>
           <InputError class="mt-2" :message="form.errors.gender_id" />
 
-          <InputLabel for="dob" value="Date of birth" class="mb-4" />
+          <InputLabel for="dob" value="Date of birth" class="my-4" />
           <div class="relative max-w-sm mb-3">
             <input id="dob" v-model="form.dob" type="date" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date" />
           </div>
           <InputError class="mt-2" :message="form.errors.dob" />
 
-          <Input v-model="form.job_title" placeholder="enter your job title" label="Job title" class="mb-2" />
+          <fwb-Input v-model="form.job_title" placeholder="enter your job title" label="Job title" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.job_title" />
 
-          <Input v-model="form.current_employer" placeholder="enter your current employer" label="Current employer" class="mb-2" />
+          <fwb-Input v-model="form.current_employer" placeholder="enter your current employer" label="Current employer" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.current_employer" />
 
           <!-- next button -->
-          <Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</Button>
+          <fwb-Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</fwb-Button>
         </form>
-      </tab>
-      <tab name="third" title="Home" :disabled="disableTabs">
+      </fwb-tab>
+      <fwb-tab name="third" title="Home" :disabled="disableTabs">
         <h5 class="mb-3">Home details</h5>
 
         <form @submit.prevent="submit">
-          <Input v-model="form.home_address" placeholder="enter your address" label="Address" class="mb-2" />
+          <fwb-Input v-model="form.home_address" placeholder="enter your address" label="Address" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.home_address" />
 
-          <Input v-model="form.home_phone" placeholder="enter your phone" label="Phone" class="mb-2" />
+          <fwb-Input v-model="form.home_phone" placeholder="enter your phone" label="Phone" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.home_phone" />
 
-          <Input v-model="form.home_mobile" placeholder="enter your mobile" label="Mobile" class="mb-2" />
+          <fwb-Input v-model="form.home_mobile" placeholder="enter your mobile" label="Mobile" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.home_mobile" />
 
-          <Input v-model="form.home_email" name="home_email" placeholder="enter your email" label="Email" class="mb-2" />
+          <fwb-Input v-model="form.home_email" name="home_email" placeholder="enter your email" label="Email" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.home_email" />
 
           <!-- next button -->
-          <Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</Button>
+          <fwb-Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</fwb-Button>
         </form>
-      </tab>
-      <tab name="fourth" title="Work" :disabled="disableTabs">
+      </fwb-tab>
+      <fwb-tab name="fourth" title="Work" :disabled="disableTabs">
         <h5 class="mb-3">Work details</h5>
 
         <form @submit.prevent="submit">
-          <Input v-model="form.work_address" placeholder="enter your address" label="Address" class="mb-2" />
+          <fwb-Input v-model="form.work_address" placeholder="enter your address" label="Address" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.work_address" />
 
-          <Input v-model="form.work_phone" placeholder="enter your phone" label="Phone" class="mb-2" />
+          <fwb-Input v-model="form.work_phone" placeholder="enter your phone" label="Phone" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.work_phone" />
 
-          <Input v-model="form.work_mobile" placeholder="enter your mobile" label="Mobile" class="mb-2" />
+          <fwb-Input v-model="form.work_mobile" placeholder="enter your mobile" label="Mobile" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.work_mobile" />
 
-          <Input v-model="form.work_email" name="work_email" placeholder="enter your email" label="Email" class="mb-2" />
+          <fwb-Input v-model="form.work_email" name="work_email" placeholder="enter your email" label="Email" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.work_email" />
 
           <!-- next button -->
-          <Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</Button>
+          <fwb-Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</fwb-Button>
         </form>
-      </tab>
-      <tab name="fifth" title="Memberships" :disabled="disableTabs">
+      </fwb-tab>
+      <fwb-tab name="fifth" title="Memberships" :disabled="disableTabs">
         <form @submit.prevent="submit('viewed_other_memberships')">
           <InputLabel for="message" value="Other Memberships" class="mb-4" />
           <textarea id="message" v-model="form.other_membership" rows="4" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="List each professional organisation you are a member of in a separate line..." />
           <InputError class="mt-2" :message="form.errors.other_membership" />
           <!-- next button -->
-          <Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</Button>
+          <fwb-Button v-show="$page.props.user.permissions.canUpdate" type="submit" :disabled="form.processing" class="p-3 mt-3">Next</fwb-Button>
         </form>
-      </tab>
-      <tab name="sixth" title="Qualifications" :disabled="disableTabs">
+      </fwb-tab>
+      <fwb-tab name="sixth" title="Qualifications" :disabled="disableTabs">
         <MemberQualifications :member_id="member_id" :list="props.qualifications" :country-list="props.countryList" :editable="$page.props.user.permissions.canUpdate" />
         <MemberDocuments :member_id="member_id" :list="props.supportingDocuments" />
 
         <!-- next button -->
-        <Button v-show="$page.props.user.permissions.canUpdate" class="p-3 mt-3" @click.prevent="nextStep">Next</Button>
-      </tab>
-      <tab name="seventh" title="Work Experience" :disabled="disableTabs">
+        <fwb-Button v-show="$page.props.user.permissions.canUpdate" class="p-3 mt-3" @click.prevent="nextStep">Next</fwb-Button>
+      </fwb-tab>
+      <fwb-tab name="seventh" title="Work Experience" :disabled="disableTabs">
         <MemberWorkExperience :member-id="member.id" :member-work-experiences="memberWorkExperiences" />
 
         <!-- next button -->
-        <Button v-show="$page.props.user.permissions.canUpdate" class="p-3 mt-3" @click.prevent="nextStep">Next</Button>
-      </tab>
-      <tab name="eighth" title="Referees" :disabled="disableTabs">
+        <fwb-Button v-show="$page.props.user.permissions.canUpdate" class="p-3 mt-3" @click.prevent="nextStep">Next</fwb-Button>
+      </fwb-tab>
+      <fwb-tab name="eighth" title="Referees" :disabled="disableTabs">
         <MemberReferees :member_id="member_id" :list="props.referees" />
 
         <!-- next button -->
-        <Button v-show="$page.props.user.permissions.canUpdate" class="p-3 mt-3" @click.prevent="nextStep">Next</Button>
-      </tab>
-      <tab name="ninth" title="Mailing Lists" :disabled="disableTabs">
+        <fwb-Button v-show="$page.props.user.permissions.canUpdate" class="p-3 mt-3" @click.prevent="nextStep">Next</fwb-Button>
+      </fwb-tab>
+      <fwb-tab name="ninth" title="Mailing Lists" :disabled="disableTabs">
         <MemberMailingListPreference :member_id="member_id" :list="props.memberMailingLists" :mailing_options="props.options.mailing_options" @submit="submit" />
-      </tab>
-    </tabs>
+      </fwb-tab>
+    </fwb-tabs>
     <!-- Link to Summary -->
     <div v-show="props.tab || $page.props.user?.completion?.data?.part2?.status" class="w-full flex justify-end">
       <Link class="underline text-indigo-500 text-sm" :href="route('members.show', member_id)">View Application Summary</Link>

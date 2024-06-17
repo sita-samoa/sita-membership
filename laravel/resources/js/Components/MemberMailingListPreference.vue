@@ -1,7 +1,7 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3'
 import InputLabel from '@/Components/InputLabel.vue'
-import { Alert, Button } from 'flowbite-vue'
+import { FwbAlert, FwbButton } from 'flowbite-vue'
 import { computed } from 'vue'
 
 const props = defineProps({
@@ -54,7 +54,7 @@ function toggleSubscription(event) {
 <template>
   <div>
     <InputLabel value="Mailing Lists" class="mb-4" />
-    <Alert v-if="!hasExistingMailingOptions" type="info" class="mt-3 mb-2">Please check the mail lists you want to join. </Alert>
+    <fwb-Alert v-if="!hasExistingMailingOptions" type="info" class="mt-3 mb-2">Please check the mail lists you want to join. </fwb-Alert>
 
     <form @submit.prevent="$emit('submit', 'viewed_mailing_list')">
       <div v-for="m in mailingOptions" class="flex items-center mb-4">
@@ -62,7 +62,7 @@ function toggleSubscription(event) {
         <InputLabel :for="m.id" :value="m.title" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300" />
       </div>
       <!-- next button -->
-      <Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</Button>
+      <fwb-Button v-show="$page.props.user.permissions.canUpdate" type="submit" class="p-3 mt-3">Next</fwb-Button>
     </form>
   </div>
 </template>
