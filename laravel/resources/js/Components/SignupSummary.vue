@@ -9,6 +9,7 @@ import AcceptModal from '@/Components/AcceptModal.vue'
 import RejectionModal from '@/Components/RejectionModal.vue'
 import CardBox from '@/Components/CardBox.vue'
 import MemberPayment from '@/Components/MemberPayment.vue'
+import SetMembershipStatus from '@/Components/SetMembershipStatus.vue'
 
 const props = defineProps(['member', 'options', 'data', 'statuses'])
 
