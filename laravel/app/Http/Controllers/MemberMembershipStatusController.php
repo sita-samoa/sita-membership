@@ -60,6 +60,7 @@ class MemberMembershipStatusController extends Controller
             'membership_status_id' => 'int',
         ]);
 
+        // @TODO - If accepted, enter a receipt number.
         $member->membership_status_id = $validated['membership_status_id'];
         $member->save();
 
