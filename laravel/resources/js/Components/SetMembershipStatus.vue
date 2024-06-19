@@ -1,9 +1,25 @@
 <script setup>
 import { ref } from 'vue'
-import { FwbButton } from 'flowbite-vue'
+import { FwbButton, FwbSelect } from 'flowbite-vue'
 import CardBoxModal from '@/Components/CardBoxModal.vue'
+import { usePage } from '@inertiajs/vue3';
+
+const props = defineProps({
+  membershipStatuses: {
+    type: Object,
+    required: true,
+  },
+  status: {
+    type: Number,
+    required: true,
+  },
+})
 
 const isModalActive = ref(false)
+const options = usePage().props.membershipStatuses.map(item => ({
+  name: item.title,
+  value: item.id
+}));
 
 </script>
 <template>
@@ -14,9 +30,11 @@ const isModalActive = ref(false)
       </p>
     </div>
 
-    <CardBoxModal v-model="isModalActive" hasCancel buttonLabel="Save" title="Set Membership Status">
-        <p>Lorem ipsum dolor sit amet <b>adipiscing elit</b></p>
-        <p>This is sample modal</p>
+    <CardBoxModal v-model="isModalActive" hasCancel buttonLabel="Save" title="Membership Status">
+      <fwb-select
+        v-model="props.status"
+        :options="options"
+      />
   </CardBoxModal>
 
 </template>

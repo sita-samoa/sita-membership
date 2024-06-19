@@ -17,6 +17,7 @@ use App\Notifications\RejectionNotification;
 use App\Notifications\SubReminder;
 use App\Repositories\MemberMembershipStatusRepository;
 use App\Repositories\MemberRepository;
+use App\Repositories\MembershipStatusesRepository;
 use App\Repositories\MembershipTypeRepository;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
@@ -374,6 +375,8 @@ class MemberController extends Controller
 
         $rep = new MemberMembershipStatusRepository();
         $statuses = $rep->getByMemberIdAndStatusId($member->id, MembershipStatus::ACCEPTED->value);
+        $rep = new MembershipStatusesRepository();
+        $membershipStatuses = $rep->get();
 
         return Inertia::render('Members/Show', [
             'member' => $member->load($relations),
@@ -384,6 +387,7 @@ class MemberController extends Controller
             'data' => [
                 'reason' => $reason,
             ],
+            'membershipStatuses' => $membershipStatuses,
         ]);
     }
 
