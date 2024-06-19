@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use Illuminate\Http\Request;
 
@@ -50,9 +51,19 @@ class MemberMembershipStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, MemberMembershipStatus $memberMembershipStatus)
+    public function update(Request $request, Member $member, MemberMembershipStatus $memberMembershipStatus)
     {
-        //
+        // @TODO - Check that only coordinator can update this field.
+        $this->authorize('update', $member);
+
+        $validated = $request->validate([
+            'membership_status_id' => 'int',
+        ]);
+
+        $member->membership_status_id = $validated['membership_status_id'];
+        $member->save();
+
+        return redirect()->back()->with('success', 'Membership Status Updated');
     }
 
     /**

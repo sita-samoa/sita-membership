@@ -112,7 +112,7 @@ const activeTab = ref('first')
         <Link :href="route('members.audit.index', { member: member.id })" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
       </fwb-tab>
     </fwb-tabs>
-    <SetMembershipStatus :membershipStatuses="props.membershipStatuses" :status="props.member.membership_status_id" />
+    <SetMembershipStatus :membershipStatuses="props.membershipStatuses" :status="props.member.membership_status_id" :member_id="props.member.id" />
 
     <template #footer>
       <p v-show="!application_ready_for_submission" class="w-full mb-6 ml-2 text-sm text-gray-500">Please ensure all sections are completed before submitting</p>

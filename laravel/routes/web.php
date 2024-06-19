@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\MailingListController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemberMembershipStatusController;
 use App\Http\Controllers\MemberQualificationController;
 use App\Http\Controllers\MemberRefereeController;
 use App\Http\Controllers\MemberSupportingDocumentController;
@@ -116,6 +117,10 @@ Route::middleware([
     // Supporting Documents download
     Route::resource('members.documents.download', DownloadController::class)
         ->only(['index']);
+
+    // MemberMembershipStatus Pages
+    Route::resource('members.membership-status', MemberMembershipStatusController::class)
+        ->only(['update']);
 
     // Members Pages
     Route::resource('members', MemberController::class)
