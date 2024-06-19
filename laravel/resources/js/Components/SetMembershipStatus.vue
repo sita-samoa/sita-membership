@@ -34,6 +34,9 @@ function submit() {
     },
   })
 }
+function resetForm() {
+  form.membership_status_id = props.status
+}
 
 </script>
 <template>
@@ -46,6 +49,7 @@ function submit() {
 
   <CardBoxModal
     @confirm="submit"
+    @cancel="resetForm"
     :disabled="form.processing"
     v-model="isModalActive"
     hasCancel
