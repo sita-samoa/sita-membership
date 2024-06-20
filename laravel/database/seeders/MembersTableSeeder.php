@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
 use App\Models\MemberMembershipStatus;
@@ -38,13 +39,17 @@ class MembersTableSeeder extends Seeder
             $from_date = Carbon::now();
             $to_date = $rep->generateEndDate($from_date);
 
+            // Only generate a receipt_number if the status is accepted.
+            $status_id = rand(1, 8);
+            $receipt_number = $status_id == MembershipStatus::ACCEPTED->value ? rand(100000, 999999) : 0;
+
             MemberMembershipStatus::create([
                 'member_id' => $i + 1,
-                'membership_status_id' => rand(1, 8),
+                'membership_status_id' => $status_id,
                 'user_id' => 1,
                 'from_date' => $from_date,
                 'to_date' => $to_date,
-                'receipt_number' => rand(100000, 999999),
+                'receipt_number' => $receipt_number,
             ]);
 
         }
