@@ -4,19 +4,18 @@ use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\User;
-use Database\Seeders\DatabaseSeeder;
 use Carbon\Carbon;
+use Database\Seeders\DatabaseSeeder;
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
 });
 
-
 test('test no receipts', function () {
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
     $member = Member::factory($user)->create();
-    
+
     $response = $this->get('/members/'.$member->id);
 
     $response->assertInertia(function ($assert) {
@@ -41,7 +40,7 @@ test('test has 1 accepted receipt', function () {
         'to_date' => $from_date,
         'receipt_number' => rand(100000, 999999),
     ]);
-    
+
     // This should not be returned.
     MemberMembershipStatus::create([
         'member_id' => $member->id,
@@ -57,5 +56,4 @@ test('test has 1 accepted receipt', function () {
     $response->assertInertia(function ($assert) {
         $assert->has('statuses', 1);
     });
-
 });
