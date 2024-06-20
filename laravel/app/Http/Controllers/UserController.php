@@ -19,6 +19,9 @@ class UserController extends Controller
 {
     use PasswordValidationRules;
 
+    const MAX_LIMIT = 100;
+    const DEFAULT_ROWS_PER_PAGE = 25;
+
     /**
      * Display a listing of the resource.
      */
@@ -28,6 +31,12 @@ class UserController extends Controller
 
         $search = $request->input('search');
         $role = $request->input('role');
+        $limit = $request->input('limit') ?? self::DEFAULT_ROWS_PER_PAGE;
+
+        // Limit the max number of rows to MAX_LIMIT.
+        if ($limit > self::MAX_LIMIT) {
+            $limit = self::MAX_LIMIT;
+        }
 
         $ids_only = [];
         if ($role) {
@@ -37,7 +46,8 @@ class UserController extends Controller
         }
 
         return Inertia::render('Users/Index', [
-            'filters' => $request->all('search', 'role'),
+            // Set default for limit.
+            'filters' => array_merge($request->only('search', 'role'), ['limit' => $limit ?? self::DEFAULT_ROWS_PER_PAGE]),
             'users' => User::orderBy('name')
                 ->when(
                     $role,
@@ -48,7 +58,7 @@ class UserController extends Controller
                     fn ($query) => $query->where('name', 'like', '%'.$search.'%')
                         ->orWhere('email', 'like', '%'.$search.'%')
                 )
-                ->paginate(10)
+                ->paginate($limit)
                 ->withQueryString(),
             'availableRoles' => array_values(Jetstream::$roles),
         ]);
