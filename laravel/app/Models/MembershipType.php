@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class MembershipType extends Model
 {
     use HasFactory;
+
+    public function setAnnualCost($value)
+    {
+        $this->annual_cost = $value;
+    }
 }

@@ -6,27 +6,28 @@ use App\Enums\MembershipStatus;
 use App\Models\MailingList;
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
-use App\Models\MembershipType;
+use App\Services\SitaOnlineService;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class DashboardController extends Controller
 {
+    protected $sitaOnlineService;
+
+    public function __construct(SitaOnlineService $sitaOnlineService)
+    {
+        $this->sitaOnlineService = $sitaOnlineService;
+    }
+
     /**
      * Display dashboard.
      */
     public function index(): Response
     {
         // Calculate outstanding payment
-        $membershipType = MembershipType::get();
-        $totalOwing = 0;
-
-        foreach ($membershipType as $m) {
-            $members = Member::where('membership_status_id', MembershipStatus::LAPSED->value);
-            $count = $members->where('membership_type_id', $m->id)->count();
-            $totalOwing += $count * $m->annual_cost;
-        }
+        $totalOwing = $this->sitaOnlineService->getOutstandingPayment();
+        $totalCollected = $this->sitaOnlineService->getTotalCollected();
 
         // Get number of mailing lists
         $mailing_list_statistics = [];
@@ -46,6 +47,8 @@ class DashboardController extends Controller
                 Member::where('membership_status_id', MembershipStatus::LAPSED->value)->count() : 0,
             'totalOwing' => $canReadAny ?
                 $totalOwing : 0,
+            'totalCollected' => $canReadAny ?
+                $totalCollected : 0,
             'mailingLists' => $canReadAny ?
                 $mailing_list_statistics : [],
             'totalEndorsed' => $canReadAny ?

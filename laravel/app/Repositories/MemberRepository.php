@@ -16,12 +16,21 @@ class MemberRepository extends Repository
 
     final public const DAYS_OF_MONTH_OF_FINANCIAL_YEAR = 30;
 
+    /**
+     * Get Members by Membership Status Id.
+     *
+     * @param  int  $limit - set to zero to remove limit
+     */
     public function getByMembershipStatusId(int $membership_status_id, int $limit = 10): Collection
     {
-        return Member::where('membership_status_id', $membership_status_id)
-            ->latest()
-            ->limit($limit)
-            ->get();
+        $query = Member::where('membership_status_id', $membership_status_id)
+            ->latest();
+
+        if ($limit > 0) {
+            $query->limit($limit);
+        }
+
+        return $query->get();
     }
 
     public function generateEndDate(Carbon $current_dt = null)

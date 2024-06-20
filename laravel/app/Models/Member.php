@@ -232,4 +232,9 @@ class Member extends Model implements Auditable
     {
         return $this->hasMany(MemberMembershipStatus::class);
     }
+
+    public function setMembershipType($membership_type)
+    {
+        $this->membership_type_id = $membership_type;
+    }
 }
