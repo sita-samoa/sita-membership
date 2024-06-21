@@ -1,9 +1,11 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3'
+import { useForm, usePage } from '@inertiajs/vue3'
 import { ref } from 'vue'
-import { FwbButton, FwbSelect } from 'flowbite-vue'
-import CardBoxModal from '@/Components/CardBoxModal.vue'
-import { usePage } from '@inertiajs/vue3';
+import { FwbSelect, FwbInput } from 'flowbite-vue'
+import DialogModal from '@/Components/DialogModal.vue'
+import BaseButtons from '@/Components/BaseButtons.vue'
+import BaseButton from '@/Components/BaseButton.vue'
+import InputError from '@/Components/InputError.vue'
 
 const props = defineProps({
   member_id: Number,
@@ -26,39 +28,65 @@ const options = usePage().props.membershipStatuses.map(item => ({
 
 const form = useForm({
   membership_status_id: props.status,
+  financial_year: '',
+  receipt_number: '',
 })
 
 function submit() {
   form.put(route('members.membership-status.update', [props.member_id, form.membership_status_id]), {
     onSuccess() {
-    },
+      isModalActive.value = false
+      resetForm()
+    }
   })
 }
 function resetForm() {
   form.membership_status_id = props.status
+  form.financial_year = ''
+  form.receipt_number = ''
 }
 
 </script>
+
 <template>
-    
+
   <div class="my-4">
     <p>
-      <fwb-button color="default" @click="isModalActive = true">Set Status</fwb-button>
+      <BaseButton label="Set Status" color="info" @click="isModalActive = true" />
     </p>
   </div>
 
-  <CardBoxModal
-    @confirm="submit"
-    @cancel="resetForm"
-    :disabled="form.processing"
-    v-model="isModalActive"
-    hasCancel
-    buttonLabel="Save"
-    title="Membership Status">
-    <fwb-select
-      v-model="form.membership_status_id"
-      :options="options"
-    />
-  </CardBoxModal>
+  <DialogModal
+    @close="isModalActive = false"
+    :show="isModalActive"
+    >
+    <template #title>
+      Membership Status
+    </template>
+    <template #content>
+
+      <form @submit.prevent="submit" :disabled="form.processing">
+        <fwb-select class="mb-2"
+          v-model="form.membership_status_id"
+          :options="options"
+        />
+
+        <!-- Acceptance Details -->
+        <div v-if="form.membership_status_id == 4">
+          <div class="mb-3">Please provide the following information.</div>
+          <fwb-input v-model="form.financial_year" required placeholder="enter payment financial year" label="Financial Year" class="mb-2" type="number" />
+          <InputError class="mt-2" :message="form.errors.financial_year" />
+
+          <fwb-input v-model="form.receipt_number" required placeholder="enter payment receipt #" label="Receipt #" class="mb-2" />
+          <InputError class="mt-2" :message="form.errors.receipt_number" />
+        </div>
+
+        <BaseButtons class="mt-4" type="justify-between">
+          <BaseButton label="Update" color="info" type="submit" />
+          <BaseButton label="Cancel" color="default" outline @click="isModalActive = false" />
+        </BaseButtons>
+      </form>
+    </template>
+  </DialogModal>
 
 </template>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use Illuminate\Http\Request;
@@ -58,9 +59,12 @@ class MemberMembershipStatusController extends Controller
 
         $validated = $request->validate([
             'membership_status_id' => 'int',
+
+            // Additional validation of accepted is selected.
+            'financial_year' => $request['membership_status_id'] == MembershipStatus::ACCEPTED->value ? 'required|int|min:2000' : '',
+            'receipt_number' => $request['membership_status_id'] == MembershipStatus::ACCEPTED->value ? 'required|string' : '',
         ]);
 
-        // @TODO - If accepted, enter a receipt number.
         $member->membership_status_id = $validated['membership_status_id'];
         $member->save();
 
