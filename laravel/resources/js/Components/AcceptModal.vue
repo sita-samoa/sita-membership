@@ -50,7 +50,7 @@ function accept() {
       <fwb-input v-model="form.financial_year" required placeholder="enter payment financial year" label="Financial Year" class="mb-2" type="number" />
       <InputError class="mt-2" :message="form.errors.financial_year" />
 
-      <fwb-input v-model="form.receipt_number" required placeholder="enter payment receipt #" label="Receipt #" class="mb-2" />
+      <fwb-input v-model="form.receipt_number" placeholder="enter payment receipt #" label="Receipt #" class="mb-2" />
       <InputError class="mt-2" :message="form.errors.receipt_number" />
     </template>
     <template #footer>
