@@ -1,15 +1,16 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useForm, Link } from '@inertiajs/vue3'
-import { FwbAlert, FwbListGroup, FwbListGroupItem, FwbButton } from 'flowbite-vue'
+import { FwbAlert, FwbListGroup, FwbListGroupItem, FwbButton, FwbTab, FwbTabs } from 'flowbite-vue'
 import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import AcceptModal from '@/Components/AcceptModal.vue'
 import RejectionModal from '@/Components/RejectionModal.vue'
 import CardBox from '@/Components/CardBox.vue'
+import MemberPayment from '@/Components/MemberPayment.vue'
 
-const props = defineProps(['member', 'options', 'data'])
+const props = defineProps(['member', 'options', 'data', 'statuses'])
 
 const completion = props.options.completion.data
 const showAcceptanceModal = ref(false)
@@ -53,6 +54,8 @@ const application_status_id = computed(() => {
 })
 
 const application_ready_for_submission = props.options.completion.overall.status
+
+const activeTab = ref('first')
 </script>
 
 <template>
@@ -85,17 +88,29 @@ const application_ready_for_submission = props.options.completion.overall.status
 
     <MemberSummaryCard :member="props.member" link-route="members.signup.index" class="mb-6" />
 
-    <fwb-list-group class="w-full">
-      <Link v-for="(c, index) in completion" :href="route('members.signup.index', { member: props.member.id, tab: index.replace('part', '') })">
-        <fwb-list-group-item>
-          <template #prefix>
-            <CheckCircleOutlineIcon v-if="c.status" fill-color="green" />
-            <AlertCircleOutlineIcon v-else fill-color="blue" />
-          </template>
-          {{ c.title }}
-        </fwb-list-group-item>
-      </Link>
-    </fwb-list-group>
+    <fwb-tabs v-model="activeTab" class="p-5">
+      <fwb-tab name="first" title="General">
+        <!-- General details -->
+        <fwb-list-group class="w-full">
+          <Link v-for="(c, index) in completion" :href="route('members.signup.index', { member: props.member.id, tab: index.replace('part', '') })">
+            <fwb-list-group-item>
+              <template #prefix>
+                <CheckCircleOutlineIcon v-if="c.status" fill-color="green" />
+                <AlertCircleOutlineIcon v-else fill-color="blue" />
+              </template>
+              {{ c.title }}
+            </fwb-list-group-item>
+          </Link>
+        </fwb-list-group>
+      </fwb-tab>
+      <fwb-tab name="second" :title="'Payments (' + props.statuses.length + ')'">
+        <member-payment :statuses="props.statuses" />
+      </fwb-tab>
+      <fwb-tab name="third" title="Audit">
+        <!-- Audit log link -->
+        <Link :href="route('members.audit.index', { member: member.id })" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
+      </fwb-tab>
+    </fwb-tabs>
 
     <template #footer>
       <p v-show="!application_ready_for_submission" class="w-full mb-6 ml-2 text-sm text-gray-500">Please ensure all sections are completed before submitting</p>
@@ -108,9 +123,6 @@ const application_ready_for_submission = props.options.completion.overall.status
       <fwb-button v-if="(application_status_id === 5 || application_status_id === 6) && $page.props.user.permissions.canAccept" class="w-full mb-6" color="green" :disabled="form.processing" default @click.prevent="showActivateModal = true">Activate Membership</fwb-button>
       <fwb-button v-if="application_status_id === 4 && $page.props.user.permissions.canSendSubReminder" class="w-full mb-6" :disabled="form.processing" default @click.prevent="sendSubReminder">Send sub reminder</fwb-button>
       <fwb-button v-if="application_status_id === 5 && $page.props.user.permissions.canSendPastDueSubReminder" class="w-full mb-6" :disabled="form.processing" default @click.prevent="sendPastDueSubReminder">Send past due sub reminder</fwb-button>
-
-      <!-- Audit log link -->
-      <Link :href="route('members.audit.index', { member: member.id })" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
 
       <!-- Dialog Modals -->
       <AcceptModal :show="showAcceptanceModal" :member-id="member.id" @close="showAcceptanceModal = false" />

@@ -372,8 +372,12 @@ class MemberController extends Controller
             $reason = $this->getRejectionReason($member);
         }
 
+        $rep = new MemberMembershipStatusRepository();
+        $statuses = $rep->getByMemberIdAndStatusId($member->id, MembershipStatus::ACCEPTED->value);
+
         return Inertia::render('Members/Show', [
             'member' => $member->load($relations),
+            'statuses' => $statuses,
             'options' => [
                 'completion' => $member->completions,
             ],
