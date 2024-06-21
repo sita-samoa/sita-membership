@@ -28,22 +28,29 @@ const options = usePage().props.membershipStatuses.map(item => ({
 
 const form = useForm({
   membership_status_id: props.status,
-  financial_year: '',
-  receipt_number: '',
+  financial_year: new Date().getFullYear(), // current year.
+  receipt_number: null,
 })
 
 function submit() {
-  form.put(route('members.membership-status.update', [props.member_id, form.membership_status_id]), {
-    onSuccess() {
-      isModalActive.value = false
-      resetForm()
-    }
-  })
+  // Submit if form.membership_status_id value changes
+  if (form.membership_status_id != props.status) {
+    form.put(route('members.membership-status.update', [props.member_id, form.membership_status_id]), {
+      onSuccess() {
+        isModalActive.value = false
+        resetForm()
+      }
+    })
+  }
+  else {
+    // Otherwise, just close the modal
+    isModalActive.value = false
+  }
 }
 function resetForm() {
   form.membership_status_id = props.status
-  form.financial_year = ''
-  form.receipt_number = ''
+  form.financial_year = new Date().getFullYear(), // current year.
+  form.receipt_number = null
 }
 
 </script>
@@ -77,12 +84,12 @@ function resetForm() {
           <fwb-input v-model="form.financial_year" required placeholder="enter payment financial year" label="Financial Year" class="mb-2" type="number" />
           <InputError class="mt-2" :message="form.errors.financial_year" />
 
-          <fwb-input v-model="form.receipt_number" required placeholder="enter payment receipt #" label="Receipt #" class="mb-2" />
+          <fwb-input v-model="form.receipt_number" placeholder="enter payment receipt #" label="Receipt #" class="mb-2" />
           <InputError class="mt-2" :message="form.errors.receipt_number" />
         </div>
 
         <BaseButtons class="mt-4" type="justify-between">
-          <BaseButton label="Update" color="info" type="submit" />
+          <BaseButton label="Update" color="info" type="submit" :disabled="form.processing" />
           <BaseButton label="Cancel" color="default" outline @click="isModalActive = false" />
         </BaseButtons>
       </form>
