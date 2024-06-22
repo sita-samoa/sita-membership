@@ -77,7 +77,7 @@ class MemberPolicy
     }
 
     /**
-     * Determine whether the user reject a membership.
+     * Determine whether the user can reject a membership.
      */
     public function reject(User $user, Member $member): bool
     {
@@ -123,6 +123,16 @@ class MemberPolicy
         $team = Team::first();
 
         return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:update_any');
+    }
+
+    /**
+     * Determine whether the user can update the membership status.
+     */
+    public function updateMembershipStatus(User $user, Member $member): bool
+    {
+        $team = Team::first();
+
+        return $user->hasTeamPermission($team, 'member:update_membership_status');
     }
 
     /**

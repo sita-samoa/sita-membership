@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useForm, Link } from '@inertiajs/vue3'
+import { useForm, Link, usePage } from '@inertiajs/vue3'
 import { FwbAlert, FwbListGroup, FwbListGroupItem, FwbButton, FwbTab, FwbTabs } from 'flowbite-vue'
 import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
@@ -17,6 +17,7 @@ const completion = props.options.completion.data
 const showAcceptanceModal = ref(false)
 const showActivateModal = ref(false)
 const showRejectionModal = ref(false)
+const permissions = usePage().props.user.permissions
 
 const form = useForm({})
 
@@ -104,7 +105,7 @@ const activeTab = ref('first')
           </Link>
         </fwb-list-group>
       </fwb-tab>
-      <fwb-tab name="fourth" title="Membership Status">
+      <fwb-tab name="fourth" title="Membership Status" v-if="permissions.canUpdateMembershipStatus">
         <!-- SetMembershipStatus -->
         <SetMembershipStatus :membershipStatuses="props.membershipStatuses" :status="props.member.membership_status_id" :member_id="props.member.id" />
       </fwb-tab>

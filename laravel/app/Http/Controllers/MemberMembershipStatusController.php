@@ -56,8 +56,8 @@ class MemberMembershipStatusController extends Controller
      */
     public function update(Request $request, Member $member, MemberMembershipStatus $memberMembershipStatus)
     {
-        // @TODO - Check that only coordinator can update this field.
-        $this->authorize('update', $member);
+        // Only coordinator can update this field.
+        $this->authorize('canUpdateMembershipStatus', $member);
 
         $mtRep = new MembershipTypeRepository();
         $memberships = $mtRep->getFreeMemberships();

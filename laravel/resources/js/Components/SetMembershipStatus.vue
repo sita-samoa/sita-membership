@@ -57,7 +57,7 @@ function resetForm() {
 
 <template>
 
-  <BaseButton label="Update Membership Status ..." small color="info" @click="isModalActive = true" />
+  <BaseButton label="Update Membership Status..." small color="info" @click="isModalActive = true" />
 
   <DialogModal
     @close="isModalActive = false"
