@@ -104,15 +104,19 @@ const activeTab = ref('first')
           </Link>
         </fwb-list-group>
       </fwb-tab>
+      <fwb-tab name="fourth" title="Membership Status">
+        <!-- SetMembershipStatus -->
+        <SetMembershipStatus :membershipStatuses="props.membershipStatuses" :status="props.member.membership_status_id" :member_id="props.member.id" />
+      </fwb-tab>
       <fwb-tab name="second" :title="'Payments (' + props.statuses.length + ')'">
-        <member-payment :statuses="props.statuses" />
+        <!-- MemberPayment -->
+        <MemberPayment :statuses="props.statuses" />
       </fwb-tab>
       <fwb-tab name="third" title="Audit">
         <!-- Audit log link -->
         <Link :href="route('members.audit.index', { member: member.id })" class="underline text-indigo-500 text-sm mt-5">View audit log</Link>
       </fwb-tab>
     </fwb-tabs>
-    <SetMembershipStatus :membershipStatuses="props.membershipStatuses" :status="props.member.membership_status_id" :member_id="props.member.id" />
 
     <template #footer>
       <p v-show="!application_ready_for_submission" class="w-full mb-6 ml-2 text-sm text-gray-500">Please ensure all sections are completed before submitting</p>

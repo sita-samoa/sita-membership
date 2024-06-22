@@ -57,23 +57,20 @@ function resetForm() {
 
 <template>
 
-  <div class="my-4">
-    <p>
-      <BaseButton label="Set Status" color="info" @click="isModalActive = true" />
-    </p>
-  </div>
+  <BaseButton label="Update Membership Status ..." small color="info" @click="isModalActive = true" />
 
   <DialogModal
     @close="isModalActive = false"
     :show="isModalActive"
     >
     <template #title>
-      Membership Status
+      Update Membership Status
     </template>
     <template #content>
 
       <form @submit.prevent="submit" :disabled="form.processing">
         <fwb-select class="mb-2"
+          label="Membership Status"
           v-model="form.membership_status_id"
           :options="options"
         />
