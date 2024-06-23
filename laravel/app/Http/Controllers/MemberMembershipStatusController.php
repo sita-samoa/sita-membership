@@ -2,15 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\MembershipStatus;
+use App\Enums\MembershipStatus as MembershipStatusEnum;
 use App\Models\Member;
 use App\Models\MemberMembershipStatus;
+use App\Models\MembershipStatus;
 use App\Repositories\MemberRepository;
-use App\Repositories\MembershipTypeRepository;
+use App\Services\SitaOnlineService;
 use Illuminate\Http\Request;
 
 class MemberMembershipStatusController extends Controller
 {
+    protected $sitaOnlineService;
+
+    public function __construct(SitaOnlineService $sitaOnlineService)
+    {
+        $this->sitaOnlineService = $sitaOnlineService;
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -54,30 +62,17 @@ class MemberMembershipStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Member $member, MemberMembershipStatus $memberMembershipStatus)
+    public function update(Request $request, Member $member, MembershipStatus $membershipStatus)
     {
         // Only coordinator can update this field.
-        $this->authorize('canUpdateMembershipStatus', $member);
+        $this->authorize('updateMembershipStatus', $member);
 
-        $mtRep = new MembershipTypeRepository();
-        $memberships = $mtRep->getFreeMemberships();
-        $isFreeMembership = false;
+        $isFreeMembership = $this->sitaOnlineService->isMemberHasFreeMembership($member);
 
-        $memberRep = new MemberRepository();
-
-        foreach ($memberships as $freeMembership) {
-            if ($member->membershipType->id == $freeMembership->id) {
-                $isFreeMembership = true;
-                break;
-            }
-        }
-
-        $isAccepted = $request['membership_status_id'] == MembershipStatus::ACCEPTED->value;
+        $isAccepted = $membershipStatus->id == MembershipStatusEnum::ACCEPTED->value;
 
         if ($isFreeMembership) {
             $validated = $request->validate([
-                'membership_status_id' => 'int',
-
                 // Additional validation of accepted is selected.
                 'financial_year' => $isAccepted ? 'required|int|min:2000' : '',
                 'receipt_number' => $isAccepted ? 'nullable|string' : '',
@@ -85,16 +80,15 @@ class MemberMembershipStatusController extends Controller
         }
         else {
             $validated = $request->validate([
-                'membership_status_id' => 'int',
-
                 // Additional validation of accepted is selected.
                 'financial_year' => $isAccepted ? 'required|int|min:2000' : '',
                 'receipt_number' => $isAccepted ? 'required|string' : '',
             ]);
         }
 
+        $rep = new MemberRepository();
         if ($isAccepted) {
-            $memberRep->accept(
+            $rep->accept(
                 $member,
                 $request->user(),
                 $validated['financial_year'],
@@ -102,8 +96,9 @@ class MemberMembershipStatusController extends Controller
             );
         }
         else {
-            $status = MembershipStatus::fromInt($validated['membership_status_id']);
-            $memberRep->updateMembershipStatus($member, $status);
+            $status = MembershipStatusEnum::fromInt($membershipStatus->id);
+            $rep->updateMembershipStatus($member, $status);
+            $rep->recordAction($member, $request->user());
         }
 
         return redirect()->back()->with('success', 'Membership Status Updated');

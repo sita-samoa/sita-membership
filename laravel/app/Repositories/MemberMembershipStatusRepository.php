@@ -210,8 +210,7 @@ class MemberMembershipStatusRepository extends Repository
             $member = $status->member;
             // Mark as lapsed.
             // Note: Lapsed membership reminders will be sent by sendPastDueSubReminders().
-            $member->membership_status_id = MembershipStatus::LAPSED->value;
-            $member->save();
+            $rep->updateMembershipStatus($member, MembershipStatus::LAPSED);
 
             $rep->recordAction($member, $admin_user);
         }

@@ -3,8 +3,10 @@
 namespace App\Services;
 
 use App\Enums\MembershipStatus;
+use App\Models\Member;
 use App\Models\MembershipType;
 use App\Repositories\MemberRepository;
+use App\Repositories\MembershipTypeRepository;
 
 class SitaOnlineService
 {
@@ -32,5 +34,20 @@ class SitaOnlineService
         }
 
         return $totalFunds;
+    }
+
+    public function isMemberHasFreeMembership(Member $member) {
+        $mtRep = new MembershipTypeRepository();
+        $memberships = $mtRep->getFreeMemberships();
+        $isFreeMembership = false;
+
+        foreach ($memberships as $freeMembership) {
+            if ($member->membershipType->id == $freeMembership->id) {
+                $isFreeMembership = true;
+                break;
+            }
+        }
+
+        return $isFreeMembership;
     }
 }
