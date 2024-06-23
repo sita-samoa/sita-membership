@@ -1,6 +1,6 @@
 <script setup>
 import { Link, useForm } from '@inertiajs/vue3'
-import { Alert, Button, Input } from 'flowbite-vue'
+import { FwbAlert, FwbButton, FwbInput } from 'flowbite-vue'
 import DialogModal from './DialogModal.vue'
 import DeleteConfirmationModal from './DeleteConfirmationModal.vue'
 import InputError from './InputError.vue'
@@ -109,10 +109,10 @@ function submit() {
 <template>
   <div>
     <h5>Referees</h5>
-    <Alert type="info" class="mb-2 mt-3">Please provide details for someone how can verify roles and responsibilities. </Alert>
+    <fwb-Alert type="info" class="mb-2 mt-3">Please provide details for someone how can verify roles and responsibilities. </fwb-Alert>
 
     <Link href="#">
-      <Button class="p-3 mt-3" color="alternative" @click.prevent="showModal">Add Referee</Button>
+      <fwb-Button class="p-3 mt-3" color="alternative" @click.prevent="showModal">Add Referee</fwb-Button>
     </Link>
     <MemberRefereesList :list="refereesList" @edit-item="edit" />
   </div>
@@ -126,16 +126,16 @@ function submit() {
       </div>
     </template>
     <template #content>
-      <Input v-model="form.name" placeholder="enter your referees name" label="Name" class="mb-2" required />
+      <fwb-Input v-model="form.name" placeholder="enter your referees name" label="Name" class="mb-2" required />
       <InputError class="mt-2" :message="form.errors.name" />
 
-      <Input v-model="form.organisation" placeholder="enter your referees organisation" label="Organisation" class="mb-2" required />
+      <fwb-Input v-model="form.organisation" placeholder="enter your referees organisation" label="Organisation" class="mb-2" required />
       <InputError class="mt-2" :message="form.errors.organisation" />
 
-      <Input v-model="form.phone" placeholder="enter your referees phone" label="Phone" class="mb-2" required />
+      <fwb-Input v-model="form.phone" placeholder="enter your referees phone" label="Phone" class="mb-2" required />
       <InputError class="mt-2" :message="form.errors.phone" />
 
-      <Input v-model="form.email" name="referee_email" placeholder="enter your referees email" label="Email" class="mb-2" required />
+      <fwb-Input v-model="form.email" name="referee_email" placeholder="enter your referees email" label="Email" class="mb-2" required />
       <InputError class="mt-2" :message="form.errors.email" />
     </template>
     <template #footer>

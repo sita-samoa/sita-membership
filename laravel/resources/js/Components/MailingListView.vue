@@ -1,7 +1,7 @@
 <script setup>
 import { router } from '@inertiajs/vue3'
 import { computed, ref, watch } from 'vue'
-import { Dropdown, ListGroup, ListGroupItem, Badge, Button } from 'flowbite-vue'
+import { FwbDropdown, FwbListGroup, FwbListGroupItem, FwbBadge, FwbButton } from 'flowbite-vue'
 import ClipboardIcon from 'vue-material-design-icons/Clipboard.vue'
 import ClipboardMultipleIcon from 'vue-material-design-icons/ClipboardMultiple.vue'
 import { mdiEmailMinus, mdiEmailPlus } from '@mdi/js'
@@ -153,41 +153,41 @@ watch([filterStatus, membershipTypeId, membershipStatusId], ([filterStatusValue,
         <!-- Filter dropdown -->
         <div class="mr-3">
           Filters | Mailing list:
-          <dropdown :text="filterName" class="mt-3">
-            <list-group>
-              <list-group-item v-for="list in props.mailingLists" :key="list.id" @click="filterStatus = list.id">
+          <fwb-dropdown :text="filterName" class="mt-3">
+            <fwb-list-group>
+              <fwb-list-group-item v-for="list in props.mailingLists" :key="list.id" @click="filterStatus = list.id">
                 {{ capitalize(list.code) }}
-              </list-group-item>
-            </list-group>
-          </dropdown>
+              </fwb-list-group-item>
+            </fwb-list-group>
+          </fwb-dropdown>
         </div>
         <div class="mr-3">
           Member Status:
-          <dropdown :text="getMembershipStatus(membershipStatusId)" class="mt-3 ml-1 md:ml-3">
-            <list-group>
-              <list-group-item :key="0" @click="membershipStatusId = 0"> All </list-group-item>
-              <list-group-item v-for="type in Object.keys(applicationStatus)" :key="type" @click="membershipStatusId = type">
+          <fwb-dropdown :text="getMembershipStatus(membershipStatusId)" class="mt-3 ml-1 md:ml-3">
+            <fwb-list-group>
+              <fwb-list-group-item :key="0" @click="membershipStatusId = 0"> All </fwb-list-group-item>
+              <fwb-list-group-item v-for="type in Object.keys(applicationStatus)" :key="type" @click="membershipStatusId = type">
                 {{ getMembershipStatus(type) }}
-              </list-group-item>
-            </list-group>
-          </dropdown>
+              </fwb-list-group-item>
+            </fwb-list-group>
+          </fwb-dropdown>
         </div>
         <div class="mr-3">
           Member Type:
-          <dropdown :text="getMembershipType(membershipTypeId)" class="mt-3 ml-1 md:ml-3">
-            <list-group>
-              <list-group-item :key="0" @click="membershipTypeId = 0"> All </list-group-item>
-              <list-group-item v-for="type in props.memberTypes" :key="type.id" @click="membershipTypeId = type.id">
+          <fwb-dropdown :text="getMembershipType(membershipTypeId)" class="mt-3 ml-1 md:ml-3">
+            <fwb-list-group>
+              <fwb-list-group-item :key="0" @click="membershipTypeId = 0"> All </fwb-list-group-item>
+              <fwb-list-group-item v-for="type in props.memberTypes" :key="type.id" @click="membershipTypeId = type.id">
                 {{ type.title }}
-              </list-group-item>
-            </list-group>
-          </dropdown>
+              </fwb-list-group-item>
+            </fwb-list-group>
+          </fwb-dropdown>
         </div>
       </div>
       <TooltipTrigger :duration="1000" text="Copied All" @trigger="() => copyAllEmails()">
-        <Button color="green" size="lg">
+        <fwb-button color="green" size="lg">
           <div class="flex"><clipboard-multiple-icon />&nbsp;Copy all emails</div>
-        </Button>
+        </fwb-button>
       </TooltipTrigger>
     </BaseLevel>
     <!-- No results message -->
@@ -202,9 +202,9 @@ watch([filterStatus, membershipTypeId, membershipStatusId], ([filterStatusValue,
                   <thead class="bg-gray-50 dark:bg-gray-800">
                     <tr>
                       <th scope="col" class="py-3.5 px-4 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <button class="flex items-center gap-x-3 focus:outline-none">
+                        <fwb-button class="flex items-center gap-x-3 focus:outline-none">
                           <span>Name</span>
-                        </button>
+                        </fwb-button>
                       </th>
 
                       <th scope="col" class="px-12 py-3.5 text-sm font-normal text-left rtl:text-right text-gray-500 dark:text-gray-400">Email Address</th>
@@ -233,12 +233,12 @@ watch([filterStatus, membershipTypeId, membershipStatusId], ([filterStatusValue,
                       </td>
                       <td class="px-4 py-4 text-sm whitespace-nowrap">
                         <div>
-                          <Badge type="default">{{ getMembershipType(member.membership_type_id) ?? 'N/A' }}</Badge>
+                          <fwb-badge type="default">{{ getMembershipType(member.membership_type_id) ?? 'N/A' }}</fwb-badge>
                         </div>
                       </td>
                       <td class="px-4 py-4 text-sm whitespace-nowrap">
                         <div>
-                          <Badge :type="getBadge(member.membership_status_id)">{{ applicationStatus[member.membership_status_id] }}</Badge>
+                          <fwb-badge :type="getBadge(member.membership_status_id)">{{ applicationStatus[member.membership_status_id] }}</fwb-badge>
                         </div>
                       </td>
 

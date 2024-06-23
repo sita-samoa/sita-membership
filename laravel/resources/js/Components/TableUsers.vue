@@ -1,7 +1,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue'
 import { useForm, usePage, router } from '@inertiajs/vue3'
-import { Input, Button } from 'flowbite-vue'
+import { FwbInput } from 'flowbite-vue'
 import debounce from 'lodash/debounce'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -32,7 +32,7 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  filters: Array,
+  filters: Object,
   users: Object,
   availableRoles: Array,
 })
@@ -205,11 +205,13 @@ const clearPhotoFileInput = () => {
 const searchForm = useForm({
   search: usePage().props.filters.search,
   role: usePage().props.filters.role,
+  limit: usePage().props.filters.limit,
 })
 
 function reset() {
   searchForm.search = ''
   searchForm.role = ''
+  searchForm.limit = usePage().props.filters.limit
 }
 
 watch(
@@ -218,7 +220,7 @@ watch(
     searchForm.get(route('users.index'), {
       search: searchForm.search,
       role: searchForm.role,
-      preserveState: true,
+      limit: searchForm.limit,
     })
   }, 500),
   { deep: true }
@@ -296,7 +298,21 @@ watch(
       </tbody>
     </table>
   </CardBox>
-  <Pagination :links="props.users.links" />
+  <div class="my-8 grid grid-cols-3 gap-1 justify-evenly">
+    <div class="rounded-lg h-12 grid grid-cols-3 gap-1">
+      <label for="limit" class="py-2 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Items per page:</label>
+
+      <select v-model="searchForm.limit" id="limit" class="mb-1 ml-2 px-4 py-3 text-gray-400 text-sm leading-4 border rounded bg-gray-50 border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+    <div class="col-span-2 rounded-lg h-12">
+      <Pagination :links="props.users.links" />
+    </div>
+  </div>
 
   <DialogModal :show="showFormModal">
     <template #title>
@@ -315,7 +331,7 @@ watch(
           <!-- Profile Photo -->
           <div class="col-span-6 sm:col-span-4">
             <!-- Profile Photo File Input -->
-            <input ref="photoInput" type="file" class="hidden" @change="updatePhotoPreview" />
+            <fwb-input ref="photoInput" type="file" class="hidden" @change="updatePhotoPreview" />
 
             <InputLabel for="photo" value="Photo" />
 

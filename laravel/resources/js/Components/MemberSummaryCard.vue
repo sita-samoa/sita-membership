@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { Link } from '@inertiajs/vue3'
-import { TheCard, Badge } from 'flowbite-vue'
+import { FwbCard, FwbBadge } from 'flowbite-vue'
 import { mdiSendCheck, mdiFile, mdiCheckDecagram, mdiClockOutline, mdiDecagram, mdiClockAlertOutline, mdiAccountOff, mdiAccountCancel } from '@mdi/js'
 import BaseIcon from '@/Components/BaseIcon.vue'
 
@@ -77,24 +77,26 @@ switch (props.member.membership_status_id) {
 const linkData = { member: props.member.id, tab: 1 }
 </script>
 <template>
-  <the-card variant="horizontal" :img-src="'https://api.dicebear.com/6.x/initials/svg?backgroundColor=30cbef&scale=50&seed=' + member_name" :alt="member_name">
-    <Link :href="route(props.linkRoute, linkData)">
-      <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
-        <span v-if="props.member.title_id">{{ props.member.title.title }}</span> {{ member_name }}
-      </h5>
+  <fwb-card variant="horizontal" :img-src="'https://api.dicebear.com/6.x/initials/svg?backgroundColor=30cbef&scale=50&seed=' + member_name" :alt="member_name">
+    <div class="p-5">
+      <Link :href="route(props.linkRoute, linkData)">
+        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+          <span v-if="props.member.title_id">{{ props.member.title.title }}</span> {{ member_name }}
+        </h5>
 
-      <div class="flex mb-3">
-        <Badge v-if="props.member.membership_status" :type="badgeType">
-          <template #icon>
-            <BaseIcon :path="badgeIcon" />
-          </template>
-          {{ props.member.membership_status.title }}
-        </Badge>
-        <Badge v-else type="default">Draft</Badge>
-        <Badge type="default">{{ props.member.membership_type.title }}</Badge>
-      </div>
+        <div class="flex mb-3">
+          <fwb-badge v-if="props.member.membership_status" :type="badgeType">
+            <template #icon>
+              <BaseIcon :path="badgeIcon" />
+            </template>
+            {{ props.member.membership_status.title }}
+          </fwb-badge>
+          <fwb-badge v-else type="default">Draft</fwb-badge>
+          <fwb-badge type="default">{{ props.member.membership_type.title }}</fwb-badge>
+        </div>
 
-      <p v-if="props.member.job_title" class="font-normal text-gray-700 dark:text-gray-400">{{ props.member.job_title }}, {{ props.member.current_employer }}</p>
-    </Link>
-  </the-card>
+        <p v-if="props.member.job_title" class="font-normal text-gray-700 dark:text-gray-400">{{ props.member.job_title }}, {{ props.member.current_employer }}</p>
+      </Link>
+    </div>
+  </fwb-card>
 </template>
