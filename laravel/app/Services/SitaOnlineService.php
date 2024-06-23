@@ -36,7 +36,8 @@ class SitaOnlineService
         return $totalFunds;
     }
 
-    public function isMemberHasFreeMembership(Member $member) {
+    public function isMemberHasFreeMembership(Member $member)
+    {
         $mtRep = new MembershipTypeRepository();
         $memberships = $mtRep->getFreeMemberships();
         $isFreeMembership = false;

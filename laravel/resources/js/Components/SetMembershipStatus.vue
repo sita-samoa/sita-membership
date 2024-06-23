@@ -23,8 +23,8 @@ const isModalActive = ref(false)
 
 const options = usePage().props.membershipStatuses.map(item => ({
   name: item.title,
-  value: item.id
-}));
+  value: item.id,
+}))
 
 const form = useForm({
   membership_status_id: props.status,
@@ -39,41 +39,28 @@ function submit() {
       onSuccess() {
         isModalActive.value = false
         resetForm()
-      }
+      },
     })
-  }
-  else {
+  } else {
     // Otherwise, just close the modal
     isModalActive.value = false
   }
 }
 function resetForm() {
   form.membership_status_id = props.status
-  form.financial_year = new Date().getFullYear(), // current year.
-  form.receipt_number = null
+  ;(form.financial_year = new Date().getFullYear()), // current year.
+    (form.receipt_number = null)
 }
-
 </script>
 
 <template>
-
   <BaseButton label="Update Membership Status..." small color="info" @click="isModalActive = true" />
 
-  <DialogModal
-    @close="isModalActive = false"
-    :show="isModalActive"
-    >
-    <template #title>
-      Update Membership Status
-    </template>
+  <DialogModal @close="isModalActive = false" :show="isModalActive">
+    <template #title> Update Membership Status </template>
     <template #content>
-
       <form @submit.prevent="submit" :disabled="form.processing">
-        <fwb-select class="mb-2"
-          label="Membership Status"
-          v-model="form.membership_status_id"
-          :options="options"
-        />
+        <fwb-select class="mb-2" label="Membership Status" v-model="form.membership_status_id" :options="options" />
 
         <!-- Acceptance Details -->
         <div v-if="form.membership_status_id == 4">
@@ -92,5 +79,4 @@ function resetForm() {
       </form>
     </template>
   </DialogModal>
-
 </template>

@@ -77,8 +77,7 @@ class MemberMembershipStatusController extends Controller
                 'financial_year' => $isAccepted ? 'required|int|min:2000' : '',
                 'receipt_number' => $isAccepted ? 'nullable|string' : '',
             ]);
-        }
-        else {
+        } else {
             $validated = $request->validate([
                 // Additional validation of accepted is selected.
                 'financial_year' => $isAccepted ? 'required|int|min:2000' : '',
@@ -94,8 +93,7 @@ class MemberMembershipStatusController extends Controller
                 $validated['financial_year'],
                 $validated['receipt_number'] ?? ''
             );
-        }
-        else {
+        } else {
             $status = MembershipStatusEnum::fromInt($membershipStatus->id);
             $rep->updateMembershipStatus($member, $status);
             $rep->recordAction($member, $request->user());

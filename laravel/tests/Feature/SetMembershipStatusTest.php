@@ -2,7 +2,6 @@
 
 use App\Enums\MembershipStatus;
 use App\Models\Member;
-use App\Models\MemberMembershipStatus;
 use App\Models\Team;
 use App\Models\User;
 use App\Repositories\MemberMembershipStatusRepository;
@@ -24,7 +23,7 @@ test('test cannot set membership status', function () {
     $new_status = MembershipStatus::ACCEPTED->value;
     $rep->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
 
-    $response = $this->put('/members/'.$member->id.'/membership-status/' . $new_status, []);
+    $response = $this->put('/members/'.$member->id.'/membership-status/'.$new_status, []);
 
     $response->assertStatus(403);
 
@@ -42,7 +41,6 @@ test('test cannot set membership status', function () {
     $response = $this->put('/members/'.$member->id.'/membership-status/a', []);
 
     $response->assertStatus(404);
-
 });
 
 test('test can set membership status', function ($role) {
@@ -60,7 +58,7 @@ test('test can set membership status', function ($role) {
     $new_status = MembershipStatus::DRAFT->value;
     $rep->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
 
-    $response = $this->put('/members/'.$member->id.'/membership-status/' . $new_status, []);
+    $response = $this->put('/members/'.$member->id.'/membership-status/'.$new_status, []);
 
     $response->assertStatus(302);
 
@@ -72,7 +70,6 @@ test('test can set membership status', function ($role) {
     $statuses = $rep2->getByMemberIdAndStatusId($member->id, $new_status, 10);
 
     expect($statuses)->toHaveCount(1);
-
 })->with(['admin', 'coordinator']);
 
 test('test can set membership status as accepted', function ($role) {
@@ -90,7 +87,7 @@ test('test can set membership status as accepted', function ($role) {
     $new_status = MembershipStatus::ACCEPTED->value;
     $rep->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
 
-    $response = $this->put('/members/'.$member->id.'/membership-status/' . $new_status, [
+    $response = $this->put('/members/'.$member->id.'/membership-status/'.$new_status, [
         'financial_year' => Carbon::now()->year,
         'receipt_number' => '111',
     ]);
@@ -105,9 +102,7 @@ test('test can set membership status as accepted', function ($role) {
     $statuses = $rep2->getByMemberIdAndStatusId($member->id, $new_status, 10);
 
     expect($statuses)->toHaveCount(1);
-
 })->with(['admin', 'coordinator']);
-
 
 test('test cannot set membership status as accepted', function ($role) {
     User::factory()->withPersonalTeam()->create();
@@ -126,7 +121,7 @@ test('test cannot set membership status as accepted', function ($role) {
     $new_status = MembershipStatus::ACCEPTED->value;
     $rep->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
 
-    $response = $this->put('/members/'.$member->id.'/membership-status/' . $new_status, [
+    $response = $this->put('/members/'.$member->id.'/membership-status/'.$new_status, [
         'financial_year' => 1999,
         'receipt_number' => '',
     ]);
@@ -134,7 +129,7 @@ test('test cannot set membership status as accepted', function ($role) {
     // Assert that validation errors are present.
     $response->assertInvalid(['financial_year', 'receipt_number']);
 
-    $response = $this->put('/members/'.$member->id.'/membership-status/' . $new_status, [
+    $response = $this->put('/members/'.$member->id.'/membership-status/'.$new_status, [
         'financial_year' => 2000,
         'receipt_number' => '',
     ]);
@@ -142,5 +137,4 @@ test('test cannot set membership status as accepted', function ($role) {
     // Assert that no validation errors are present.
     $response->assertValid(['financial_year']);
     $response->assertInvalid(['receipt_number']);
-
 })->with(['admin', 'coordinator']);
