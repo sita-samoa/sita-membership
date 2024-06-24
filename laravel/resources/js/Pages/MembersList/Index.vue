@@ -18,11 +18,11 @@ const styleStore = useStyleStore()
 </script>
 
 <template>
-  <Head title="Member List" />
+  <Head title="Members List" />
   <LayoutGuestAlt :canLogin="true" :canRegister="true">
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiViewList" title="Members" main> &nbsp; </SectionTitleLineWithButton>
-      <MembersList :list="members" />
+      <SectionTitleLineWithButton :icon="mdiViewList" title="Members List" main> &nbsp; </SectionTitleLineWithButton>
+      <MembersList :list="members" searchRoute="members-list.index" />
     </SectionMain>
   </LayoutGuestAlt>
 </template>

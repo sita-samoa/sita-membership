@@ -21,7 +21,7 @@ const styleStore = useStyleStore()
       <div v-if="canLogin" class="sm:fixed sm:top-0 sm:right-0 p-6 text-right">
         <a @click="styleStore.setDarkMode()" href="#" title="Light/Dark Mode" class="mr-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"><BaseIcon :path="mdiThemeLightDark" /></a>
 
-        <Link :href="route('member-list.index')" class="mr-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Member List</Link>
+        <Link :href="route('members-list.index')" class="mr-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Members List</Link>
 
         <Link v-if="$page.props.auth.user" :href="route('dashboard.index')" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</Link>
 

@@ -32,6 +32,19 @@ const props = defineProps({
     Type: Object,
     Default: {},
   },
+  searchRoute: {
+    Type: String,
+    Default: 'members.index',
+  },
+  canDownload: {
+    Type: Boolean,
+    Default: false,
+  },
+  canFilter: {
+    Type: Boolean,
+    Default: false,
+  }
+
 })
 
 const filterName = computed(() => {
@@ -78,7 +91,7 @@ function reset() {
 watch(
   () => form,
   debounce(function () {
-    form.get(route('members.index'), {
+    form.get(route(props.searchRoute), {
       search: form.search,
       membership_status_id: form.membership_status_id,
     })
@@ -88,7 +101,7 @@ watch(
 </script>
 <template>
   <SearchFilter v-model="form.search" :display-text="'Show - ' + filterName" placeholder="Search by name, job  or employer" @reset="reset">
-    <fwb-list-group>
+    <fwb-list-group v-if="props.canFilter">
       <fwb-list-group-item @click="form.membership_status_id = ''">
         <template #prefix>
           <AccountCircleIcon />
@@ -147,9 +160,9 @@ watch(
   </SearchFilter>
 
   <!-- Results summary -->
-  <BaseLevel mobile>
+  <BaseLevel mobile class="my-4 ">
     <ResultsSummary :total="props.list.total" :from="props.list.from" :to="props.list.to" />
-    <div class="my-3 text-small" @click="download">
+    <div class="text-small" @click="download" v-if="props.canDownload">
       <a title="Download" href="#"> <BaseIcon :path="mdiDownload" /> Download </a>
     </div>
   </BaseLevel>

@@ -42,7 +42,7 @@ class MemberController extends Controller
         $membership_status_id = $request->input('membership_status_id');
 
         $rep = new MemberRepository();
-        $members = $rep->filterMembers($membership_status_id, $search);
+        $members = $rep->filterMembers([$membership_status_id], $search);
 
         $pagedMembers = $members
             ->with('membershipType', 'title', 'membershipStatus')

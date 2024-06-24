@@ -5,7 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\MailingListController;
 use App\Http\Controllers\MemberController;
-use App\Http\Controllers\MemberListController;
+use App\Http\Controllers\MembersListController;
 use App\Http\Controllers\MemberQualificationController;
 use App\Http\Controllers\MemberRefereeController;
 use App\Http\Controllers\MemberSupportingDocumentController;
@@ -34,7 +34,7 @@ Route::get('/', function () {
     ]);
 });
 
-Route::resource('member-list', MemberListController::class)
+Route::resource('members-list', MembersListController::class)
     ->only(['index']);
 
 Route::get('/demo', function () {

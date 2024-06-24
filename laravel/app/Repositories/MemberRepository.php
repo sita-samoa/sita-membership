@@ -115,22 +115,30 @@ class MemberRepository extends Repository
      * @param  string  $search
      * @return Collection
      */
-    public function filterMembers($membership_status_id, $search)
+    public function filterMembers(array $membership_status_id, $search)
     {
         return Member::orderBy('first_name')
-            ->when(
-                $membership_status_id,
-                fn ($query) => $query->where(
-                    'membership_status_id',
-                    $membership_status_id
-                )
-            )
-            ->when(
-                $search,
-                fn ($query) => $query->where('first_name', 'like', '%'.$search.'%')
-                    ->orWhere('last_name', 'like', '%'.$search.'%')
-                    ->orWhere('job_title', 'like', '%'.$search.'%')
-                    ->orWhere('current_employer', 'like', '%'.$search.'%')
-            );
+            ->where(function ($query) use ($membership_status_id, $search) {
+                if (!empty($membership_status_id) && $search) {
+                    $query->whereIn('membership_status_id', $membership_status_id);
+                    $query->where(function ($query) use ($search) {
+                        $query->where('first_name', 'like', '%'.$search.'%')
+                            ->orWhere('last_name', 'like', '%'.$search.'%')
+                            ->orWhere('job_title', 'like', '%'.$search.'%')
+                            ->orWhere('current_employer', 'like', '%'.$search.'%');
+                    });
+                }
+                else if (!empty($membership_status_id)) {
+                    $query->whereIn('membership_status_id', $membership_status_id);
+                }
+                else if ($search) {
+                    $query->where(function ($query) use ($search) {
+                        $query->where('first_name', 'like', '%'.$search.'%')
+                            ->orWhere('last_name', 'like', '%'.$search.'%')
+                            ->orWhere('job_title', 'like', '%'.$search.'%')
+                            ->orWhere('current_employer', 'like', '%'.$search.'%');
+                    });
+                }
+            });
     }
 }

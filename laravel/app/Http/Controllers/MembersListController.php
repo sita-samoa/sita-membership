@@ -8,7 +8,7 @@ use App\Repositories\MemberRepository;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 
-class MemberListController extends Controller
+class MembersListController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +21,7 @@ class MemberListController extends Controller
 
         $rep = new MemberRepository();
         // $members = $rep->filterMembers($membership_status_id, $search);
-        $members = $rep->filterMembers($membership_status_id, $search)
+        $members = $rep->filterMembers([$membership_status_id], $search)
             ->select([
                 'first_name',
                 'last_name',
@@ -37,7 +37,7 @@ class MemberListController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('MemberList/Index', [
+        return Inertia::render('MembersList/Index', [
             'filters' => $request->only('membership_status_id', 'search'),
             'members' => $pagedMembers,
         ]);
