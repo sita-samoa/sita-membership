@@ -20,7 +20,17 @@ class MemberListController extends Controller
         $membership_status_id = MembershipStatus::ACCEPTED->value;
 
         $rep = new MemberRepository();
-        $members = $rep->filterMembers($membership_status_id, $search);
+        // $members = $rep->filterMembers($membership_status_id, $search);
+        $members = $rep->filterMembers($membership_status_id, $search)
+            ->select([
+                'first_name',
+                'last_name',
+                'current_employer',
+                'job_title',
+                'membership_type_id',
+                'title_id',
+                'membership_status_id',
+            ]);
 
         $pagedMembers = $members
             ->with('membershipType', 'title', 'membershipStatus')

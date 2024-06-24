@@ -15,7 +15,7 @@ const props = defineProps({
   },
   linkRoute: {
     type: String,
-    default: 'members.show',
+    default: 'members.index',
   },
 })
 
