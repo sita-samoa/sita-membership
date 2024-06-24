@@ -101,26 +101,26 @@ watch(
 </script>
 <template>
   <SearchFilter v-model="form.search" :display-text="'Show - ' + filterName" placeholder="Search by name, job  or employer" @reset="reset">
-    <fwb-list-group v-if="props.canFilter">
+    <fwb-list-group>
       <fwb-list-group-item @click="form.membership_status_id = ''">
         <template #prefix>
           <AccountCircleIcon />
         </template>
         All
       </fwb-list-group-item>
-      <fwb-list-group-item @click="form.membership_status_id = 1">
+      <fwb-list-group-item @click="form.membership_status_id = 1" v-if="props.canFilter">
         <template #prefix>
           <FileIcon />
         </template>
         Draft
       </fwb-list-group-item>
-      <fwb-list-group-item @click="form.membership_status_id = 2">
+      <fwb-list-group-item @click="form.membership_status_id = 2" v-if="props.canFilter">
         <template #prefix>
           <SendCheckIcon />
         </template>
         Submitted
       </fwb-list-group-item>
-      <fwb-list-group-item @click="form.membership_status_id = 3">
+      <fwb-list-group-item @click="form.membership_status_id = 3" v-if="props.canFilter">
         <template #prefix>
           <DecagramIcon />
         </template>
@@ -138,19 +138,19 @@ watch(
         </template>
         Lapsed
       </fwb-list-group-item>
-      <fwb-list-group-item @click="form.membership_status_id = 6">
+      <fwb-list-group-item @click="form.membership_status_id = 6" v-if="props.canFilter">
         <template #prefix>
           <ClockAlertOutlineIcon />
         </template>
         Expired
       </fwb-list-group-item>
-      <fwb-list-group-item @click="form.membership_status_id = 7">
+      <fwb-list-group-item @click="form.membership_status_id = 7" v-if="props.canFilter">
         <template #prefix>
           <AccountOffIcon />
         </template>
         Banned
       </fwb-list-group-item>
-      <fwb-list-group-item @click="form.membership_status_id = 8">
+      <fwb-list-group-item @click="form.membership_status_id = 8" v-if="props.canFilter">
         <template #prefix>
           <AccountCancelIcon />
         </template>

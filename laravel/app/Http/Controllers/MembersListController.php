@@ -15,13 +15,28 @@ class MembersListController extends Controller
      */
     public function index(Request $request)
     {
+        // @TODO add authorization.
 
-        $search = $request->input('search');
-        $membership_status_id = MembershipStatus::ACCEPTED->value;
+        // Only allow Accepted and Lapsed membership status ids.
+        $validatedData = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'membership_status_id' => 'nullable|integer|in:4,5|exists:membership_statuses,id',
+        ]);
+
+        $membership_status_ids = [
+            MembershipStatus::ACCEPTED->value,
+            MembershipStatus::LAPSED->value,
+        ];
+
+        $search = $validatedData['search'] ?? '';
+        $membership_status_id = $validatedData['membership_status_id'] ?? '';
+
+        if ($membership_status_id) {
+            $membership_status_ids = [$membership_status_id];
+        }
 
         $rep = new MemberRepository();
-        // $members = $rep->filterMembers($membership_status_id, $search);
-        $members = $rep->filterMembers([$membership_status_id], $search)
+        $members = $rep->filterMembers($membership_status_ids, $search)
             ->select([
                 'first_name',
                 'last_name',
