@@ -5,6 +5,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DownloadController;
 use App\Http\Controllers\MailingListController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\MemberListController;
 use App\Http\Controllers\MemberQualificationController;
 use App\Http\Controllers\MemberRefereeController;
 use App\Http\Controllers\MemberSupportingDocumentController;
@@ -32,6 +33,9 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
     ]);
 });
+
+Route::resource('member-list', MemberListController::class)
+    ->only(['index']);
 
 Route::get('/demo', function () {
     return Inertia::render('Demo/HomeView');
