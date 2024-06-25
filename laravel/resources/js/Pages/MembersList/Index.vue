@@ -18,10 +18,9 @@ const styleStore = useStyleStore()
 </script>
 
 <template>
-  <Head title="Members List" />
-  <LayoutGuestAlt :canLogin="true" :canRegister="true">
+  <LayoutGuestAlt title="Members" :canLogin="true" :canRegister="true">
     <SectionMain>
-      <SectionTitleLineWithButton :icon="mdiViewList" title="Members List" main> &nbsp; </SectionTitleLineWithButton>
+      <SectionTitleLineWithButton :icon="mdiViewList" title="SITA Members" main> &nbsp; </SectionTitleLineWithButton>
       <MembersList :list="members" searchRoute="members-list.index" />
     </SectionMain>
   </LayoutGuestAlt>

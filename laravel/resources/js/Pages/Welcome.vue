@@ -18,8 +18,7 @@ const styleStore = useStyleStore()
 </script>
 
 <template>
-  <Head title="Join SITA" />
-  <LayoutGuestAlt :canLogin="canLogin" :canRegister="canRegister" :appVersion="appVersion">
+  <LayoutGuestAlt title="Samoa Information Technology Association" :canLogin="canLogin" :canRegister="canRegister" :appVersion="appVersion">
 
     <div class="flex justify-center">
       <ApplicationMark />
@@ -39,8 +38,8 @@ const styleStore = useStyleStore()
         <fwb-card href="#" variant="horizontal" img-src="/imgs/poly-laptop.webp" img-alt="Desk">
           <div class="p-5">
             <Link :href="route('members-list.index')">
-              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Search Members List</h5>
-              <p class="font-normal text-gray-700 dark:text-gray-400">Verify the status of our members. Check their membership details, their area of interest, and their skills. Search for members by name, email, or skills.</p>
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Discover Members</h5>
+              <p class="font-normal text-gray-700 dark:text-gray-400">Verify the status of our members. Check their membership details. Search for members by name, job, or employer.</p>
             </Link>
           </div>
         </fwb-card>

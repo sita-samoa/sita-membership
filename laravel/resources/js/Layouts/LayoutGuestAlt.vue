@@ -11,17 +11,19 @@ defineProps({
   canLogin: Boolean,
   canRegister: Boolean,
   appVersion: String,
+  title: String,
 })
 
 const styleStore = useStyleStore()
 </script>
 
 <template>
+  <Head :title="title" />
   <LayoutGuest>
     <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
       <div v-if="canLogin" class="sm:fixed sm:top-0 sm:right-0 p-6 text-right">
         <GuestNavLink href="/" :active="route().current('/')">Home</GuestNavLink>
-        <GuestNavLink :href="route('members-list.index')" :active="route().current(route('members-list.index'))" >Members List</GuestNavLink>
+        <GuestNavLink :href="route('members-list.index')" :active="route().current(route('members-list.index'))" >Members</GuestNavLink>
 
         <GuestNavLink v-if="$page.props.auth.user" :href="route('dashboard.index')">Dashboard</GuestNavLink>
 
