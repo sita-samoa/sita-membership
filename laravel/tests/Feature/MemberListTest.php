@@ -1,11 +1,11 @@
 <?php
 
+use App\Enums\MembershipStatus;
+use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
-use App\Models\Member;
 use Database\Seeders\DatabaseSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
-use App\Enums\MembershipStatus;
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -39,7 +39,6 @@ test('test roles can access and list displayed', function (string $role) {
         );
 
     $response->assertStatus(200);
-
 })->with(['editor', 'executive', 'coordinator']);
 
 test('test can filter by member_status_id and search', function ($role) {
