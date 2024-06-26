@@ -19,7 +19,6 @@ const styleStore = useStyleStore()
 
 <template>
   <LayoutGuestAlt title="Samoa Information Technology Association" :canLogin="canLogin" :canRegister="canRegister" :appVersion="appVersion">
-
     <div class="flex justify-center">
       <ApplicationMark />
     </div>

@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Repositories\MemberRepository;
-use Inertia\Inertia;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class MembersListController extends Controller
 {

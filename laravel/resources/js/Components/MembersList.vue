@@ -43,8 +43,7 @@ const props = defineProps({
   canFilter: {
     Type: Boolean,
     Default: false,
-  }
-
+  },
 })
 
 const filterName = computed(() => {
@@ -160,7 +159,7 @@ watch(
   </SearchFilter>
 
   <!-- Results summary -->
-  <BaseLevel mobile class="my-4 ">
+  <BaseLevel mobile class="my-4">
     <ResultsSummary :total="props.list.total" :from="props.list.from" :to="props.list.to" />
     <div class="text-small" @click="download" v-if="props.canDownload">
       <a title="Download" href="#"> <BaseIcon :path="mdiDownload" /> Download </a>

@@ -6,7 +6,6 @@ const props = defineProps({
   href: String,
   active: Boolean,
 })
-
 </script>
 
 <template>

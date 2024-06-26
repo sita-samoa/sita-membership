@@ -23,7 +23,7 @@ const styleStore = useStyleStore()
     <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
       <div v-if="canLogin" class="bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 sm:fixed sm:top-0 sm:right-0 p-6 text-right">
         <GuestNavLink href="/" :active="route().current('/')">Home</GuestNavLink>
-        <GuestNavLink :href="route('members-list.index')" :active="route().current(route('members-list.index'))" >Members</GuestNavLink>
+        <GuestNavLink :href="route('members-list.index')" :active="route().current(route('members-list.index'))">Members</GuestNavLink>
 
         <GuestNavLink v-if="$page.props.auth.user" :href="route('dashboard.index')">Dashboard</GuestNavLink>
 
@@ -36,7 +36,6 @@ const styleStore = useStyleStore()
       </div>
 
       <div class="max-w-7xl mx-auto p-6 lg:p-8">
-
         <slot />
 
         <FooterBar />
