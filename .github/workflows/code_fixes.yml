@@ -25,9 +25,9 @@ jobs:
         uses: "ramsey/composer-install@v2"
         with:
           working-directory: ./laravel
-
       - name: Fix PHP code style issues
         run: composer format_ci
+        continue-on-error: true
 
       - name: Cache node modules
         id: cache-npm
@@ -51,6 +51,7 @@ jobs:
         run: npm ci
       - name: Format code
         run: npm run format
+        continue-on-error: true
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v4
