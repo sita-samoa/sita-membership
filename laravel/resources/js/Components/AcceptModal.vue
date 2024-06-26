@@ -47,7 +47,13 @@ function accept() {
     <template #title>{{ props.headingText }}</template>
     <template #content>
       <div class="mb-3">Please provide the following information.</div>
-      <fwb-input v-model="form.financial_year" required placeholder="enter payment financial year" label="Financial Year" class="mb-2" type="number" />
+      <fwb-input
+        v-model="form.financial_year"
+        required
+        placeholder="enter payment financial year"
+        label="Financial Year"
+        class="mb-2"
+        type="number" />
       <InputError class="mt-2" :message="form.errors.financial_year" />
 
       <fwb-input v-model="form.receipt_number" placeholder="enter payment receipt #" label="Receipt #" class="mb-2" />
