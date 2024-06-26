@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { useForm, Link } from '@inertiajs/vue3'
+import { useForm, Link, usePage } from '@inertiajs/vue3'
 import { FwbAlert, FwbListGroup, FwbListGroupItem, FwbButton, FwbTab, FwbTabs } from 'flowbite-vue'
 import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
@@ -9,13 +9,15 @@ import AcceptModal from '@/Components/AcceptModal.vue'
 import RejectionModal from '@/Components/RejectionModal.vue'
 import CardBox from '@/Components/CardBox.vue'
 import MemberPayment from '@/Components/MemberPayment.vue'
+import SetMembershipStatus from '@/Components/SetMembershipStatus.vue'
 
-const props = defineProps(['member', 'options', 'data', 'statuses'])
+const props = defineProps(['member', 'options', 'data', 'statuses', 'membershipStatuses'])
 
 const completion = props.options.completion.data
 const showAcceptanceModal = ref(false)
 const showActivateModal = ref(false)
 const showRejectionModal = ref(false)
+const permissions = usePage().props.user.permissions
 
 const form = useForm({})
 
@@ -103,8 +105,13 @@ const activeTab = ref('first')
           </Link>
         </fwb-list-group>
       </fwb-tab>
+      <fwb-tab name="fourth" title="Membership Status" v-if="permissions.canUpdateMembershipStatus">
+        <!-- SetMembershipStatus -->
+        <SetMembershipStatus :membershipStatuses="props.membershipStatuses" :status="props.member.membership_status_id" :member_id="props.member.id" />
+      </fwb-tab>
       <fwb-tab name="second" :title="'Payments (' + props.statuses.length + ')'">
-        <member-payment :statuses="props.statuses" />
+        <!-- MemberPayment -->
+        <MemberPayment :statuses="props.statuses" />
       </fwb-tab>
       <fwb-tab name="third" title="Audit">
         <!-- Audit log link -->

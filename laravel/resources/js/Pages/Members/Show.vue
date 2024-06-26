@@ -5,14 +5,14 @@ import { mdiBadgeAccountHorizontalOutline } from '@mdi/js'
 import SectionMain from '@/Components/SectionMain.vue'
 import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue'
 
-defineProps(['member', 'options', 'data', 'statuses'])
+defineProps(['member', 'options', 'data', 'statuses', 'membershipStatuses'])
 </script>
 
 <template>
   <LayoutAuthenticated title="Summary">
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiBadgeAccountHorizontalOutline" title="Summary" main> &nbsp; </SectionTitleLineWithButton>
-      <SignupSummary :member="member" :options="options" :data="data" :statuses="statuses" />
+      <SignupSummary :member="member" :options="options" :data="data" :statuses="statuses" :membershipStatuses="membershipStatuses" />
     </SectionMain>
   </LayoutAuthenticated>
 </template>

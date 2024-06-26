@@ -12,4 +12,9 @@ enum MembershipStatus: int
     case EXPIRED = 6;
     case BANNED = 7;
     case REJECTED = 8;
+
+    public static function fromInt(int $value): self
+    {
+        return self::tryFrom($value) ?? throw new \InvalidArgumentException('Invalid status');
+    }
 }
