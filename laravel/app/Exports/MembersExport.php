@@ -84,6 +84,6 @@ class MembersExport implements FromCollection, WithMapping, WithHeadings
     {
         $rep = new MemberRepository();
 
-        return $rep->filterMembers($this->member_status_id, $this->search)->get();
+        return $rep->filterMembers([$this->member_status_id], $this->search)->get();
     }
 }
