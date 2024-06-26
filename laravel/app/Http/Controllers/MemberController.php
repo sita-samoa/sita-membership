@@ -50,11 +50,17 @@ class MemberController extends Controller
             'membership_status_id' => 'nullable|integer|exists:membership_statuses,id',
         ]);
 
+        $membership_status_ids = [];
+
         $search = $validatedData['search'] ?? '';
         $membership_status_id = $validatedData['membership_status_id'] ?? '';
 
+        if ($membership_status_id) {
+            $membership_status_ids = [$membership_status_id];
+        }
+
         $rep = new MemberRepository();
-        $members = $rep->filterMembers([$membership_status_id], $search);
+        $members = $rep->filterMembers($membership_status_ids, $search);
 
         $pagedMembers = $members
             ->with('membershipType', 'title', 'membershipStatus')
