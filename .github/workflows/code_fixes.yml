@@ -1,7 +1,7 @@
 name: Code Fixes
 
 on:
-  workflow_call:
+  push:
 
 jobs:
   php-code-styling:
