@@ -2,7 +2,7 @@
 import { Head, Link } from '@inertiajs/vue3'
 import { FwbCard } from 'flowbite-vue'
 import ApplicationMark from '@/Components/ApplicationMark.vue'
-import LayoutGuest from '@/Layouts/LayoutGuest.vue'
+import LayoutGuestAlt from '@/Layouts/LayoutGuestAlt.vue'
 import BaseIcon from '@/Components/BaseIcon.vue'
 import { useStyleStore } from '@/Stores/style.js'
 import { mdiThemeLightDark } from '@mdi/js'
@@ -18,42 +18,33 @@ const styleStore = useStyleStore()
 </script>
 
 <template>
-  <Head title="Join SITA" />
-  <LayoutGuest>
-    <div class="relative sm:flex sm:justify-center sm:items-center min-h-screen bg-dots-darker bg-center bg-gray-100 dark:bg-dots-lighter dark:bg-gray-900 selection:bg-red-500 selection:text-white">
-      <div v-if="canLogin" class="sm:fixed sm:top-0 sm:right-0 p-6 text-right">
-        <a @click="styleStore.setDarkMode()" href="#" title="Light/Dark Mode" class="mr-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500"><BaseIcon :path="mdiThemeLightDark" /></a>
-        <Link v-if="$page.props.auth.user" :href="route('dashboard.index')" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</Link>
+  <LayoutGuestAlt title="Samoa Information Technology Association" :canLogin="canLogin" :canRegister="canRegister" :appVersion="appVersion">
+    <div class="flex justify-center">
+      <ApplicationMark />
+    </div>
 
-        <template v-else>
-          <Link :href="route('login')" class="font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Log in</Link>
-
-          <Link v-if="canRegister" :href="route('register')" class="ml-4 font-semibold text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Register</Link>
-        </template>
-      </div>
-
-      <div class="max-w-7xl mx-auto p-6 lg:p-8">
-        <div class="flex justify-center">
-          <ApplicationMark />
-        </div>
-
-        <div class="my-16">
-          <div class="grid grid-cols-1 md:grid-cols-1 gap-6 lg:gap-8">
-            <fwb-card href="#" variant="horizontal" img-src="/imgs/sita_cover.webp" img-alt="Desk">
-              <div class="p-5">
-                <Link :href="route('dashboard.index')">
-                  <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Join SITA</h5>
-                  <p class="font-normal text-gray-700 dark:text-gray-400">You've reached the SITA Online portal. Use it to Sign up and join the Sāmoa Information Technology Association. Register an account to get started or login to complete your Sign up.</p>
-                </Link>
-              </div>
-            </fwb-card>
+    <div class="my-16">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+        <fwb-card href="#" variant="horizontal" img-src="/imgs/sita_cover.webp" img-alt="Desk">
+          <div class="p-5">
+            <Link :href="route('dashboard.index')">
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Join SITA</h5>
+              <p class="font-normal text-gray-700 dark:text-gray-400">You've reached the SITA Online portal. Use it to Sign up and join the Sāmoa Information Technology Association. Register an account to get started or login to complete your Sign up.</p>
+            </Link>
           </div>
-        </div>
+        </fwb-card>
 
-        <FooterBar />
+        <fwb-card href="#" variant="horizontal" img-src="/imgs/poly-laptop.webp" img-alt="Desk">
+          <div class="p-5">
+            <Link :href="route('members-list.index')">
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Discover Members</h5>
+              <p class="font-normal text-gray-700 dark:text-gray-400">Verify the status of our members. Check their membership details. Search for members by name, job, or employer. Find out more about their work and expertise.</p>
+            </Link>
+          </div>
+        </fwb-card>
       </div>
     </div>
-  </LayoutGuest>
+  </LayoutGuestAlt>
 </template>
 
 <style>

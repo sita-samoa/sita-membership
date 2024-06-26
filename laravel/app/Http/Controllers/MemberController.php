@@ -45,12 +45,16 @@ class MemberController extends Controller
     {
         $this->authorize('viewAny', Member::class);
 
-        // @TODO - Validate inputs
-        $search = $request->input('search');
-        $membership_status_id = $request->input('membership_status_id');
+        $validatedData = $request->validate([
+            'search' => 'nullable|string|max:255',
+            'membership_status_id' => 'nullable|integer|exists:membership_statuses,id',
+        ]);
+
+        $search = $validatedData['search'] ?? '';
+        $membership_status_id = $validatedData['membership_status_id'] ?? '';
 
         $rep = new MemberRepository();
-        $members = $rep->filterMembers($membership_status_id, $search);
+        $members = $rep->filterMembers([$membership_status_id], $search);
 
         $pagedMembers = $members
             ->with('membershipType', 'title', 'membershipStatus')

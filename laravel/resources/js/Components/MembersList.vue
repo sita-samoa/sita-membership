@@ -32,6 +32,18 @@ const props = defineProps({
     Type: Object,
     Default: {},
   },
+  searchRoute: {
+    Type: String,
+    Default: 'members.index',
+  },
+  canDownload: {
+    Type: Boolean,
+    Default: false,
+  },
+  canFilter: {
+    Type: Boolean,
+    Default: false,
+  },
 })
 
 const filterName = computed(() => {
@@ -78,7 +90,7 @@ function reset() {
 watch(
   () => form,
   debounce(function () {
-    form.get(route('members.index'), {
+    form.get(route(props.searchRoute), {
       search: form.search,
       membership_status_id: form.membership_status_id,
     })
@@ -95,19 +107,19 @@ watch(
         </template>
         All
       </fwb-list-group-item>
-      <fwb-list-group-item @click="form.membership_status_id = 1">
+      <fwb-list-group-item @click="form.membership_status_id = 1" v-if="props.canFilter">
         <template #prefix>
           <FileIcon />
         </template>
         Draft
       </fwb-list-group-item>
-      <fwb-list-group-item @click="form.membership_status_id = 2">
+      <fwb-list-group-item @click="form.membership_status_id = 2" v-if="props.canFilter">
         <template #prefix>
           <SendCheckIcon />
         </template>
         Submitted
       </fwb-list-group-item>
-      <fwb-list-group-item @click="form.membership_status_id = 3">
+      <fwb-list-group-item @click="form.membership_status_id = 3" v-if="props.canFilter">
         <template #prefix>
           <DecagramIcon />
         </template>
@@ -125,19 +137,19 @@ watch(
         </template>
         Lapsed
       </fwb-list-group-item>
-      <fwb-list-group-item @click="form.membership_status_id = 6">
+      <fwb-list-group-item @click="form.membership_status_id = 6" v-if="props.canFilter">
         <template #prefix>
           <ClockAlertOutlineIcon />
         </template>
         Expired
       </fwb-list-group-item>
-      <fwb-list-group-item @click="form.membership_status_id = 7">
+      <fwb-list-group-item @click="form.membership_status_id = 7" v-if="props.canFilter">
         <template #prefix>
           <AccountOffIcon />
         </template>
         Banned
       </fwb-list-group-item>
-      <fwb-list-group-item @click="form.membership_status_id = 8">
+      <fwb-list-group-item @click="form.membership_status_id = 8" v-if="props.canFilter">
         <template #prefix>
           <AccountCancelIcon />
         </template>
@@ -147,9 +159,9 @@ watch(
   </SearchFilter>
 
   <!-- Results summary -->
-  <BaseLevel mobile>
+  <BaseLevel mobile class="my-4">
     <ResultsSummary :total="props.list.total" :from="props.list.from" :to="props.list.to" />
-    <div class="my-3 text-small" @click="download">
+    <div class="text-small" @click="download" v-if="props.canDownload">
       <a title="Download" href="#"> <BaseIcon :path="mdiDownload" /> Download </a>
     </div>
   </BaseLevel>

@@ -12,7 +12,7 @@ defineProps(['member', 'members'])
   <LayoutAuthenticated title="Members">
     <SectionMain>
       <SectionTitleLineWithButton :icon="mdiViewList" title="Members" main> &nbsp; </SectionTitleLineWithButton>
-      <MembersList :list="members" />
+      <MembersList :list="members" canDownload="true" canFilter="true" />
     </SectionMain>
   </LayoutAuthenticated>
 </template>

@@ -8,6 +8,7 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberMembershipStatusController;
 use App\Http\Controllers\MemberQualificationController;
 use App\Http\Controllers\MemberRefereeController;
+use App\Http\Controllers\MembersListController;
 use App\Http\Controllers\MemberSupportingDocumentController;
 use App\Http\Controllers\MemberWorkExperienceController;
 use App\Http\Controllers\SignupController;
@@ -33,6 +34,9 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
     ]);
 });
+
+Route::resource('members-list', MembersListController::class)
+    ->only(['index']);
 
 Route::get('/demo', function () {
     return Inertia::render('Demo/HomeView');
