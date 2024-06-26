@@ -2,6 +2,11 @@
 
 SITA Membership database with Laravel 10 and Jet stream Inertia (Vuejs) and Tailwind.
 
+## Application Guides
+
+* [User Guide](docs/guides/user_guide.md)
+* [Admin Guide](docs/guides/admin_guide.md)
+
 ## Incident Response
 
 Use the following information to respond to any cybersecurity incidents.
@@ -34,13 +39,12 @@ We are always looking for help. You can contribute to this project in multiple w
 * Documentation
 * Joining Sāmoa Code Hub
 
+## Getting started
 
 ### Dev environment with [docker4drupal](https://github.com/wodby/docker4drupal/releases)
 
 This repository has been set up to work with docker compose. You need docker
 and docker compose to use the commands below.
-
-## Getting started
 
 ```
 # start up containers

@@ -2,11 +2,7 @@
 
 ## Accessing the App
 
-* [Go to the app's URL](https://register.sita.ws)
-
-## Accessibility
-
-* You can use Dark mode, which is especially important for users with visual impairments due to the high contrast between light and dark colors.
+* [Go to SITA Online](https://register.sita.ws)
 
 ## Searching for Members
 
@@ -68,3 +64,19 @@ To check on changes to your file.
 
 * Click on the "Audit" tab
 * Click "View audit log"
+
+## Accessibility
+
+* You can use Dark mode, which is especially important for users with visual impairments due to the high contrast between light and dark colors.
+
+## Approval Process
+
+1. User registers (and verifies account)
+2. User signs up and submits application
+3. Executive is alerted via email for Endorsement
+4. Executive endorses application
+5. User and Coordinator are alerted via email
+6. [Offline] Coordinator issues an invoice and sends to user
+7. [Offline] Coordinator receives payment
+8. Coordinator accepts the application and enters the receipt number
+9. User is notified that the application is Accepted
