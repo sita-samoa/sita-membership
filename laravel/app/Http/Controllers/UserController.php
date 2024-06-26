@@ -78,7 +78,7 @@ class UserController extends Controller
                 'string',
                 'email',
                 'max:255',
-                'unique:users'
+                'unique:users',
             ],
             'password' => $this->passwordRules(),
             'photo' => 'nullable|image',
