@@ -34,7 +34,9 @@ const props = defineProps({
   },
   searchRoute: {
     Type: String,
-    Default: 'members.index',
+    // @TODO - find out why this doesnt work. You have to specify the route
+    // Default: 'members.index',
+    Required: true,
   },
   canDownload: {
     Type: Boolean,

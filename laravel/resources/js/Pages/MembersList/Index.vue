@@ -3,7 +3,6 @@ import MembersList from '@/Components/MembersList.vue'
 import { mdiViewList } from '@mdi/js'
 import SectionMain from '@/Components/SectionMain.vue'
 import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue'
-import { Head } from '@inertiajs/vue3'
 import LayoutGuestAlt from '@/Layouts/LayoutGuestAlt.vue'
 import { useStyleStore } from '@/Stores/style.js'
 
