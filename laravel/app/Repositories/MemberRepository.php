@@ -120,7 +120,6 @@ class MemberRepository extends Repository
      */
     public function filterMembers(array $membership_status_id, $search)
     {
-        // @TODO - If $membership_status_id is empty give all records.
         return Member::orderBy('first_name')
             ->where(function ($query) use ($membership_status_id, $search) {
                 if ($membership_status_id !== [] && $search) {
