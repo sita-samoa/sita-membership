@@ -39,7 +39,7 @@ const styleStore = useStyleStore()
           <div class="p-5">
             <Link :href="route('members-list.index')">
               <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Discover Members</h5>
-              <p class="font-normal text-gray-700 dark:text-gray-400">Verify the status of our members. Check their membership details. Search for members by name, job, or employer.</p>
+              <p class="font-normal text-gray-700 dark:text-gray-400">Verify the status of our members. Check their membership details. Search for members by name, job, or employer. Find out more about their work and expertise.</p>
             </Link>
           </div>
         </fwb-card>
