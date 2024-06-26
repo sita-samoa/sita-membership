@@ -17,7 +17,9 @@ use App\Notifications\RejectionNotification;
 use App\Notifications\SubReminder;
 use App\Repositories\MemberMembershipStatusRepository;
 use App\Repositories\MemberRepository;
+use App\Repositories\MembershipStatusesRepository;
 use App\Repositories\MembershipTypeRepository;
+use App\Services\SitaOnlineService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,8 +29,13 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class MemberController extends Controller
 {
-    public function __construct(public MemberRepository $rep = new MemberRepository())
+    protected $sitaOnlineService;
+    public MemberRepository $rep;
+
+    public function __construct(SitaOnlineService $sitaOnlineService)
     {
+        $this->sitaOnlineService = $sitaOnlineService;
+        $this->rep = new MemberRepository();
     }
 
     /**
@@ -38,6 +45,7 @@ class MemberController extends Controller
     {
         $this->authorize('viewAny', Member::class);
 
+        // @TODO - Validate inputs
         $search = $request->input('search');
         $membership_status_id = $request->input('membership_status_id');
 
@@ -86,7 +94,6 @@ class MemberController extends Controller
     {
         $validated = $request->validate([
             'membership_type_id' => 'required|int|min:1',
-            // 'membership_status_id' => 'required|int|min:1',
         ]);
 
         $member = new Member();
@@ -126,8 +133,7 @@ class MemberController extends Controller
     {
         $this->authorize('submit', $member);
 
-        $member->membership_status_id = MembershipStatus::SUBMITTED->value;
-        $member->save();
+        $this->rep->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
 
         // find any old rejection reasons and mark inactive
         $mrs = MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first();
@@ -171,8 +177,7 @@ class MemberController extends Controller
     {
         $this->authorize('endorse', $member);
 
-        $member->membership_status_id = MembershipStatus::ENDORSED->value;
-        $member->save();
+        $this->rep->updateMembershipStatus($member, MembershipStatus::ENDORSED);
 
         // add record to member membership status
         $this->rep->recordAction($member, $request->user());
@@ -196,15 +201,7 @@ class MemberController extends Controller
         $this->authorize('accept', $member);
 
         $rep = new MembershipTypeRepository();
-        $memberships = $rep->getFreeMemberships();
-        $isFreeMembership = false;
-
-        foreach ($memberships as $freeMembership) {
-            if ($member->membershipType->id == $freeMembership->id) {
-                $isFreeMembership = true;
-                break;
-            }
-        }
+        $isFreeMembership = $this->sitaOnlineService->isMemberHasFreeMembership($member);
 
         if ($isFreeMembership) {
             $validated = $request->validate([
@@ -374,6 +371,8 @@ class MemberController extends Controller
 
         $rep = new MemberMembershipStatusRepository();
         $statuses = $rep->getByMemberIdAndStatusId($member->id, MembershipStatus::ACCEPTED->value);
+        $rep = new MembershipStatusesRepository();
+        $membershipStatuses = $rep->get();
 
         return Inertia::render('Members/Show', [
             'member' => $member->load($relations),
@@ -384,6 +383,7 @@ class MemberController extends Controller
             'data' => [
                 'reason' => $reason,
             ],
+            'membershipStatuses' => $membershipStatuses,
         ]);
     }
 

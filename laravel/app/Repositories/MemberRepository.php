@@ -52,10 +52,15 @@ class MemberRepository extends Repository
         return Carbon::create($current_dt->year, $month, $day);
     }
 
+    public function updateMembershipStatus(Member $member, MembershipStatus $status)
+    {
+        $member->membership_status_id = $status->value;
+        $member->save();
+    }
+
     public function accept(Member $member, User $user, int $financial_year = 0, string $receipt_number = '')
     {
-        $member->membership_status_id = MembershipStatus::ACCEPTED->value;
-        $member->save();
+        $this->updateMembershipStatus($member, MembershipStatus::ACCEPTED);
 
         if ($financial_year === 0) {
             $financial_year = Carbon::now()->year;
@@ -74,8 +79,7 @@ class MemberRepository extends Repository
 
     public function reject(Member $member, string $reason)
     {
-        $member->membership_status_id = MembershipStatus::REJECTED->value;
-        $member->save();
+        $this->updateMembershipStatus($member, MembershipStatus::REJECTED);
 
         $member_rejected = new MemberRejectionStatus(['member_id' => $member->id, 'reason' => $reason]);
         $member_rejected->save();
