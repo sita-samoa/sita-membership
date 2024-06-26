@@ -1,7 +1,8 @@
-name: Tests
+name: Laravel Tests
 
 on:
-  workflow_call:
+  pull_request:
+    branches: [main]
 
 concurrency:
   group: ${{ github.ref }}
