@@ -50,16 +50,7 @@ class MemberController extends Controller
             'membership_status_id' => 'nullable|integer|exists:membership_statuses,id',
         ]);
 
-        $membership_status_ids = [
-            MembershipStatus::DRAFT->value,
-            MembershipStatus::SUBMITTED->value,
-            MembershipStatus::ENDORSED->value,
-            MembershipStatus::ACCEPTED->value,
-            MembershipStatus::LAPSED->value,
-            MembershipStatus::EXPIRED->value,
-            MembershipStatus::BANNED->value,
-            MembershipStatus::REJECTED->value,
-        ];
+        $membership_status_ids = [];
 
         $search = $validatedData['search'] ?? '';
         $membership_status_id = $validatedData['membership_status_id'] ?? '';
