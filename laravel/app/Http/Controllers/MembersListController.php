@@ -38,6 +38,7 @@ class MembersListController extends Controller
         $rep = new MemberRepository();
         $members = $rep->filterMembers($membership_status_ids, $search)
             ->select([
+                'id',
                 'first_name',
                 'last_name',
                 'current_employer',
