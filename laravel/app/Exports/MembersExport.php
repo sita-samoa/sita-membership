@@ -83,7 +83,8 @@ class MembersExport implements FromCollection, WithMapping, WithHeadings
     public function collection()
     {
         $rep = new MemberRepository();
+        $status_ids = $this->member_status_id ? [$this->member_status_id] : [];
 
-        return $rep->filterMembers([$this->member_status_id], $this->search)->get();
+        return $rep->filterMembers($status_ids, $this->search)->get();
     }
 }
