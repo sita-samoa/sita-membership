@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MembershipStatus;
-use App\Exports\MembersExport;
 use App\Models\MailingList;
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
@@ -462,7 +461,8 @@ class MemberController extends Controller
 
         $export = $this->sitaOnlineService->getMembersExport($membership_status_id, $search);
 
-        $filename = 'members_' . date('YmdHis') . '.xlsx';
+        $filename = 'members_'.date('YmdHis').'.xlsx';
+
         return Excel::download($export, $filename);
     }
 }

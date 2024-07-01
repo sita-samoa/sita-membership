@@ -53,7 +53,8 @@ class SitaOnlineService
         return $isFreeMembership;
     }
 
-    public function getMembersExport($membership_status_id = '', $search = '') {
+    public function getMembersExport($membership_status_id = '', $search = '')
+    {
         return new MembersExport($membership_status_id, $search);
     }
 }

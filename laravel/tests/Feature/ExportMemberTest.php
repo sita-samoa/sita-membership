@@ -1,12 +1,10 @@
 <?php
 
 use App\Enums\MembershipStatus;
-use App\Exports\MembersExport;
 use App\Models\Member;
 use App\Models\User;
 use App\Services\SitaOnlineService;
 use Database\Seeders\DatabaseSeeder;
-use Maatwebsite\Excel\Facades\Excel;
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
