@@ -452,11 +452,17 @@ class MemberController extends Controller
     {
         $this->authorize('viewAny', Member::class);
 
-        $membership_status_id = $request->input('membership_status_id');
-        $search = $request->input('search');
+        $validated = $request->validate([
+            'membership_status_id' => 'nullable|int',
+            'search' => 'nullable|string|max:255',
+        ]);
 
-        $export = new MembersExport($membership_status_id ?? '', $search ?? '');
+        $membership_status_id = $validated['membership_status_id'] ?? '';
+        $search = $validated['search'] ?? '';
 
-        return Excel::download($export, 'members.xlsx');
+        $export = $this->sitaOnlineService->getMembersExport($membership_status_id, $search);
+
+        $filename = 'members_' . date('YmdHis') . '.xlsx';
+        return Excel::download($export, $filename);
     }
 }
