@@ -23,7 +23,7 @@ const styleStore = useStyleStore()
       <ApplicationMark />
     </div>
 
-    <div class="my-16">
+    <div class="my-16 p-6 lg:p-8">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
         <fwb-card href="#" variant="horizontal" img-src="/imgs/sita_cover.webp" img-alt="Desk">
           <div class="p-5">
