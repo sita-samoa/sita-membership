@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   mariadb:
     image: wodby/mariadb:$MARIADB_TAG
@@ -319,6 +317,13 @@ services:
 #    - "--log-path=/tmp/chromedriver.log"
 #    - "--verbose"
 #    - "--whitelisted-ips="
+
+  gitleaks:
+    image: zricethezav/gitleaks:latest
+    container_name: "${PROJECT_NAME}_gitleaks"
+    command: --source="/path" detect --report-path /path/.gitleaks/findings.json --config /path/.gitleaks/.gitleaks.toml
+    volumes:
+    - ./:/path
 
   traefik:
     image: traefik:v2.0

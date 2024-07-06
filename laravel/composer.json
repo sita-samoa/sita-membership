@@ -94,6 +94,12 @@
     "extra": {
         "laravel": {
             "dont-discover": []
+        },
+        "violinist": {
+          "default_branch": "main",
+          "security_updates_only": 1,
+          "update_dev_dependencies": 0,
+          "update_with_dependencies": 1
         }
     },
     "config": {

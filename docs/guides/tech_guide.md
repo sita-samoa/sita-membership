@@ -103,6 +103,12 @@ php artisan backup:run
 php artisan backup:clean
 ```
 
+## Git leaks
+
+The repo will be scanned for secrets each time docker compose up is called. It
+will also be checked as part of Github actions. If there is a leak it will
+appear in .gitleaks/findings.json file.
+
 ## User images
 
 To display them run the following comand to create a symlink

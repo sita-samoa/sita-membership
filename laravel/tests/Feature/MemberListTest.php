@@ -94,3 +94,24 @@ test('test can filter by member_status_id and search', function ($role) {
 })->with(['editor', 'executive', 'coordinator']);
 
 // @todo test pagination works
+
+test('test click on items', function ($role) {
+    // admin can access
+    $this->actingAs($admin = User::factory()->withPersonalTeam()->create());
+    $team = Team::first();
+
+    // can access
+    $user = User::factory()->create();
+    $user->teams()->attach($team, ['role' => $role]);
+    $this->actingAs($user->fresh());
+
+    // Get only accepted members
+    $response = $this->get('/members')
+        ->assertInertia(
+            fn (Assert $page) => $page
+                ->component('Members/Index')
+                ->has('members.data', 7)
+        );
+
+    // @TODO - Test that you can click on links.
+})->with(['coordinator']);

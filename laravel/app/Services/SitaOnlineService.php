@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\MembershipStatus;
+use App\Exports\MembersExport;
 use App\Models\Member;
 use App\Models\MembershipType;
 use App\Repositories\MemberRepository;
@@ -50,5 +51,10 @@ class SitaOnlineService
         }
 
         return $isFreeMembership;
+    }
+
+    public function getMembersExport($membership_status_id = '', $search = '')
+    {
+        return new MembersExport($membership_status_id, $search);
     }
 }
