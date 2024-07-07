@@ -26,7 +26,7 @@ class MemberSupportingDocumentController extends Controller
     {
         $this->authorize('view', $member);
 
-        $file_upload_limit = env('SITA_FILE_UPLOAD_LIMIT') ?? 20;
+        $file_upload_limit = config('services.sita.file_upload_limit');
 
         $validated = $request->validate([
             'title' => 'nullable|string',

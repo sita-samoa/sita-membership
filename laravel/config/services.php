@@ -42,7 +42,7 @@ return [
     ],
 
     'sita' => [
-        'file_upload_limit' => env('SITA_FILE_UPLOAD_LIMIT'),
+        'file_upload_limit' => env('SITA_FILE_UPLOAD_LIMIT', 5),
     ],
 
 ];
