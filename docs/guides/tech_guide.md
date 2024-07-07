@@ -51,14 +51,14 @@ php artisan schedule:run
 
 ```
 
-* Once installed you can access the dev site on:
+- Once installed you can access the dev site on:
 
 ```
 sita-membership.docker.localhost:8000
 ```
 
-* Click "Register" and register a new account then use it to log in.
-* OR - run `composer dev` to set up test accounts
+- Click "Register" and register a new account then use it to log in.
+- OR - run `composer dev` to set up test accounts
 
 ## Test accounts
 
@@ -133,9 +133,9 @@ docker compose -f docker-compose.yml -f docker-compose.ssl.yml stop
 
 Update the laravel .env file to the following values as needed
 
-* local - for local development
-* demo - for a uat or demo site (demo users cannot be deleted)
-* production - for production site
+- local - for local development
+- demo - for a uat or demo site (demo users cannot be deleted)
+- production - for production site
 
 ## On Production
 
@@ -150,9 +150,14 @@ php artisan queue:work database --tries=1 --max-time=30 --stop-when-empty
 
 ```
 
-Also set APP_ENV=production and GOOGLE_ANALYTICS_GA4. This will ensure Google Analytics works correctly.
+Also setup the following env varilables:
 
-Set MAIL_BACKUPS_TO_ADDRESS to be notified of backup statuses.
+```
+APP_ENV=production
+GOOGLE_ANALYTICS_GA4=null # Google Analytics
+SENTRY_LARAVEL_DSN=null # For Sentry logging. Set to null to turn off (for dev)
+MAIL_BACKUPS_TO_ADDRESS=null # Emails to notify of backup statuses.
+```
 
 Also if using SSL update the following variables accordingly in .env. Here
 example.com is used as an example domain
@@ -215,9 +220,9 @@ alias dstop="docker compose stop"
 
 ## Resources
 
-* [Jet stream (inertia-vue)](https://jetstream.laravel.com/2.x/introduction.html#inertia-vue)
-* [Laravel vite](https://laravel.com/docs/10.x/vite)
-* [Github Project](https://github.com/orgs/sita-samoa/projects/1)
-* [Icons](https://pictogrammers.com/library/mdi/)
-* [SSL support](https://github.com/bubelov/traefik-letsencrypt-compose)
-* [Laravel Backup](https://github.com/spatie/laravel-backup)
+- [Jet stream (inertia-vue)](https://jetstream.laravel.com/2.x/introduction.html#inertia-vue)
+- [Laravel vite](https://laravel.com/docs/10.x/vite)
+- [Github Project](https://github.com/orgs/sita-samoa/projects/1)
+- [Icons](https://pictogrammers.com/library/mdi/)
+- [SSL support](https://github.com/bubelov/traefik-letsencrypt-compose)
+- [Laravel Backup](https://github.com/spatie/laravel-backup)
