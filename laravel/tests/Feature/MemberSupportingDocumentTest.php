@@ -34,3 +34,17 @@ test('test supporting document uploaded and downloaded', function () {
     // Clean up
     Storage::delete('supportingDocuments/'.$file->hashName());
 });
+
+
+test('test supporting document upload limit', function () {
+    $this->actingAs($user = User::factory()->create());
+
+    $member = Member::factory()->for($user)->create();
+
+    // .env.testing is set to 5MB
+    $response = $this->post('/members/'.$member->id.'/documents', [
+        'file' => $file = UploadedFile::fake()->image('random.jpg')->size(6 * 1024),
+    ]);
+
+    $response->assertInvalid(['file']);
+});
