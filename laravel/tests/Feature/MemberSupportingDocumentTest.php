@@ -35,7 +35,6 @@ test('test supporting document uploaded and downloaded', function () {
     Storage::delete('supportingDocuments/'.$file->hashName());
 });
 
-
 test('test supporting document upload limit', function () {
     $this->actingAs($user = User::factory()->create());
 
