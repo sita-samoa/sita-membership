@@ -20,8 +20,7 @@ cd laravel
 # install dependencies
 composer install
 
-# cp env.dev and configure
-# verify db configs
+# cp env.dev and configure - verify db configs
 cp .env.dev .env
 
 # run initialisation commands
@@ -33,32 +32,24 @@ php artisan key:generate
 # or you can run this (it will recreate the database each time)
 composer build
 
-# and this command to setup demo users and members for dev (must run after composer build)
-composer dev
-
-# register for a google recaptcha site key and secret here
-https://www.google.com/recaptcha/admin/create
-
-# in the domains field enter the following
-sita-membership.docker.localhost
-
-# once received, add your google recaptcha environment variables to laravel/.env
-GOOGLE_RECAPTCHA_SITE_KEY=YOUR_GOOGLE_RECAPTCHA_SITE_KEY
-GOOGLE_RECAPTCHA_SECRET_KEY=YOUR_GOOGLE_RECAPTCHA_SECRET_KEY
-
 # for scheduled events use the following command to process them
 php artisan schedule:run
 
+# To display user images and invoices run the following.
+php artisan storage:link
 ```
 
-- Once installed you can access the dev site on:
+Access the Dev site on:
 
 ```
 sita-membership.docker.localhost:8000
 ```
 
-- Click "Register" and register a new account then use it to log in.
-- OR - run `composer dev` to set up test accounts
+Create test accounts and dumy data (see [Test accounts](#test-accounts))
+
+```
+composer dev
+```
 
 ## Test accounts
 
@@ -109,14 +100,6 @@ The repo will be scanned for secrets each time docker compose up is called. It
 will also be checked as part of Github actions. If there is a leak it will
 appear in .gitleaks/findings.json file.
 
-## User images
-
-To display them run the following comand to create a symlink
-
-```
-php artisan storage:link
-```
-
 ## SSL support on dev
 
 To run your dev with SSL support use the following command
@@ -139,25 +122,11 @@ Update the laravel .env file to the following values as needed
 
 ## On Production
 
-Ensure that the following commands are run on a cron see https://laravel.com/docs/10.x/scheduling#running-the-scheduler
+Follow Getting started steps but use .env.example as the template for .env (ie cp .env.example .env).
 
-```
-# run every minute - for scheduled tasks
-php artisan schedule:run
+Also set **APP_ENV**=production and **GOOGLE_ANALYTICS_GA4**. This will ensure Google Analytics works correctly.
 
-# run every 5 minutes - for running queues
-php artisan queue:work database --tries=1 --max-time=30 --stop-when-empty
-
-```
-
-Also setup the following env varilables:
-
-```
-APP_ENV=production
-GOOGLE_ANALYTICS_GA4=null # Google Analytics
-SENTRY_LARAVEL_DSN=null # For Sentry logging. Set to null to turn off (for dev)
-MAIL_BACKUPS_TO_ADDRESS=null # Emails to notify of backup statuses.
-```
+Set **MAIL_BACKUPS_TO_ADDRESS** to be notified of backup statuses.
 
 Also if using SSL update the following variables accordingly in .env. Here
 example.com is used as an example domain
@@ -166,6 +135,34 @@ example.com is used as an example domain
 DOMAIN=example.com
 EMAIL=your@email.com
 CERT_RESOLVER=letsencrypt
+```
+
+If you run composer dev on production make sure to reset it by running composer build to ensure there are no test accounts on pord.
+
+Ensure that the following commands are run on a cron see https://laravel.com/docs/10.x/scheduling#running-the-scheduler
+
+```
+# run every minute - for scheduled tasks
+php artisan schedule:run
+
+# run every 5 minutes - for running queues
+php artisan queue:work database --tries=1 --max-time=30 --stop-when-empty
+```
+
+### Google Analytics
+
+Register for a google recaptcha site key and secret
+https://www.google.com/recaptcha/admin/create
+
+In the domains field enter the following:
+
+`sita-membership.docker.localhost`
+
+Once received, add your google recaptcha environment variables to laravel/.env
+
+```
+GOOGLE_RECAPTCHA_SITE_KEY=YOUR_GOOGLE_RECAPTCHA_SITE_KEY
+GOOGLE_RECAPTCHA_SECRET_KEY=YOUR_GOOGLE_RECAPTCHA_SECRET_KEY
 ```
 
 ## Common commands
