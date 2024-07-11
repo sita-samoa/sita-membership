@@ -3,7 +3,6 @@
 namespace App\Repositories;
 
 use App\Enums\MembershipStatus;
-use App\Enums\MembershipType as MembershipTypeEnum;
 use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\MemberRejectionStatus;

@@ -6,7 +6,6 @@ use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
 use App\Notifications\Invoice;
-use Carbon\Carbon;
 use Illuminate\Support\Facades\Notification;
 
 beforeEach(function () {
@@ -60,7 +59,7 @@ test('test invoice notification not sent', function ($membership_type_id) {
     $member->save();
 
     $response = $this->put('/members/'.$member->id.'/endorse');
-    
+
     $response->assertStatus(302);
 
     // Invoice is not sent
