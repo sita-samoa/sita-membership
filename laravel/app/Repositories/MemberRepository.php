@@ -80,19 +80,7 @@ class MemberRepository extends Repository
             )
         );
 
-        $this->recordAction($member, $user, $to_date, $receipt_number);
-
-        $membership_status =
-            MemberMembershipStatus::where(['member_id' => $member->id, 'receipt_number' => $receipt_number])->first();
-
-        if (
-            !in_array(
-                $member->membership_type_id,
-                [MembershipTypeEnum::STUDENT->value, MembershipTypeEnum::FELLOW->value]
-            )
-        ) {
-            $this->generateInvoiceAndNotifyUser($member, $membership_status);
-        }
+        return $this->recordAction($member, $user, $to_date, $receipt_number);
     }
 
     public function reject(Member $member, string $reason)
@@ -166,8 +154,11 @@ class MemberRepository extends Repository
      *
      * @return Collection
      */
-    public function generateInvoiceAndNotifyUser(Member $member, MemberMembershipStatus $membership_status)
+    public function generateInvoiceAndNotifyUser(Member $member)
     {
+        // @TODO - Get this from db.
+        $invoice_number = 1000;
+
         $customer = new Buyer([
             'name' => $member->first_name.' '.$member->last_name,
             'phone' => $member->home_mobile,
@@ -182,9 +173,9 @@ class MemberRepository extends Repository
         $item = (new InvoiceItem())->title('SITA Membership Subscription - '.$membership_type->title)
             ->pricePerUnit($annual_cost);
 
-        $end_date = Carbon::parse($membership_status->to_date);
-        $start_date = Carbon::now();
-        $days_to_pay = abs($end_date->diffInDays($start_date));
+        $weeks = 4;
+        $days_per_week = 7;
+        $days_to_pay = $weeks * $days_per_week;
 
         $notes = [
             'Account name: Samoa Information Association, Bank account number 2001364583, Swift code: BOSPWSWS.',
@@ -205,7 +196,7 @@ class MemberRepository extends Repository
             ->name('Invoice')
             ->date(Carbon::now())
             ->status('due')
-            ->sequence($membership_status->receipt_number)
+            ->sequence($invoice_number)
             ->currencySymbol('$')
             ->currencyCode('Tala')
             ->dateFormat('d/m/Y')
