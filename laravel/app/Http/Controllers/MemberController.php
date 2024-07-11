@@ -29,12 +29,12 @@ use Maatwebsite\Excel\Facades\Excel;
 class MemberController extends Controller
 {
     protected $sitaOnlineService;
-    public MemberRepository $rep;
+    public MemberRepository $memberRepository;
 
     public function __construct(SitaOnlineService $sitaOnlineService)
     {
         $this->sitaOnlineService = $sitaOnlineService;
-        $this->rep = new MemberRepository();
+        $this->memberRepository = new MemberRepository();
     }
 
     /**
@@ -142,7 +142,7 @@ class MemberController extends Controller
     {
         $this->authorize('submit', $member);
 
-        $this->rep->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
+        $this->memberRepository->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
 
         // find any old rejection reasons and mark inactive
         $mrs = MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first();
@@ -151,7 +151,7 @@ class MemberController extends Controller
             $mrs->save();
         }
         // add record to member membership status
-        $this->rep->recordAction($member, $request->user());
+        $this->memberRepository->recordAction($member, $request->user());
         // Send endorsement notifications.
         $team = Team::first();
         $users = $team->allUsers();
@@ -174,7 +174,7 @@ class MemberController extends Controller
         ]);
 
         $flag_name = $validated['flag_name'];
-        $this->rep->markOptionalFlagAsViewed($member, $flag_name);
+        $this->memberRepository->markOptionalFlagAsViewed($member, $flag_name);
 
         return redirect()->back();
     }
@@ -186,10 +186,10 @@ class MemberController extends Controller
     {
         $this->authorize('endorse', $member);
 
-        $this->rep->updateMembershipStatus($member, MembershipStatus::ENDORSED);
+        $this->memberRepository->updateMembershipStatus($member, MembershipStatus::ENDORSED);
 
         // add record to member membership status
-        $this->rep->recordAction($member, $request->user());
+        $this->memberRepository->recordAction($member, $request->user());
         // Send acceptance notifications.
         $team = Team::first();
         $users = $team->allUsers();
@@ -197,6 +197,12 @@ class MemberController extends Controller
             if ($team->userHasPermission($user, 'member:accept')) {
                 $user->notify(new AcceptanceNotification($member));
             }
+        }
+
+        // Generate Invoice
+        $isFreeMembership = $this->sitaOnlineService->isMemberHasFreeMembership($member);
+        if (!$isFreeMembership) {
+            $this->memberRepository->generateInvoiceAndNotifyUser($member);
         }
 
         return redirect()->back()->with('success', 'Application Endorsed');
@@ -209,7 +215,6 @@ class MemberController extends Controller
     {
         $this->authorize('accept', $member);
 
-        $rep = new MembershipTypeRepository();
         $isFreeMembership = $this->sitaOnlineService->isMemberHasFreeMembership($member);
 
         if ($isFreeMembership) {
@@ -218,7 +223,7 @@ class MemberController extends Controller
                 'receipt_number' => 'nullable|string',
             ]);
 
-            $this->rep->accept(
+            $this->memberRepository->accept(
                 $member,
                 $request->user(),
                 $validated['financial_year'],
@@ -230,7 +235,7 @@ class MemberController extends Controller
                 'receipt_number' => 'required|string',
             ]);
 
-            $this->rep->accept(
+            $this->memberRepository->accept(
                 $member,
                 $request->user(),
                 $validated['financial_year'],
@@ -252,12 +257,12 @@ class MemberController extends Controller
             'reason' => 'required|string',
         ]);
 
-        $this->rep->reject(
+        $this->memberRepository->reject(
             $member,
             $validated['reason']
         );
 
-        $this->rep->recordAction($member, $request->user());
+        $this->memberRepository->recordAction($member, $request->user());
 
         // Send rejection notification.
         $member->user->notify(new RejectionNotification($member, $validated['reason']));
