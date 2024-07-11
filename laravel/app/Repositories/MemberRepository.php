@@ -199,7 +199,7 @@ class MemberRepository extends Repository
             '',
             'Please quote invoice number as reference',
         ];
-        $notes = "<br/>".implode("<br/>", $notes);
+        $notes = '<br/>'.implode('<br/>', $notes);
 
         $invoice = Invoice::make()
             ->name('Invoice')
