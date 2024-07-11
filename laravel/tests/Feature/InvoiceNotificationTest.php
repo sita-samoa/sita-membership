@@ -21,18 +21,16 @@ test('test invoice notification sent', function ($membership_type_id) {
     $this->actingAs($user = User::factory()->create());
     $team->users()->attach(
         $user,
-        ['role' => 'coordinator']
+        ['role' => 'executive']
     );
 
     $member = Member::factory()->create();
-    $member->membership_status_id = MembershipStatus::ENDORSED;
+    $member->membership_status_id = MembershipStatus::SUBMITTED;
     $member->membership_type_id = $membership_type_id->value;
     $member->save();
 
-    $response = $this->put(
-        '/members/'.$member->id.'/accept',
-        ['financial_year' => Carbon::now()->year, 'receipt_number' => '121']
-    );
+    $response = $this->put('/members/'.$member->id.'/endorse');
+
     $response->assertStatus(302);
 
     Notification::assertSentTo(
@@ -53,21 +51,23 @@ test('test invoice notification not sent', function ($membership_type_id) {
     $this->actingAs($user = User::factory()->create());
     $team->users()->attach(
         $user,
-        ['role' => 'coordinator']
+        ['role' => 'executive']
     );
 
     $member = Member::factory()->create();
-    $member->membership_status_id = MembershipStatus::ENDORSED;
+    $member->membership_status_id = MembershipStatus::SUBMITTED;
     $member->membership_type_id = $membership_type_id->value;
     $member->save();
 
-    $response = $this->put(
-        '/members/'.$member->id.'/accept',
-        ['financial_year' => Carbon::now()->year, 'receipt_number' => '111']
-    );
+    $response = $this->put('/members/'.$member->id.'/endorse');
+    
     $response->assertStatus(302);
 
-    Notification::assertNothingSent();
+    // Invoice is not sent
+    Notification::assertNotSentTo(
+        [$member->user],
+        Invoice::class
+    );
 })->with([
     'STUDENT' => MembershipType::STUDENT,
     'FELLOW' => MembershipType::FELLOW,
