@@ -17,7 +17,6 @@ use App\Notifications\SubReminder;
 use App\Repositories\MemberMembershipStatusRepository;
 use App\Repositories\MemberRepository;
 use App\Repositories\MembershipStatusesRepository;
-use App\Repositories\MembershipTypeRepository;
 use App\Services\SitaOnlineService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
