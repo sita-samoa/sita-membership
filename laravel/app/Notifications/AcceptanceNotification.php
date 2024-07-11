@@ -41,8 +41,8 @@ class AcceptanceNotification extends Notification implements ShouldQueue
             ->line('A signup request has been endorsed. Please review
                 for your Acceptance.')
             ->line('Before accepting please ensure:')
-            ->line('* that an invoice has been issued; and')
             ->line('* payment has been collected')
+            ->line('* receipt number is recorded on SITA Online')
             ->action('View details', route('members.show', $this->member->id));
     }
 
