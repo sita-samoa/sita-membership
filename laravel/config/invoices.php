@@ -87,11 +87,11 @@ return [
          * Default attributes for Seller::class
          */
         'attributes' => [
-            'name'          => 'Samoa Information Technology Association',
-            'address'       => 'Vaivase, Apia, Samoa',
-            'code'          => '41-1985581',
-            'vat'           => '123456789',
-            'phone'         => '760-355-3930',
+            'name'          => 'Samoa Information Technology Association (SITA)',
+            'address'       => 'Attention: Wellington Seufale, Private Bag, MOF, Central Bank Building, Floor 2, APIA, APIA, NA, Samoa.',
+            // 'code'          => '41-1985581',
+            // 'vat'           => '123456789',
+            // 'phone'         => '760-355-3930',
             'custom_fields' => [
                 /*
                  * Custom attributes for Seller::class
@@ -99,7 +99,7 @@ return [
                  * Used to display additional info on Seller section in invoice
                  * attribute => value
                  */
-                'SWIFT' => 'BANK101',
+                // 'SWIFT' => 'BANK101',
             ],
         ],
     ],

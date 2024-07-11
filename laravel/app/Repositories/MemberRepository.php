@@ -186,8 +186,23 @@ class MemberRepository extends Repository
         $start_date = Carbon::now();
         $days_to_pay = abs($end_date->diffInDays($start_date));
 
+        $notes = [
+            'Account name: Samoa Information Association, Bank account number 2001364583, Swift code: BOSPWSWS.',
+            '',
+            'Bank name:',
+            'Bank South Pacific (Samoa) Limited',
+            '',
+            'Bank Address:',
+            'Head Office, Beach Road',
+            'P.O Box 1860',
+            'Apia, Samoa',
+            '',
+            'Please quote invoice number as reference',
+        ];
+        $notes = "<br/>".implode("<br/>", $notes);
+
         $invoice = Invoice::make()
-            ->name('Samoa Information Technology Association Invoice')
+            ->name('Invoice')
             ->date(Carbon::now())
             ->status('due')
             ->sequence($membership_status->receipt_number)
@@ -198,6 +213,7 @@ class MemberRepository extends Repository
             ->logo(public_path('imgs/logo.png'))
             ->filename('SITA Invoice '.$customer->name.' '.Carbon::now()->format('d-m-Y'))
             ->buyer($customer)
+            ->notes($notes)
             ->addItem($item);
 
         $invoice->save('public');
