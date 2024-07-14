@@ -41,4 +41,8 @@ return [
         'ga4' => env('GOOGLE_ANALYTICS_GA4'),
     ],
 
+    'sita' => [
+        'file_upload_limit' => env('SITA_FILE_UPLOAD_LIMIT', 5),
+    ],
+
 ];

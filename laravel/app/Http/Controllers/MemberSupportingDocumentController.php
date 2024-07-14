@@ -26,13 +26,15 @@ class MemberSupportingDocumentController extends Controller
     {
         $this->authorize('view', $member);
 
+        $file_upload_limit = config('services.sita.file_upload_limit');
+
         $validated = $request->validate([
             'title' => 'nullable|string',
             'file' => [
                 'required',
                 File::types(['doc', 'docx', 'pdf', 'png', 'jpg'])
                     // ->min(1024)
-                    ->max(20 * 1024),
+                    ->max($file_upload_limit * 1024),
             ],
         ]);
         $file = $request->file('file');
