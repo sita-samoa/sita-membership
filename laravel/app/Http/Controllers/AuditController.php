@@ -32,6 +32,9 @@ class AuditController extends Controller
         foreach ($member->referees()->cursor() as $q) {
             $auditIds = $auditIds->merge($q->audits()->get('id'));
         }
+        foreach ($member->invoices()->cursor() as $q) {
+            $auditIds = $auditIds->merge($q->audits()->get('id'));
+        }
         $ids = array_column($auditIds->all(), 'id');
 
         return Inertia::render('Members/Audit', [
