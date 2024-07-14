@@ -5,7 +5,7 @@ use App\Enums\MembershipType;
 use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
-use App\Notifications\Invoice;
+use App\Notifications\InvoiceNotification;
 use Illuminate\Support\Facades\Notification;
 
 beforeEach(function () {
@@ -34,7 +34,7 @@ test('test invoice notification sent', function ($membership_type_id) {
 
     Notification::assertSentTo(
         [$member->user],
-        Invoice::class
+        InvoiceNotification::class
     );
 })->with([
     'FULL' => MembershipType::FULL,
@@ -65,7 +65,7 @@ test('test invoice notification not sent', function ($membership_type_id) {
     // Invoice is not sent
     Notification::assertNotSentTo(
         [$member->user],
-        Invoice::class
+        InvoiceNotification::class
     );
 })->with([
     'STUDENT' => MembershipType::STUDENT,
