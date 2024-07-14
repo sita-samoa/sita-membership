@@ -28,7 +28,7 @@ return [
          * Supported tags {SERIES}, {DELIMITER}, {SEQUENCE}
          * Example: SUB.00001
          */
-        'format' => '#{SEQUENCE}',
+        'format' => 'INV-{SEQUENCE}',
     ],
 
     'currency' => [
@@ -88,7 +88,7 @@ return [
          */
         'attributes' => [
             'name'          => 'Samoa Information Technology Association (SITA)',
-            'address'       => 'Attention: Wellington Seufale, Private Bag, MOF, Central Bank Building, Floor 2, APIA, APIA, NA, Samoa.',
+            // 'address'       => 'Attention: Wellington Seufale, Private Bag, MOF, Central Bank Building, Floor 2, APIA, APIA, NA, Samoa.',
             // 'code'          => '41-1985581',
             // 'vat'           => '123456789',
             // 'phone'         => '760-355-3930',
@@ -99,7 +99,7 @@ return [
                  * Used to display additional info on Seller section in invoice
                  * attribute => value
                  */
-                // 'SWIFT' => 'BANK101',
+                'Attention' => 'The President, Tamaligi, APIA, SAMOA',
             ],
         ],
     ],
