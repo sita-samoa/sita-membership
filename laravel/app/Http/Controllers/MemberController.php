@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Enums\MembershipStatus;
 use App\Models\MailingList;
 use App\Models\Member;
-use App\Models\MemberInvoices;
 use App\Models\MemberMailingPreference;
 use App\Models\MemberRejectionStatus;
 use App\Models\MembershipType;
@@ -16,6 +15,7 @@ use App\Notifications\InvoiceNotification;
 use App\Notifications\PastDueSubReminder;
 use App\Notifications\RejectionNotification;
 use App\Notifications\SubReminder;
+use App\Repositories\MemberInvoicesRepository;
 use App\Repositories\MemberMembershipStatusRepository;
 use App\Repositories\MemberRepository;
 use App\Repositories\MembershipStatusesRepository;
@@ -206,26 +206,8 @@ class MemberController extends Controller
         if (!$isFreeMembership) {
             $invoice = $this->memberRepository->generateInvoice($member);
             // Record Invoice details.
-            $memberInvoice = new MemberInvoices();
-            $invoiceDate = Carbon::createFromFormat('d/m/Y', $invoice->getDate());
-            $payBeforeDate = Carbon::createFromFormat('d/m/Y', $invoice->getPayUntilDate());
-            $path = $invoice->url();
-            // Correct the path.
-            $path = str_replace('/storage/', '/invoices/', $path);
-
-            $memberInvoice->fill([
-                'invoice_status_id' => 1,
-                'invoice_date' => $invoiceDate,
-                'invoice_number' =>  $invoice->getSerialNumber(),
-                'amount' => $invoice->total_amount,
-                'pay_before_date' => $payBeforeDate,
-            ]);
-            $memberInvoice->member_id = $member->id;
-            // $memberInvoice->title = $invoice->getCustomData()
-            $memberInvoice->file_name = $invoice->filename;
-            $memberInvoice->file_path = $path;
-            $memberInvoice->file_size = $path ? Storage::size($path) : null;
-            $memberInvoice->save();
+            $rep = new MemberInvoicesRepository();
+            $memberInvoice = $rep->addInvoice($member->id, $invoice);
 
             // @TODO - Put this on a queue
             // Notify user.
