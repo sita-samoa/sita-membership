@@ -8,6 +8,7 @@ import { createInertiaApp, router } from '@inertiajs/vue3'
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { ZiggyVue } from '../../vendor/tightenco/ziggy/dist/vue.m'
 import { VueReCaptcha } from 'vue-recaptcha-v3'
+import * as Sentry from '@sentry/vue'
 
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel'
 
@@ -17,6 +18,8 @@ createInertiaApp({
   title: title => `${title} - ${appName}`,
   resolve: name => resolvePageComponent(`./Pages/${name}.vue`, import.meta.glob('./Pages/**/*.vue')),
   setup({ el, App, props, plugin }) {
+    const app = createApp({ render: () => h(App, props) })
+
     /**
      * Track Page and Send to Google Analytic
      * */
@@ -29,15 +32,24 @@ createInertiaApp({
     }
 
     const captchaKey = props.initialPage.props.recaptcha_site_key
-    return (
-      createApp({ render: () => h(App, props) })
-        .use(plugin)
-        .use(pinia)
-        .use(VueReCaptcha, { siteKey: captchaKey, loaderOptions: { autoHideBadge: true } })
-        /* eslint no-undef: 0 */
-        .use(ZiggyVue, Ziggy)
-        .mount(el)
-    )
+
+    Sentry.init({
+      app,
+      dsn: import.meta.env.VITE_SENTRY_DSN_PUBLIC,
+      integrations: [Sentry.replayIntegration()],
+      replaysSessionSampleRate: 0.1,
+      replaysOnErrorSampleRate: 1.0,
+    })
+
+    app
+      .use(plugin)
+      .use(pinia)
+      .use(VueReCaptcha, { siteKey: captchaKey, loaderOptions: { autoHideBadge: true } })
+      /* eslint no-undef: 0 */
+      .use(ZiggyVue, Ziggy)
+      .mount(el)
+
+    return app
   },
   progress: {
     color: '#4B5563',
