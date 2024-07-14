@@ -56,6 +56,7 @@ class HandleInertiaRequests extends Middleware
             },
             'recaptcha_site_key' => config('services.google_recaptcha.site_key'),
             'google_analytics_ga4' => config('services.google_analytics.ga4'),
+            'sita_file_upload_limit' => config('services.sita.file_upload_limit'),
         ]);
     }
 }
