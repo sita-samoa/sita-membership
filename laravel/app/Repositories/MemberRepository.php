@@ -8,7 +8,6 @@ use App\Models\MemberMembershipStatus;
 use App\Models\MemberRejectionStatus;
 use App\Models\MembershipType;
 use App\Models\User;
-use App\Notifications\Invoice as NotificationsInvoice;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use LaravelDaily\Invoices\Classes\Buyer;
@@ -151,18 +150,20 @@ class MemberRepository extends Repository
     /**
      * Generate Invoice for membership subscription.
      *
-     * @return Collection
+     * @return \LaravelDaily\Invoices\Invoice
      */
-    public function generateInvoiceAndNotifyUser(Member $member)
+    public function generateInvoice(Member $member)
     {
-        // @TODO - Get this from db.
-        $invoice_number = 1000;
+        $rep = new InvoiceSequenceRepository();
+        $invoice_number = $rep->getNextInvoiceNumber();
 
         $customer = new Buyer([
+            // Use home details.
             'name' => $member->first_name.' '.$member->last_name,
-            'phone' => $member->home_mobile,
+            // 'phone' => $member->home_mobile,
             'custom_fields' => [
-                'email' => $member->home_email,
+                'Occupation' => $member->job_title.', '.$member->current_employer,
+                'Email' => $member->home_email,
             ],
         ]);
 
@@ -188,6 +189,9 @@ class MemberRepository extends Repository
             'Apia, Samoa',
             '',
             'Please quote invoice number as reference',
+            '',
+            'Registered Office: Attention: Wellington Seufale, Private Bag,
+                MOF, Central Bank Building, Floor 2, APIA, Samoa',
         ];
         $notes = '<br/>'.implode('<br/>', $notes);
 
@@ -206,10 +210,8 @@ class MemberRepository extends Repository
             ->notes($notes)
             ->addItem($item);
 
-        $invoice->save('public');
+        $invoice->save('invoices');
 
-        $member->user->notify(new NotificationsInvoice($member, $invoice));
-
-        return $invoice->stream();
+        return $invoice;
     }
 }

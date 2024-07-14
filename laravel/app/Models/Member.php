@@ -233,8 +233,18 @@ class Member extends Model implements Auditable
         return $this->hasMany(MemberMembershipStatus::class);
     }
 
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(MemberInvoices::class);
+    }
+
     public function setMembershipType($membership_type)
     {
         $this->membership_type_id = $membership_type;
+    }
+
+    public function getFullName()
+    {
+        return $this->first_name.' '.$this->last_name;
     }
 }
