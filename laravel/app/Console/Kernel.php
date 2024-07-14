@@ -13,15 +13,21 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
+        // Run queue.
+        // Note it doesnt work here. Only works on cron.
+        // $schedule->command('queue:work database --tries=1 --max-time=20 --stop-when-empty')
+        //     ->everyMinute()
+        //     ->withoutOverlapping();
+
         // Mark members as lapsed.
         $schedule->call(function () {
             $rep = new MemberMembershipStatusRepository();
             $rep->markAsLapsed();
         })->daily();
 
-        // Schedule backups.
-        $schedule->command('backup:clean')->daily()->at('01:00');
-        $schedule->command('backup:run')->daily()->at('01:30');
+        // Schedule backups (UTC timezone).
+        $schedule->command('backup:clean')->daily()->at('13:00');
+        $schedule->command('backup:run')->daily()->at('13:30');
 
         // Reminders for sub.
         $schedule->call(function () {
