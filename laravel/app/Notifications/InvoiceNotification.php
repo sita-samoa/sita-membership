@@ -4,9 +4,9 @@ namespace App\Notifications;
 
 use App\Models\Member;
 use App\Models\MemberInvoices;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 

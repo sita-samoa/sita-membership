@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\MembershipStatus;
+use App\Jobs\ProcessInvoice;
 use App\Models\MailingList;
 use App\Models\Member;
 use App\Models\MemberMailingPreference;
@@ -204,14 +205,16 @@ class MemberController extends Controller
         // Generate Invoice
         $isFreeMembership = $this->sitaOnlineService->isMemberHasFreeMembership($member);
         if (!$isFreeMembership) {
-            $invoice = $this->memberRepository->generateInvoice($member);
-            // Record Invoice details.
-            $rep = new MemberInvoicesRepository();
-            $memberInvoice = $rep->addInvoice($member->id, $invoice);
+            ProcessInvoice::dispatch($member);
 
-            // @TODO - Put this on a queue
-            // Notify user.
-            $member->user->notify(new InvoiceNotification($member, $memberInvoice));
+            // $invoice = $this->memberRepository->generateInvoice($member);
+            // // Record Invoice details.
+            // $rep = new MemberInvoicesRepository();
+            // $memberInvoice = $rep->addInvoice($member->id, $invoice);
+
+            // // @TODO - Put this on a queue
+            // // Notify user.
+            // $member->user->notify(new InvoiceNotification($member, $memberInvoice));
         }
 
         return redirect()->back()->with('success', 'Application Endorsed');
