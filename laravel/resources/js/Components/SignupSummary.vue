@@ -9,9 +9,10 @@ import AcceptModal from '@/Components/AcceptModal.vue'
 import RejectionModal from '@/Components/RejectionModal.vue'
 import CardBox from '@/Components/CardBox.vue'
 import MemberPayment from '@/Components/MemberPayment.vue'
+import MemberInvoice from '@/Components/MemberInvoice.vue'
 import SetMembershipStatus from '@/Components/SetMembershipStatus.vue'
 
-const props = defineProps(['member', 'options', 'data', 'statuses', 'membershipStatuses'])
+const props = defineProps(['member', 'options', 'data', 'statuses', 'membershipStatuses', 'invoices'])
 
 const completion = props.options.completion.data
 const showAcceptanceModal = ref(false)
@@ -109,7 +110,9 @@ const activeTab = ref('first')
         <!-- SetMembershipStatus -->
         <SetMembershipStatus :membershipStatuses="props.membershipStatuses" :status="props.member.membership_status_id" :member_id="props.member.id" />
       </fwb-tab>
-      <fwb-tab name="second" :title="'Payments (' + props.statuses.length + ')'">
+      <fwb-tab name="second" title="Billing">
+        <!-- MemberInvoice -->
+        <MemberInvoice :invoices="props.invoices" :member_id="props.member.id" />
         <!-- MemberPayment -->
         <MemberPayment :statuses="props.statuses" />
       </fwb-tab>

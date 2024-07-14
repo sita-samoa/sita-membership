@@ -5,12 +5,14 @@ namespace App\Http\Controllers;
 use App\Enums\MembershipStatus;
 use App\Models\MailingList;
 use App\Models\Member;
+use App\Models\MemberInvoices;
 use App\Models\MemberMailingPreference;
 use App\Models\MemberRejectionStatus;
 use App\Models\MembershipType;
 use App\Models\Team;
 use App\Notifications\AcceptanceNotification;
 use App\Notifications\EndorsementNotification;
+use App\Notifications\InvoiceNotification;
 use App\Notifications\PastDueSubReminder;
 use App\Notifications\RejectionNotification;
 use App\Notifications\SubReminder;
@@ -21,6 +23,7 @@ use App\Services\SitaOnlineService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 use Maatwebsite\Excel\Facades\Excel;
@@ -201,7 +204,32 @@ class MemberController extends Controller
         // Generate Invoice
         $isFreeMembership = $this->sitaOnlineService->isMemberHasFreeMembership($member);
         if (!$isFreeMembership) {
-            $this->memberRepository->generateInvoiceAndNotifyUser($member);
+            $invoice = $this->memberRepository->generateInvoice($member);
+            // Record Invoice details.
+            $memberInvoice = new MemberInvoices();
+            $invoiceDate = Carbon::createFromFormat('d/m/Y', $invoice->getDate());
+            $payBeforeDate = Carbon::createFromFormat('d/m/Y', $invoice->getPayUntilDate());
+            $path = $invoice->url();
+            // Correct the path.
+            $path = str_replace('/storage/', '/invoices/', $path);
+
+            $memberInvoice->fill([
+                'invoice_status_id' => 1,
+                'invoice_date' => $invoiceDate,
+                'invoice_number' =>  $invoice->getSerialNumber(),
+                'amount' => $invoice->total_amount,
+                'pay_before_date' => $payBeforeDate,
+            ]);
+            $memberInvoice->member_id = $member->id;
+            // $memberInvoice->title = $invoice->getCustomData()
+            $memberInvoice->file_name = $invoice->filename;
+            $memberInvoice->file_path = $path;
+            $memberInvoice->file_size = $path ? Storage::size($path) : null;
+            $memberInvoice->save();
+
+            // @TODO - Put this on a queue
+            // Notify user.
+            $member->user->notify(new InvoiceNotification($member, $memberInvoice));
         }
 
         return redirect()->back()->with('success', 'Application Endorsed');
@@ -384,6 +412,9 @@ class MemberController extends Controller
 
         $rep = new MemberMembershipStatusRepository();
         $statuses = $rep->getByMemberIdAndStatusId($member->id, MembershipStatus::ACCEPTED->value);
+
+        $invoices = $member->invoices()->get();
+
         $rep = new MembershipStatusesRepository();
         $membershipStatuses = $rep->get();
 
@@ -397,6 +428,7 @@ class MemberController extends Controller
                 'reason' => $reason,
             ],
             'membershipStatuses' => $membershipStatuses,
+            'invoices' => $invoices,
         ]);
     }
 

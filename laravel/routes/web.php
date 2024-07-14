@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuditController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DownloadController;
+use App\Http\Controllers\InvoiceDownloadController;
 use App\Http\Controllers\MailingListController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MemberMembershipStatusController;
@@ -136,5 +137,9 @@ Route::middleware([
 
     // Mailing List
     Route::resource('mailing-lists', MailingListController::class)
+        ->only(['index']);
+
+    // Invoice download
+    Route::resource('members.invoices.download', InvoiceDownloadController::class)
         ->only(['index']);
 });
