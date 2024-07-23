@@ -54,7 +54,8 @@ class SitaOnlineService
     }
 
     // Helper function for more readable code.
-    public function isMemberHasPaidMembership(Member $member) {
+    public function isMemberHasPaidMembership(Member $member)
+    {
         return !$this->isMemberHasFreeMembership($member);
     }
 
