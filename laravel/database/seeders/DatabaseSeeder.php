@@ -137,5 +137,26 @@ class DatabaseSeeder extends Seeder
             'code' => 'members',
             'title' => 'SITA Members - Announcements for SITA Members only.',
         ]);
+
+        // Add Invoice Statuses
+        if (DB::table('invoice_statuses')->count() == 0) {
+            DB::table('invoice_statuses')->insert([
+                [
+                    'id' => 1,
+                    'code' => 'due',
+                    'title' => 'Due',
+                ],
+                [
+                    'id' => 2,
+                    'code' => 'paid',
+                    'title' => 'Paid',
+                ],
+                [
+                    'id' => 3,
+                    'code' => 'cancelled',
+                    'title' => 'Cancelled',
+                ],
+            ]);
+        }
     }
 }

@@ -6,11 +6,12 @@ const allowEdit = false
 defineProps(['statuses'])
 </script>
 <template>
+  <h5 class="my-3">Payments</h5>
   <fwb-table v-if="statuses.length > 0">
     <fwb-table-head>
-      <fwb-table-head-cell>From Date</fwb-table-head-cell>
-      <fwb-table-head-cell>To Date</fwb-table-head-cell>
+      <fwb-table-head-cell>Date</fwb-table-head-cell>
       <fwb-table-head-cell>Receipt Number</fwb-table-head-cell>
+      <fwb-table-head-cell>To Date</fwb-table-head-cell>
       <fwb-table-head-cell v-if="allowEdit">
         <span class="sr-only">Edit</span>
       </fwb-table-head-cell>
@@ -18,8 +19,8 @@ defineProps(['statuses'])
     <fwb-table-body>
       <fwb-table-row v-for="(c, index) in statuses">
         <fwb-table-cell>{{ c.from_date }}</fwb-table-cell>
-        <fwb-table-cell>{{ c.to_date }}</fwb-table-cell>
         <fwb-table-cell>{{ c.receipt_number }}</fwb-table-cell>
+        <fwb-table-cell>{{ c.to_date }}</fwb-table-cell>
         <fwb-table-cell v-if="allowEdit">
           <fwb-a href="#"> Edit </fwb-a>
         </fwb-table-cell>

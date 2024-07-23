@@ -11,17 +11,19 @@ use App\Models\MembershipType;
 use App\Models\Team;
 use App\Notifications\AcceptanceNotification;
 use App\Notifications\EndorsementNotification;
+use App\Notifications\InvoiceNotification;
 use App\Notifications\PastDueSubReminder;
 use App\Notifications\RejectionNotification;
 use App\Notifications\SubReminder;
+use App\Repositories\MemberInvoicesRepository;
 use App\Repositories\MemberMembershipStatusRepository;
 use App\Repositories\MemberRepository;
 use App\Repositories\MembershipStatusesRepository;
-use App\Repositories\MembershipTypeRepository;
 use App\Services\SitaOnlineService;
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 use Maatwebsite\Excel\Facades\Excel;
@@ -29,12 +31,12 @@ use Maatwebsite\Excel\Facades\Excel;
 class MemberController extends Controller
 {
     protected $sitaOnlineService;
-    public MemberRepository $rep;
+    public MemberRepository $memberRepository;
 
     public function __construct(SitaOnlineService $sitaOnlineService)
     {
         $this->sitaOnlineService = $sitaOnlineService;
-        $this->rep = new MemberRepository();
+        $this->memberRepository = new MemberRepository();
     }
 
     /**
@@ -142,7 +144,7 @@ class MemberController extends Controller
     {
         $this->authorize('submit', $member);
 
-        $this->rep->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
+        $this->memberRepository->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
 
         // find any old rejection reasons and mark inactive
         $mrs = MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first();
@@ -151,7 +153,7 @@ class MemberController extends Controller
             $mrs->save();
         }
         // add record to member membership status
-        $this->rep->recordAction($member, $request->user());
+        $this->memberRepository->recordAction($member, $request->user());
         // Send endorsement notifications.
         $team = Team::first();
         $users = $team->allUsers();
@@ -174,7 +176,7 @@ class MemberController extends Controller
         ]);
 
         $flag_name = $validated['flag_name'];
-        $this->rep->markOptionalFlagAsViewed($member, $flag_name);
+        $this->memberRepository->markOptionalFlagAsViewed($member, $flag_name);
 
         return redirect()->back();
     }
@@ -186,10 +188,10 @@ class MemberController extends Controller
     {
         $this->authorize('endorse', $member);
 
-        $this->rep->updateMembershipStatus($member, MembershipStatus::ENDORSED);
+        $this->memberRepository->updateMembershipStatus($member, MembershipStatus::ENDORSED);
 
         // add record to member membership status
-        $this->rep->recordAction($member, $request->user());
+        $this->memberRepository->recordAction($member, $request->user());
         // Send acceptance notifications.
         $team = Team::first();
         $users = $team->allUsers();
@@ -197,6 +199,19 @@ class MemberController extends Controller
             if ($team->userHasPermission($user, 'member:accept')) {
                 $user->notify(new AcceptanceNotification($member));
             }
+        }
+
+        // Generate Invoice
+        $isFreeMembership = $this->sitaOnlineService->isMemberHasFreeMembership($member);
+        if (!$isFreeMembership) {
+            $invoice = $this->memberRepository->generateInvoice($member);
+            // Record Invoice details.
+            $rep = new MemberInvoicesRepository();
+            $memberInvoice = $rep->addInvoice($member->id, $invoice);
+
+            // @TODO - Put this on a queue
+            // Notify user.
+            $member->user->notify(new InvoiceNotification($member, $memberInvoice));
         }
 
         return redirect()->back()->with('success', 'Application Endorsed');
@@ -209,7 +224,6 @@ class MemberController extends Controller
     {
         $this->authorize('accept', $member);
 
-        $rep = new MembershipTypeRepository();
         $isFreeMembership = $this->sitaOnlineService->isMemberHasFreeMembership($member);
 
         if ($isFreeMembership) {
@@ -218,7 +232,7 @@ class MemberController extends Controller
                 'receipt_number' => 'nullable|string',
             ]);
 
-            $this->rep->accept(
+            $this->memberRepository->accept(
                 $member,
                 $request->user(),
                 $validated['financial_year'],
@@ -230,7 +244,7 @@ class MemberController extends Controller
                 'receipt_number' => 'required|string',
             ]);
 
-            $this->rep->accept(
+            $this->memberRepository->accept(
                 $member,
                 $request->user(),
                 $validated['financial_year'],
@@ -252,12 +266,12 @@ class MemberController extends Controller
             'reason' => 'required|string',
         ]);
 
-        $this->rep->reject(
+        $this->memberRepository->reject(
             $member,
             $validated['reason']
         );
 
-        $this->rep->recordAction($member, $request->user());
+        $this->memberRepository->recordAction($member, $request->user());
 
         // Send rejection notification.
         $member->user->notify(new RejectionNotification($member, $validated['reason']));
@@ -380,6 +394,9 @@ class MemberController extends Controller
 
         $rep = new MemberMembershipStatusRepository();
         $statuses = $rep->getByMemberIdAndStatusId($member->id, MembershipStatus::ACCEPTED->value);
+
+        $invoices = $member->invoices()->get();
+
         $rep = new MembershipStatusesRepository();
         $membershipStatuses = $rep->get();
 
@@ -393,6 +410,7 @@ class MemberController extends Controller
                 'reason' => $reason,
             ],
             'membershipStatuses' => $membershipStatuses,
+            'invoices' => $invoices,
         ]);
     }
 

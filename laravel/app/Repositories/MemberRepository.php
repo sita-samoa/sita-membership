@@ -6,9 +6,13 @@ use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\MemberRejectionStatus;
+use App\Models\MembershipType;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use LaravelDaily\Invoices\Classes\Buyer;
+use LaravelDaily\Invoices\Classes\InvoiceItem;
+use LaravelDaily\Invoices\Invoice;
 
 class MemberRepository extends Repository
 {
@@ -141,5 +145,73 @@ class MemberRepository extends Repository
                     });
                 }
             });
+    }
+
+    /**
+     * Generate Invoice for membership subscription.
+     *
+     * @return \LaravelDaily\Invoices\Invoice
+     */
+    public function generateInvoice(Member $member)
+    {
+        $rep = new InvoiceSequenceRepository();
+        $invoice_number = $rep->getNextInvoiceNumber();
+
+        $customer = new Buyer([
+            // Use home details.
+            'name' => $member->first_name.' '.$member->last_name,
+            // 'phone' => $member->home_mobile,
+            'custom_fields' => [
+                'Occupation' => $member->job_title.', '.$member->current_employer,
+                'Email' => $member->home_email,
+            ],
+        ]);
+
+        $membership_type = MembershipType::where('id', $member->membership_type_id)->first();
+        $annual_cost = $membership_type->annual_cost;
+
+        $item = (new InvoiceItem())->title('SITA Membership Subscription - '.$membership_type->title)
+            ->pricePerUnit($annual_cost);
+
+        $weeks = 4;
+        $days_per_week = 7;
+        $days_to_pay = $weeks * $days_per_week;
+
+        $notes = [
+            'Account name: Samoa Information Association, Bank account number 2001364583, Swift code: BOSPWSWS.',
+            '',
+            'Bank name:',
+            'Bank South Pacific (Samoa) Limited',
+            '',
+            'Bank Address:',
+            'Head Office, Beach Road',
+            'P.O Box 1860',
+            'Apia, Samoa',
+            '',
+            'Please quote invoice number as reference',
+            '',
+            'Registered Office: Attention: Wellington Seufale, Private Bag,
+                MOF, Central Bank Building, Floor 2, APIA, Samoa',
+        ];
+        $notes = '<br/>'.implode('<br/>', $notes);
+
+        $invoice = Invoice::make()
+            ->name('Invoice')
+            ->date(Carbon::now())
+            ->status('due')
+            ->sequence($invoice_number)
+            ->currencySymbol('$')
+            ->currencyCode('Tala')
+            ->dateFormat('d/m/Y')
+            ->payUntilDays($days_to_pay)
+            ->logo(public_path('imgs/logo.png'))
+            ->filename('SITA Invoice '.$customer->name.' '.Carbon::now()->format('d-m-Y'))
+            ->buyer($customer)
+            ->notes($notes)
+            ->addItem($item);
+
+        $invoice->save('invoices');
+
+        return $invoice;
     }
 }
