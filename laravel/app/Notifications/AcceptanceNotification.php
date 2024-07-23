@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Member;
+use App\Services\SitaOnlineService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -15,7 +16,7 @@ class AcceptanceNotification extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct(public Member $member)
+    public function __construct(public Member $member, public SitaOnlineService $sitaOnlineService)
     {
         //
     }
@@ -35,15 +36,30 @@ class AcceptanceNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage())
-            ->subject('Signup endorsed')
-            ->greeting('Tālofa!')
-            ->line('A signup request has been endorsed. Please review
-                for your Acceptance.')
-            ->line('Before accepting please ensure:')
-            ->line('* payment has been collected')
-            ->line('* receipt number is recorded on SITA Online')
-            ->action('View details', route('members.show', $this->member->id));
+        // Have a different message for paid and free memberships.
+        $emailMessage = (new MailMessage())
+        ->subject('Signup endorsed')
+        ->greeting('Tālofa!')
+        ->line('A signup request has been Endorsed.');
+
+        $isPaidMembership = $this->sitaOnlineService->isMemberHasPaidMembership($this->member);
+        $message = 'Please review for your Acceptance.';
+
+        if ($isPaidMembership) {
+            $emailMessage->line('An invoice has also been sent.');
+            $emailMessage->line($message);
+            $emailMessage->line('Before accepting please ensure:');
+            $emailMessage->line('* payment has been collected');
+            $emailMessage->line('* receipt number is recorded on SITA Online');
+        }
+        else {
+            $emailMessage->line('No invoice was sent.');
+            $emailMessage->line($message);
+        }
+
+        $emailMessage->action('View details', route('members.show', $this->member->id));
+
+        return $emailMessage;
     }
 
     /**
