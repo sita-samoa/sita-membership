@@ -197,7 +197,7 @@ class MemberController extends Controller
         $users = $team->allUsers();
         foreach ($users as $user) {
             if ($team->userHasPermission($user, 'member:accept')) {
-                $user->notify(new AcceptanceNotification($member));
+                $user->notify(new AcceptanceNotification($member, $this->sitaOnlineService));
             }
         }
 

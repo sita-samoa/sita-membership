@@ -53,6 +53,11 @@ class SitaOnlineService
         return $isFreeMembership;
     }
 
+    // Helper function for more readable code.
+    public function isMemberHasPaidMembership(Member $member) {
+        return !$this->isMemberHasFreeMembership($member);
+    }
+
     public function getMembersExport($membership_status_id = '', $search = '')
     {
         return new MembersExport($membership_status_id, $search);
