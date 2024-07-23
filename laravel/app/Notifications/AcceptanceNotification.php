@@ -38,9 +38,9 @@ class AcceptanceNotification extends Notification implements ShouldQueue
     {
         // Have a different message for paid and free memberships.
         $emailMessage = (new MailMessage())
-        ->subject('Signup endorsed')
-        ->greeting('Tālofa!')
-        ->line('A signup request has been Endorsed.');
+            ->subject('Signup endorsed')
+            ->greeting('Tālofa!')
+            ->line('A signup request has been Endorsed.');
 
         $isPaidMembership = $this->sitaOnlineService->isMemberHasPaidMembership($this->member);
         $message = 'Please review for your Acceptance.';
@@ -51,8 +51,7 @@ class AcceptanceNotification extends Notification implements ShouldQueue
             $emailMessage->line('Before accepting please ensure:');
             $emailMessage->line('* payment has been collected');
             $emailMessage->line('* receipt number is recorded on SITA Online');
-        }
-        else {
+        } else {
             $emailMessage->line('No invoice was sent.');
             $emailMessage->line($message);
         }
