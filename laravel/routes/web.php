@@ -14,6 +14,7 @@ use App\Http\Controllers\MemberSupportingDocumentController;
 use App\Http\Controllers\MemberWorkExperienceController;
 use App\Http\Controllers\SignupController;
 use App\Http\Controllers\UserController;
+use Dcblogdev\Xero\Facades\Xero;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -142,4 +143,21 @@ Route::middleware([
     // Invoice download
     Route::resource('members.invoices.download', InvoiceDownloadController::class)
         ->only(['index']);
+});
+
+Route::group(['middleware' => ['web', 'auth']], function(){
+    Route::get('xero', function(){
+
+        if (! Xero::isConnected()) {
+            return redirect('xero/connect');
+        } else {
+            //display your tenant name
+            return Xero::getTenantName();
+        }
+
+    });
+
+    Route::get('xero/connect', function(){
+        return Xero::connect();
+    });
 });
