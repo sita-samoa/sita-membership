@@ -19,9 +19,9 @@ import AuthenticationCardLogo from '@/Components/AuthenticationCardLogo.vue'
 
 const { executeRecaptcha, recaptchaLoaded, instance } = useReCaptcha()
 const recaptcha = async () => {
-  // This variable is setup from node not Laravel .env file
-  //  when npm run build is run.
-  if (process.env.NODE_ENV === 'production') {
+  // Only set up in production when key is set.
+  const nodeEnv = import.meta.env.VITE_APP_ENV
+  if (nodeEnv === 'production') {
     await recaptchaLoaded()
     form.captcha_token = await executeRecaptcha('login')
   }

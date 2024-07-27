@@ -34,8 +34,12 @@ const submit = () => {
 
 const { executeRecaptcha, recaptchaLoaded, instance } = useReCaptcha()
 const recaptcha = async () => {
-  await recaptchaLoaded()
-  form.captcha_token = await executeRecaptcha('register')
+  // Only set up in production when key is set.
+  const nodeEnv = import.meta.env.VITE_APP_ENV
+  if (nodeEnv === 'production') {
+    await recaptchaLoaded()
+    form.captcha_token = await executeRecaptcha('register')
+  }
   submit()
 }
 

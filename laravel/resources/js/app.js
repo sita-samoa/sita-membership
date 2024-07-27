@@ -23,8 +23,8 @@ createInertiaApp({
     /**
      * Track Page and Send to Google Analytic
      * */
-    if (process.env.NODE_ENV === 'production') {
-      const googleAnalyticsGa4 = props.initialPage.props.google_analytics_ga4
+    const googleAnalyticsGa4 = props.initialPage.props.google_analytics_ga4
+    if (import.meta.env.VITE_APP_ENV === 'production' && googleAnalyticsGa4) {
       router.on('navigate', () => {
         gtag('js', new Date())
         gtag('config', googleAnalyticsGa4)
