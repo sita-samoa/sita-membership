@@ -165,6 +165,11 @@ GOOGLE_RECAPTCHA_SITE_KEY=YOUR_GOOGLE_RECAPTCHA_SITE_KEY
 GOOGLE_RECAPTCHA_SECRET_KEY=YOUR_GOOGLE_RECAPTCHA_SECRET_KEY
 ```
 
+## Tugboat Integration
+
+Tugboat will create a staging environment for each PR for testing. With default
+logins for admin, coordinator, editor and executive using composer dev.
+
 ## Common commands
 
 ```
