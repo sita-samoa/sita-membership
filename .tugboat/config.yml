@@ -1,0 +1,91 @@
+# Laravel 10 Tugboat starter config.
+# https://docs.tugboatqa.com/starter-configs/tutorials/laravel/
+services:
+  # What to call the service hosting the site.
+  webserver:
+    # This uses PHP 8.1.x with Apache: update to match your version of PHP.
+    image: tugboatqa/php:8.1-apache
+
+    # Set this as the default service. This does a few things
+    #   1. Clones the git repository into the service container
+    #   2. Exposes port 80 to the Tugboat HTTP proxy
+    #   3. Routes requests to the preview URL to this service
+    default: true
+    # Wait until the mysql service is done building.
+    depends: database
+
+    # A set of commands to run while building this service
+    commands:
+      # Commands that set up the basic preview infrastructure
+      init:
+        # Install zip and things
+        - apt-get update
+        - apt-get install -yq libzip-dev
+        # Uncomment until needed
+        # - docker-php-ext-install bcmath
+        # Install opcache and mod-rewrite.
+        - |
+          docker-php-ext-install \
+            opcache \
+            intl \
+            zip \
+        - a2enmod headers rewrite
+        # Install node
+        - apt-get install -yq ca-certificates curl gnupg
+        - curl -fsSL https://deb.nodesource.com/setup_20.x -o nodesource_setup.sh
+        - bash nodesource_setup.sh
+        - apt-get install -yq nodejs
+        # Copy the tugboat .env we created before
+        - cp "${TUGBOAT_ROOT}/.tugboat/.env.tugboat" "${TUGBOAT_ROOT}/laravel/.env"
+        # Link the document root to the expected path. This example links
+        # /public to the docroot
+        - ln -snf "${TUGBOAT_ROOT}/laravel/public" "${DOCROOT}"
+        # Composer install
+        - cd "${TUGBOAT_ROOT}/laravel" && composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --optimize-autoloader
+        # symlink storage
+        - cd "${TUGBOAT_ROOT}/laravel" && php artisan storage:link
+        # Ensure storage permissions
+        - chgrp -R www-data "${TUGBOAT_ROOT}/laravel/storage"
+        - find "${TUGBOAT_ROOT}/laravel/storage" -type d -exec chmod 2775 {} \;
+        - find "${TUGBOAT_ROOT}/laravel/storage" -type f -exec chmod 0664 {} \;
+        # Generate the random key if you didn't set APP_KEY before.
+        - cd "${TUGBOAT_ROOT}/laravel" && php artisan key:generate
+        # Generate the random key if you didn't set APP_KEY before.
+        # - cd "${TUGBOAT_ROOT}/laravel" && php artisan view:cache
+        # Install the workers
+        - mkdir -p /etc/service/webserver
+        - cp .tugboat/etc/service/webserver/run /etc/service/webserver/run
+        - chmod +x /etc/service/webserver/run
+      update:
+        # Clear caches.
+        - cd "${TUGBOAT_ROOT}/laravel" && php artisan config:cache
+        # Generate the db structure with some data. Here you have several choices:
+        # 1. If you have seeders on your project, you might just run migrate with --seed.
+        # - php artisan migrate --seed
+        # 2. You might want just the structure without any test data.
+        # - php artisan migrate
+        # 3. Or you might load a database dump from somewhere else. That's up to you.
+        # Create db structure.
+        - cd "${TUGBOAT_ROOT}/laravel" && composer build
+        # Run seeders.
+        - cd "${TUGBOAT_ROOT}/laravel" && composer dev
+        # Compile vite templates
+        - cd "${TUGBOAT_ROOT}/laravel" && npm ci
+        # - cd "${TUGBOAT_ROOT}/laravel" && npm run build
+      build:
+        # Need full build to run composer dev.
+        # - cd "${TUGBOAT_ROOT}/laravel" && composer install --no-dev -q --no-ansi --no-interaction --no-progress --prefer-dist --optimize-autoloader
+        # Clear caches.
+        - cd "${TUGBOAT_ROOT}/laravel" && php artisan config:cache
+        # Run any pending migrations. This will ensure your data has the last
+        # migrations applied.
+        - cd "${TUGBOAT_ROOT}/laravel" && php artisan migrate --force
+        # Compile vite templates
+        - cd "${TUGBOAT_ROOT}/laravel" && npm i
+        - cd "${TUGBOAT_ROOT}/laravel" && npm run build
+
+  database:
+    # Use the latest available version of MariaDB by not specifying a
+    # version
+    image: tugboatqa/mariadb:10.8
+
