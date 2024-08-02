@@ -25,6 +25,7 @@ docker-compose.override.yml
 docker-init/files
 docker-init/data
 mariadb-init/
+.env.gitpod
 
 # and some random server stuff
 .bash_history
