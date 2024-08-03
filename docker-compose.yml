@@ -27,6 +27,8 @@ services:
   php:
     # image: wodby/drupal-php:$PHP_TAG
     image: wodby/php:$PHP_TAG
+    user: root
+    command: "php-fpm -R"
     container_name: "${PROJECT_NAME}_php"
     environment:
       # APP_KEY: $APP_KEY
@@ -39,8 +41,8 @@ services:
       # DB_USERNAME: $DB_USER
       # DB_PASSWORD: $DB_PASSWORD
       # DB_DATABASE: $DB_NAME
-      PHP_FPM_USER: wodby
-      PHP_FPM_GROUP: wodby
+      PHP_FPM_USER: root
+      PHP_FPM_GROUP: root
       APP_URL: "http://${PROJECT_BASE_URL}:${PROJECT_PORT}"
       MAIL_HOST: mailhog
       ADMIN_NAME: admin
@@ -242,6 +244,7 @@ services:
 
   node:
     image: wodby/node:$NODE_TAG
+    user: root
     container_name: "${PROJECT_NAME}_node"
     working_dir: /var/www/html/laravel/
     labels:
