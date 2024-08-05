@@ -1,0 +1,57 @@
+# ddev and composer are running as part of the prebuild
+# when starting a workspace all docker images are ready
+tasks:
+  - init: |
+      sudo chown gitpod:gitpod .
+      curl -O https://gist.githubusercontent.com/ainsofs/ba947741b230606be5d2f4aad6faf7bf/raw/.bash_aliases
+      source .bash_aliases
+      cp .env .env.gitpod
+      sed -i "s|PROJECT_BASE_URL=sita-membership.docker.localhost|PROJECT_BASE_URL=${GITPOD_WORKSPACE_URL}|g" .env.gitpod
+      sed -i "s|PROJECT_BASE_URL=https://|PROJECT_BASE_URL=8000-|g" .env.gitpod
+      sed -i "s|APP_URL=http://\${PROJECT_BASE_URL}:\${PROJECT_PORT}|APP_URL=${GITPOD_WORKSPACE_URL}|g" .env.gitpod
+      sed -i "s|APP_URL=https://|APP_URL=https://8000-|g" .env.gitpod
+      make gitpod
+      make composer "install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist"
+      docker compose stop node
+      make gitpod
+      cp laravel/.env.dev laravel/.env
+      make composer build
+      make composer dev
+      make artisan key:generate
+      make artisan storage:link
+    command: |
+      source .bash_aliases
+      make gitpod
+      make logs php node
+
+# VScode xdebug extension
+vscode:
+  extensions:
+    # PHP extensions.
+    - felixfbecker.php-debug
+    - wongjn.php-sniffer
+    - neilbrayfield.php-docblocker
+    - bmewburn.vscode-intelephense-client
+    - devsense.composer-php-vscode
+
+    # Bash extensions.
+    # - timonwong.shellcheck
+    # - rogalmic.bash-debug
+
+    # Vue extensions.
+    - vue.volar
+
+    # AI extensions.
+    # - codeium.codeium
+
+ports:
+  # portainer port
+  - port: 8080
+    onOpen: ignore
+  # vite port
+  - port: 5173
+    onOpen: ignore
+    visibility: public
+  # project port
+  - port: 8000
+    onOpen: open-browser

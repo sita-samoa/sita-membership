@@ -43,7 +43,7 @@ services:
       # DB_DATABASE: $DB_NAME
       PHP_FPM_USER: root
       PHP_FPM_GROUP: root
-      APP_URL: "http://${PROJECT_BASE_URL}:${PROJECT_PORT}"
+      APP_URL: ${APP_URL}
       MAIL_HOST: mailhog
       ADMIN_NAME: admin
       ADMIN_PASSWORD: password
@@ -246,12 +246,15 @@ services:
     image: wodby/node:$NODE_TAG
     user: root
     container_name: "${PROJECT_NAME}_node"
+    environment:
+      APP_URL: ${APP_URL}
+      GITPOD_WORKSPACE_URL: ${GITPOD_WORKSPACE_URL}
     working_dir: /var/www/html/laravel/
     labels:
-      - "traefik.http.services.${PROJECT_NAME}_node.loadbalancer.server.port=3000"
+      - "traefik.http.services.${PROJECT_NAME}_node.loadbalancer.server.port=5173"
       - "traefik.http.routers.${PROJECT_NAME}_node.rule=Host(`node.${PROJECT_BASE_URL}`)"
     expose:
-      - "3000"
+      - "5173"
     ports:
       - 5173:5173
     volumes:
