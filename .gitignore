@@ -26,6 +26,9 @@ docker-init/files
 docker-init/data
 mariadb-init/
 
+# ignore caches
+laravel/.eslintcache
+
 # and some random server stuff
 .bash_history
 .bashrc

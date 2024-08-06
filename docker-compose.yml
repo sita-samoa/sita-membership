@@ -27,6 +27,8 @@ services:
   php:
     # image: wodby/drupal-php:$PHP_TAG
     image: wodby/php:$PHP_TAG
+    user: root
+    command: "php-fpm -R"
     container_name: "${PROJECT_NAME}_php"
     environment:
       # APP_KEY: $APP_KEY
@@ -39,9 +41,9 @@ services:
       # DB_USERNAME: $DB_USER
       # DB_PASSWORD: $DB_PASSWORD
       # DB_DATABASE: $DB_NAME
-      PHP_FPM_USER: wodby
-      PHP_FPM_GROUP: wodby
-      APP_URL: "http://${PROJECT_BASE_URL}:${PROJECT_PORT}"
+      PHP_FPM_USER: root
+      PHP_FPM_GROUP: root
+      APP_URL: ${APP_URL}
       MAIL_HOST: mailhog
       ADMIN_NAME: admin
       ADMIN_PASSWORD: password
@@ -242,13 +244,17 @@ services:
 
   node:
     image: wodby/node:$NODE_TAG
+    user: root
     container_name: "${PROJECT_NAME}_node"
+    environment:
+      APP_URL: ${APP_URL}
+      GITPOD_WORKSPACE_URL: ${GITPOD_WORKSPACE_URL}
     working_dir: /var/www/html/laravel/
     labels:
-      - "traefik.http.services.${PROJECT_NAME}_node.loadbalancer.server.port=3000"
+      - "traefik.http.services.${PROJECT_NAME}_node.loadbalancer.server.port=5173"
       - "traefik.http.routers.${PROJECT_NAME}_node.rule=Host(`node.${PROJECT_BASE_URL}`)"
     expose:
-      - "3000"
+      - "5173"
     ports:
       - 5173:5173
     volumes:

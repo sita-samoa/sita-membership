@@ -1,6 +1,12 @@
 # SITA Membership database
 
-SITA Membership database with Laravel 10 and Jet stream Inertia (Vuejs) and Tailwind.
+SITA Membership database with Laravel 10 and Jetstream Inertia (Vuejs) and Tailwind.
+
+## Contribute today!
+
+First Signup for a [Gitpod account](https://gitpod.io/login/), then click the link below:
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/sita-samoa/sita-membership)
 
 ## Guides
 

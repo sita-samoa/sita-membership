@@ -9,34 +9,28 @@ and docker compose to use the commands below. You dont need to use docker.
 
 ```
 # start up containers
-docker compose up -d
-
-# log in to php container
-docker compose exec php sh
-
-# switch to laravel folder
-cd laravel
+make
 
 # install dependencies
-composer install
+make composer install
 
 # cp env.dev and configure - verify db configs
-cp .env.dev .env
+cp laravel/.env.dev laravel/.env
 
 # run initialisation commands
-php artisan migrate
-php artisan db:seed --class=DatabaseSeeder
-php artisan db:seed --class=UsersTableSeeder
-php artisan key:generate
+make artisan key:generate
 
-# or you can run this (it will recreate the database each time)
-composer build
+# run migrations and default data seed
+make composer build
 
-# for scheduled events use the following command to process them
-php artisan schedule:run
+# Create test accounts and dumy data (see [Test accounts](#test-accounts))
+make composer dev
 
 # To display user images and invoices run the following.
-php artisan storage:link
+make artisan storage:link
+
+# for scheduled events use the following command to process them
+make artisan schedule:run
 ```
 
 Access the Dev site on:
@@ -45,26 +39,17 @@ Access the Dev site on:
 sita-membership.docker.localhost:8000
 ```
 
-Create test accounts and dumy data (see [Test accounts](#test-accounts))
-
-```
-composer dev
-```
-
 ## Test accounts
 
-This will create test accounts and dummy data for local dev.
+Running `make composer dev`  will create test accounts and dummy data for local dev.
 
 ```
-composer dev
-
 # demo@example.com - user with no roles
 # executive@example.com - user with executive role
 # coordinator@example.com - user with coordinator role
 # admin@example.com - user with admin role
 
 # All accounts use "password" as its password
-
 ```
 
 ## Coding style and etiqueue
@@ -137,7 +122,7 @@ EMAIL=your@email.com
 CERT_RESOLVER=letsencrypt
 ```
 
-If you run composer dev on production make sure to reset it by running composer build to ensure there are no test accounts on pord.
+If you run composer dev on production make sure to reset it by running composer build to ensure there are no test accounts.
 
 Ensure that the following commands are run on a cron see https://laravel.com/docs/10.x/scheduling#running-the-scheduler
 
@@ -165,60 +150,79 @@ GOOGLE_RECAPTCHA_SITE_KEY=YOUR_GOOGLE_RECAPTCHA_SITE_KEY
 GOOGLE_RECAPTCHA_SECRET_KEY=YOUR_GOOGLE_RECAPTCHA_SECRET_KEY
 ```
 
+## Gitpod Integration
+
+You can start coding using Gitpod.
+
+First Signup for a [Gitpod account](https://gitpod.io/login/), then click the link below:
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/sita-samoa/sita-membership)
+
 ## Tugboat Integration
 
 Tugboat will create a staging environment for each PR for testing. With default
 logins for admin, coordinator, editor and executive using composer dev.
 
+## Git revise
+
+Git revise can be install to improve your commits and messaging run `bash .install-git-revise.sh`. Run `git revise -ie` to update commit messages in bulk.
+
 ## Common commands
 
 ```
 # clear database and re-run migrations
-php artisan migrate:fresh
+make artisan migrate:fresh
 
 # create a new model, controller and migration called Member
-php artisan make:model -mrc Member
+make artisan make:model -mrc Member
 
 # start up dev environment
-docker compose up -d
+make
 
 # stop environment
-docker compose stop
+make stop
 
 # delete everything and start in a clean environment
-docker compose down -v
+make down
 
 # check logs
-docker compose logs -f
+make logs
 
-# check logs for specific container
-docker compose logs -f php
+# check logs for php and node container
+make logs php node
 
 # log into php container (this will allow use php artisan)
-docker compose exec php sh
+make shell
 
 # run tests
-./vendor/bin/pest
+make composer test
 
 # create pest test
-php artisan make:test UserTest --pest
-
+make artisan "make:test UserTest --pest"
 ```
 
 ## Tips
 
-Use bash aliases in your local dev
+Use bash aliases in your local dev. This repo includes an alias file you can use with `source .bash_aliases`
 
 ```
 # docker compose aliases
 alias dc="docker compose"
-alias dup="docker compose up -d"
-alias dlup="docker compose up -d && docker compose logs php"
+alias dup="docker compose up -d --remove-orphans"
+alias dupl="docker compose up -d && docker compose logs php"
 alias dphp="docker compose exec php sh"
 alias dnode="docker compose exec node bash"
-alias dlnode="docker compose logs -f node"
+alias dl='docker compose logs -f' # eg dl nginx php for nginx and php logs
 alias dstop="docker compose stop"
+
+#docker4drupal aliases
+alias mcomposer="make composer"
+alias martisan="make artisan"
+alias mlogs="make logs"
+alias mshell="make shell"
 ```
+
+You can also use make commands. Use `make help` to find a list.
 
 ## Resources
 
