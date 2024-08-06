@@ -19,18 +19,14 @@ export default defineConfig({
   ],
   server: {
     host: true,
-    // hmr: {
-    //   host: 'localhost',
-    // },
-		hmr: process.env.GITPOD_WORKSPACE_URL
-			? {
-					protocol: 'wss',
-					clientPort: 443,
-					host: process.env.GITPOD_WORKSPACE_URL.replace(
-						'https://',
-						'5173-',
-					),
-			  }
-			: true,
+    hmr: process.env.GITPOD_WORKSPACE_URL
+      ? {
+        protocol: 'wss',
+        clientPort: 443,
+        host: process.env.GITPOD_WORKSPACE_URL.replace('https://', '5173-'),
+      }
+      : {
+        host: 'localhost',
+      },
   },
 })
