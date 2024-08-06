@@ -27,6 +27,9 @@ docker-init/data
 mariadb-init/
 .env.gitpod
 
+# ignore caches
+laravel/.eslintcache
+
 # and some random server stuff
 .bash_history
 .bashrc
