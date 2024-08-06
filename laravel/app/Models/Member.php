@@ -243,7 +243,7 @@ class Member extends Model implements Auditable
         $this->membership_type_id = $membership_type;
     }
 
-    public function getFullName()
+    public function getFullName(): string
     {
         return $this->first_name.' '.$this->last_name;
     }

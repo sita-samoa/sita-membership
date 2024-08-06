@@ -26,7 +26,7 @@ class MemberInvoicesRepository extends Repository
         $payBeforeDate = Carbon::createFromFormat('d/m/Y', $invoice->getPayUntilDate());
         $path = $invoice->url();
         // Correct the path.
-        $path = str_replace('/storage/', '/invoices/', $path);
+        $path = str_replace('/storage/', '/invoices/', (string) $path);
 
         $memberInvoice->fill([
             'invoice_status_id' => 1,
