@@ -25,6 +25,10 @@ docker-compose.override.yml
 docker-init/files
 docker-init/data
 mariadb-init/
+.env.gitpod
+
+# ignore caches
+laravel/.eslintcache
 
 # and some random server stuff
 .bash_history
