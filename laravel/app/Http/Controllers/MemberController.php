@@ -253,6 +253,18 @@ class MemberController extends Controller
             );
         }
 
+        // Send acceptance notifications.
+        $team = Team::first();
+        $users = $team->allUsers();
+        foreach ($users as $user) {
+            if ($team->userHasPermission($user, 'member:endorse')) {
+                $user->notify(new AcceptedNotification($member, false));
+            }
+        }
+
+        // Notify user.
+        $member->user->notify(new AcceptedNotification($member));
+
         return redirect()->back()->with('success', 'Application Accepted');
     }
 
