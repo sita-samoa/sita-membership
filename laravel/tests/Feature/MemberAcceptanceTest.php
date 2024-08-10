@@ -4,8 +4,10 @@ use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
+use App\Notifications\AcceptedNotification;
 use App\Repositories\MembershipTypeRepository;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Notification;
 
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
@@ -120,3 +122,30 @@ test('that user cannot mark themselves as accepted', function () {
     ]);
     $response->assertStatus(403);
 });
+
+test('that notification is sent', function ($role) {
+    Notification::fake();
+
+    User::factory()->withPersonalTeam()->create();
+    $team = Team::first();
+
+    $this->actingAs($user = User::factory()->create());
+    $team->users()->attach(
+        $user,
+        ['role' => $role]
+    );
+
+    $member = Member::factory()->create();
+    $member->membership_status_id = MembershipStatus::ENDORSED->value;
+    $member->save();
+
+    $response = $this->put('/members/'.$member->id.'/accept', [
+        'financial_year' => Carbon::now()->year,
+        'receipt_number' => '111',
+    ]);
+
+    Notification::assertSentTo(
+        [$member->user],
+        AcceptedNotification::class
+    );
+})->with(['admin', 'coordinator']);
