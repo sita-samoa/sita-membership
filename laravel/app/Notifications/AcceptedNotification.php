@@ -8,14 +8,14 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class EndorsementNotification extends Notification implements ShouldQueue
+class AcceptedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct(public Member $member)
+    public function __construct(public Member $member, public bool $isNotifyMember = true)
     {
         //
     }
@@ -35,12 +35,19 @@ class EndorsementNotification extends Notification implements ShouldQueue
      */
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage())
-            ->subject('Signup submitted')
-            ->greeting('Tālofa!')
-            ->line('A signup request has been submitted. Please review
-                for your Endorsement.')
-            ->action('View details', route('members.show', $this->member->id));
+        if ($this->isNotifyMember) {
+            return (new MailMessage())
+                ->subject('Signup Accepted')
+                ->greeting('Tālofa '.$this->member->getFullName().'!')
+                ->line('Your signup request has been accepted.')
+                ->action('View details', route('members.show', $this->member->id));
+        } else {
+            return (new MailMessage())
+                ->subject('Signup Accepted')
+                ->greeting('Tālofa!')
+                ->line('A signup request has been accepted for '.$this->member->getFullName().'.')
+                ->action('View details', route('members.show', $this->member->id));
+        }
     }
 
     /**

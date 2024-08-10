@@ -39,7 +39,7 @@ class MemberInvoicesRepository extends Repository
         // $memberInvoice->title = $invoice->getCustomData()
         $memberInvoice->file_name = $invoice->filename;
         $memberInvoice->file_path = $path;
-        $memberInvoice->file_size = $path ? Storage::size($path) : null;
+        $memberInvoice->file_size = $path !== '' && $path !== '0' ? Storage::size($path) : null;
 
         $memberInvoice->save();
 

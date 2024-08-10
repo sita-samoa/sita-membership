@@ -9,11 +9,12 @@ use App\Models\MemberMailingPreference;
 use App\Models\MemberRejectionStatus;
 use App\Models\MembershipType;
 use App\Models\Team;
-use App\Notifications\AcceptanceNotification;
-use App\Notifications\EndorsementNotification;
+use App\Notifications\AcceptedNotification;
+use App\Notifications\EndorsedNotification;
 use App\Notifications\InvoiceNotification;
 use App\Notifications\PastDueSubReminder;
 use App\Notifications\RejectionNotification;
+use App\Notifications\SubmittedNotification;
 use App\Notifications\SubReminder;
 use App\Repositories\MemberInvoicesRepository;
 use App\Repositories\MemberMembershipStatusRepository;
@@ -159,7 +160,7 @@ class MemberController extends Controller
         $users = $team->allUsers();
         foreach ($users as $user) {
             if ($team->userHasPermission($user, 'member:endorse')) {
-                $user->notify(new EndorsementNotification($member));
+                $user->notify(new SubmittedNotification($member));
             }
         }
 
@@ -197,7 +198,7 @@ class MemberController extends Controller
         $users = $team->allUsers();
         foreach ($users as $user) {
             if ($team->userHasPermission($user, 'member:accept')) {
-                $user->notify(new AcceptanceNotification($member, $this->sitaOnlineService));
+                $user->notify(new EndorsedNotification($member, $this->sitaOnlineService));
             }
         }
 
@@ -251,6 +252,18 @@ class MemberController extends Controller
                 $validated['receipt_number']
             );
         }
+
+        // Send acceptance notifications.
+        $team = Team::first();
+        $users = $team->allUsers();
+        foreach ($users as $user) {
+            if ($team->userHasPermission($user, 'member:endorse')) {
+                $user->notify(new AcceptedNotification($member, false));
+            }
+        }
+
+        // Notify user.
+        $member->user->notify(new AcceptedNotification($member));
 
         return redirect()->back()->with('success', 'Application Accepted');
     }

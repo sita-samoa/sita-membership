@@ -55,3 +55,6 @@ ports:
   # project port
   - port: 8000
     onOpen: open-browser
+  # mailhog port
+  - port: 8025
+    onOpen: open-browser
