@@ -97,10 +97,10 @@ To run your dev with SSL support use the following command
 
 ```
 # start containers
-docker compose -f docker-compose.yml -f docker-compose.ssl.yml up -d
+make ssl
 
 # stop containers
-docker compose -f docker-compose.yml -f docker-compose.ssl.yml stop
+make stop
 ```
 
 ## Environments
@@ -260,7 +260,7 @@ alias mlogs="make logs"
 alias mshell="make shell"
 ```
 
-You can also use make commands. Use `make help` to find a list.
+You can also use make commands. Use `make help` to find a list of commands.
 
 ## Resources
 
