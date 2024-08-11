@@ -22,22 +22,22 @@ return [
     */
     'landingUri' => env('XERO_LANDING_URL', '/'),
 
-    /**
+    /*
      * Set access token, when set will bypass the oauth2 process
      */
     'accessToken' => env('XERO_ACCESS_TOKEN', ''),
 
-    /**
+    /*
      * Set webhook token
      */
     'webhookKey' => env('XERO_WEBHOOK_KEY', ''),
 
-    /**
+    /*
      * Set the scopes
      */
     'scopes' => env('XERO_SCOPES', 'openid email profile offline_access accounting.settings accounting.transactions accounting.contacts'),
 
-    /**
+    /*
      * Encrypt tokens in database?
      */
     'encrypt' => env('XERO_ENCRYPT', false),

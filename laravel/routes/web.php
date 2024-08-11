@@ -145,8 +145,8 @@ Route::middleware([
         ->only(['index']);
 });
 
-Route::group(['middleware' => ['web', 'auth']], function(){
-    Route::get('xero', function(){
+Route::group(['middleware' => ['web', 'auth']], function () {
+    Route::get('xero', function () {
 
         if (! Xero::isConnected()) {
             return redirect('xero/connect');
@@ -157,7 +157,7 @@ Route::group(['middleware' => ['web', 'auth']], function(){
 
     });
 
-    Route::get('xero/connect', function(){
+    Route::get('xero/connect', function () {
         return Xero::connect();
     });
 });
