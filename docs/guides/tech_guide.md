@@ -23,14 +23,14 @@ make artisan key:generate
 # run migrations and default data seed
 make composer build
 
-# Create test accounts and dumy data (see [Test accounts](#test-accounts))
-make composer dev
-
 # To display user images and invoices run the following.
 make artisan storage:link
 
 # for scheduled events use the following command to process them
 make artisan schedule:run
+
+# for queued events use the following command to process them
+make artisan queue:work
 ```
 
 Access the Dev site on:
@@ -39,9 +39,15 @@ Access the Dev site on:
 sita-membership.docker.localhost:8000
 ```
 
+Create test accounts and dumy data (see [Test accounts](#test-accounts))
+
+```
+make composer dev
+```
+
 ## Test accounts
 
-Running `make composer dev`  will create test accounts and dummy data for local dev.
+Running `make composer dev` will create test accounts and dummy data for local dev.
 
 ```
 # demo@example.com - user with no roles
@@ -122,16 +128,48 @@ EMAIL=your@email.com
 CERT_RESOLVER=letsencrypt
 ```
 
+If you run composer dev on production make sure to reset it by running composer build to ensure there are no test accounts on pord.
+
+Ensure that the following commands are run on a cron see https://laravel.com/docs/10.x/scheduling#running-the-scheduler
+
+Also set **APP_ENV**=production and **GOOGLE_ANALYTICS_GA4**. This will ensure Google Analytics works correctly.
+
+# run every 5 minutes - for running queues
+
+```
+php artisan queue:work database --tries=1 --max-time=30 --stop-when-empty
+```
+
+### Google Analytics
+
+Register for a google recaptcha site key and secret
+https://www.google.com/recaptcha/admin/create
+
+In the domains field enter the following:
+
+`sita-membership.docker.localhost`
+
+Once received, add your google recaptcha environment variables to laravel/.env
+
+```
+GOOGLE_RECAPTCHA_SITE_KEY=YOUR_GOOGLE_RECAPTCHA_SITE_KEY
+GOOGLE_RECAPTCHA_SECRET_KEY=YOUR_GOOGLE_RECAPTCHA_SECRET_KEY
+
+```
+
 If you run composer dev on production make sure to reset it by running composer build to ensure there are no test accounts.
 
 Ensure that the following commands are run on a cron see https://laravel.com/docs/10.x/scheduling#running-the-scheduler
 
 ```
 # run every minute - for scheduled tasks
+
 php artisan schedule:run
 
 # run every 5 minutes - for running queues
+
 php artisan queue:work database --tries=1 --max-time=30 --stop-when-empty
+
 ```
 
 ### Google Analytics
