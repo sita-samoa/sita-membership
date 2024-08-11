@@ -22,6 +22,13 @@ up:
 	docker compose pull
 	docker compose up -d --remove-orphans
 
+## ssl	:	Start up containers with SSL support.
+.PHONY: ssl
+ssl:
+	@echo "Starting up containers for $(PROJECT_NAME)..."
+	docker compose pull
+	docker compose -f docker-compose.yml -f docker-compose.ssl.yml up -d --remove-orphans
+
 ## gitpod	:	Start up containers in gitpod.
 .PHONY: gitpod
 gitpod:
