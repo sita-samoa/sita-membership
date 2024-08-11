@@ -6,10 +6,11 @@ use App\Models\Member;
 use App\Models\MemberInvoices;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class InvoiceNotification extends Notification
+class InvoiceNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -47,9 +48,10 @@ class InvoiceNotification extends Notification
         return (new MailMessage())
             ->subject('Invoice '.$this->invoice->invoice_number.' from Samoa Information Technology Association for '.$this->member->getFullName())
             ->greeting("Tālofa {$this->member->getFullName()}!")
+            ->line('Your SITA membership application has been Endorsed! Please pay your membership fee to complete your application.')
             ->line('Here\'s invoice '.$this->invoice->invoice_number.' for '.$formattedAmount.'.')
-            ->line('The amount outstanding of '.$formattedAmount.' is due on '.Carbon::parse($this->invoice->pay_before_date)->format('d M Y').'.')
             ->action('View details', $url)
+            ->line('The amount outstanding of '.$formattedAmount.' is due on '.Carbon::parse($this->invoice->pay_before_date)->format('d M Y').'.')
             ->line('If you have any questions, please let us know.');
     }
 
