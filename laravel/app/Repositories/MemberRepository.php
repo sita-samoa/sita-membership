@@ -178,7 +178,7 @@ class MemberRepository extends Repository
         $days_to_pay = $weeks * $days_per_week;
 
         $notes = [
-            'Account name: Samoa Information Association, Bank account number 2001364583, Swift code: BOSPWSWS.',
+            'Account name: Samoa Information Technology Association, Bank account number 2001364583, Swift code: BOSPWSWS.',
             '',
             'Bank name:',
             'Bank South Pacific (Samoa) Limited',

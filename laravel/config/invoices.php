@@ -27,8 +27,10 @@ return [
         /*
          * Supported tags {SERIES}, {DELIMITER}, {SEQUENCE}
          * Example: SUB.00001
+         * INS - Invoice from SITA Online
+         * INV - Invoice from Xero
          */
-        'format' => 'INV-{SEQUENCE}',
+        'format' => 'INS-{SEQUENCE}',
     ],
 
     'currency' => [
