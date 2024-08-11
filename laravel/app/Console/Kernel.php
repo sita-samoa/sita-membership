@@ -19,9 +19,9 @@ class Kernel extends ConsoleKernel
             $rep->markAsLapsed();
         })->daily();
 
-        // Schedule backups.
-        $schedule->command('backup:clean')->daily()->at('01:00');
-        $schedule->command('backup:run')->daily()->at('01:30');
+        // Schedule backups (UTC timezone).
+        $schedule->command('backup:clean')->daily()->at('13:00');
+        $schedule->command('backup:run')->daily()->at('13:30');
 
         // Reminders for sub.
         $schedule->call(function () {
