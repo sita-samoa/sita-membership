@@ -19,7 +19,7 @@
         "@tailwindcss/typography": "^0.5.2",
         "@vitejs/plugin-vue": "^4.0.0",
         "autoprefixer": "^10.4.7",
-        "axios": "^1.6.0",
+        "axios": "^1.7.4",
         "chart.js": "^4.3.0",
         "eslint": "^8.41.0",
         "eslint-config-prettier": "^8.8.0",
