@@ -8,8 +8,7 @@ We'd like to extend our heartfelt thanks to everyone who has contributed code to
 
 Special thanks to the following individuals who have contributed in non-code ways:
 
-- **[Contributor Name](link-to-profile)** - [Contribution Type/Details]
-- **[Contributor Name](link-to-profile)** - [Contribution Type/Details]
+- **[Tomasi](https://github.com/tomashee)** - [Documentation]
 
 ### Examples of Non-Code Contributions
 
