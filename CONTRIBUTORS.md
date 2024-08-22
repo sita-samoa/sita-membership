@@ -8,9 +8,10 @@ We'd like to extend our heartfelt thanks to everyone who has contributed code to
 
 Special thanks to the following individuals who have contributed in non-code ways:
 
-
 - **[John Laa](https://github.com/laa1213)** - [Documentation]
-- **[Contributor Name](link-to-profile)** - [Contribution Type/Details]
+- **[Eugene F. Barker](https://github.com/genebarker)** - [Documentation and Issues]
+- **[Samuel Ieremia](https://github.com/Lilomaiava)** - [Documentation]
+- **[Tomasi](https://github.com/tomashee)** - [Documentation]
 
 ### Examples of Non-Code Contributions
 
