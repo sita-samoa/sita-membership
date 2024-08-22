@@ -10,6 +10,7 @@ Special thanks to the following individuals who have contributed in non-code way
 
 - **[Contributor Name](link-to-profile)** - [Contribution Type/Details]
 - **[Contributor Name](link-to-profile)** - [Contribution Type/Details]
+[superma](https://github.com/ilu73)
 
 ### Examples of Non-Code Contributions
 
