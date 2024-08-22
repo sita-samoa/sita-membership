@@ -8,7 +8,7 @@ We'd like to extend our heartfelt thanks to everyone who has contributed code to
 
 Special thanks to the following individuals who have contributed in non-code ways:
 
-- **[Contributor Name](link-to-profile)** - [Contribution Type/Details]
+- **[Zeldris](https://github.com/zeldris2025)** - [Contribution Type/Details]
 - **[Contributor Name](link-to-profile)** - [Contribution Type/Details]
 
 ### Examples of Non-Code Contributions
