@@ -2,6 +2,10 @@
 
 SITA Membership database with Laravel 10 and Jetstream Inertia (Vuejs) and Tailwind.
 
+## Code of conduct and etiquette 
+
+Please be respectful when adding code comments and responding to feedback.
+
 ## Contribute today!
 
 First Signup for a [Gitpod account](https://gitpod.io/login/), then click the link below:
