@@ -5,7 +5,7 @@
 ### Dev environment with [docker4drupal](https://github.com/wodby/docker4drupal/releases)
 
 This repository has been set up to work with docker compose. You need docker
-and docker compose to use the commands below. You dont need to use docker.
+and docker compose to use the commands below. 
 
 ```
 # start up containers
@@ -30,7 +30,7 @@ make artisan storage:link
 make artisan schedule:run
 
 # for queued events use the following command to process them
-make artisan queue:work
+make artisan queue:listen
 ```
 
 Access the Dev site on:
@@ -58,9 +58,9 @@ Running `make composer dev` will create test accounts and dummy data for local d
 # All accounts use "password" as its password
 ```
 
-## Coding style and etiqueue
+## Coding style
 
-We have linting for PHP and JS which should take care of most things. Please be respectful when adding code comments and responding to feedback.
+We have linting for PHP and JS which should take care of most things..th
 
 ## Linting
 
@@ -134,9 +134,8 @@ Ensure that the following commands are run on a cron see https://laravel.com/doc
 
 Also set **APP_ENV**=production and **GOOGLE_ANALYTICS_GA4**. This will ensure Google Analytics works correctly.
 
-# run every 5 minutes - for running queues
-
 ```
+# run every 5 minutes - for running queues
 php artisan queue:work database --tries=1 --max-time=30 --stop-when-empty
 ```
 
