@@ -8,6 +8,7 @@ We'd like to extend our heartfelt thanks to everyone who has contributed code to
 
 Special thanks to the following individuals who have contributed in non-code ways:
 
+- **[Ulafala Viliamu](https://github.com/CyberSimbax)** - [Documentation] 
 - **[Zeldris](https://github.com/zeldris2025)** - [Documentation]
 - **[Ray Faasau](https://github.com/vfaasau)** - [Documentation]
 - **[Ilu](https://github.com/ilu73)** - [Documentation]
