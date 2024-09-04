@@ -8,7 +8,15 @@ We'd like to extend our heartfelt thanks to everyone who has contributed code to
 
 Special thanks to the following individuals who have contributed in non-code ways:
 
-- **[CyberSimbax](https://github.com/CyberSimbax)** - [Providing Feedback] 
+- **[Ulafala Viliamu](https://github.com/CyberSimbax)** - [Documentation] 
+- **[Zeldris](https://github.com/zeldris2025)** - [Documentation]
+- **[Ray Faasau](https://github.com/vfaasau)** - [Documentation]
+- **[Ilu](https://github.com/ilu73)** - [Documentation]
+- **[Kingsley Leavasa](https://github.com/samoankid)** - [Documentation]
+- **[John Laa](https://github.com/laa1213)** - [Documentation]
+- **[Eugene F. Barker](https://github.com/genebarker)** - [Documentation and Issues]
+- **[Samuel Ieremia](https://github.com/Lilomaiava)** - [Documentation]
+- **[Tomasi](https://github.com/tomashee)** - [Documentation]
 
 ### Examples of Non-Code Contributions
 
