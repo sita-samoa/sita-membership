@@ -7,16 +7,31 @@
 ## Searching for Members
 
 - Click on "Members"
+
+![alt text](/docs/img/members.png)
+
 - Type in the search bar
 - Explore the results
 
-You can also filter by Membership status using the dropdown
-Press the reset button to clear all the searches
+![alt text](/docs/img/search-results.png)
+
+- Press the reset button to clear all the searches
+
+![alt text](/docs/img/reset.png)
+
+#### You can also filter by Membership status using the dropdown
+![alt text](/docs/img/filter-search.png)
+
 
 ## Registering an Account
 
 - Click on "Register"
+
+![alt text](/docs/img/register.png)
+
 - Fill in the form and submit
+
+![alt text](/docs/img/reg-form.png)
 - Check your email for a verification link
 
 ## Verifying Your Account
@@ -25,18 +40,24 @@ Press the reset button to clear all the searches
 
 It is recommended to setup your account with MFA for added security.
 
+## Logging In
+
+- Click on "Log in"
+
+![alt text](/docs/img/login.png)
+- Enter your email and password
+
+![alt text](/docs/img/login-form.png)
+
 ## Recovering Your Password
 
 - Click on "Login"
+
+![alt text](/docs/img/login.png)
 - Click on "Forgot Password"
 - Enter your email and submit
 - Check your email for a password reset link
 - Click on the link in your email to reset your password
-
-## Logging In
-
-- Enter your email and password
-- Click on "Log in"
 
 ## Creating or Updating Your Member Profile
 
