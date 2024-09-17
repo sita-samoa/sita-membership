@@ -7,11 +7,19 @@
 ## Searching for Members
 
 - Click on "Members"
+
+![img](/docs/img/members.png)
 - Type in the search bar
 - Explore the results
 
-You can also filter by Membership status using the dropdown
-Press the reset button to clear all the searches
+![img](/docs/img/members-list.png)
+- Press the reset button to clear all the searches
+
+![img](/docs/img/reset-button.png)
+
+#### You can also filter by Membership status using the dropdown
+
+![img](/docs/img/filter-member.png)
 
 ## Registering an Account
 
