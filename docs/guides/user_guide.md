@@ -24,7 +24,11 @@
 ## Registering an Account
 
 - Click on "Register"
+
+![img](/docs/img/register.png)
 - Fill in the form and submit
+
+![img](/docs/img/reg-form.png)
 - Check your email for a verification link
 
 ## Verifying Your Account
@@ -33,18 +37,24 @@
 
 It is recommended to setup your account with MFA for added security.
 
+## Logging In
+
+- Click on "Log in"
+
+![img](/docs/img/login.png)
+- Enter your email and password
+
+![img](/docs/img/login-form.png)
+
 ## Recovering Your Password
 
 - Click on "Login"
+
+![img](/docs/img/login.png)
 - Click on "Forgot Password"
 - Enter your email and submit
 - Check your email for a password reset link
 - Click on the link in your email to reset your password
-
-## Logging In
-
-- Enter your email and password
-- Click on "Log in"
 
 ## Creating or Updating Your Member Profile
 
