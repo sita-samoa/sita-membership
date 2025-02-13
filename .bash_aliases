@@ -67,6 +67,7 @@ alias gclean="find . -type f -name '*.orig' -exec rm -r {} +"
 alias gbegone="git clean -f -d"
 alias gstash="git stash"
 alias gapply="git stash apply"
+alias gamend="git add . ; git commit --amend --no-edit"
 
 function parse_git_branch {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \1/' -e "s/ //"
@@ -81,7 +82,9 @@ alias gl2='git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s
 alias gl3='git log --format="%C(auto) %h %s"'
 alias gl4="git log"
 
-# alias gac='git add . ; git commit -m'
+function gac {
+  git add . ; git commit -m "$@"
+}
 # alias gpo="git push origin"
 alias gfo="git fetch origin"
 alias gfp="git fetch --prune"
