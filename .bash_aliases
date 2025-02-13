@@ -43,6 +43,7 @@ alias mcomposer="make composer"
 alias martisan="make artisan"
 alias mlogs="make logs"
 alias mshell="make shell"
+alias mdrush="make drush"
 # alias mnode="make node"
 # alias mphp="make php"
 
@@ -53,18 +54,19 @@ alias g="git"
 alias gc="git commit"
 alias gs="git status"
 alias gd="git diff"
-# alias gl="git log"
 alias gan="git add"
 alias ga="git add -p"
 alias gch="git checkout"
 alias gchb="git checkout -b"
 alias gb="git branch"
 alias gr="git reset"
-alias gp="git push --follow-tags"
+alias gpf="git push --follow-tags"
 alias gt="git tag"
 alias gpl="git pull"
 alias gclean="find . -type f -name '*.orig' -exec rm -r {} +"
 alias gbegone="git clean -f -d"
+alias gstash="git stash"
+alias gapply="git stash apply"
 
 function parse_git_branch {
   git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ \1/' -e "s/ //"
@@ -77,7 +79,8 @@ function gcm {
 alias gl='git log --pretty=oneline --abbrev-commit'
 alias gl2='git log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"- %s"'
 alias gl3='git log --format="%C(auto) %h %s"'
-alias gc2='git commit -m'
+alias gl4="git log"
+
 # alias gac='git add . ; git commit -m'
 # alias gpo="git push origin"
 alias gfo="git fetch origin"
