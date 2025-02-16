@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Repositories\MemberMembershipStatusRepository;
+use App\Services\SitaOnlineService;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -17,6 +18,10 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $rep = new MemberMembershipStatusRepository();
             $rep->markAsLapsed();
+
+            // Send unverified account reminder for 2 day old accounts.
+            $service = new SitaOnlineService();
+            $service->sendUnverifiedAccountReminderForTwoDays();
         })->daily();
 
         // Schedule backups (UTC timezone).
@@ -27,6 +32,10 @@ class Kernel extends ConsoleKernel
         $schedule->call(function () {
             $rep = new MemberMembershipStatusRepository();
             $rep->sendExpiringMembershipReminders(1);
+
+            // Send unverified account reminder for accounts older than a week.
+            $service = new SitaOnlineService();
+            $service->sendUnverifiedAccountReminderForMoreThanTwoDays();
         })->weekly();
 
         // Reminders for expiring and past due subs.

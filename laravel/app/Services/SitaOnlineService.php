@@ -6,11 +6,35 @@ use App\Enums\MembershipStatus;
 use App\Exports\MembersExport;
 use App\Models\Member;
 use App\Models\MembershipType;
+use App\Models\User;
 use App\Repositories\MemberRepository;
 use App\Repositories\MembershipTypeRepository;
+use App\Repositories\UserRepository;
 
+// Use this class to put business logic that uses different Repository calls.
 class SitaOnlineService
 {
+    // Consider moving this to a UserRepository class for consistency.
+    public function sendUnverifiedAccountReminderForTwoDays()
+    {
+        $rep = new UserRepository();
+        // Get unverified accounts.
+        $unverifiedUsers = $rep->getUnverifiedForTwoDays();
+
+        // Send an email to each unverified user.
+        $rep->notifyOfUnverifiedAccount($unverifiedUsers);
+    }
+
+    public function sendUnverifiedAccountReminderForMoreThanTwoDays()
+    {
+        $rep = new UserRepository();
+        // Get unverified accounts.
+        $unverifiedUsers = $rep->getUnverifiedMoreThanTwoDays();
+
+        // Send an email to each unverified user.
+        $rep->notifyOfUnverifiedAccount($unverifiedUsers);
+    }
+
     public function getOutstandingPayment()
     {
         return $this->getTotalFundsByMembershipType(MembershipStatus::LAPSED);
