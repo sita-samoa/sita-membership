@@ -138,7 +138,7 @@ function submit() {
 }
 function update() {
   form._method = 'PUT'
-  if (photoInput.value) {
+  if (photoInput.value && photoInput.files && photoInput.files.length > 0) {
     form.photo = photoInput.value.files[0]
   }
 
