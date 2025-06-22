@@ -26,8 +26,7 @@ test('updating user role without photo field fails or does not update', function
     // Reload user
     $user->refresh();
 
-    // Fails: role should NOT be updated, or response is not successful
-    // (Adjust this assertion based on actual broken behavior)
-    expect($user->hasTeamRole($team, 'admin'))->toBeFalse();
-    $response->assertSessionHasErrors();
+    // The role should be updated even if no photo is provided
+    expect($user->hasTeamRole($team, 'admin'))->toBeTrue();
+    $response->assertSessionDoesntHaveErrors();
 });

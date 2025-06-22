@@ -124,7 +124,7 @@ function hideDeleteForm() {
 }
 function submit() {
   form._method = ''
-  if (photoInput.value) {
+  if (photoInput.value && photoInput.value.files) {
     form.photo = photoInput.value.files[0]
   }
   form.post(route('users.store', itemId.value), {
@@ -138,7 +138,7 @@ function submit() {
 }
 function update() {
   form._method = 'PUT'
-  if (photoInput.value) {
+  if (photoInput.value && photoInput.value.files) {
     form.photo = photoInput.value.files[0]
   }
 
@@ -173,8 +173,8 @@ const selectNewPhoto = () => {
 }
 
 const updatePhotoPreview = () => {
+  if (!photoInput.value || !photoInput.value.files) return
   const photo = photoInput.value.files[0]
-
   if (!photo) return
 
   const reader = new FileReader()
