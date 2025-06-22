@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\User;
 use App\Models\Team;
+use App\Models\User;
 
-/**
+/*
  * Demonstrates bug: updating user role without photo field (simulating frontend bug where photoInput.value.files is undefined)
  * should fail or not update the role as expected.
  */
@@ -18,7 +18,7 @@ test('updating user role without photo field fails or does not update', function
     $this->actingAs($admin);
 
     // Attempt to update user role WITHOUT photo field (simulate frontend bug)
-    $response = $this->patch('/users/' . $user->id, [
+    $response = $this->patch('/users/'.$user->id, [
         'role' => 'admin',
         // 'photo' => missing on purpose
     ]);
