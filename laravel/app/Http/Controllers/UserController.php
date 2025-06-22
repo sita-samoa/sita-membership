@@ -137,7 +137,10 @@ class UserController extends Controller
 
         $rep = new UpdateUserProfileInformation();
 
-        $rep->update($user, $request->only(['name', 'email', 'photo']));
+        // Only update profile info if name or email is present
+        if ($request->hasAny(['name', 'email'])) {
+            $rep->update($user, $request->only(['name', 'email', 'photo']));
+        }
 
         if ($request->input('password')) {
             $input = $request->only('password');
