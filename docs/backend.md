@@ -1,0 +1,27 @@
+# Backend Tech Stack Overview
+
+1. **Main framework**: [Laravel](https://laravel.com/) (`^10.8`)
+2. **Programming language**: PHP (`^8.1`)
+3. **API & HTTP**: [GuzzleHTTP](https://docs.guzzlephp.org/) (`^7.2`), [Inertia.js Laravel](https://inertiajs.com/server-side-setup) (`^0.6.8`)
+4. **Authentication & Security**: [Laravel Jetstream](https://jetstream.laravel.com/) (`^3.1`), [Laravel Sanctum](https://laravel.com/docs/10.x/sanctum) (`^3.2`)
+5. **Database & Data**:
+   - [Maatwebsite Excel](https://docs.laravel-excel.com/) (`^3.1`)
+   - [Laraveldaily Invoices](https://laraveldaily.com/package/laravel-invoices/) (`^3.1`)
+   - [Monarobase Country List](https://github.com/Monarobase/country-list) (`^3.4`)
+   - [OwenIt Laravel Auditing](https://github.com/owen-it/laravel-auditing) (`^13.5`)
+6. **Monitoring & Error Reporting**: [Sentry Laravel](https://docs.sentry.io/platforms/php/guides/laravel/) (`^4.6`)
+7. **Backup & Utilities**: [Spatie Laravel Backup](https://spatie.be/docs/laravel-backup) (`^8.1`), [TightenCo Ziggy](https://github.com/tighten/ziggy) (`^1.0`)
+8. **Development tools**:
+   - [Laravel Sail](https://laravel.com/docs/10.x/sail) (`^1.18`)
+   - [Laravel Pint](https://laravel.com/docs/10.x/pint) (`^1.0`)
+   - [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer) (`^3.7`)
+   - [Rector](https://github.com/rectorphp/rector) (`^0.16.0`), [Rector Laravel](https://github.com/driftingly/rector-laravel) (`^0.20.0`)
+   - [FakerPHP Faker](https://fakerphp.github.io/) (`^1.9.1`)
+   - [Mockery](https://github.com/mockery/mockery) (`^1.4.4`)
+   - [Nunomaduro Collision](https://github.com/nunomaduro/collision) (`^7.0`)
+   - [Spatie Laravel Ignition](https://spatie.be/docs/laravel-ignition) (`^2.0`)
+9. **Testing framework**: [PestPHP](https://pestphp.com/) (`^2.0`), [PestPHP Laravel Plugin](https://pestphp.com/docs/laravel) (`^2.0`)
+
+---
+
+This file summarizes the main backend technologies and tools used in this project based on `/laravel/composer.json`. Please refer to the file for the complete list of dependencies.
