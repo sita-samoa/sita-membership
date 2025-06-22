@@ -77,7 +77,7 @@
             "./vendor/bin/pest"
         ],
         "test_single": [
-            "./vendor/bin/pest --filter MemberSubmissionTest"
+            "./vendor/bin/pest --filter UserUpdatePhotoRoleTest"
         ],
         "post-autoload-dump": [
             "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
