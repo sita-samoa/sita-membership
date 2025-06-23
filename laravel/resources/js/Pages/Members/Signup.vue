@@ -1,9 +1,11 @@
 <script setup>
-import LayoutAuthenticated from '@/Layouts/LayoutAuthenticated.vue'
-import SignupSteps from '@/Components/SignupSteps.vue'
+import { defineAsyncComponent } from 'vue'
 import { mdiClipboardText } from '@mdi/js'
-import SectionMain from '@/Components/SectionMain.vue'
-import SectionTitleLineWithButton from '@/Components/SectionTitleLineWithButton.vue'
+
+const LayoutAuthenticated = defineAsyncComponent(() => import('@/Layouts/LayoutAuthenticated.vue'))
+const SignupSteps = defineAsyncComponent(() => import('@/Components/SignupSteps.vue'))
+const SectionMain = defineAsyncComponent(() => import('@/Components/SectionMain.vue'))
+const SectionTitleLineWithButton = defineAsyncComponent(() => import('@/Components/SectionTitleLineWithButton.vue'))
 
 defineProps(['member', 'completion', 'options', 'qualifications', 'permissions', 'referees', 'memberWorkExperiences', 'supportingDocuments', 'memberMailingLists', 'countryList', 'tab'])
 </script>

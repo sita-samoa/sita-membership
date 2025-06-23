@@ -1,13 +1,15 @@
 <script setup>
 import { ref } from 'vue'
 import { Head, Link, router } from '@inertiajs/vue3'
-import ApplicationMark from '@/Components/ApplicationMark.vue'
-import Banner from '@/Components/Banner.vue'
-import Dropdown from '@/Components/Dropdown.vue'
-import DropdownLink from '@/Components/DropdownLink.vue'
-import NavLink from '@/Components/NavLink.vue'
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue'
-import FlashMessages from '@/Components/FlashMessages.vue'
+import { defineAsyncComponent } from 'vue'
+
+const ApplicationMark = defineAsyncComponent(() => import('@/Components/ApplicationMark.vue'))
+const Banner = defineAsyncComponent(() => import('@/Components/Banner.vue'))
+const Dropdown = defineAsyncComponent(() => import('@/Components/Dropdown.vue'))
+const DropdownLink = defineAsyncComponent(() => import('@/Components/DropdownLink.vue'))
+const NavLink = defineAsyncComponent(() => import('@/Components/NavLink.vue'))
+const ResponsiveNavLink = defineAsyncComponent(() => import('@/Components/ResponsiveNavLink.vue'))
+const FlashMessages = defineAsyncComponent(() => import('@/Components/FlashMessages.vue'))
 
 defineProps({
   title: String,
