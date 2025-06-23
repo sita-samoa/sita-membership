@@ -2,15 +2,17 @@
 import { ref, computed } from 'vue'
 import { useForm, Link, usePage } from '@inertiajs/vue3'
 import { FwbAlert, FwbListGroup, FwbListGroupItem, FwbButton, FwbTab, FwbTabs } from 'flowbite-vue'
-import MemberSummaryCard from '@/Components/MemberSummaryCard.vue'
+import { defineAsyncComponent } from 'vue'
 import CheckCircleOutlineIcon from 'vue-material-design-icons/CheckCircleOutline.vue'
 import AlertCircleOutlineIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
-import AcceptModal from '@/Components/AcceptModal.vue'
-import RejectionModal from '@/Components/RejectionModal.vue'
-import CardBox from '@/Components/CardBox.vue'
-import MemberPayment from '@/Components/MemberPayment.vue'
-import MemberInvoice from '@/Components/MemberInvoice.vue'
-import SetMembershipStatus from '@/Components/SetMembershipStatus.vue'
+
+const MemberSummaryCard = defineAsyncComponent(() => import('@/Components/MemberSummaryCard.vue'))
+const AcceptModal = defineAsyncComponent(() => import('@/Components/AcceptModal.vue'))
+const RejectionModal = defineAsyncComponent(() => import('@/Components/RejectionModal.vue'))
+const CardBox = defineAsyncComponent(() => import('@/Components/CardBox.vue'))
+const MemberPayment = defineAsyncComponent(() => import('@/Components/MemberPayment.vue'))
+const MemberInvoice = defineAsyncComponent(() => import('@/Components/MemberInvoice.vue'))
+const SetMembershipStatus = defineAsyncComponent(() => import('@/Components/SetMembershipStatus.vue'))
 
 const props = defineProps(['member', 'options', 'data', 'statuses', 'membershipStatuses', 'invoices'])
 

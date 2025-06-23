@@ -2,16 +2,18 @@
 import { useForm } from '@inertiajs/vue3'
 import { FwbAlert, FwbButton, FwbInput, FwbProgress } from 'flowbite-vue'
 import { computed, ref } from 'vue'
-import InputLabel from '@/Components/InputLabel.vue'
-import InputError from '@/Components/InputError.vue'
-import MemberDocumentsList from '@/Components/MemberDocumentsList.vue'
-import DeleteConfirmationModal from '@/Components/DeleteConfirmationModal.vue'
-import DialogModal from '@/Components/DialogModal.vue'
-import AddButton from '@/Components/AddButton.vue'
-import DeleteButton from '@/Components/DeleteButton.vue'
-import UpdateButton from '@/Components/UpdateButton.vue'
-import CancelButton from '@/Components/CancelButton.vue'
+import { defineAsyncComponent } from 'vue'
 import CloudDownloadIcon from 'vue-material-design-icons/CloudDownload.vue'
+
+const InputLabel = defineAsyncComponent(() => import('@/Components/InputLabel.vue'))
+const InputError = defineAsyncComponent(() => import('@/Components/InputError.vue'))
+const MemberDocumentsList = defineAsyncComponent(() => import('@/Components/MemberDocumentsList.vue'))
+const DeleteConfirmationModal = defineAsyncComponent(() => import('@/Components/DeleteConfirmationModal.vue'))
+const DialogModal = defineAsyncComponent(() => import('@/Components/DialogModal.vue'))
+const AddButton = defineAsyncComponent(() => import('@/Components/AddButton.vue'))
+const DeleteButton = defineAsyncComponent(() => import('@/Components/DeleteButton.vue'))
+const UpdateButton = defineAsyncComponent(() => import('@/Components/UpdateButton.vue'))
+const CancelButton = defineAsyncComponent(() => import('@/Components/CancelButton.vue'))
 
 const handleFileChange = event => {
   const file = event.target.files[0]
