@@ -26,7 +26,7 @@ services:
 
   php:
     # image: wodby/drupal-php:$PHP_TAG
-    image: wodby/php:$PHP_TAG
+    image: wodby/laravel-php:$PHP_TAG
     user: root
     command: "php-fpm -R"
     container_name: "${PROJECT_NAME}_php"
