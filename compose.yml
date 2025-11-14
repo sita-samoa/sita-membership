@@ -26,16 +26,19 @@ services:
 
   php:
     # image: wodby/drupal-php:$PHP_TAG
-    image: wodby/php:$PHP_TAG
+    image: wodby/laravel-php:$PHP_TAG
     user: root
     command: "php-fpm -R"
     container_name: "${PROJECT_NAME}_php"
     environment:
       # APP_KEY: $APP_KEY
       LARAVEL_APP_DEBUG: "true"
-      SSMTP_MAILHUB: mailhog:1025
-      #      SSMTP_MAILHUB: opensmtpd:25
-      PHP_SENDMAIL_PATH: '"/usr/bin/dos2unix -u | /usr/sbin/ssmtp -t -f"'
+      # By default xdebug extension also disabled.
+      PHP_EXTENSIONS_DISABLE: xhprof,spx
+      PHP_MAIL_MIXED_LF_AND_CRLF: "On"
+      # Mailpit:
+      MSMTP_HOST: mailpit
+      MSMTP_PORT: 1025
       # DB_HOST: $DB_HOST
       # DB_PORT: $DB_PORT
       # DB_USERNAME: $DB_USER
@@ -69,6 +72,7 @@ services:
     #      MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", {"browserName":"chrome","goog:chromeOptions":{"args":["--disable-gpu","--headless"]}}, "http://chrome:9515"]'
     volumes:
       - ./:/var/www/html:cached
+      - ~/.cache/composer:/home/wodby/.cache/composer
   ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/drupal/local#docker-for-mac
   #    - drupal:/var/www/html
   ## For XHProf and Xdebug profiler traces
@@ -104,15 +108,23 @@ services:
     #    - drupal:/var/www/html
     labels:
       - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
+      - "traefik.http.services.${PROJECT_NAME}_nginx.loadbalancer.server.port=80"
 
-  mailhog:
-    image: mailhog/mailhog
-    container_name: "${PROJECT_NAME}_mailhog"
-    ports:
-      - 8025:8025
+  mailpit:
+    image: axllent/mailpit
+    container_name: "${PROJECT_NAME}_mailpit"
     labels:
-      - "traefik.http.services.${PROJECT_NAME}_mailhog.loadbalancer.server.port=8025"
-      - "traefik.http.routers.${PROJECT_NAME}_mailhog.rule=Host(`mailhog.${PROJECT_BASE_URL}`)"
+      - "traefik.http.services.${PROJECT_NAME}_mailpit.loadbalancer.server.port=8025"
+      - "traefik.http.routers.${PROJECT_NAME}_mailpit.rule=Host(`mailpit.${PROJECT_BASE_URL}`)"
+
+  # mailhog:
+  #   image: mailhog/mailhog
+  #   container_name: "${PROJECT_NAME}_mailhog"
+  #   ports:
+  #     - 8025:8025
+  #   labels:
+  #     - "traefik.http.services.${PROJECT_NAME}_mailhog.loadbalancer.server.port=8025"
+  #     - "traefik.http.routers.${PROJECT_NAME}_mailhog.rule=Host(`mailhog.${PROJECT_BASE_URL}`)"
 
   #  postgres:
   #    image: wodby/postgres:$POSTGRES_TAG
@@ -174,16 +186,17 @@ services:
   #    labels:
   #    - "traefik.http.routers.${PROJECT_NAME}_adminer.rule=Host(`adminer.${PROJECT_BASE_URL}`)"
 
-  pma:
-    image: phpmyadmin/phpmyadmin
-    container_name: "${PROJECT_NAME}_pma"
-    environment:
-      PMA_HOST: $DB_HOST
-      PMA_USER: $DB_USER
-      PMA_PASSWORD: $DB_PASSWORD
-      UPLOAD_LIMIT: 1G
-    labels:
-      - "traefik.http.routers.${PROJECT_NAME}_pma.rule=Host(`pma.${PROJECT_BASE_URL}`)"
+  # pma:
+  #   image: phpmyadmin/phpmyadmin
+  #   container_name: "${PROJECT_NAME}_pma"
+  #   environment:
+  #     PMA_HOST: $DB_HOST
+  #     PMA_USER: $DB_USER
+  #     PMA_PASSWORD: $DB_PASSWORD
+  #     UPLOAD_LIMIT: 1G
+  #   labels:
+  #     - "traefik.http.routers.${PROJECT_NAME}_pma.rule=Host(`pma.${PROJECT_BASE_URL}`)"
+  #     - "traefik.http.services.${PROJECT_NAME}_pma.loadbalancer.server.port=80"
 
   # pma_testing:
   #   image: phpmyadmin/phpmyadmin
