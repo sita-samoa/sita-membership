@@ -1,5 +1,8 @@
 include .env
 
+## Detect Docker Compose command (v2 'docker compose' or legacy 'docker-compose')
+DOCKER_COMPOSE ?= $(shell docker compose version >/dev/null 2>&1 && echo "docker compose" || echo "docker-compose")
+
 default: up
 
 COMPOSER_ROOT ?= /var/www/html
@@ -19,20 +22,20 @@ endif
 .PHONY: up
 up:
 	@echo "Starting up containers for $(PROJECT_NAME)..."
-	docker compose pull
-	docker compose up -d --remove-orphans
+	$(DOCKER_COMPOSE) pull
+	$(DOCKER_COMPOSE) up -d --remove-orphans
 
 ## ssl	:	Start up containers with SSL support.
 .PHONY: ssl
 ssl:
 	@echo "Starting up containers for $(PROJECT_NAME)..."
-	docker compose pull
-	docker compose -f docker-compose.yml -f docker-compose.ssl.yml up -d --remove-orphans
+	$(DOCKER_COMPOSE) pull
+	$(DOCKER_COMPOSE) -f compose.yml -f compose.ssl.yml up -d --remove-orphans
 
 ## gitpod	:	Start up containers in gitpod.
 .PHONY: gitpod
 gitpod:
-	docker compose --env-file .env.gitpod up -d --remove-orphans
+	$(DOCKER_COMPOSE) --env-file .env.gitpod up -d --remove-orphans
 
 .PHONY: mutagen
 mutagen:
@@ -46,13 +49,13 @@ down: stop
 .PHONY: start
 start:
 	@echo "Starting containers for $(PROJECT_NAME) from where you left off..."
-	@docker compose start
+	@$(DOCKER_COMPOSE) start
 
 ## stop	:	Stop containers.
 .PHONY: stop
 stop:
 	@echo "Stopping containers for $(PROJECT_NAME)..."
-	@docker compose stop
+	@$(DOCKER_COMPOSE) stop
 
 ## prune	:	Remove containers and their volumes.
 ##		You can optionally pass an argument with the service name to prune single container
@@ -61,7 +64,7 @@ stop:
 .PHONY: prune
 prune:
 	@echo "Removing containers for $(PROJECT_NAME)..."
-	@docker compose down -v $(filter-out $@,$(MAKECMDGOALS))
+	@$(DOCKER_COMPOSE) down -v $(filter-out $@,$(MAKECMDGOALS))
 
 ## ps	:	List running containers.
 .PHONY: ps

@@ -69,6 +69,7 @@ services:
     #      MINK_DRIVER_ARGS_WEBDRIVER: '["chrome", {"browserName":"chrome","goog:chromeOptions":{"args":["--disable-gpu","--headless"]}}, "http://chrome:9515"]'
     volumes:
       - ./:/var/www/html:cached
+      - ~/.cache/composer:/home/wodby/.cache/composer
   ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/drupal/local#docker-for-mac
   #    - drupal:/var/www/html
   ## For XHProf and Xdebug profiler traces
@@ -104,6 +105,7 @@ services:
     #    - drupal:/var/www/html
     labels:
       - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
+      - "traefik.http.services.${PROJECT_NAME}_nginx.loadbalancer.server.port=80"
 
   mailhog:
     image: mailhog/mailhog
@@ -184,6 +186,7 @@ services:
       UPLOAD_LIMIT: 1G
     labels:
       - "traefik.http.routers.${PROJECT_NAME}_pma.rule=Host(`pma.${PROJECT_BASE_URL}`)"
+      - "traefik.http.services.${PROJECT_NAME}_pma.loadbalancer.server.port=80"
 
   # pma_testing:
   #   image: phpmyadmin/phpmyadmin
