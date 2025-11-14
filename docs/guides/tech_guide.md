@@ -36,7 +36,7 @@ make artisan queue:work
 Access the Dev site on:
 
 ```
-sita-membership.docker.localhost:8000
+http://sita-membership.docker.localhost:8000
 ```
 
 Create test accounts and dumy data (see [Test accounts](#test-accounts))
