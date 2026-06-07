@@ -247,6 +247,18 @@ make logs
 # check logs for php and node container
 make logs php node
 
+# check logs for dev environment
+make logs-dev
+
+# check logs for dev environment (specific services)
+make logs-dev php nginx
+
+# check logs for prod environment
+make logs-prod
+
+# check logs for prod environment (specific services)
+make logs-prod php nginx
+
 # log into php container (this will allow use php artisan)
 make shell
 
