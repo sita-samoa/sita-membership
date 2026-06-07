@@ -164,13 +164,13 @@ Update the Laravel `.env` file to the following values as needed:
 
 ### Initial Setup
 
-1. Create `.env.local` to override production-specific variables:
+1. Create `.env.prod` to override production-specific variables:
 
 ```
-cp .env.local-prod .env.local
+cp .env.prod-sample .env.prod
 ```
 
-2. Update the following values in `.env.local`:
+2. Update the following values in `.env.prod`:
 
 - `APP_KEY` - Generate a secure 32-character key using `php artisan key:generate`
 - `DB_NAME` - Set to your production database name
@@ -180,7 +180,7 @@ cp .env.local-prod .env.local
 - `PROJECT_BASE_URL` - Set to your production domain (e.g., `sita-membership.example.com`)
 - `EMAIL` - Set to your email for Let's Encrypt SSL notifications
 
-**Note:** Only add variables that differ from `.env`. Docker Compose 2.24+ automatically merges `.env.local` with `.env`, with `.env.local` taking precedence.
+**Note:** Only add variables that differ from `.env`. The `make prod` command passes both `.env` and `.env.prod` to Docker Compose, with `.env.prod` taking precedence.
 
 3. Update the Laravel environment in `laravel/.env`:
 
@@ -192,14 +192,14 @@ cp .env.local-prod .env.local
 
 This project uses Caddy with automatic Let's Encrypt SSL for production (simpler configuration than Traefik).
 
-The `make prod` command automatically loads `.env.local` if it exists (Docker Compose 2.24+). Ensure your `.env.local` file has the correct domain and email configured:
+The `make prod` command passes both `.env` and `.env.prod` to Docker Compose. Ensure your `.env.prod` file has the correct domain and email configured:
 
 ```
 PROJECT_BASE_URL=example.com
 EMAIL=your@email.com
 ```
 
-**Pro tip:** Keep `.env.local` minimal—only override sensitive or environment-specific values like passwords, keys, and domains. All other variables are inherited from `.env`.
+**Pro tip:** Keep `.env.prod` minimal—only override sensitive or environment-specific values like passwords, keys, and domains. All other variables are inherited from `.env`.
 
 The Caddyfile in the project root automatically handles:
 
