@@ -66,7 +66,8 @@ start:
 .PHONY: stop
 stop:
 	@echo "Stopping containers for $(PROJECT_NAME)..."
-	@$(DOCKER_COMPOSE) stop
+	@$(DOCKER_COMPOSE) -f compose.yml -f compose.dev.yml stop || true
+	@$(DOCKER_COMPOSE) -f compose.yml -f compose.prod.yml stop || true
 
 ## prune	:	Remove containers and their volumes.
 ##		You can optionally pass an argument with the service name to prune single container
