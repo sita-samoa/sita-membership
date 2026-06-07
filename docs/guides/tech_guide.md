@@ -1,6 +1,6 @@
 # Technical Guide
 
-## Getting started
+## Getting Started
 
 ### Dev environment with [docker4drupal](https://github.com/wodby/docker4drupal/releases)
 
@@ -39,13 +39,13 @@ Access the Dev site on:
 http://sita-membership.docker.localhost:8000
 ```
 
-Create test accounts and dumy data (see [Test accounts](#test-accounts))
+Create test accounts and dummy data (see [Test Accounts](#test-accounts))
 
 ```
 make composer dev
 ```
 
-## Test accounts
+## Test Accounts
 
 Running `make composer dev` will create test accounts and dummy data for local dev.
 
@@ -58,11 +58,13 @@ Running `make composer dev` will create test accounts and dummy data for local d
 # All accounts use "password" as its password
 ```
 
-## Coding style and etiqueue
+## Development Environment
+
+### Coding Style and Etiquette
 
 We have linting for PHP and JS which should take care of most things. Please be respectful when adding code comments and responding to feedback.
 
-## Linting
+### Linting
 
 ```
 # run in php container
@@ -75,30 +77,9 @@ npm run lint # shows warnings and tries to fix
 npm run format # tries to fix js/vue problems
 ```
 
-## Backups
+### SSL Support on Dev (Traefik)
 
-```
-# To take a backup run the following command
-php artisan backup:run
-
-# to clean out old backups
-php artisan backup:clean
-```
-
-## Git leaks
-
-The repo will be scanned for secrets each time docker compose up is called. It
-will also be checked as part of Github actions. If there is a leak it will
-appear in .gitleaks/findings.json file.
-
-## Local Development vs Production
-
-This project uses different reverse proxies for local development and production:
-
-- **Local Development:** Traefik with Let's Encrypt SSL (easier debugging with dashboard)
-- **Production:** Caddy with automatic Let's Encrypt SSL (simpler configuration)
-
-### SSL support on dev (Traefik)
+This project uses Traefik with Let's Encrypt SSL for local development, which provides easier debugging with a dashboard.
 
 To run your dev with SSL support using Traefik, use the following command:
 
@@ -115,115 +96,7 @@ make stop
 
 Access the Traefik dashboard at `https://traefik.sita-membership.docker.localhost:8080` (requires basic auth).
 
-### Production Deployment (Caddy)
-
-To run containers with Caddy for production, use:
-
-```
-# start containers with Caddy
-make prod
-
-# stop containers
-make stop
-```
-
-Caddy automatically handles SSL certificate generation and renewal via Let's Encrypt. The Caddyfile in the project root defines all routing rules.
-
-## Environments
-
-Update the laravel .env file to the following values as needed
-
-- local - for local development
-- demo - for a uat or demo site (demo users cannot be deleted)
-- production - for production site
-
-## On Production
-
-Follow Getting started steps but use .env.example as the template for .env (ie cp .env.example .env).
-
-Also set **APP_ENV**=production and **GOOGLE_ANALYTICS_GA4**. This will ensure Google Analytics works correctly.
-
-Set **MAIL_BACKUPS_TO_ADDRESS** to be notified of backup statuses.
-
-### Caddy Configuration for Production
-
-Update the following variables in .env for Caddy SSL support. Here example.com is used as an example domain:
-
-```
-PROJECT_BASE_URL=example.com
-EMAIL=your@email.com
-```
-
-The Caddyfile in the project root automatically handles:
-
-- SSL certificate generation and renewal via Let's Encrypt
-- HTTP to HTTPS redirects
-- Reverse proxy routing for all services
-
-To deploy with Caddy:
-
-```
-make prod
-```
-
-SSL certificates are stored persistently in `docker-init/data/caddy/` and will survive container restarts.
-
-#### Updating Caddyfile in Production
-
-To update the Caddyfile without downtime:
-
-```
-# Edit Caddyfile locally
-# Then reload configuration in the running container
-docker exec <container_name> caddy reload
-```
-
-If you run composer dev on production make sure to reset it by running composer build to ensure there are no test accounts on prod.
-
-### Automated Cron Tasks
-
-The production deployment includes a `crond` service that automatically runs the following tasks:
-
-- **Every minute**: `php artisan schedule:run` - Processes Laravel scheduled tasks (backups, membership status updates, reminders)
-- **Every 5 minutes**: `php artisan queue:work` - Processes queued jobs
-
-No manual cron setup is required on the host server.
-
-### Google Analytics
-
-Register for a google recaptcha site key and secret
-https://www.google.com/recaptcha/admin/create
-
-In the domains field enter the following:
-
-`sita-membership.docker.localhost`
-
-Once received, add your google recaptcha environment variables to laravel/.env
-
-```
-GOOGLE_RECAPTCHA_SITE_KEY=YOUR_GOOGLE_RECAPTCHA_SITE_KEY
-GOOGLE_RECAPTCHA_SECRET_KEY=YOUR_GOOGLE_RECAPTCHA_SECRET_KEY
-
-```
-
-## Gitpod Integration
-
-You can start coding using Gitpod.
-
-First Signup for a [Gitpod account](https://gitpod.io/login/), then click the link below:
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/sita-samoa/sita-membership)
-
-## Tugboat Integration
-
-Tugboat will create a staging environment for each PR for testing. With default
-logins for admin, coordinator, editor and executive using composer dev.
-
-## Git revise
-
-Git revise can be install to improve your commits and messaging run `bash .install-git-revise.sh`. Run `git revise -ie` to update commit messages in bulk.
-
-## Common commands
+### Common Commands
 
 ```
 # clear database and re-run migrations
@@ -267,6 +140,130 @@ make composer test
 
 # create pest test
 make artisan "make:test UserTest --pest"
+```
+
+### Git Workflow Tools
+
+#### Git Revise
+
+Git revise can be installed to improve your commits and messaging. Run `bash .install-git-revise.sh`. Use `git revise -ie` to update commit messages in bulk.
+
+#### Git Leaks
+
+The repo will be scanned for secrets each time docker compose up is called. It will also be checked as part of Github actions. If there is a leak it will appear in `.gitleaks/findings.json` file.
+
+## Production Deployment
+
+### Environment Configuration
+
+Update the Laravel `.env` file to the following values as needed:
+
+- `local` - for local development
+- `demo` - for a UAT or demo site (demo users cannot be deleted)
+- `production` - for production site
+
+### Initial Setup
+
+Follow the Getting Started steps but use `.env.example` as the template for `.env` (i.e., `cp .env.example .env`).
+
+Set the following environment variables:
+
+- `APP_ENV=production` - Required for production mode
+- `GOOGLE_ANALYTICS_GA4` - Ensures Google Analytics works correctly
+- `MAIL_BACKUPS_TO_ADDRESS` - To be notified of backup statuses
+
+### Caddy Configuration
+
+This project uses Caddy with automatic Let's Encrypt SSL for production (simpler configuration than Traefik).
+
+Update the following variables in `.env` for Caddy SSL support. Here `example.com` is used as an example domain:
+
+```
+PROJECT_BASE_URL=example.com
+EMAIL=your@email.com
+```
+
+The Caddyfile in the project root automatically handles:
+
+- SSL certificate generation and renewal via Let's Encrypt
+- HTTP to HTTPS redirects
+- Reverse proxy routing for all services
+
+To deploy with Caddy:
+
+```
+make prod
+```
+
+SSL certificates are stored persistently in `docker-init/data/caddy/` and will survive container restarts.
+
+#### Updating Caddyfile in Production
+
+To update the Caddyfile without downtime:
+
+```
+# Edit Caddyfile locally
+# Then reload configuration in the running container
+docker exec <container_name> caddy reload
+```
+
+### Automated Cron Tasks
+
+The production deployment includes a `crond` service that automatically runs the following tasks:
+
+- **Every minute**: `php artisan schedule:run` - Processes Laravel scheduled tasks (backups, membership status updates, reminders)
+- **Every 5 minutes**: `php artisan queue:work` - Processes queued jobs
+
+No manual cron setup is required on the host server.
+
+### ⚠️ Important Warning
+
+**Never run `composer dev` on production.** This creates test accounts and dummy data. If you accidentally run it, reset by running `composer build` to ensure there are no test accounts on production.
+
+## Integrations
+
+### Gitpod
+
+You can start coding using Gitpod.
+
+First signup for a [Gitpod account](https://gitpod.io/login/), then click the link below:
+
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/sita-samoa/sita-membership)
+
+### Tugboat
+
+Tugboat will create a staging environment for each PR for testing. With default logins for admin, coordinator, editor and executive using `composer dev`.
+
+## Security & Configuration
+
+### reCAPTCHA Setup
+
+Register for a Google reCAPTCHA site key and secret:
+https://www.google.com/recaptcha/admin/create
+
+In the domains field enter the following:
+
+```
+sita-membership.docker.localhost
+```
+
+Once received, add your Google reCAPTCHA environment variables to `laravel/.env`:
+
+```
+GOOGLE_RECAPTCHA_SITE_KEY=YOUR_GOOGLE_RECAPTCHA_SITE_KEY
+GOOGLE_RECAPTCHA_SECRET_KEY=YOUR_GOOGLE_RECAPTCHA_SECRET_KEY
+```
+
+## Maintenance
+
+### Backups
+
+```
+# To take a backup run the following command
+php artisan backup:run
+
+# to clean out old backups
+php artisan backup:clean
 ```
 
 ## Tips
