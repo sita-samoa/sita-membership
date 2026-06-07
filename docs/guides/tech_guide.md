@@ -155,6 +155,7 @@ EMAIL=your@email.com
 ```
 
 The Caddyfile in the project root automatically handles:
+
 - SSL certificate generation and renewal via Let's Encrypt
 - HTTP to HTTPS redirects
 - Reverse proxy routing for all services
@@ -179,19 +180,14 @@ docker exec <container_name> caddy reload
 
 If you run composer dev on production make sure to reset it by running composer build to ensure there are no test accounts on prod.
 
-Ensure that the following commands are run on a cron see https://laravel.com/docs/10.x/scheduling#running-the-scheduler
+### Automated Cron Tasks
 
-# run every minute - for scheduled tasks
+The production deployment includes a `crond` service that automatically runs the following tasks:
 
-```
-php artisan schedule:run
-```
+- **Every minute**: `php artisan schedule:run` - Processes Laravel scheduled tasks (backups, membership status updates, reminders)
+- **Every 5 minutes**: `php artisan queue:work` - Processes queued jobs
 
-# run every 5 minutes - for running queues
-
-```
-php artisan queue:work database --tries=1 --max-time=30 --stop-when-empty
-```
+No manual cron setup is required on the host server.
 
 ### Google Analytics
 
@@ -208,37 +204,6 @@ Once received, add your google recaptcha environment variables to laravel/.env
 GOOGLE_RECAPTCHA_SITE_KEY=YOUR_GOOGLE_RECAPTCHA_SITE_KEY
 GOOGLE_RECAPTCHA_SECRET_KEY=YOUR_GOOGLE_RECAPTCHA_SECRET_KEY
 
-```
-
-If you run composer dev on production make sure to reset it by running composer build to ensure there are no test accounts.
-
-Ensure that the following commands are run on a cron see https://laravel.com/docs/10.x/scheduling#running-the-scheduler
-
-```
-# run every minute - for scheduled tasks
-
-php artisan schedule:run
-
-# run every 5 minutes - for running queues
-
-php artisan queue:work database --tries=1 --max-time=30 --stop-when-empty
-
-```
-
-### Google Analytics
-
-Register for a google recaptcha site key and secret
-https://www.google.com/recaptcha/admin/create
-
-In the domains field enter the following:
-
-`sita-membership.docker.localhost`
-
-Once received, add your google recaptcha environment variables to laravel/.env
-
-```
-GOOGLE_RECAPTCHA_SITE_KEY=YOUR_GOOGLE_RECAPTCHA_SITE_KEY
-GOOGLE_RECAPTCHA_SECRET_KEY=YOUR_GOOGLE_RECAPTCHA_SECRET_KEY
 ```
 
 ## Gitpod Integration

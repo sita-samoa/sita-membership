@@ -1,6 +1,17 @@
 services:
+  mariadb:
+    restart: unless-stopped
+
+  php:
+    restart: unless-stopped
+    environment:
+      LARAVEL_APP_DEBUG: "false"
+
+  nginx:
+    restart: unless-stopped
+
   caddy:
-    image: caddy:latest
+    image: caddy:${CADDY_TAG}
     container_name: "${PROJECT_NAME}_caddy"
     ports:
       - "80:80"
@@ -15,3 +26,17 @@ services:
     networks:
       - default
     restart: unless-stopped
+
+  crond:
+    image: wodby/laravel-php:$PHP_TAG
+    container_name: "${PROJECT_NAME}_crond"
+    environment:
+      CRONTAB: |
+        * * * * * php /var/www/html/laravel/artisan schedule:run >> /var/log/cron.log 2>&1
+        */5 * * * * php /var/www/html/laravel/artisan queue:work database --tries=1 --max-time=30 --stop-when-empty >> /var/log/cron.log 2>&1
+    command: sudo -E crond -f -d 0
+    volumes:
+      - ./:/var/www/html:cached
+    restart: unless-stopped
+    depends_on:
+      - mariadb
