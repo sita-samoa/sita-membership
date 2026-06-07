@@ -37,12 +37,13 @@ dev:
 ssl: dev
 
 ## prod	:	Start up containers with Caddy SSL support (production).
+##		Create .env.local to override specific variables from .env (e.g., DB_PASSWORD, APP_KEY).
+##		Docker Compose 2.24+ automatically merges .env.local with .env.
 .PHONY: prod
-ENV_FILE_PROD := $(shell [ -f .env.prod ] && echo "--env-file .env.prod" || echo "")
 prod:
 	@echo "Starting up containers for $(PROJECT_NAME) with Caddy..."
 	$(DOCKER_COMPOSE) pull
-	$(DOCKER_COMPOSE) -f compose.yml -f compose.prod.yml $(ENV_FILE_PROD) up -d --remove-orphans
+	$(DOCKER_COMPOSE) -f compose.yml -f compose.prod.yml up -d --remove-orphans
 
 ## gitpod	:	Start up containers in gitpod.
 .PHONY: gitpod
