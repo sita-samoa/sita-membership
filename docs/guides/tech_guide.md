@@ -91,17 +91,43 @@ The repo will be scanned for secrets each time docker compose up is called. It
 will also be checked as part of Github actions. If there is a leak it will
 appear in .gitleaks/findings.json file.
 
-## SSL support on dev
+## Local Development vs Production
 
-To run your dev with SSL support use the following command
+This project uses different reverse proxies for local development and production:
+
+- **Local Development:** Traefik with Let's Encrypt SSL (easier debugging with dashboard)
+- **Production:** Caddy with automatic Let's Encrypt SSL (simpler configuration)
+
+### SSL support on dev (Traefik)
+
+To run your dev with SSL support using Traefik, use the following command:
 
 ```
-# start containers
+# start containers with Traefik
+make dev
+
+# or use the backward-compatible alias
 make ssl
 
 # stop containers
 make stop
 ```
+
+Access the Traefik dashboard at `https://traefik.sita-membership.docker.localhost:8080` (requires basic auth).
+
+### Production Deployment (Caddy)
+
+To run containers with Caddy for production, use:
+
+```
+# start containers with Caddy
+make prod
+
+# stop containers
+make stop
+```
+
+Caddy automatically handles SSL certificate generation and renewal via Let's Encrypt. The Caddyfile in the project root defines all routing rules.
 
 ## Environments
 
@@ -119,20 +145,47 @@ Also set **APP_ENV**=production and **GOOGLE_ANALYTICS_GA4**. This will ensure G
 
 Set **MAIL_BACKUPS_TO_ADDRESS** to be notified of backup statuses.
 
-Also if using SSL update the following variables accordingly in .env. Here
-example.com is used as an example domain
+### Caddy Configuration for Production
+
+Update the following variables in .env for Caddy SSL support. Here example.com is used as an example domain:
 
 ```
-DOMAIN=example.com
+PROJECT_BASE_URL=example.com
 EMAIL=your@email.com
-CERT_RESOLVER=letsencrypt
 ```
 
-If you run composer dev on production make sure to reset it by running composer build to ensure there are no test accounts on pord.
+The Caddyfile in the project root automatically handles:
+- SSL certificate generation and renewal via Let's Encrypt
+- HTTP to HTTPS redirects
+- Reverse proxy routing for all services
+
+To deploy with Caddy:
+
+```
+make prod
+```
+
+SSL certificates are stored persistently in `docker-init/data/caddy/` and will survive container restarts.
+
+#### Updating Caddyfile in Production
+
+To update the Caddyfile without downtime:
+
+```
+# Edit Caddyfile locally
+# Then reload configuration in the running container
+docker exec <container_name> caddy reload
+```
+
+If you run composer dev on production make sure to reset it by running composer build to ensure there are no test accounts on prod.
 
 Ensure that the following commands are run on a cron see https://laravel.com/docs/10.x/scheduling#running-the-scheduler
 
-Also set **APP_ENV**=production and **GOOGLE_ANALYTICS_GA4**. This will ensure Google Analytics works correctly.
+# run every minute - for scheduled tasks
+
+```
+php artisan schedule:run
+```
 
 # run every 5 minutes - for running queues
 

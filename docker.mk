@@ -25,12 +25,23 @@ up:
 	$(DOCKER_COMPOSE) pull
 	$(DOCKER_COMPOSE) up -d --remove-orphans
 
-## ssl	:	Start up containers with SSL support.
-.PHONY: ssl
-ssl:
-	@echo "Starting up containers for $(PROJECT_NAME)..."
+## dev	:	Start up containers with Traefik SSL support (local development).
+.PHONY: dev
+dev:
+	@echo "Starting up containers for $(PROJECT_NAME) with Traefik..."
 	$(DOCKER_COMPOSE) pull
-	$(DOCKER_COMPOSE) -f compose.yml -f compose.ssl.yml up -d --remove-orphans
+	$(DOCKER_COMPOSE) -f compose.yml -f compose.dev.yml up -d --remove-orphans
+
+## ssl	:	Start up containers with SSL support (alias for 'make dev' - backward compatible).
+.PHONY: ssl
+ssl: dev
+
+## prod	:	Start up containers with Caddy SSL support (production).
+.PHONY: prod
+prod:
+	@echo "Starting up containers for $(PROJECT_NAME) with Caddy..."
+	$(DOCKER_COMPOSE) pull
+	$(DOCKER_COMPOSE) -f compose.yml -f compose.prod.yml up -d --remove-orphans
 
 ## gitpod	:	Start up containers in gitpod.
 .PHONY: gitpod
