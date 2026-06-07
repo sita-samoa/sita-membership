@@ -110,6 +110,22 @@ composer:
 logs:
 	@docker compose logs -f $(filter-out $@,$(MAKECMDGOALS))
 
+## logs-dev	:	View logs for dev environment.
+##		You can optionally pass an argument with the service name to limit logs
+##		logs-dev php	: View `php` container logs in dev.
+##		logs-dev nginx php	: View `nginx` and `php` containers logs in dev.
+.PHONY: logs-dev
+logs-dev:
+	@$(DOCKER_COMPOSE) -f compose.yml -f compose.dev.yml logs -f $(filter-out $@,$(MAKECMDGOALS))
+
+## logs-prod	:	View logs for prod environment.
+##		You can optionally pass an argument with the service name to limit logs
+##		logs-prod php	: View `php` container logs in prod.
+##		logs-prod nginx php	: View `nginx` and `php` containers logs in prod.
+.PHONY: logs-prod
+logs-prod:
+	@$(DOCKER_COMPOSE) -f compose.yml -f compose.prod.yml logs -f $(filter-out $@,$(MAKECMDGOALS))
+
 # https://stackoverflow.com/a/6273809/1826109
 %:
 	@:
