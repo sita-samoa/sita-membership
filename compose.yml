@@ -81,10 +81,6 @@ services:
       - ./:/var/www/html:cached
     ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/drupal/local#docker-for-mac
     #    - drupal:/var/www/html
-  mailpit:
-    image: axllent/mailpit
-    container_name: "${PROJECT_NAME}_mailpit"
-
   # mailhog:
   #   image: mailhog/mailhog
   #   container_name: "${PROJECT_NAME}_mailhog"
