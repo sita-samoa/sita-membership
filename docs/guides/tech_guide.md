@@ -164,9 +164,23 @@ Update the Laravel `.env` file to the following values as needed:
 
 ### Initial Setup
 
-Follow the Getting Started steps but use `.env.example` as the template for `.env` (i.e., `cp .env.example .env`).
+1. Copy the production environment template:
 
-Set the following environment variables:
+```
+cp .env.prod-sample .env.prod
+```
+
+2. Update the following values in `.env.prod`:
+
+- `APP_KEY` - Generate a secure 32-character key using `php artisan key:generate`
+- `DB_NAME` - Set to your production database name
+- `DB_USER` - Set to your production database user
+- `DB_PASSWORD` - Set to a secure database password
+- `DB_ROOT_PASSWORD` - Set to a secure root password
+- `PROJECT_BASE_URL` - Set to your production domain (e.g., `sita-membership.example.com`)
+- `EMAIL` - Set to your email for Let's Encrypt SSL notifications
+
+3. Update the Laravel environment in `laravel/.env`:
 
 - `APP_ENV=production` - Required for production mode
 - `GOOGLE_ANALYTICS_GA4` - Ensures Google Analytics works correctly
@@ -176,7 +190,7 @@ Set the following environment variables:
 
 This project uses Caddy with automatic Let's Encrypt SSL for production (simpler configuration than Traefik).
 
-Update the following variables in `.env` for Caddy SSL support. Here `example.com` is used as an example domain:
+The `make prod` command automatically uses `.env.prod` if it exists. Ensure your `.env.prod` file has the correct domain and email configured:
 
 ```
 PROJECT_BASE_URL=example.com

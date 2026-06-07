@@ -26,6 +26,7 @@ docker-init/files
 docker-init/data
 mariadb-init/
 .env.gitpod
+.env.prod
 
 # ignore caches
 laravel/.eslintcache
