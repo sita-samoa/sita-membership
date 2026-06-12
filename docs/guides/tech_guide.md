@@ -207,6 +207,14 @@ The Caddyfile in the project root automatically handles:
 - HTTP to HTTPS redirects
 - Reverse proxy routing for all services
 
+The Caddyfile also sets the following security headers on all responses:
+
+- `Strict-Transport-Security` — enforces HTTPS for one year with subdomains and preload
+- `X-Frame-Options` — prevents clickjacking
+- `X-Content-Type-Options` — prevents MIME-type sniffing
+- `X-XSS-Protection` — enables browser XSS filtering
+- `Referrer-Policy` — controls referrer information
+
 To deploy with Caddy:
 
 ```
@@ -215,6 +223,18 @@ make prod
 
 SSL certificates are stored persistently in `docker-init/data/caddy/` and will survive container restarts.
 
+#### Checking Caddy Health
+
+The Caddy container includes a health check that runs every 30 seconds:
+
+```
+# View health check status
+docker ps --filter name=<project_name>_caddy
+
+# View Caddy logs
+make logs-prod caddy
+```
+
 #### Updating Caddyfile in Production
 
 To update the Caddyfile without downtime:
@@ -222,7 +242,7 @@ To update the Caddyfile without downtime:
 ```
 # Edit Caddyfile locally
 # Then reload configuration in the running container
-docker exec <container_name> caddy reload
+docker exec <container_name> caddy reload --config /etc/caddy/Caddyfile
 ```
 
 ### Automated Cron Tasks
@@ -233,6 +253,30 @@ The production deployment includes a `crond` service that automatically runs the
 - **Every 5 minutes**: `php artisan queue:work` - Processes queued jobs
 
 No manual cron setup is required on the host server.
+
+### Troubleshooting
+
+#### SSL certificate not issued
+
+- Ensure `PROJECT_BASE_URL` in `.env.prod` resolves to your server's public IP.
+- Ports 80 and 443 must be open and reachable from the internet (Let's Encrypt requires HTTP-01 challenge access on port 80).
+- Check Caddy logs: `make logs-prod caddy`
+
+#### Caddy container unhealthy
+
+- Run `docker inspect <container_id>` and check the `Health` field for failure details.
+- Verify the Caddyfile syntax: `docker exec <container_name> caddy validate --config /etc/caddy/Caddyfile`
+
+#### Security headers not appearing
+
+- Use `curl -I https://your-domain.com` to inspect response headers.
+- If behind another proxy, ensure that proxy is not stripping headers.
+
+#### Reloading Caddy config without downtime
+
+```
+docker exec <container_name> caddy reload --config /etc/caddy/Caddyfile
+```
 
 ### ⚠️ Important Warning
 

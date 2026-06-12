@@ -26,6 +26,17 @@ services:
     networks:
       - default
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "caddy", "version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: "0.5"
 
   crond:
     image: wodby/laravel-php:$PHP_TAG

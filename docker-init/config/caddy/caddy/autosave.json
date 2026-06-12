@@ -1,0 +1,55 @@
+{
+  "apps": {
+    "http": {
+      "servers": {
+        "srv0": {
+          "listen": [":443"],
+          "routes": [
+            {
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "reverse_proxy",
+                          "upstreams": [{ "dial": "nginx:80" }]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "match": [{ "host": ["sita-membership.example.com"] }],
+              "terminal": true
+            }
+          ]
+        }
+      }
+    },
+    "tls": {
+      "automation": {
+        "on_demand": {
+          "permission": {
+            "endpoint": "http://localhost:2019/caddy/caddyfile",
+            "module": "http"
+          }
+        },
+        "policies": [
+          {
+            "issuers": [
+              { "email": "admin@example.com", "module": "acme" },
+              {
+                "ca": "https://acme.zerossl.com/v2/DV90",
+                "email": "admin@example.com",
+                "module": "acme"
+              }
+            ],
+            "subjects": ["sita-membership.example.com"]
+          }
+        ]
+      }
+    }
+  }
+}

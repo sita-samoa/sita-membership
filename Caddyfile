@@ -1,10 +1,15 @@
 {
   email {$EMAIL}
-  on_demand_tls {
-    ask http://localhost:2019/caddy/caddyfile
-  }
 }
 
 {$PROJECT_BASE_URL} {
   reverse_proxy nginx:80
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-Frame-Options "SAMEORIGIN"
+    X-Content-Type-Options "nosniff"
+    X-XSS-Protection "1; mode=block"
+    Referrer-Policy "strict-origin-when-cross-origin"
+  }
 }
