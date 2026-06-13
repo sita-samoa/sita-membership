@@ -17,6 +17,49 @@ SITA Membership is a membership management system for the Samoa ICT Association 
 
 ---
 
+### Branch Naming
+
+- lowercase, kebab-case; alphanumeric + hyphens only
+- format: `<type>/[optional issue id-]<short-description>`
+- prefixes: `feature/`, `bugfix/`, `hotfix/`, `release/`, `docs/`
+- description: 2–6 words, concise
+
+Examples:
+
+- feature/repo-card-filters
+- bugfix/search-input-crash
+- docs/update-readme
+
+---
+
+### Commit Messages
+
+Follow Conventional Commits:
+
+`<type>[optional scope]: <description>`
+
+Rules:
+
+- imperative mood
+- lowercase
+- no trailing period
+- subject ≤ 50 chars
+- scope optional
+- single primary change
+
+Types:
+
+- feat, fix, refactor, chore, docs, perf, style, test, build, ci
+
+Examples:
+
+- feat: add repository filters
+- fix(ui): resolve card alignment
+- docs: update installation guide
+- chore!: drop node 16 support
+
+---
+
 ## Repository Layout
 
 ```
@@ -41,45 +84,45 @@ docs/             Project documentation
 
 ### PHP Stack
 
-| Category         | Technology                  | Version            |
-| ---------------- | --------------------------- | ------------------ |
-| Language         | PHP                         | ^8.2               |
-| Framework        | Laravel                     | ^12.0              |
-| Auth / Teams     | Laravel Jetstream           | ^5.0               |
-| API auth         | Laravel Sanctum             | ^4.0               |
-| SSR bridge       | Inertia.js Laravel          | ^2.0               |
-| Testing          | PestPHP + Pest Laravel      | ^3.0               |
-| Error tracking   | Sentry PHP                  | ^4.6               |
-| Code quality     | Laravel Pint                | ^1.0               |
-| Code quality     | PHP_CodeSniffer             | ^3.7               |
-| Code quality     | Rector                      | ^2.0               |
+| Category       | Technology             | Version |
+| -------------- | ---------------------- | ------- |
+| Language       | PHP                    | ^8.2    |
+| Framework      | Laravel                | ^12.0   |
+| Auth / Teams   | Laravel Jetstream      | ^5.0    |
+| API auth       | Laravel Sanctum        | ^4.0    |
+| SSR bridge     | Inertia.js Laravel     | ^2.0    |
+| Testing        | PestPHP + Pest Laravel | ^3.0    |
+| Error tracking | Sentry PHP             | ^4.6    |
+| Code quality   | Laravel Pint           | ^1.0    |
+| Code quality   | PHP_CodeSniffer        | ^3.7    |
+| Code quality   | Rector                 | ^2.0    |
 
 ### Node.js Stack
 
-| Category         | Technology                  | Version            |
-| ---------------- | --------------------------- | ------------------ |
-| Runtime          | Node.js                     | ^20.0              |
-| Framework        | Vue 3                       | ^3.2               |
-| Routing          | Inertia.js Vue 3            | ^1.0               |
-| State            | Pinia                       | ^2.1               |
-| Build            | Vite                        | ^8.0               |
-| Vite plugin      | @vitejs/plugin-vue          | ^6.0.7             |
-| Vite plugin      | laravel-vite-plugin         | ^3.1.0             |
-| Error tracking   | Sentry Vue                  | ^8.33              |
-| Code quality     | ESLint                      | ^8.41              |
-| Code quality     | Prettier                    | ^2.8               |
-| Git hooks        | Husky                       | ^8.0.3             |
-| Staged linting   | lint-staged                 | ^13.2.2            |
-| HTTP client      | Axios                       | ^1.13.2            |
-| Date utility     | Day.js                      | ^1.11.7            |
+| Category       | Technology          | Version |
+| -------------- | ------------------- | ------- |
+| Runtime        | Node.js             | ^20.0   |
+| Framework      | Vue 3               | ^3.2    |
+| Routing        | Inertia.js Vue 3    | ^1.0    |
+| State          | Pinia               | ^2.1    |
+| Build          | Vite                | ^8.0    |
+| Vite plugin    | @vitejs/plugin-vue  | ^6.0.7  |
+| Vite plugin    | laravel-vite-plugin | ^3.1.0  |
+| Error tracking | Sentry Vue          | ^8.33   |
+| Code quality   | ESLint              | ^8.41   |
+| Code quality   | Prettier            | ^2.8    |
+| Git hooks      | Husky               | ^8.0.3  |
+| Staged linting | lint-staged         | ^13.2.2 |
+| HTTP client    | Axios               | ^1.13.2 |
+| Date utility   | Day.js              | ^1.11.7 |
 
 ### UI / Styling (Node.js)
 
-| Category         | Technology                  | Version            |
-| ---------------- | --------------------------- | ------------------ |
-| CSS Framework    | Tailwind CSS                | ^3.1               |
-| Components       | Flowbite                    | ^2.3               |
-| Components       | Flowbite-Vue                | ^0.1               |
+| Category      | Technology   | Version |
+| ------------- | ------------ | ------- |
+| CSS Framework | Tailwind CSS | ^3.1    |
+| Components    | Flowbite     | ^2.3    |
+| Components    | Flowbite-Vue | ^0.1    |
 
 ---
 
