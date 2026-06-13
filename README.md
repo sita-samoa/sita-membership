@@ -1,6 +1,6 @@
 # SITA Membership database
 
-SITA Membership database with Laravel 10 and Jetstream Inertia (Vuejs) and Tailwind.
+SITA Membership database with Laravel 11 and Jetstream Inertia (Vuejs) and Tailwind.
 
 ## Contribute today!
 
@@ -10,9 +10,9 @@ First Signup for a [Gitpod account](https://gitpod.io/login/), then click the li
 
 ## Guides
 
-* [User Guide](docs/guides/user_guide.md)
-* [Admin Guide](docs/guides/admin_guide.md)
-* [Technical Guide](docs/guides/tech_guide.md) - Includes setup for local dev (Traefik) and production (Caddy)
+- [User Guide](docs/guides/user_guide.md)
+- [Admin Guide](docs/guides/admin_guide.md)
+- [Technical Guide](docs/guides/tech_guide.md) - Includes setup for local dev (Traefik) and production (Caddy)
 
 ## Incident Response
 
@@ -25,23 +25,23 @@ send an email to sita-exec@sita.ws or president@sita.ws
 
 ### Steps while under attack
 
-* Notify contact person above
-* Isolate and block using Web Application Firewall
-* Scale up infrustructure
+- Notify contact person above
+- Isolate and block using Web Application Firewall
+- Scale up infrustructure
 
 #### Steps when compromised
 
-* Provision new server
-* Restore site
+- Provision new server
+- Restore site
 
 ## Contributing
 
 We are always looking for help. You can contribute to this project in multiple ways:
 
-* Coding - Feel free to review the issue queue and open up a Pull Request.
-* Code review
-* Testing
-* Reporting bugs
-* Suggesting enhancements
-* Documentation
-* Joining Sāmoa Code Hub
+- Coding - Feel free to review the issue queue and open up a Pull Request.
+- Code review
+- Testing
+- Reporting bugs
+- Suggesting enhancements
+- Documentation
+- Joining Sāmoa Code Hub
