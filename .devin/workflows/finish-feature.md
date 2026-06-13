@@ -1,10 +1,10 @@
 ---
-description: Return to main branch and clean up the WIP doc after a feature is merged
+description: Return to main branch and clean up the WIP doc
 ---
 
 # Finish Feature
 
-Cleans up after a feature branch has been merged.
+Cleans up after a feature branch.
 
 ## Steps
 
