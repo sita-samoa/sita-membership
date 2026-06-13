@@ -12,7 +12,7 @@ First Signup for a [Gitpod account](https://gitpod.io/login/), then click the li
 
 * [User Guide](docs/guides/user_guide.md)
 * [Admin Guide](docs/guides/admin_guide.md)
-* [Technical Guide](docs/guides/tech_guide.md)
+* [Technical Guide](docs/guides/tech_guide.md) - Includes setup for local dev (Traefik) and production (Caddy)
 
 ## Incident Response
 

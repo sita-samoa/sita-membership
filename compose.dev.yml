@@ -1,0 +1,72 @@
+services:
+  mariadb_testing:
+    image: wodby/mariadb:$MARIADB_TAG
+    container_name: "${PROJECT_NAME}_mariadb_testing"
+    stop_grace_period: 30s
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
+      MYSQL_DATABASE: laravel_testing
+      MYSQL_USER: $DB_USER
+      MYSQL_PASSWORD: $DB_PASSWORD
+
+  php:
+    user: root
+    environment:
+      LARAVEL_APP_DEBUG: "true"
+      PHP_FPM_USER: root
+      PHP_FPM_GROUP: root
+      MSMTP_HOST: mailpit
+      MSMTP_PORT: 1025
+      MAIL_HOST: mailpit
+      ADMIN_NAME: admin
+      ADMIN_PASSWORD: password
+      ADMIN_EMAIL: admin@example.com
+      ADMIN_TEAM: "SITA Online"
+
+  nginx:
+    labels:
+      - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
+      - "traefik.http.services.${PROJECT_NAME}_nginx.loadbalancer.server.port=80"
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: "${PROJECT_NAME}_mailpit"
+    labels:
+      - "traefik.http.services.${PROJECT_NAME}_mailpit.loadbalancer.server.port=8025"
+      - "traefik.http.routers.${PROJECT_NAME}_mailpit.rule=Host(`mailpit.${PROJECT_BASE_URL}`)"
+
+  node:
+    image: wodby/node:$NODE_TAG
+    user: root
+    container_name: "${PROJECT_NAME}_node"
+    environment:
+      APP_URL: ${APP_URL}
+      GITPOD_WORKSPACE_URL: ${GITPOD_WORKSPACE_URL}
+    working_dir: /var/www/html/laravel/
+    labels:
+      - "traefik.http.services.${PROJECT_NAME}_node.loadbalancer.server.port=5173"
+      - "traefik.http.routers.${PROJECT_NAME}_node.rule=Host(`node.${PROJECT_BASE_URL}`)"
+    expose:
+      - "5173"
+    ports:
+      - 5173:5173
+    volumes:
+      - ./:/var/www/html
+    command: sh -c 'npm install && npm run dev'
+
+  gitleaks:
+    image: zricethezav/gitleaks:latest
+    container_name: "${PROJECT_NAME}_gitleaks"
+    command: --source="/path" detect --report-path /path/.gitleaks/findings.json --config /path/.gitleaks/.gitleaks.toml
+    volumes:
+      - ./:/path
+
+  traefik:
+    image: traefik:v2.0
+    container_name: "${PROJECT_NAME}_traefik"
+    command: --api.insecure=true --providers.docker
+    ports:
+      - "${PROJECT_PORT}:80"
+      - "8080:8080" # Dashboard
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock

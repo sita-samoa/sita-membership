@@ -11,47 +11,22 @@ services:
     volumes:
       - ./mariadb-init:/docker-entrypoint-initdb.d # Place init .sql file(s) here.
   #      - /path/to/mariadb/data/on/host:/var/lib/mysql # Use bind mount
-  mariadb_testing:
-    image: wodby/mariadb:$MARIADB_TAG
-    container_name: "${PROJECT_NAME}_mariadb_testing"
-    stop_grace_period: 30s
-    environment:
-      MYSQL_ROOT_PASSWORD: $DB_ROOT_PASSWORD
-      MYSQL_DATABASE: laravel_testing
-      MYSQL_USER: $DB_USER
-      MYSQL_PASSWORD: $DB_PASSWORD
-  #    volumes:
-  #      - ./mariadb-init:/docker-entrypoint-initdb.d # Place init .sql file(s) here.
-  #      - /path/to/mariadb/data/on/host:/var/lib/mysql # Use bind mount
-
   php:
     # image: wodby/drupal-php:$PHP_TAG
     image: wodby/laravel-php:$PHP_TAG
-    user: root
     command: "php-fpm -R"
     container_name: "${PROJECT_NAME}_php"
     environment:
       # APP_KEY: $APP_KEY
-      LARAVEL_APP_DEBUG: "true"
       # By default xdebug extension also disabled.
       PHP_EXTENSIONS_DISABLE: xhprof,spx
       PHP_MAIL_MIXED_LF_AND_CRLF: "On"
-      # Mailpit:
-      MSMTP_HOST: mailpit
-      MSMTP_PORT: 1025
       # DB_HOST: $DB_HOST
       # DB_PORT: $DB_PORT
       # DB_USERNAME: $DB_USER
       # DB_PASSWORD: $DB_PASSWORD
       # DB_DATABASE: $DB_NAME
-      PHP_FPM_USER: root
-      PHP_FPM_GROUP: root
       APP_URL: ${APP_URL}
-      MAIL_HOST: mailhog
-      ADMIN_NAME: admin
-      ADMIN_PASSWORD: password
-      ADMIN_EMAIL: admin@example.com
-      ADMIN_TEAM: "SITA Online"
     #      DB_DRIVER: $DB_DRIVER
     #      DRUSH_OPTIONS_URI: "http://${PROJECT_BASE_URL}:${PROJECT_PORT}"
     #      PHP_FPM_USER: wodby
@@ -106,17 +81,6 @@ services:
       - ./:/var/www/html:cached
     ## Alternative for macOS users: Mutagen https://wodby.com/docs/stacks/drupal/local#docker-for-mac
     #    - drupal:/var/www/html
-    labels:
-      - "traefik.http.routers.${PROJECT_NAME}_nginx.rule=Host(`${PROJECT_BASE_URL}`)"
-      - "traefik.http.services.${PROJECT_NAME}_nginx.loadbalancer.server.port=80"
-
-  mailpit:
-    image: axllent/mailpit
-    container_name: "${PROJECT_NAME}_mailpit"
-    labels:
-      - "traefik.http.services.${PROJECT_NAME}_mailpit.loadbalancer.server.port=8025"
-      - "traefik.http.routers.${PROJECT_NAME}_mailpit.rule=Host(`mailpit.${PROJECT_BASE_URL}`)"
-
   # mailhog:
   #   image: mailhog/mailhog
   #   container_name: "${PROJECT_NAME}_mailhog"
@@ -257,26 +221,6 @@ services:
   #      WEAVER_WORKER_TIMEOUT: 90
   #      WEAVER_CONVERSION_FALLBACK: "false"
 
-  node:
-    image: wodby/node:$NODE_TAG
-    user: root
-    container_name: "${PROJECT_NAME}_node"
-    environment:
-      APP_URL: ${APP_URL}
-      GITPOD_WORKSPACE_URL: ${GITPOD_WORKSPACE_URL}
-    working_dir: /var/www/html/laravel/
-    labels:
-      - "traefik.http.services.${PROJECT_NAME}_node.loadbalancer.server.port=5173"
-      - "traefik.http.routers.${PROJECT_NAME}_node.rule=Host(`node.${PROJECT_BASE_URL}`)"
-    expose:
-      - "5173"
-    ports:
-      - 5173:5173
-    volumes:
-      - ./:/var/www/html
-    command: sh -c 'npm install && npm run dev'
-    # command: sh -c 'npm install && npm build'
-
   #  blackfire:
   #    image: blackfire/blackfire
   #    container_name: "${PROJECT_NAME}_blackfire"
@@ -338,23 +282,6 @@ services:
   #    - "--log-path=/tmp/chromedriver.log"
   #    - "--verbose"
   #    - "--whitelisted-ips="
-
-  gitleaks:
-    image: zricethezav/gitleaks:latest
-    container_name: "${PROJECT_NAME}_gitleaks"
-    command: --source="/path" detect --report-path /path/.gitleaks/findings.json --config /path/.gitleaks/.gitleaks.toml
-    volumes:
-      - ./:/path
-
-  traefik:
-    image: traefik:v2.0
-    container_name: "${PROJECT_NAME}_traefik"
-    command: --api.insecure=true --providers.docker
-    ports:
-      - "${PROJECT_PORT}:80"
-      - "8080:8080" # Dashboard
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
 #x-mutagen:
 #  sync:
 #    defaults:

@@ -25,12 +25,25 @@ up:
 	$(DOCKER_COMPOSE) pull
 	$(DOCKER_COMPOSE) up -d --remove-orphans
 
-## ssl	:	Start up containers with SSL support.
-.PHONY: ssl
-ssl:
-	@echo "Starting up containers for $(PROJECT_NAME)..."
+## dev	:	Start up containers with Traefik SSL support (local development).
+.PHONY: dev
+dev:
+	@echo "Starting up containers for $(PROJECT_NAME) with Traefik..."
 	$(DOCKER_COMPOSE) pull
-	$(DOCKER_COMPOSE) -f compose.yml -f compose.ssl.yml up -d --remove-orphans
+	$(DOCKER_COMPOSE) -f compose.yml -f compose.dev.yml up -d --remove-orphans
+
+## ssl	:	Start up containers with SSL support (alias for 'make dev' - backward compatible).
+.PHONY: ssl
+ssl: dev
+
+## prod	:	Start up containers with Caddy SSL support (production).
+##		Create .env.prod to override specific variables from .env (e.g., DB_PASSWORD, APP_KEY).
+##		Later env files override earlier ones.
+.PHONY: prod
+prod:
+	@echo "Starting up containers for $(PROJECT_NAME) with Caddy..."
+	$(DOCKER_COMPOSE) pull
+	$(DOCKER_COMPOSE) -f compose.yml -f compose.prod.yml --env-file .env --env-file .env.prod up -d --remove-orphans
 
 ## gitpod	:	Start up containers in gitpod.
 .PHONY: gitpod
@@ -55,7 +68,8 @@ start:
 .PHONY: stop
 stop:
 	@echo "Stopping containers for $(PROJECT_NAME)..."
-	@$(DOCKER_COMPOSE) stop
+	@$(DOCKER_COMPOSE) -f compose.yml -f compose.dev.yml stop || true
+	@$(DOCKER_COMPOSE) -f compose.yml -f compose.prod.yml stop || true
 
 ## prune	:	Remove containers and their volumes.
 ##		You can optionally pass an argument with the service name to prune single container
@@ -97,6 +111,22 @@ composer:
 .PHONY: logs
 logs:
 	@docker compose logs -f $(filter-out $@,$(MAKECMDGOALS))
+
+## logs-dev	:	View logs for dev environment.
+##		You can optionally pass an argument with the service name to limit logs
+##		logs-dev php	: View `php` container logs in dev.
+##		logs-dev nginx php	: View `nginx` and `php` containers logs in dev.
+.PHONY: logs-dev
+logs-dev:
+	@$(DOCKER_COMPOSE) -f compose.yml -f compose.dev.yml logs -f $(filter-out $@,$(MAKECMDGOALS))
+
+## logs-prod	:	View logs for prod environment.
+##		You can optionally pass an argument with the service name to limit logs
+##		logs-prod php	: View `php` container logs in prod.
+##		logs-prod nginx php	: View `nginx` and `php` containers logs in prod.
+.PHONY: logs-prod
+logs-prod:
+	@$(DOCKER_COMPOSE) -f compose.yml -f compose.prod.yml logs -f $(filter-out $@,$(MAKECMDGOALS))
 
 # https://stackoverflow.com/a/6273809/1826109
 %:
