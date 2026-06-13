@@ -1,1 +1,23 @@
-[]
+[
+ {
+  "RuleID": "generic-api-key",
+  "Description": "Detected a Generic API Key, potentially exposing access to various services and sensitive operations.",
+  "StartLine": 20,
+  "EndLine": 20,
+  "StartColumn": 36,
+  "EndColumn": 67,
+  "Match": "tokens\" :available-permissions=\"",
+  "Secret": "available-permissions=",
+  "File": "laravel/resources/js/Pages/API/Index.vue",
+  "SymlinkFile": "",
+  "Commit": "25a8d1e9034c12796c0697f1261e2feb8c8962c2",
+  "Link": "https://github.com/sita-samoa/sita-membership/blob/25a8d1e9034c12796c0697f1261e2feb8c8962c2/laravel/resources/js/Pages/API/Index.vue#L20",
+  "Entropy": 3.6292198,
+  "Author": "Ainsof So'o",
+  "Email": "ainsof.soo@gmail.com",
+  "Date": "2023-06-04T05:14:54Z",
+  "Message": "Tests/static analysis 2 (#134)\n\n* add php coding style packages\n\n* fix php coding style\n\n* fix js format\n\n* eslint js files\n\n* eslint 80 lines",
+  "Tags": [],
+  "Fingerprint": "25a8d1e9034c12796c0697f1261e2feb8c8962c2:laravel/resources/js/Pages/API/Index.vue:generic-api-key:20"
+ }
+]

@@ -1,10 +1,10 @@
-# Laravel 10 Tugboat starter config.
+# Laravel 11 Tugboat starter config.
 # https://docs.tugboatqa.com/starter-configs/tutorials/laravel/
 services:
   # What to call the service hosting the site.
   webserver:
-    # This uses PHP 8.1.x with Apache: update to match your version of PHP.
-    image: tugboatqa/php:8.1-apache
+    # This uses PHP 8.2.x with Apache: update to match your version of PHP.
+    image: tugboatqa/php:8.2-apache
 
     # Set this as the default service. This does a few things
     #   1. Clones the git repository into the service container
@@ -87,5 +87,4 @@ services:
   database:
     # Use the latest available version of MariaDB by not specifying a
     # version
-    image: tugboatqa/mariadb:10.8
-
+    image: tugboatqa/mariadb:10.11
