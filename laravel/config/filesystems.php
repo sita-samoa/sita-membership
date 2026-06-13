@@ -32,6 +32,7 @@ return [
 
         'local' => [
             'driver' => 'local',
+            // Explicitly set to preserve storage/app root (Laravel 12 defaults to storage/app/private)
             'root' => storage_path('app'),
             'throw' => false,
         ],
