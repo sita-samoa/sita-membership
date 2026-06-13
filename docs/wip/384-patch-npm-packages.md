@@ -21,30 +21,30 @@ Update outdated npm dependencies to address security vulnerabilities and bug fix
 
 ### Completed Updates
 
-- `npm audit fix`: No automatic fixes available within semver constraints
-- `npm update`: Updated dependencies to latest patch versions within version ranges
+- `npm audit fix --force`: Applied breaking changes to fix esbuild vulnerabilities
+- Major version bumps in `package.json`:
+  - `vite`: ^6.4.1 → **^8.0.16**
+  - `@vitejs/plugin-vue`: ^5.2.4 → **^6.0.7**
+  - `laravel-vite-plugin`: ^1.3.0 → **^3.1.0**
+- `package-lock.json` fully regenerated with updated dependency tree
 - Build verification: ✓ Successful (`npm run build` completed)
 
-### Remaining Vulnerabilities (Require Breaking Changes)
+### Remaining Vulnerabilities (Require Additional Breaking Changes)
 
-7 vulnerabilities remain that **cannot be fixed via patch updates**:
-
-**High Severity (4):**
-
-- **esbuild** (via vite 6.x): Missing binary integrity verification
-  - Fix requires vite 8.x (breaking change)
-  - Affects: `@vitejs/plugin-vue`, `laravel-vite-plugin`
+3 vulnerabilities remain that require further breaking changes:
 
 **Moderate Severity (3):**
 
 - **micromatch** (<4.0.8): ReDoS vulnerability
-  - Fix requires `lint-staged` major version update
+  - Fix requires `lint-staged` major version update (13.x → 17.x)
 - **yaml** (2.0.0-2.8.2): Stack overflow via deeply nested collections
   - Fix requires `lint-staged` major version update
 
 ### Notes
 
-- `package.json` unchanged - all updates were within existing version constraints
-- `package-lock.json` updated with latest compatible versions
-- Build system fully functional after updates
-- Remaining vulnerabilities require separate issue for major version upgrades
+- **AGENTS.md updated** to reflect new Vite 8.x tech stack versions
+- `package.json` updated with major version bumps for vite, @vitejs/plugin-vue, laravel-vite-plugin
+- `package-lock.json` fully regenerated with updated dependency tree
+- Build system fully functional after major version upgrades
+- All esbuild-related high-severity vulnerabilities resolved
+- Remaining 3 moderate vulnerabilities tracked separately for `lint-staged` upgrade
