@@ -45,13 +45,13 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.2,8.3,8.4]
+        php: [8.2, 8.3, 8.4]
 
     name: PHP ${{ matrix.php }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
@@ -64,7 +64,7 @@ jobs:
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
 
       - name: Use Node.js 20.x
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20.x
 

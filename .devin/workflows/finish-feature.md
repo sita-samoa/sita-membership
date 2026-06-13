@@ -1,5 +1,9 @@
 ---
+<<<<<<< Updated upstream
 description: Return to main branch and clean up the WIP doc
+=======
+description: Return to main branch and clean up the WIP doc 
+>>>>>>> Stashed changes
 ---
 
 # Finish Feature
@@ -36,11 +40,10 @@ git push -u origin HEAD
 
 6. Detect the current branch name and extract the short description (e.g., `feature/42-dark-mode` → `dark-mode`).
 
-7. Switch back to `main` and pull latest:
+7. Switch back to `main`:
 
 ```bash
 git checkout main
-git pull origin main
 ```
 
 8. Delete the local feature branch:
