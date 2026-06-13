@@ -103,10 +103,6 @@ Route::middleware([
     Route::resource('members.qualifications', MemberQualificationController::class)
         ->only(['store', 'update', 'destroy']);
 
-    // Work experience
-    Route::resource('member-work-experiences', MemberWorkExperienceController::class)
-        ->only(['store', 'update', 'destroy']);
-
     // Member audit
     Route::resource('members.audit', AuditController::class)
         ->only(['index']);

@@ -28,8 +28,8 @@ return static function (RectorConfig $rectorConfig): void {
     ]);
 
     $rectorConfig->sets([
-        LaravelSetList::LARAVEL_100,
-        LevelSetList::UP_TO_PHP_81,
+        LaravelSetList::LARAVEL_120,
+        LevelSetList::UP_TO_PHP_82,
         SetList::CODE_QUALITY,
         SetList::DEAD_CODE,
     ]);
