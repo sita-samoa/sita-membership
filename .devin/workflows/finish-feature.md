@@ -1,9 +1,5 @@
 ---
-<<<<<<< Updated upstream
 description: Return to main branch and clean up the WIP doc
-=======
-description: Return to main branch and clean up the WIP doc 
->>>>>>> Stashed changes
 ---
 
 # Finish Feature
