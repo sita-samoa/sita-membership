@@ -39,23 +39,23 @@ docs/             Project documentation
 
 ## Tech Stack Versions
 
-| Layer            | Technology                  | Version             |
-| ---------------- | --------------------------- | ------------------- |
-| Language         | PHP                         | ^8.2                |
-| Framework        | Laravel                     | ^11.0               |
-| Auth / Teams     | Laravel Jetstream           | ^4.0                |
-| API auth         | Laravel Sanctum             | ^4.0                |
-| SSR bridge       | Inertia.js Laravel          | ^2.0                |
-| Frontend         | Vue 3                       | ^3.2                |
-| Routing (client) | Inertia.js Vue 3            | ^1.0                |
-| State            | Pinia                       | ^2.1                |
-| Build            | Vite                        | ^6.4                |
-| Styling          | Tailwind CSS                | ^3.1                |
-| Components       | Flowbite / Flowbite-Vue     | ^2.3 / ^0.1         |
-| Testing          | PestPHP + Pest Laravel      | ^2.0                |
-| Error tracking   | Sentry (PHP + Vue)          | ^4.6 / ^8.33        |
-| Code quality     | Laravel Pint, PHPCS, Rector | ^1.0 / ^3.7 / ^0.16 |
-| JS linting       | ESLint + Prettier           | ^8.41 / ^2.8        |
+| Layer            | Technology                  | Version            |
+| ---------------- | --------------------------- | ------------------ |
+| Language         | PHP                         | ^8.2               |
+| Framework        | Laravel                     | ^11.0              |
+| Auth / Teams     | Laravel Jetstream           | ^5.0               |
+| API auth         | Laravel Sanctum             | ^4.0               |
+| SSR bridge       | Inertia.js Laravel          | ^1.0               |
+| Frontend         | Vue 3                       | ^3.2               |
+| Routing (client) | Inertia.js Vue 3            | ^1.0               |
+| State            | Pinia                       | ^2.1               |
+| Build            | Vite                        | ^6.4               |
+| Styling          | Tailwind CSS                | ^3.1               |
+| Components       | Flowbite / Flowbite-Vue     | ^2.3 / ^0.1        |
+| Testing          | PestPHP + Pest Laravel      | ^2.0               |
+| Error tracking   | Sentry (PHP + Vue)          | ^4.6 / ^8.33       |
+| Code quality     | Laravel Pint, PHPCS, Rector | ^1.0 / ^3.7 / ^1.0 |
+| JS linting       | ESLint + Prettier           | ^8.41 / ^2.8       |
 
 ---
 
@@ -160,7 +160,7 @@ Pre-commit hooks (Husky + lint-staged + pretty-quick) run automatically on `git 
 2. **Migrations are append-only** — never edit an existing migration file; always create a new one.
 3. **Seeder classes** (`DatabaseSeeder`, `UsersTableSeeder`, `DemoUsersSeeder`, `MembersTableSeeder`) are used by the `composer build` and `composer dev` scripts — keep their class names stable.
 4. **PHP version target is 8.2+** — use modern PHP syntax (readonly properties, enums, fibers where appropriate) but ensure compatibility with 8.2.
-5. **Laravel 11 conventions** — use the slim `bootstrap/app.php` middleware/exception registration style; avoid the old `Http/Kernel.php` pattern.
+5. **Laravel 11 conventions** — both the slim `bootstrap/app.php` style and the traditional Kernel-based structure are valid. The project currently uses the Kernel-based approach with `Http/Kernel.php` and `Console/Kernel.php`.
 6. **Frontend state** lives in Pinia stores under `resources/js/stores/`. Do not reach into Vue component internals for cross-component state.
 7. **Inertia shared data** is the source of truth for server-to-client props — extend `HandleInertiaRequests` middleware rather than adding ad-hoc `view()->share()` calls.
 8. **Avoid `any` in TypeScript / untyped JS** — annotate props, emits, and store state.
