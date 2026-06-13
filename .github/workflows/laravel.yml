@@ -23,15 +23,15 @@ jobs:
       run:
         working-directory: ./laravel
 
-# Service container Mysql mysql
+    # Service container MariaDB
     services:
       # Label used to access the service container
-      mysql:
+      mariadb:
         # Docker Hub image (also with version)
-        image: mysql:5.7
+        image: mariadb:10.11
         env:
-          MYSQL_ROOT_PASSWORD: secret
-          MYSQL_DATABASE:  testing
+          MARIADB_ROOT_PASSWORD: secret
+          MARIADB_DATABASE: testing
         ## map the "external" 33306 port with the "internal" 3306
         ports:
           - 33306:3306
