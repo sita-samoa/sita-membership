@@ -3,6 +3,9 @@ name: Code Fixes
 on:
   push:
 
+permissions:
+  contents: write
+
 jobs:
   php-code-styling:
     runs-on: ubuntu-latest
