@@ -58,16 +58,19 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, mysql, pdo_mysql
           coverage: none
+          tools: composer:v2
 
       - name: Install Composer dependencies
-        run:
-          composer install -q --no-ansi --no-interaction --no-scripts --no-progress
-          --prefer-dist
+        uses: ramsey/composer-install@v3
+        with:
+          working-directory: ./laravel
 
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
+          cache: "npm"
+          cache-dependency-path: laravel/package-lock.json
 
       - name: Install dependencies
         run: npm ci
