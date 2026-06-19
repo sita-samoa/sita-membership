@@ -10,11 +10,11 @@ Creates a new GitHub issue in the current repository with a structured body.
 
 1. The user provides a short title/description for the issue (e.g., `/create-ticket "Add dark mode toggle"`).
 
-2. Run the issue creation script:
+2. Run the issue creation script with **only** the title and optional body. The script does not accept additional arguments.
    // turbo
 
 ```bash
-./scripts/gh-create-issue.sh "<title>"
+./scripts/gh-create-issue.sh "<title>" "<body>"
 ```
 
 3. Confirm the issue was created and note the issue number from the output (e.g., `#42`).
