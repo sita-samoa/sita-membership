@@ -37,4 +37,14 @@ git commit -m "$COMMIT_MESSAGE"
 git push -u origin HEAD
 ```
 
-6. Tell the user: "WIP doc removed and pushed to $BRANCH. Go to GitHub to review the PR, squash & merge, and close it. Then run `/cleanup-branch` to delete the local branch."
+6. Build a link to the PR or compare page:
+
+```bash
+PR_URL=$(gh pr view --json url --jq .url 2>/dev/null)
+if [ -z "$PR_URL" ]; then
+  REPO_URL=$(git remote get-url origin | sed 's/\.git$//' | sed 's/^git@github.com:/https:\/\/github.com\//')
+  PR_URL="${REPO_URL}/compare/main...${BRANCH}"
+fi
+```
+
+7. Tell the user: "WIP doc removed and pushed to $BRANCH. Review the PR at $PR_URL, squash & merge, and close it. Then run `/cleanup-branch` to delete the local branch."
