@@ -43,7 +43,7 @@ test('test roles can access and list displayed', function (string $role) {
 
 test('test can filter by member_status_id and search', function ($role) {
     $status = MembershipStatus::ACCEPTED->value;
-    $search = 'test';
+    $search = 'zzuniquefilter';
 
     Member::factory()->count(1)->create([
         'membership_status_id' => MembershipStatus::ACCEPTED->value,

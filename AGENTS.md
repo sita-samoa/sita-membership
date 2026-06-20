@@ -1,235 +1,88 @@
-# AGENTS.md — SITA Membership
-
-Guidance for AI coding agents (Copilot, Cursor, Cascade, etc.) working in this repository.
-
----
+# SITA Membership
 
 ## Project Overview
 
-SITA Membership is a membership management system for the Samoa ICT Association (SITA).
+Membership management system for the Samoa ICT Association (SITA). Tracks member registrations, renewals, and organisational data for Samoa's ICT sector.
 
-- **Backend**: Laravel 11 (PHP 8.2+) with Inertia.js server-side adapter
-- **Frontend**: Vue 3 + Inertia.js + Pinia, built with Vite
-- **Styling**: Tailwind CSS 3 with Flowbite components
-- **Database**: MySQL/MariaDB via Docker
-- **Reverse proxy**: Caddy (production) / Traefik (local dev)
-- **Containerisation**: Docker Compose
+## Technology Stack
 
----
+- PHP ^8.2 · Laravel ^12 · Jetstream ^5 · Inertia ^2
+- Vue 3 ^3.2 · Pinia ^2.1 · Vite ^8
+- Tailwind CSS ^3.1 · Flowbite / Flowbite-Vue
+- MySQL/MariaDB · Docker Compose
+- Node ^20 · PestPHP ^3
 
-### Branch Naming
+## Architecture
 
-- lowercase, kebab-case; alphanumeric + hyphens only
-- format: `<type>/[optional issue id-]<short-description>`
-- prefixes: `feature/`, `bugfix/`, `hotfix/`, `release/`, `docs/`
-- description: 2–6 words, concise
-
-Examples:
-
-- feature/repo-card-filters
-- bugfix/search-input-crash
-- docs/update-readme
-
----
-
-### Commit Messages
-
-Follow Conventional Commits:
-
-`<type>[optional scope]: <description>`
-
-Rules:
-
-- imperative mood
-- lowercase
-- no trailing period
-- subject ≤ 50 chars
-- scope optional
-- single primary change
-
-Types:
-
-- feat, fix, refactor, chore, docs, perf, style, test, build, ci
-
-Examples:
-
-- feat: add repository filters
-- fix(ui): resolve card alignment
-- docs: update installation guide
-- chore!: drop node 16 support
-
----
-
-## Repository Layout
-
-```
-laravel/          Laravel application root (PHP + JS assets live here)
-  app/            PHP application code (Actions, Enums, Models, etc.)
-  database/       Migrations, factories, seeders
-  resources/      Blade views, Vue components, JS entry points
-  tests/          PestPHP test suites
-  composer.json   PHP dependency manifest
-  package.json    Node/JS dependency manifest
-docker.mk         Docker Compose make targets (included by Makefile)
-Makefile          Top-level make entry point
-compose.yml       Base Docker Compose service definitions
-compose.dev.yml   Dev overrides (Traefik SSL)
-compose.prod.yml  Prod overrides (Caddy SSL)
-docs/             Project documentation
+```text
+Vue 3 (SPA pages) → Inertia.js → Laravel Controllers → Models → MySQL
 ```
 
----
+- **Inertia.js** bridges server and client — no separate API layer for the UI.
+- **Shared data** flows via `HandleInertiaRequests` middleware (source of truth for server→client props).
+- **Frontend state** lives in Pinia stores (`resources/js/stores/`). Components do not share state directly.
+- **Kernel-based structure** — uses `Http/Kernel.php` and `Console/Kernel.php` (not slim `bootstrap/app.php`).
 
-## Tech Stack Versions
+## Critical Rules
 
-### PHP Stack
+1. Never modify `compose.yml`, `compose.prod.yml`, or `Caddyfile` without explicit instruction.
+2. Migrations are append-only — never edit an existing migration; always create a new one.
+3. Keep seeder class names stable (`DatabaseSeeder`, `UsersTableSeeder`, `DemoUsersSeeder`, `MembersTableSeeder`) — CI depends on them.
+4. Never commit `.env`, `.env.prod`, or any file with credentials. Use `.env.example` as template.
+5. No `any` types — annotate all props, emits, and store state.
+6. Never commit to `main` branch. Use feature branches.
 
-| Category       | Technology             | Version |
-| -------------- | ---------------------- | ------- |
-| Language       | PHP                    | ^8.2    |
-| Framework      | Laravel                | ^12.0   |
-| Auth / Teams   | Laravel Jetstream      | ^5.0    |
-| API auth       | Laravel Sanctum        | ^4.0    |
-| SSR bridge     | Inertia.js Laravel     | ^2.0    |
-| Testing        | PestPHP + Pest Laravel | ^3.0    |
-| Error tracking | Sentry PHP             | ^4.6    |
-| Code quality   | Laravel Pint           | ^1.0    |
-| Code quality   | PHP_CodeSniffer        | ^3.7    |
-| Code quality   | Rector                 | ^2.0    |
+## Coding Standards
 
-### Node.js Stack
+- PHP 8.2+ syntax: readonly properties, enums, match expressions.
+- Extend `HandleInertiaRequests` for shared data — no `view()->share()`.
+- Cross-component state must go through Pinia, not component internals.
+- Conventional Commits: `<type>[scope]: <description>` (imperative, lowercase, ≤50 chars).
+- Branch naming: `<type>/<short-description>` (kebab-case, 2–6 words).
 
-| Category       | Technology          | Version |
-| -------------- | ------------------- | ------- |
-| Runtime        | Node.js             | ^20.0   |
-| Framework      | Vue 3               | ^3.2    |
-| Routing        | Inertia.js Vue 3    | ^1.0    |
-| State          | Pinia               | ^2.1    |
-| Build          | Vite                | ^8.0    |
-| Vite plugin    | @vitejs/plugin-vue  | ^6.0.7  |
-| Vite plugin    | laravel-vite-plugin | ^3.1.0  |
-| Error tracking | Sentry Vue          | ^8.33   |
-| Code quality   | ESLint              | ^8.41   |
-| Code quality   | Prettier            | ^2.8    |
-| Git hooks      | Husky               | ^8.0.3  |
-| Staged linting | lint-staged         | ^13.2.2 |
-| HTTP client    | Axios               | ^1.13.2 |
-| Date utility   | Day.js              | ^1.11.7 |
+## Testing Requirements
 
-### UI / Styling (Node.js)
+- All tests must pass before opening a PR.
+- Add tests for business logic changes.
+- PestPHP is the runner. Tests live in `laravel/tests/`.
 
-| Category      | Technology   | Version |
-| ------------- | ------------ | ------- |
-| CSS Framework | Tailwind CSS | ^3.1    |
-| Components    | Flowbite     | ^2.3    |
-| Components    | Flowbite-Vue | ^0.1    |
-
----
-
-## Development Environment
-
-The project runs entirely inside Docker. There is **no local PHP or Node requirement** beyond Docker itself.
-
-### Starting the stack
+## Commands
 
 ```bash
-# Standard (no SSL)
-make up
-
-# Local dev with Traefik SSL
-make dev
-
-# Production with Caddy SSL
-make prod
+make up                  # Start stack (no SSL)
+make dev                 # Start with Traefik SSL
+make shell               # Shell into PHP container
+make artisan test        # Run full test suite
+make composer test       # Alias for tests
+make composer lint       # Check style (Pint + PHPCS + Rector)
+make composer format     # Auto-fix style
+npm run lint             # ESLint --fix
+npm run format           # Prettier write
 ```
 
-### Stopping / cleaning up
+## Known Pitfalls
 
-```bash
-make stop        # Stop containers
-make down        # Stop containers (alias)
-make prune       # Remove containers + volumes
-```
+- Husky pre-commit hooks run lint-staged on commit — bypass with `--no-verify` only when necessary.
+- `composer build` and `composer dev` scripts invoke seeders by class name — renaming breaks CI.
+- Both Kernel-based and slim bootstrap exist in Laravel 12 docs; this project uses Kernel-based.
 
-### Common tasks
+## Decision Priorities
 
-```bash
-# Open a shell in the php container
-make shell
+1. Correctness
+2. Security
+3. Maintainability
+4. Developer experience
+5. Performance
 
-# Run an Artisan command
-make artisan migrate
-make artisan "db:seed --class=DatabaseSeeder"
+## Change Workflow
 
-# Run Composer
-make composer install
-make composer "require vendor/package"
+**Before coding:**
 
-# View logs
-make logs              # all services
-make logs php          # php service only
-make logs-dev php      # dev environment, php service
-make logs-prod php     # prod environment, php service
+1. Read relevant files and understand affected modules.
+2. Identify if change touches infra files (requires explicit approval).
 
-# List running containers
-make ps
-```
+**After coding:**
 
----
-
-## Running Tests
-
-All test commands execute inside the Docker container.
-
-```bash
-# Full test suite
-make artisan test
-# or directly via composer script
-make composer test
-
-# Single test filter
-make composer test_single
-```
-
-PestPHP is the test runner. Test files live under `laravel/tests/`.
-
----
-
-## Code Style & Linting
-
-### PHP
-
-```bash
-# Check (no write)
-make composer lint
-
-# Auto-fix
-make composer format
-```
-
-This runs Laravel Pint, PHP_CodeSniffer, and Rector in sequence.
-
-### JavaScript / Vue
-
-```bash
-# Inside the container (npm)
-npm run lint      # ESLint --fix
-npm run format    # Prettier write
-```
-
-Pre-commit hooks (Husky + lint-staged + pretty-quick) run automatically on `git commit`.
-
----
-
-## Agent Rules
-
-1. **Do not modify** `compose.yml`, `compose.prod.yml`, or `Caddyfile` without explicit instruction — these affect production.
-2. **Migrations are append-only** — never edit an existing migration file; always create a new one.
-3. **Seeder classes** (`DatabaseSeeder`, `UsersTableSeeder`, `DemoUsersSeeder`, `MembersTableSeeder`) are used by the `composer build` and `composer dev` scripts — keep their class names stable.
-4. **PHP version target is 8.2+** — use modern PHP syntax (readonly properties, enums, fibers where appropriate) but ensure compatibility with 8.2.
-5. **Laravel 11 conventions** — both the slim `bootstrap/app.php` style and the traditional Kernel-based structure are valid. The project currently uses the Kernel-based approach with `Http/Kernel.php` and `Console/Kernel.php`.
-6. **Frontend state** lives in Pinia stores under `resources/js/stores/`. Do not reach into Vue component internals for cross-component state.
-7. **Inertia shared data** is the source of truth for server-to-client props — extend `HandleInertiaRequests` middleware rather than adding ad-hoc `view()->share()` calls.
-8. **Avoid `any` in TypeScript / untyped JS** — annotate props, emits, and store state.
-9. **Tests must pass** before opening a PR. Run `make composer test` locally.
-10. **Secrets** — never commit `.env`, `.env.prod`, or any file containing credentials. Use `.env.example` as the template.
+1. Run `make composer test`.
+2. Run `make composer lint`.
+3. Summarise what changed, why, and any risks.
