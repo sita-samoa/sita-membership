@@ -90,8 +90,11 @@ jobs:
       - name: Execute tests
         env:
           DB_CONNECTION: mysql
+          DB_HOST: 127.0.0.1
           DB_DATABASE: testing
           DB_PORT: 33306
-          DB_USER: root
+          DB_USERNAME: root
           DB_PASSWORD: secret
+          CACHE_DRIVER: array
+          SESSION_DRIVER: array
         run: vendor/bin/pest
