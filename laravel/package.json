@@ -47,6 +47,11 @@
     "vue-material-design-icons": "^5.2.0",
     "vue-recaptcha-v3": "^2.0.1"
   },
+  "overrides": {
+    "flowbite-vue": {
+      "nanoid": "5.1.16"
+    }
+  },
   "lint-staged": {
     "*.js": "eslint --cache --fix"
   }
