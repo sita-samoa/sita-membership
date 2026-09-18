@@ -1,0 +1,16 @@
+{
+	"name": "SITA Membership",
+	"image": "mcr.microsoft.com/devcontainers/base:2.0.4-noble",
+	"features": {
+		"ghcr.io/devcontainers/features/docker-in-docker:2": {}
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"xdebug.php-debug",
+				"bmewburn.vscode-intelephense-client",
+				"vue.volar"
+			]
+		}
+	}
+}
