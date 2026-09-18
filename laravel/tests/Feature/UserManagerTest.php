@@ -1,8 +1,10 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
+use Database\Seeders\DatabaseSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
 
 test('user without role cannot access', function () {
@@ -111,13 +113,24 @@ test('user can be created', function (string $role) {
 })->with(['admin', 'editor', 'executive', 'coordinator']);
 
 test('users can be deleted', function () {
+    $this->seed(DatabaseSeeder::class);
+
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
     $user2 = User::factory()->withPersonalTeam()->create();
+    $teamId = $user2->ownedTeams()->first()->id;
+    $member = Member::factory()->for($user2)->create();
 
     $response = $this->delete('/users/'.$user2->id);
 
+    $response->assertRedirect();
     expect(User::get())->toHaveCount(1);
+    $this->assertSoftDeleted($user2);
+    $this->assertDatabaseHas('members', [
+        'id' => $member->id,
+        'user_id' => $user2->id,
+    ]);
+    $this->assertDatabaseMissing('teams', ['id' => $teamId]);
 });
 
 test('super user cannot be deleted', function () {

@@ -36,6 +36,6 @@ class ProcessInvoice implements ShouldQueue
         $memberInvoice = $rep->addInvoice($this->member->id, $invoice);
 
         // Notify user.
-        $this->member->user->notify(new InvoiceNotification($this->member, $memberInvoice));
+        $this->member->user?->notify(new InvoiceNotification($this->member, $memberInvoice));
     }
 }
