@@ -4,6 +4,7 @@
     "prepare": "cd ../ && husky install",
     "dev": "vite",
     "build": "vite build",
+    "audit:security": "node ../scripts/npm-audit.cjs",
     "lint": "eslint --fix .",
     "format": "prettier 'resources/{js,vue}/**/*.{js,vue}' --write",
     "pre-commit": "npm run format && lint-staged && pretty-quick --staged",

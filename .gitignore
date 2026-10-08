@@ -38,3 +38,4 @@ errors.log
 .docker-sync/
 mutagen.yml.lock
 .vscode
+/laravel/npm-audit-report.json
