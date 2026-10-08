@@ -56,6 +56,8 @@ make artisan test        # Run full test suite
 make composer test       # Alias for tests
 make composer lint       # Check style (Pint + PHPCS + Rector)
 make composer format     # Auto-fix style
+
+# run these in the laraval folder
 npm run lint             # ESLint --fix
 npm run format           # Prettier write
 ```
