@@ -6,6 +6,11 @@ use App\Models\User;
 
 trait SkipsDeletedUsers
 {
+    public function shouldSend(object $notifiable, string $channel): bool
+    {
+        return ! ($notifiable instanceof User && $notifiable->trashed());
+    }
+
     /**
      * Get the mail channel when the recipient still has an active account.
      *

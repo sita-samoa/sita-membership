@@ -5,8 +5,14 @@ use App\Models\Member;
 use App\Models\MemberMembershipStatus;
 use App\Models\MemberWorkExperience;
 use App\Models\User;
+use App\Notifications\AcceptedNotification;
 use App\Notifications\SubReminder;
 use Database\Seeders\DatabaseSeeder;
+use Illuminate\Notifications\ChannelManager;
+use Illuminate\Notifications\SendQueuedNotifications;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Queue;
+use Illuminate\Support\Testing\Fakes\MailFake;
 use Laravel\Jetstream\Features;
 
 test('user accounts can be deleted', function () {
@@ -87,7 +93,41 @@ test('deleting an account preserves its membership records', function () {
     return ! Features::hasAccountDeletionFeatures();
 }, 'Account deletion is not enabled.');
 
-test('queued membership notifications skip deleted users', function () {
+test('queued membership notifications check deletion at delivery time', function (string $notificationClass, bool $deleteRecipient) {
+    Queue::fake();
+    $mail = new class(app('mail.manager')) extends MailFake
+    {
+        public int $deliveries = 0;
+
+        public function send($view, array $data = [], $callback = null)
+        {
+            $this->deliveries++;
+
+            return parent::send($view, $data, $callback);
+        }
+    };
+    Mail::swap($mail);
+    $this->seed(DatabaseSeeder::class);
+
+    $user = User::factory()->create();
+    $member = Member::factory()->for($user)->create();
+    $user->notify(new $notificationClass($member));
+
+    Queue::assertPushed(SendQueuedNotifications::class, 1);
+    $payload = serialize(Queue::pushed(SendQueuedNotifications::class)->sole());
+
+    if ($deleteRecipient) {
+        $user->delete();
+    }
+
+    $job = unserialize($payload);
+    expect($job->channels)->toBe(['mail']);
+    $job->handle(app(ChannelManager::class));
+
+    expect($mail->deliveries)->toBe($deleteRecipient ? 0 : 1);
+})->with([AcceptedNotification::class, SubReminder::class])->with([true, false]);
+
+test('membership notifications initiated after deletion select no channels', function () {
     $this->seed(DatabaseSeeder::class);
 
     $user = User::factory()->create();
