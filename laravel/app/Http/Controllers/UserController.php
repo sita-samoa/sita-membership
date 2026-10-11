@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Inertia\Inertia;
+use Laravel\Jetstream\Contracts\DeletesUsers;
 use Laravel\Jetstream\Jetstream;
 
 class UserController extends Controller
@@ -176,7 +177,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(User $user, DeletesUsers $deletesUsers)
     {
         if (App::environment('demo') && $user->isDemoUser()) {
             return redirect()
@@ -192,7 +193,7 @@ class UserController extends Controller
 
         $this->authorize('delete', $user);
 
-        $user->delete();
+        $deletesUsers->delete($user);
 
         return redirect()->back()->with('success', 'User deleted.');
     }

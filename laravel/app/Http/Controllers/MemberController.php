@@ -255,7 +255,7 @@ class MemberController extends Controller
         }
 
         // Notify user.
-        $member->user->notify(new AcceptedNotification($member));
+        $member->user?->notify(new AcceptedNotification($member));
 
         return redirect()->back()->with('success', 'Application Accepted');
     }
@@ -279,7 +279,7 @@ class MemberController extends Controller
         $this->memberRepository->recordAction($member, $request->user());
 
         // Send rejection notification.
-        $member->user->notify(new RejectionNotification($member, $validated['reason']));
+        $member->user?->notify(new RejectionNotification($member, $validated['reason']));
 
         return redirect()->back()->with('success', 'Application Rejected');
     }
@@ -319,6 +319,10 @@ class MemberController extends Controller
     {
         $this->authorize('sendSubReminder', $member);
 
+        if (! $member->user) {
+            return redirect()->back()->with('error', 'Member does not have an active user account.');
+        }
+
         // Email will be sent in a queue.
         $member->user->notify(new SubReminder($member));
 
@@ -331,6 +335,10 @@ class MemberController extends Controller
     public function sendPastDueSubReminder(Member $member): RedirectResponse
     {
         $this->authorize('sendPastDueSubReminder', $member);
+
+        if (! $member->user) {
+            return redirect()->back()->with('error', 'Member does not have an active user account.');
+        }
 
         $end_grace_period = Carbon::now();
         $rep = new MemberMembershipStatusRepository();

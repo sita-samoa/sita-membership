@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Member;
+use App\Notifications\Concerns\SkipsDeletedUsers;
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,6 +13,7 @@ use Illuminate\Notifications\Notification;
 class PastDueSubReminder extends Notification implements ShouldQueue
 {
     use Queueable;
+    use SkipsDeletedUsers;
 
     protected function getDays()
     {
@@ -35,7 +37,7 @@ class PastDueSubReminder extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return $this->mailChannelFor($notifiable);
     }
 
     /**

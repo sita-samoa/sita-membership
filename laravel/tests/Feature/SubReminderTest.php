@@ -4,6 +4,7 @@ use App\Enums\MembershipStatus;
 use App\Models\Member;
 use App\Models\Team;
 use App\Models\User;
+use Database\Seeders\DatabaseSeeder;
 use Illuminate\Support\Facades\Queue;
 
 beforeEach(function () {
@@ -86,4 +87,22 @@ test('test coordinator can send a reminder', function () {
 
     $response->assertStatus(302);
     Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 1);
+});
+
+test('test reminder is not sent to a deleted member account', function () {
+    Queue::fake();
+
+    $admin = User::factory()->withPersonalTeam()->create();
+    $memberOwner = User::factory()->create();
+    $member = Member::factory()->for($memberOwner)->create([
+        'membership_status_id' => MembershipStatus::ACCEPTED->value,
+    ]);
+    $memberOwner->delete();
+
+    $response = $this->actingAs($admin)
+        ->put('/members/'.$member->id.'/send-sub-reminder');
+
+    $response->assertStatus(302);
+    $response->assertSessionHas('error', 'Member does not have an active user account.');
+    Queue::assertNothingPushed();
 });

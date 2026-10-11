@@ -3,6 +3,7 @@
 namespace App\Notifications;
 
 use App\Models\Member;
+use App\Notifications\Concerns\SkipsDeletedUsers;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -11,6 +12,7 @@ use Illuminate\Notifications\Notification;
 class ExpiringSubReminder extends Notification implements ShouldQueue
 {
     use Queueable;
+    use SkipsDeletedUsers;
 
     /**
      * Create a new notification instance.
@@ -27,7 +29,7 @@ class ExpiringSubReminder extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        return ['mail'];
+        return $this->mailChannelFor($notifiable);
     }
 
     /**

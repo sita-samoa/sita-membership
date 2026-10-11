@@ -112,6 +112,10 @@ class MemberMembershipStatusRepository extends Repository
             $user = $member->user;
             $expiry_date = $status->to_date;
 
+            if (! $user) {
+                continue;
+            }
+
             // Cater for sqlite date format using github actions
             if (Carbon::canBeCreatedFromFormat($expiry_date, $mariadb_format)) {
                 $end_grace_period = Carbon::createFromFormat($mariadb_format, $expiry_date);
@@ -168,6 +172,11 @@ class MemberMembershipStatusRepository extends Repository
             $member = $status->member;
             $user = $member->user;
             $expiry_date = $status->to_date;
+
+            if (! $user) {
+                continue;
+            }
+
             $days = $current->diffInDays($expiry_date);
 
             $user->notify(new ExpiringSubReminder($member, $days));
