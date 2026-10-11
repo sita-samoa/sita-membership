@@ -40,5 +40,15 @@ jobs:
         with:
           node-version: 24
 
+      - name: Test npm audit exception filter
+        run: node --test ../scripts/npm-audit.test.cjs
+
       - name: Audit npm dependencies
-        run: npm audit --audit-level=moderate
+        run: npm run audit:security
+
+      - name: Upload npm audit report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-report
+          path: laravel/npm-audit-report.json
