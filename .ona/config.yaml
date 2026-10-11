@@ -1,0 +1,91 @@
+tasks:
+  install-dependencies:
+    name: Install dependencies
+    description: Install the locked PHP and JavaScript dependencies.
+    triggeredBy:
+      - manual
+      - postDevcontainerStart
+      - prebuild
+    command: |
+      set -eu
+      test -f laravel/.env || cp laravel/.env.dev laravel/.env
+      docker compose -f compose.yml -f compose.dev.yml run --rm --no-deps php composer --working-dir=/var/www/html/laravel install --no-ansi --no-interaction --no-progress --prefer-dist
+      docker compose -f compose.yml -f compose.dev.yml run --rm --no-deps node npm ci
+      docker compose -f compose.yml -f compose.dev.yml run --rm --no-deps php php /var/www/html/laravel/artisan key:generate --force
+      docker compose -f compose.yml -f compose.dev.yml run --rm --no-deps php php /var/www/html/laravel/artisan storage:link || test -L laravel/public/storage
+
+  build-assets:
+    name: Build assets
+    description: Build the production Vite bundle.
+    triggeredBy:
+      - manual
+    dependsOn:
+      - install-dependencies
+    command: docker compose -f compose.yml -f compose.dev.yml run --rm --no-deps node npm run build
+
+  test:
+    name: Run tests
+    description: Run the PestPHP test suite against the testing database.
+    triggeredBy:
+      - manual
+    dependsOn:
+      - install-dependencies
+    command: |
+      set -eu
+      cleanup() {
+        docker compose -f compose.yml -f compose.dev.yml stop mariadb_testing
+      }
+      trap cleanup EXIT
+      docker compose -f compose.yml -f compose.dev.yml up -d mariadb_testing
+      until docker compose -f compose.yml -f compose.dev.yml exec -T mariadb_testing sh -lc 'mariadb-admin ping -h 127.0.0.1 -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" --silent'; do
+        sleep 2
+      done
+      docker compose -f compose.yml -f compose.dev.yml run --rm --no-deps php composer --working-dir=/var/www/html/laravel test
+
+services:
+  development-stack:
+    name: Development stack
+    description: Run Laravel, Vite, MariaDB, Mailpit, and nginx.
+    triggeredBy:
+      - manual
+      - postEnvironmentStart
+    commands:
+      start: |
+        set -eu
+        gitpod environment port open 8000 --admission creator_only --name "Development stack"
+        gitpod environment port open 5173 --admission everyone --name "Development stack"
+        export ONA_EXPOSED_HOST="$(gitpod environment port get 8000 -f URL | sed -E 's#^https?://##; s#/$##')"
+        export GITPOD_WORKSPACE_URL="$(gitpod environment port get 5173 -f URL | sed -E 's#/$##')"
+        export PROJECT_BASE_URL="$ONA_EXPOSED_HOST"
+        export APP_URL="https://$ONA_EXPOSED_HOST"
+        ona_compose_override="$(mktemp)"
+        trap 'rm -f "$ona_compose_override"' EXIT
+        printf '%s\n' \
+          'services:' \
+          '  nginx:' \
+          '    ports:' \
+          '      - "8000:80"' \
+          '  traefik:' \
+          '    profiles:' \
+          '      - disabled' > "$ona_compose_override"
+        export COMPOSE_FILE="compose.yml:compose.dev.yml:$ona_compose_override"
+        docker compose up --remove-orphans mariadb php nginx mailpit node &
+        stack_pid=$!
+        until docker compose -f compose.yml -f compose.dev.yml exec -T php php -v >/dev/null 2>&1; do
+          if ! kill -0 "$stack_pid" 2>/dev/null; then
+            wait "$stack_pid"
+          fi
+          sleep 2
+        done
+        until docker compose exec -T mariadb sh -lc 'mariadb-admin ping -h 127.0.0.1 -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" --silent'; do
+          if ! kill -0 "$stack_pid" 2>/dev/null; then
+            wait "$stack_pid"
+          fi
+          sleep 2
+        done
+        docker compose exec -T php php /var/www/html/laravel/artisan migrate --force
+        wait "$stack_pid"
+      ready: |
+        ONA_EXPOSED_HOST="$(gitpod environment port get 8000 -f URL | sed -E 's#^https?://##; s#/$##')"
+        curl -fsS -H "Host: ${ONA_EXPOSED_HOST}" http://localhost:8000/ >/dev/null
+      stop: docker compose -f compose.yml -f compose.dev.yml down --remove-orphans
