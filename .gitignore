@@ -22,6 +22,7 @@ ehthumbs.db
 
 # Ignore docker files
 docker-compose.override.yml
+compose.override.yml
 docker-init/
 mariadb-init/
 .env.gitpod
