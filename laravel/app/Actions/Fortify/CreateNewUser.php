@@ -24,9 +24,11 @@ class CreateNewUser implements CreatesNewUsers
     {
         $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'email' => ['required', 'string', 'email', 'max:255',
+                'unique:users'],
             'password' => $this->passwordRules(),
-            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '', ];
+            'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? [
+                'accepted', 'required'] : '', ];
         if (!app()->environment('testing')) {
             // Skip ReCaptcha Validation during Testing
             // @todo: remove and mock reCaptcha during testing instead

@@ -85,7 +85,9 @@ test('cannot mark as accepted', function ($role) {
     $response->assertStatus(403);
 })->with(['editor', 'executive']);
 
-test('cannot mark as accepted with status', function (MembershipStatus $status) {
+test('cannot mark as accepted with status', function (
+    MembershipStatus $status
+) {
     User::factory()->withPersonalTeam()->create();
     $team = Team::first();
 

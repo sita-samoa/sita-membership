@@ -21,32 +21,33 @@ test('test cannot submit application when incomplete', function () {
     $response->assertStatus(403);
 });
 
-test('test student can submit application with limited requirements', function () {
-    // Create user with personal team.
-    $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+test('test student can submit application with limited '
+    .'requirements', function () {
+        // Create user with personal team.
+        $this->actingAs($user = User::factory()->withPersonalTeam()->create());
 
-    // Get student membership id.
-    $rep = new MembershipTypeRepository();
-    $studentMembershipType = $rep->getByCode('student');
+        // Get student membership id.
+        $rep = new MembershipTypeRepository();
+        $studentMembershipType = $rep->getByCode('student');
 
-    // Create member.
-    $member = Member::factory()->for($user)->create(
-        ['membership_type_id' => $studentMembershipType->id]
-    );
+        // Create member.
+        $member = Member::factory()->for($user)->create(
+            ['membership_type_id' => $studentMembershipType->id]
+        );
 
-    // Subscribe to mailing list.
-    MemberMailingPreference::create([
-        'member_id' => $member->id,
-        'mailing_list_id' => 1,
-        'subscribed' => true,
-    ]);
+        // Subscribe to mailing list.
+        MemberMailingPreference::create([
+            'member_id' => $member->id,
+            'mailing_list_id' => 1,
+            'subscribed' => true,
+        ]);
 
-    $response = $this->put('/members/'.$member->id.'/submit');
-    $response->assertStatus(302);
-    // Assert that no validation errors are present.
-    $response->assertValid();
-    $response->assertSessionHas('success');
-});
+        $response = $this->put('/members/'.$member->id.'/submit');
+        $response->assertStatus(302);
+        // Assert that no validation errors are present.
+        $response->assertValid();
+        $response->assertSessionHas('success');
+    });
 
 test('test group admin can submit application when incomplete', function () {
     $admin = User::factory()->withPersonalTeam()->create();
@@ -81,8 +82,12 @@ test('test notification sent when submitted', function () {
     $response = $this->put('/members/'.$member->id.'/submit');
     $response->assertStatus(302);
 
-    // There should be two users receiving notifications. Site admin and Group admin.
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 2);
+    // There should be two users receiving notifications. Site admin and Group
+    // admin.
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        2
+    );
 });
 
 test('@todo - test that user can submit their own application', function () {

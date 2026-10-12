@@ -21,8 +21,12 @@ class InviteTeamMember implements InvitesTeamMembers
     /**
      * Invite a new team member to the given team.
      */
-    public function invite(User $user, Team $team, string $email, string $role = null): void
-    {
+    public function invite(
+        User $user,
+        Team $team,
+        string $email,
+        ?string $role = null
+    ): void {
         Gate::forUser($user)->authorize('addTeamMember', $team);
 
         $this->validate($team, $email, $role);
@@ -46,7 +50,9 @@ class InviteTeamMember implements InvitesTeamMembers
             'email' => $email,
             'role' => $role,
         ], $this->rules($team), [
-            'email.unique' => __('This user has already been invited to the team.'),
+            'email.unique' => __(
+                'This user has already been invited to the team.'
+            ),
         ])->after(
             $this->ensureUserIsNotAlreadyOnTeam($team, $email)
         )->validateWithBag('addTeamMember');
@@ -62,7 +68,9 @@ class InviteTeamMember implements InvitesTeamMembers
         return array_filter([
             'email' => [
                 'required', 'email',
-                Rule::unique('team_invitations')->where(function (Builder $query) use ($team) {
+                Rule::unique('team_invitations')->where(function (
+                    Builder $query
+                ) use ($team) {
                     $query->where('team_id', $team->id);
                 }),
             ],
@@ -75,8 +83,10 @@ class InviteTeamMember implements InvitesTeamMembers
     /**
      * Ensure that the user is not already on the team.
      */
-    protected function ensureUserIsNotAlreadyOnTeam(Team $team, string $email): Closure
-    {
+    protected function ensureUserIsNotAlreadyOnTeam(
+        Team $team,
+        string $email
+    ): Closure {
         return function ($validator) use ($team, $email) {
             $validator->errors()->addIf(
                 $team->hasUserWithEmail($email),

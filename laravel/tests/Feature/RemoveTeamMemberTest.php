@@ -10,7 +10,8 @@ test('team members can be removed from teams', function () {
         ['role' => 'admin']
     );
 
-    $response = $this->delete('/teams/'.$user->currentTeam->id.'/members/'.$otherUser->id);
+    $response = $this->delete('/teams/'.$user->currentTeam->id.'/members/'
+        .$otherUser->id);
 
     expect($user->currentTeam->fresh()->users)->toHaveCount(0);
 });
@@ -25,7 +26,8 @@ test('only team owner can remove team members', function () {
 
     $this->actingAs($otherUser);
 
-    $response = $this->delete('/teams/'.$user->currentTeam->id.'/members/'.$user->id);
+    $response = $this->delete('/teams/'.$user->currentTeam->id.'/members/'
+        .$user->id);
 
     $response->assertStatus(403);
 });

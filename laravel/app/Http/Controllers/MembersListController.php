@@ -20,7 +20,12 @@ class MembersListController extends Controller
         // Only allow Accepted and Lapsed membership status ids.
         $validatedData = $request->validate([
             'search' => 'nullable|string|max:255',
-            'membership_status_id' => 'nullable|integer|in:4,5|exists:membership_statuses,id',
+            'membership_status_id' => [
+                'nullable',
+                'integer',
+                'in:4,5',
+                'exists:membership_statuses,id',
+            ],
         ]);
 
         $membership_status_ids = [

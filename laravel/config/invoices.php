@@ -83,7 +83,7 @@ return [
          * Must implement LaravelDaily\Invoices\Contracts\PartyContract
          *      or extend LaravelDaily\Invoices\Classes\Party
          */
-        'class' => \LaravelDaily\Invoices\Classes\Seller::class,
+        'class' => LaravelDaily\Invoices\Classes\Seller::class,
 
         /*
          * Default attributes for Seller::class

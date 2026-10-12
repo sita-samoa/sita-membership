@@ -19,8 +19,10 @@ class MemberSupportingDocumentPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, MemberSupportingDocument $memberSupportingDocument): bool
-    {
+    public function view(
+        User $user,
+        MemberSupportingDocument $memberSupportingDocument
+    ): bool {
         //
     }
 
@@ -35,8 +37,10 @@ class MemberSupportingDocumentPolicy
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, MemberSupportingDocument $memberSupportingDocument): bool
-    {
+    public function update(
+        User $user,
+        MemberSupportingDocument $memberSupportingDocument
+    ): bool {
         $member = Member::where('id', $memberSupportingDocument
             ->member_id)->first();
 
@@ -46,24 +50,30 @@ class MemberSupportingDocumentPolicy
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, MemberSupportingDocument $memberSupportingDocument): bool
-    {
+    public function delete(
+        User $user,
+        MemberSupportingDocument $memberSupportingDocument
+    ): bool {
         return $this->update($user, $memberSupportingDocument);
     }
 
     /**
      * Determine whether the user can restore the model.
      */
-    public function restore(User $user, MemberSupportingDocument $memberSupportingDocument): bool
-    {
+    public function restore(
+        User $user,
+        MemberSupportingDocument $memberSupportingDocument
+    ): bool {
         //
     }
 
     /**
      * Determine whether the user can permanently delete the model.
      */
-    public function forceDelete(User $user, MemberSupportingDocument $memberSupportingDocument): bool
-    {
+    public function forceDelete(
+        User $user,
+        MemberSupportingDocument $memberSupportingDocument
+    ): bool {
         //
     }
 }

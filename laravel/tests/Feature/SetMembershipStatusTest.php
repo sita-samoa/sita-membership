@@ -23,7 +23,8 @@ test('test cannot set membership status', function () {
     $new_status = MembershipStatus::ACCEPTED->value;
     $rep->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
 
-    $response = $this->put('/members/'.$member->id.'/membership-status/'.$new_status, []);
+    $response = $this->put('/members/'.$member->id.'/membership-status/'
+        .$new_status, []);
 
     $response->assertStatus(403);
 
@@ -33,7 +34,10 @@ test('test cannot set membership status', function () {
     expect($statuses)->toHaveCount(0);
 
     // Cannot set with invalid id.
-    $response = $this->put('/members/'.$member->id.'/membership-status/1000', []);
+    $response = $this->put(
+        '/members/'.$member->id.'/membership-status/1000',
+        []
+    );
 
     $response->assertStatus(404);
 
@@ -58,7 +62,8 @@ test('test can set membership status', function ($role) {
     $new_status = MembershipStatus::DRAFT->value;
     $rep->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
 
-    $response = $this->put('/members/'.$member->id.'/membership-status/'.$new_status, []);
+    $response = $this->put('/members/'.$member->id.'/membership-status/'
+        .$new_status, []);
 
     $response->assertStatus(302);
 
@@ -87,10 +92,11 @@ test('test can set membership status as accepted', function ($role) {
     $new_status = MembershipStatus::ACCEPTED->value;
     $rep->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
 
-    $response = $this->put('/members/'.$member->id.'/membership-status/'.$new_status, [
-        'financial_year' => Carbon::now()->year,
-        'receipt_number' => '111',
-    ]);
+    $response = $this->put('/members/'.$member->id.'/membership-status/'
+        .$new_status, [
+            'financial_year' => Carbon::now()->year,
+            'receipt_number' => '111',
+        ]);
 
     $response->assertStatus(302);
 
@@ -121,18 +127,20 @@ test('test cannot set membership status as accepted', function ($role) {
     $new_status = MembershipStatus::ACCEPTED->value;
     $rep->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
 
-    $response = $this->put('/members/'.$member->id.'/membership-status/'.$new_status, [
-        'financial_year' => 1999,
-        'receipt_number' => '',
-    ]);
+    $response = $this->put('/members/'.$member->id.'/membership-status/'
+        .$new_status, [
+            'financial_year' => 1999,
+            'receipt_number' => '',
+        ]);
 
     // Assert that validation errors are present.
     $response->assertInvalid(['financial_year', 'receipt_number']);
 
-    $response = $this->put('/members/'.$member->id.'/membership-status/'.$new_status, [
-        'financial_year' => 2000,
-        'receipt_number' => '',
-    ]);
+    $response = $this->put('/members/'.$member->id.'/membership-status/'
+        .$new_status, [
+            'financial_year' => 2000,
+            'receipt_number' => '',
+        ]);
 
     // Assert that no validation errors are present.
     $response->assertValid(['financial_year']);

@@ -12,8 +12,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class Member extends Model implements Auditable
 {
-    use HasFactory;
     use AuditableTrait;
+    use HasFactory;
 
     protected $fillable = [
         'title_id',

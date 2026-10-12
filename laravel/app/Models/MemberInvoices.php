@@ -10,8 +10,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class MemberInvoices extends Model implements Auditable
 {
-    use HasFactory;
     use AuditableTrait;
+    use HasFactory;
 
     protected $fillable = [
         'invoice_status_id',

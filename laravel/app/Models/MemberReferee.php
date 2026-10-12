@@ -10,8 +10,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class MemberReferee extends Model implements Auditable
 {
-    use HasFactory;
     use AuditableTrait;
+    use HasFactory;
 
     protected $fillable = [
         'name',

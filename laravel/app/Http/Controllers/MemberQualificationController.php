@@ -43,8 +43,11 @@ class MemberQualificationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Member $member, MemberQualification $qualification): RedirectResponse
-    {
+    public function update(
+        Request $request,
+        Member $member,
+        MemberQualification $qualification
+    ): RedirectResponse {
         // @todo - Implement authorization here
         $this->authorize('update', $member);
 
@@ -63,8 +66,10 @@ class MemberQualificationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Member $member, MemberQualification $qualification): RedirectResponse
-    {
+    public function destroy(
+        Member $member,
+        MemberQualification $qualification
+    ): RedirectResponse {
         // @todo - Implement authorization here
         $this->authorize('update', $member);
 
