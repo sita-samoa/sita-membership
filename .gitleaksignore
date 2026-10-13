@@ -1,0 +1,5 @@
+# Vue available-permissions binding misidentified as a generic API key.
+25a8d1e9034c12796c0697f1261e2feb8c8962c2:laravel/resources/js/Pages/API/Index.vue:generic-api-key:20
+# Copies of the same false positive in historical generated reports.
+74678990516b4f5e6c6caf34ca61f2cc1d269d54:.gitleaks/findings.json:generic-api-key:10
+f21455f55bc943d762477668a40eb781e9ce5f46:.gitleaks/findings.json:generic-api-key:10
