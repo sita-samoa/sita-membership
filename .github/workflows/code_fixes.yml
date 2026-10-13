@@ -22,7 +22,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: "8.4"
 
       - name: Setup Composer
         uses: "ramsey/composer-install@v2"
@@ -32,19 +32,12 @@ jobs:
         run: composer format_ci
         continue-on-error: true
 
-      - name: Cache node modules
-        id: cache-npm
-        uses: actions/cache@v4
-        env:
-          cache-name: cache-node-modules
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          # npm cache files are stored in `~/.npm` on Linux/macOS
-          path: ~/.npm
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
+          node-version: "24"
+          cache: "npm"
+          cache-dependency-path: laravel/package-lock.json
       - name: Install dependencies
         run: npm ci
       - name: Format code
