@@ -345,13 +345,19 @@ class MemberController extends Controller
         $this->authorize('sendSubReminder', $member);
 
         if (! $member->user) {
-            return redirect()->back()->with('error', 'Member does not have an active user account.');
+            return redirect()->back()->with(
+                'error',
+                'Member does not have an active user account.'
+            );
         }
 
         // Email will be sent in a queue.
         $member->user->notify(new SubReminder($member));
 
-        return redirect()->back()->with('success', 'Reminder scheduled.');
+        return redirect()->back()->with(
+            'success',
+            'Reminder scheduled.'
+        );
     }
 
     /**
@@ -362,7 +368,10 @@ class MemberController extends Controller
         $this->authorize('sendPastDueSubReminder', $member);
 
         if (! $member->user) {
-            return redirect()->back()->with('error', 'Member does not have an active user account.');
+            return redirect()->back()->with(
+                'error',
+                'Member does not have an active user account.'
+            );
         }
 
         $end_grace_period = Carbon::now();

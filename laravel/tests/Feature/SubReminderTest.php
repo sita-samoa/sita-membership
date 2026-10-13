@@ -120,6 +120,9 @@ test('test reminder is not sent to a deleted member account', function () {
         ->put('/members/'.$member->id.'/send-sub-reminder');
 
     $response->assertStatus(302);
-    $response->assertSessionHas('error', 'Member does not have an active user account.');
+    $response->assertSessionHas(
+        'error',
+        'Member does not have an active user account.'
+    );
     Queue::assertNothingPushed();
 });
