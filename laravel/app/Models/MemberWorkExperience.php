@@ -10,8 +10,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 
 class MemberWorkExperience extends Model implements Auditable
 {
-    use HasFactory;
     use AuditableTrait;
+    use HasFactory;
 
     protected $fillable = [
         'member_id',

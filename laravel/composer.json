@@ -55,6 +55,9 @@
       "php artisan db:seed --class=DatabaseSeeder"
     ],
     "dev": [
+      "php artisan migrate",
+      "php artisan db:seed --class=UsersTableSeeder",
+      "php artisan db:seed --class=DatabaseSeeder",
       "php artisan db:seed --class=DemoUsersSeeder",
       "php artisan db:seed --class=MembersTableSeeder"
     ],

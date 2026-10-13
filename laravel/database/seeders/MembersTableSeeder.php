@@ -19,18 +19,18 @@ class MembersTableSeeder extends Seeder
     {
         $members_num = 500;
 
-        Member::factory()
+        $members = Member::factory()
             ->count($members_num)
             ->create();
 
         $rep = new MemberRepository();
 
         // add members to mailing lists
-        for ($i = 0; $i < $members_num; $i++) {
+        foreach ($members as $member) {
             $current = Carbon::now();
             $date = rand(1, 2) == 1 ? $current->toDateString() : $current->subMonth()->toDateString();
             MemberMailingPreference::create([
-                'member_id' => $i + 1,
+                'member_id' => $member->id,
                 'mailing_list_id' => rand(1, 2),
                 'subscribed' => rand(0, 1),
                 'created_at' => $current->toDateString(),
@@ -44,9 +44,9 @@ class MembersTableSeeder extends Seeder
             $receipt_number = $status_id == MembershipStatus::ACCEPTED->value ? rand(100000, 999999) : 0;
 
             MemberMembershipStatus::create([
-                'member_id' => $i + 1,
+                'member_id' => $member->id,
                 'membership_status_id' => $status_id,
-                'user_id' => 1,
+                'user_id' => $member->user_id,
                 'from_date' => $from_date,
                 'to_date' => $to_date,
                 'receipt_number' => $receipt_number,

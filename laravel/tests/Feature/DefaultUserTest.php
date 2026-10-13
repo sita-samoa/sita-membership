@@ -29,5 +29,6 @@ test('test the default user belongs to team 1', function () {
     $user = User::first();
 
     expect($user->fresh()->ownedTeams)->toHaveCount(1);
-    expect($user->fresh()->ownedTeams()->latest('id')->first()->name)->toEqual('SITA Online');
+    expect($user->fresh()->ownedTeams()->latest('id')->first()->name)
+        ->toEqual('SITA Online');
 });

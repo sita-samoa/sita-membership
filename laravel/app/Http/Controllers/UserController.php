@@ -19,8 +19,8 @@ class UserController extends Controller
 {
     use PasswordValidationRules;
 
-    const MAX_LIMIT = 100;
-    const DEFAULT_ROWS_PER_PAGE = 25;
+    public const MAX_LIMIT = 100;
+    public const DEFAULT_ROWS_PER_PAGE = 25;
 
     /**
      * Display a listing of the resource.
@@ -47,7 +47,10 @@ class UserController extends Controller
 
         return Inertia::render('Users/Index', [
             // Set default for limit.
-            'filters' => array_merge($request->only('search', 'role'), ['limit' => $limit ?? self::DEFAULT_ROWS_PER_PAGE]),
+            'filters' => array_merge(
+                $request->only('search', 'role'),
+                ['limit' => $limit ?? self::DEFAULT_ROWS_PER_PAGE]
+            ),
             'users' => User::orderBy('email_verified_at')
                 ->when(
                     $role,
@@ -93,19 +96,17 @@ class UserController extends Controller
 
         $validated = Validator::make($input, $rules)->validate();
 
-        $user = DB::transaction(function () use ($validated) {
-            return tap(User::create([
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-                'password' => Hash::make($validated['password']),
-            ]), function (User $user) {
-                $user->ownedTeams()->save(Team::forceCreate([
-                    'user_id' => $user->id,
-                    'name' => explode(' ', $user->name, 2)[0]."'s Team",
-                    'personal_team' => true,
-                ]));
-            });
-        });
+        $user = DB::transaction(fn () => tap(User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+        ]), function (User $user) {
+            $user->ownedTeams()->save(Team::forceCreate([
+                'user_id' => $user->id,
+                'name' => explode(' ', $user->name, 2)[0]."'s Team",
+                'personal_team' => true,
+            ]));
+        }));
 
         if (isset($validated['photo'])) {
             $user->updateProfilePhoto($validated['photo']);

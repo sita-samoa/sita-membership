@@ -62,14 +62,19 @@ class MemberMembershipStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Member $member, MembershipStatus $membershipStatus)
-    {
+    public function update(
+        Request $request,
+        Member $member,
+        MembershipStatus $membershipStatus
+    ) {
         // Only coordinator can update this field.
         $this->authorize('updateMembershipStatus', $member);
 
-        $isFreeMembership = $this->sitaOnlineService->isMemberHasFreeMembership($member);
+        $isFreeMembership = $this->sitaOnlineService
+            ->isMemberHasFreeMembership($member);
 
-        $isAccepted = $membershipStatus->id == MembershipStatusEnum::ACCEPTED->value;
+        $isAccepted = $membershipStatus->id
+            == MembershipStatusEnum::ACCEPTED->value;
 
         if ($isFreeMembership) {
             $validated = $request->validate([

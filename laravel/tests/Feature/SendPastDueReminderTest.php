@@ -23,10 +23,15 @@ test('test that reminder cannot be sent if not Lapsed', function ($status_id) {
     $member->membership_status_id = $status_id;
     $member->save();
 
-    $response = $this->put('/members/'.$member->id.'/send-past-due-sub-reminder');
+    $response = $this->put(
+        '/members/'.$member->id.'/send-past-due-sub-reminder'
+    );
 
     $response->assertStatus(403);
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 0);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        0
+    );
 })->with([1, 2, 3, 4, 6]);
 
 test('test that reminder sent', function () {
@@ -37,10 +42,15 @@ test('test that reminder sent', function () {
     $member->membership_status_id = MembershipStatus::LAPSED->value;
     $member->save();
 
-    $response = $this->put('/members/'.$member->id.'/send-past-due-sub-reminder');
+    $response = $this->put(
+        '/members/'.$member->id.'/send-past-due-sub-reminder'
+    );
 
     $response->assertStatus(302);
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 1);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        1
+    );
 });
 
 test('test user cannot send a reminder', function () {
@@ -51,10 +61,15 @@ test('test user cannot send a reminder', function () {
     $member->membership_status_id = MembershipStatus::LAPSED->value;
     $member->save();
 
-    $response = $this->put('/members/'.$member->id.'/send-past-due-sub-reminder');
+    $response = $this->put(
+        '/members/'.$member->id.'/send-past-due-sub-reminder'
+    );
 
     $response->assertStatus(403);
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 0);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        0
+    );
 });
 
 test('test other roles cannot send a reminder', function (string $role) {
@@ -68,10 +83,15 @@ test('test other roles cannot send a reminder', function (string $role) {
     $team = Team::first();
     $user->teams()->attach($team, ['role' => $role]);
 
-    $response = $this->put('/members/'.$member->id.'/send-past-due-sub-reminder');
+    $response = $this->put(
+        '/members/'.$member->id.'/send-past-due-sub-reminder'
+    );
 
     $response->assertStatus(403);
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 0);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        0
+    );
 })->with(['editor', 'executive']);
 
 test('test coordinator can send a reminder', function () {
@@ -87,8 +107,13 @@ test('test coordinator can send a reminder', function () {
     $team = Team::first();
     $user->teams()->attach($team, ['role' => 'coordinator']);
 
-    $response = $this->put('/members/'.$member->id.'/send-past-due-sub-reminder');
+    $response = $this->put(
+        '/members/'.$member->id.'/send-past-due-sub-reminder'
+    );
 
     $response->assertStatus(302);
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 1);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        1
+    );
 });

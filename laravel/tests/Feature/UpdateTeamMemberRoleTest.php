@@ -10,9 +10,10 @@ test('team member roles can be updated', function () {
         ['role' => 'admin']
     );
 
-    $response = $this->put('/teams/'.$user->currentTeam->id.'/members/'.$otherUser->id, [
-        'role' => 'editor',
-    ]);
+    $response = $this->put('/teams/'.$user->currentTeam->id.'/members/'
+        .$otherUser->id, [
+            'role' => 'editor',
+        ]);
 
     expect($otherUser->fresh()->hasTeamRole(
         $user->currentTeam->fresh(),
@@ -30,9 +31,10 @@ test('only team owner can update team member roles', function () {
 
     $this->actingAs($otherUser);
 
-    $response = $this->put('/teams/'.$user->currentTeam->id.'/members/'.$otherUser->id, [
-        'role' => 'editor',
-    ]);
+    $response = $this->put('/teams/'.$user->currentTeam->id.'/members/'
+        .$otherUser->id, [
+            'role' => 'editor',
+        ]);
 
     expect($otherUser->fresh()->hasTeamRole(
         $user->currentTeam->fresh(),

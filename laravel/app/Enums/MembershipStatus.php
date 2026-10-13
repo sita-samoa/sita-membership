@@ -15,6 +15,8 @@ enum MembershipStatus: int
 
     public static function fromInt(int $value): self
     {
-        return self::tryFrom($value) ?? throw new \InvalidArgumentException('Invalid status');
+        return self::tryFrom($value) ?? throw new \InvalidArgumentException(
+            'Invalid status'
+        );
     }
 }

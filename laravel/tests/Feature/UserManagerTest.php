@@ -45,7 +45,8 @@ test('can access with role', function (string $role) {
 test('user can paginate users', function () {
     User::factory()->count(45)->create();
 
-    $user = $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+    $user = $this->actingAs($user = User::factory()->withPersonalTeam()
+        ->create());
 
     $user->get('/users')
         ->assertInertia(
@@ -66,7 +67,8 @@ test('user can paginate users', function () {
 test('user can modify limits', function (int $limit) {
     User::factory()->count(150)->create();
 
-    $user = $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+    $user = $this->actingAs($user = User::factory()->withPersonalTeam()
+        ->create());
 
     $user->get('/users?limit='.$limit)
         ->assertInertia(
@@ -79,7 +81,8 @@ test('user can modify limits', function (int $limit) {
 test('user can paginate higher than 100', function (int $limit) {
     User::factory()->count(150)->create();
 
-    $user = $this->actingAs($user = User::factory()->withPersonalTeam()->create());
+    $user = $this->actingAs($user = User::factory()->withPersonalTeam()
+        ->create());
 
     // Cannot have more than 100.
     $user->get('/users?limit='.$limit)

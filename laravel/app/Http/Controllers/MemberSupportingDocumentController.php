@@ -60,8 +60,11 @@ class MemberSupportingDocumentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Member $member, MemberSupportingDocument $document): RedirectResponse
-    {
+    public function update(
+        Request $request,
+        Member $member,
+        MemberSupportingDocument $document
+    ): RedirectResponse {
         $this->authorize('update', $document);
 
         $validated = $request->validate([
@@ -81,7 +84,8 @@ class MemberSupportingDocumentController extends Controller
         if ($file) {
             $path = $file ? $file->store('supportingDocuments') : null;
 
-            $document->file_name = $file ? $file->getClientOriginalName() : null;
+            $document->file_name = $file ? $file->getClientOriginalName(
+            ) : null;
             $document->file_path = $path;
             $document->file_size = $path ? Storage::size($path) : null;
             $document->save();
@@ -98,8 +102,10 @@ class MemberSupportingDocumentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Member $member, MemberSupportingDocument $document): RedirectResponse
-    {
+    public function destroy(
+        Member $member,
+        MemberSupportingDocument $document
+    ): RedirectResponse {
         $this->authorize('update', $document);
 
         // Dont delete the document but mark as deleted so that it
@@ -108,6 +114,9 @@ class MemberSupportingDocumentController extends Controller
         $document->to_delete = true;
         $document->save();
 
-        return redirect()->back()->with('success', 'Supporting Document deleted.');
+        return redirect()->back()->with(
+            'success',
+            'Supporting Document deleted.'
+        );
     }
 }

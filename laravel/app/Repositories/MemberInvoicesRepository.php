@@ -23,7 +23,10 @@ class MemberInvoicesRepository extends Repository
     {
         $memberInvoice = new MemberInvoices();
         $invoiceDate = Carbon::createFromFormat('d/m/Y', $invoice->getDate());
-        $payBeforeDate = Carbon::createFromFormat('d/m/Y', $invoice->getPayUntilDate());
+        $payBeforeDate = Carbon::createFromFormat(
+            'd/m/Y',
+            $invoice->getPayUntilDate()
+        );
         $path = $invoice->url();
         // Correct the path.
         $path = str_replace('/storage/', '/invoices/', (string) $path);
@@ -39,7 +42,8 @@ class MemberInvoicesRepository extends Repository
         // $memberInvoice->title = $invoice->getCustomData()
         $memberInvoice->file_name = $invoice->filename;
         $memberInvoice->file_path = $path;
-        $memberInvoice->file_size = $path !== '' && $path !== '0' ? Storage::size($path) : null;
+        $memberInvoice->file_size = $path !== '' && $path !== '0'
+            ? Storage::size($path) : null;
 
         $memberInvoice->save();
 

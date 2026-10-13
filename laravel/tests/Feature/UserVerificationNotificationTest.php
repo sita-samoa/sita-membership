@@ -38,7 +38,10 @@ it('notifies users created 2 days ago', function () {
     $service = new SitaOnlineService();
     $service->sendUnverifiedAccountReminderForTwoDays();
 
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 3);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        3
+    );
 });
 
 it('notifies users created more than 1 week ago', function () {
@@ -48,5 +51,8 @@ it('notifies users created more than 1 week ago', function () {
     $service = new SitaOnlineService();
     $service->sendUnverifiedAccountReminderForMoreThanTwoDays();
 
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 2);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        2
+    );
 });

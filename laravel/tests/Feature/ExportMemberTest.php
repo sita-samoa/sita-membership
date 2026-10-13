@@ -9,9 +9,12 @@ use Database\Seeders\DatabaseSeeder;
 beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
 
-    Member::factory()->create(['membership_status_id' => MembershipStatus::ACCEPTED->value]);
-    Member::factory()->create(['membership_status_id' => MembershipStatus::SUBMITTED->value]);
-    Member::factory()->create(['membership_status_id' => MembershipStatus::LAPSED->value]);
+    Member::factory()->create([
+        'membership_status_id' => MembershipStatus::ACCEPTED->value]);
+    Member::factory()->create([
+        'membership_status_id' => MembershipStatus::SUBMITTED->value]);
+    Member::factory()->create([
+        'membership_status_id' => MembershipStatus::LAPSED->value]);
 });
 
 test('members exported', function () {
@@ -27,7 +30,10 @@ test('export member with null title_id', function () {
     $response = $this->get('/members/export');
 
     $response->assertStatus(200);
-    $response->assertHeader('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    $response->assertHeader(
+        'Content-Type',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
     $disposition = $response->headers->get('Content-Disposition');
     $filename = substr($disposition, strpos($disposition, '=') + 1);
     expect($filename)->toStartWith('members_');
@@ -44,7 +50,8 @@ test('members exported has at least 1 row', function () {
 
 test('filtered members exported has at least 1 row', function () {
     $service = new SitaOnlineService();
-    $sheet = $service->getMembersExport(MembershipStatus::ACCEPTED->value)->collection();
+    $sheet = $service->getMembersExport(MembershipStatus::ACCEPTED->value)
+        ->collection();
 
     expect($sheet)->toHaveCount(1);
 });

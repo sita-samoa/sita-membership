@@ -11,8 +11,11 @@ class Recaptcha implements ValidationRule
     /**
      * Run the validation rule.
      */
-    public function validate(string $attribute, mixed $value, Closure $fail): void
-    {
+    public function validate(
+        string $attribute,
+        mixed $value,
+        Closure $fail
+    ): void {
         $endpoint = config('services.google_recaptcha');
 
         $response = Http::asForm()->post($endpoint['url'], [
@@ -21,7 +24,8 @@ class Recaptcha implements ValidationRule
         ])->json();
 
         if (!$response['success'] || $response['score'] <= 0.5) {
-            $fail('Something went wrong. Please contact us through the SITA website.');
+            $fail('Something went wrong. Please contact us through '
+                .'the SITA website.');
         }
     }
 }

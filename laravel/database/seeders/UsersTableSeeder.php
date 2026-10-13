@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Team;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -23,11 +22,10 @@ class UsersTableSeeder extends Seeder
                 ]
             );
 
-            $user->ownedTeams()->save(Team::forceCreate([
-                'user_id' => $user->id,
+            $user->ownedTeams()->firstOrCreate(['personal_team' => true], [
                 'name' => config('admin.admin_team'),
                 'personal_team' => true,
-            ]));
+            ]);
         }
     }
 }

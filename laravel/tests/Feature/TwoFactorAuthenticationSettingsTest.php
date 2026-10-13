@@ -29,7 +29,10 @@ test('recovery codes can be regenerated', function () {
     $this->post('/user/two-factor-recovery-codes');
 
     expect($user->recoveryCodes())->toHaveCount(8);
-    expect(array_diff($user->recoveryCodes(), $user->fresh()->recoveryCodes()))->toHaveCount(8);
+    expect(array_diff(
+        $user->recoveryCodes(),
+        $user->fresh()->recoveryCodes()
+    ))->toHaveCount(8);
 })->skip(function () {
     return ! Features::canManageTwoFactorAuthentication();
 }, 'Two factor authentication is not enabled.');

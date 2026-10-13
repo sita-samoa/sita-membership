@@ -41,7 +41,7 @@ class UserVerificationReminder extends Notification implements ShouldQueue
             ->line('It looks like you haven’t verified your email address yet.')
             ->action('Verify Email', route('verification.verify', [
                 'id' => $this->user->id,
-                'hash' => sha1($this->user->email),
+                'hash' => sha1((string) $this->user->email),
             ]))
             ->line('Thank you for using our application!');
     }

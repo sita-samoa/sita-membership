@@ -26,7 +26,10 @@ class MemberPolicy
     {
         $team = Team::first();
 
-        return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:read_any');
+        return $member->user()->is($user) || $user->hasTeamPermission(
+            $team,
+            'member:read_any'
+        );
     }
 
     /**
@@ -45,7 +48,10 @@ class MemberPolicy
         $team = Team::first();
 
         if ($member->completions['overall']['status']) {
-            return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:submit_any');
+            return $member->user()->is($user) || $user->hasTeamPermission(
+                $team,
+                'member:submit_any'
+            );
         }
 
         return $user->hasTeamPermission($team, 'member:submit_incomplete');
@@ -70,9 +76,11 @@ class MemberPolicy
 
         return $user->hasTeamPermission($team, 'member:accept') &&
             (
-                $member->membership_status_id == MembershipStatus::ENDORSED->value ||
-                $member->membership_status_id == MembershipStatus::LAPSED->value ||
-                $member->membership_status_id == MembershipStatus::EXPIRED->value
+                in_array($member->membership_status_id, [
+                    MembershipStatus::ENDORSED->value,
+                    MembershipStatus::LAPSED->value,
+                    MembershipStatus::EXPIRED->value,
+                ])
             );
     }
 
@@ -122,7 +130,10 @@ class MemberPolicy
     {
         $team = Team::first();
 
-        return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:update_any');
+        return $member->user()->is($user) || $user->hasTeamPermission(
+            $team,
+            'member:update_any'
+        );
     }
 
     /**
@@ -132,7 +143,10 @@ class MemberPolicy
     {
         $team = Team::first();
 
-        return $user->hasTeamPermission($team, 'member:update_membership_status');
+        return $user->hasTeamPermission(
+            $team,
+            'member:update_membership_status'
+        );
     }
 
     /**
@@ -142,7 +156,10 @@ class MemberPolicy
     {
         $team = Team::first();
 
-        return $member->user()->is($user) || $user->hasTeamPermission($team, 'member:delete_any');
+        return $member->user()->is($user) || $user->hasTeamPermission(
+            $team,
+            'member:delete_any'
+        );
     }
 
     /**

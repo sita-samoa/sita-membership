@@ -39,7 +39,8 @@ class JetstreamServiceProvider extends ServiceProvider
     }
 
     /**
-     * Configure the roles and permissions that are available within the application.
+     * Configure the roles and permissions that are available within the
+     * application.
      */
     protected function configurePermissions(): void
     {
@@ -65,13 +66,15 @@ class JetstreamServiceProvider extends ServiceProvider
         Jetstream::role('editor', 'Editor', [
             'member:read_any',
             'member:update_any',
-        ])->description('Editor users have the ability to read and update member details.');
+        ])->description('Editor users have the ability to read and update '
+            .'member details.');
 
         Jetstream::role('executive', 'Executive', [
             'member:read_any',
             'member:endorse',
             'member:reject',
-        ])->description('SITA Executive users have the ability to read member details and endorse applications.');
+        ])->description('SITA Executive users have the ability to read '
+            .'member details and endorse applications.');
 
         Jetstream::role('coordinator', 'Coordinator', [
             'member:create_many',

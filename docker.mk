@@ -26,11 +26,14 @@ up:
 	$(DOCKER_COMPOSE) up -d --remove-orphans
 
 ## dev	:	Start up containers with Traefik SSL support (local development).
+ifeq (,$(filter composer,$(firstword $(MAKECMDGOALS))))
 .PHONY: dev
 dev:
 	@echo "Starting up containers for $(PROJECT_NAME) with Traefik..."
 	$(DOCKER_COMPOSE) pull
 	$(DOCKER_COMPOSE) -f compose.yml -f compose.dev.yml up -d --remove-orphans
+
+endif
 
 ## ssl	:	Start up containers with SSL support (alias for 'make dev' - backward compatible).
 .PHONY: ssl

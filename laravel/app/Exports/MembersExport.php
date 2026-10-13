@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 
-class MembersExport implements FromCollection, WithMapping, WithHeadings
+class MembersExport implements FromCollection, WithHeadings, WithMapping
 {
     public function __construct(
         public readonly string $member_status_id,

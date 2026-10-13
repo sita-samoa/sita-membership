@@ -50,13 +50,18 @@ class HandleInertiaRequests extends Middleware
 
                 return [
                     'member_id' => $user->members()->first()->id ?? 0,
-                    'completion' => $user->members()->first() ? $user->members()->first()->completions : [],
+                    'completion' => $user->members()->first() ? $user
+                        ->members()->first()->completions : [],
                     'permissions' => $user->permissions ?? [],
                 ];
             },
-            'recaptcha_site_key' => config('services.google_recaptcha.site_key'),
+            'recaptcha_site_key' => config(
+                'services.google_recaptcha.site_key'
+            ),
             'google_analytics_ga4' => config('services.google_analytics.ga4'),
-            'sita_file_upload_limit' => config('services.sita.file_upload_limit'),
+            'sita_file_upload_limit' => config(
+                'services.sita.file_upload_limit'
+            ),
         ]);
     }
 }

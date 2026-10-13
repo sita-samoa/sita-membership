@@ -18,7 +18,8 @@ use Laravel\Fortify\Fortify;
 
 class FortifyServiceProvider extends ServiceProvider
 {
-    // field needed to only validate recaptcha once (login ran twice because of MFA)
+    // field needed to only validate recaptcha once (login ran twice because of
+    // MFA)
     protected $isFirstCall = false;
 
     /**
@@ -35,7 +36,9 @@ class FortifyServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Fortify::createUsersUsing(CreateNewUser::class);
-        Fortify::updateUserProfileInformationUsing(UpdateUserProfileInformation::class);
+        Fortify::updateUserProfileInformationUsing(
+            UpdateUserProfileInformation::class
+        );
         Fortify::updateUserPasswordsUsing(UpdateUserPassword::class);
         Fortify::resetUserPasswordsUsing(ResetUserPassword::class);
 
@@ -52,7 +55,8 @@ class FortifyServiceProvider extends ServiceProvider
                     $this->isFirstCall = true;
                     Validator::make(
                         ['captcha_token' => $request->captcha_token],
-                        ['captcha_token' => ['required', 'string', new Recaptcha()]]
+                        ['captcha_token' => ['required', 'string',
+                            new Recaptcha()]]
                     )->validate();
                 }
 
@@ -69,7 +73,9 @@ class FortifyServiceProvider extends ServiceProvider
         });
 
         RateLimiter::for('two-factor', function (Request $request) {
-            return Limit::perMinute(5)->by($request->session()->get('login.id'));
+            return Limit::perMinute(5)->by($request->session()->get(
+                'login.id'
+            ));
         });
     }
 }
