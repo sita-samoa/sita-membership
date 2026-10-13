@@ -11,9 +11,12 @@ beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
 
     // Test data.
-    Member::factory()->count(3)->create(['membership_status_id' => MembershipStatus::ACCEPTED->value]);
-    Member::factory()->count(3)->create(['membership_status_id' => MembershipStatus::LAPSED->value]);
-    Member::factory()->count(1)->create(['membership_status_id' => MembershipStatus::DRAFT->value]);
+    Member::factory()->count(3)->create([
+        'membership_status_id' => MembershipStatus::ACCEPTED->value]);
+    Member::factory()->count(3)->create([
+        'membership_status_id' => MembershipStatus::LAPSED->value]);
+    Member::factory()->count(1)->create([
+        'membership_status_id' => MembershipStatus::DRAFT->value]);
 });
 
 test('test user without role cannot access', function () {
@@ -81,7 +84,8 @@ test('test can filter by member_status_id and search', function ($role) {
         );
 
     // Get accepted members with search
-    $response = $this->get('/members?search='.$search.'&membership_status_id='.$status)
+    $response = $this->get('/members?search='.$search
+        .'&membership_status_id='.$status)
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('Members/Index')

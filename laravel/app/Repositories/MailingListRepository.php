@@ -9,7 +9,10 @@ class MailingListRepository extends Repository
 {
     public function getAllSubscribedMembers($id)
     {
-        $member_preferences = MemberMailingPreference::where('mailing_list_id', $id)
+        $member_preferences = MemberMailingPreference::where(
+            'mailing_list_id',
+            $id
+        )
             ->where('subscribed', true)->get('member_id');
 
         return Member::whereIn('id', $member_preferences);
@@ -17,12 +20,21 @@ class MailingListRepository extends Repository
 
     public function getAllEmails($members): string
     {
-        return implode('; ', $members->pluck('home_email')->map(fn ($item) => (string) $item)->toArray());
+        return implode('; ', $members->pluck('home_email')->map(fn (
+            $item
+        ) => (string) $item)->toArray());
     }
 
     public function getSubStatusCount($id, $status, $fromDate, $tillDate)
     {
-        return MemberMailingPreference::where('mailing_list_id', $id)->where('subscribed', $status)->
-        where('updated_at', '>=', $fromDate)->where('updated_at', '<=', $tillDate)->count();
+        return MemberMailingPreference::where('mailing_list_id', $id)->where(
+            'subscribed',
+            $status
+        )->
+        where('updated_at', '>=', $fromDate)->where(
+            'updated_at',
+            '<=',
+            $tillDate
+        )->count();
     }
 }

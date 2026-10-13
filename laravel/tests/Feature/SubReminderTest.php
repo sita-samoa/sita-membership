@@ -11,7 +11,9 @@ beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
 });
 
-test('test that sub reminder cannot be sent if not Accepted', function ($status_id) {
+test('test that sub reminder cannot be sent if not Accepted', function (
+    $status_id
+) {
     Queue::fake();
 
     $this->actingAs($user = User::factory()->withPersonalTeam()->create());
@@ -22,7 +24,10 @@ test('test that sub reminder cannot be sent if not Accepted', function ($status_
     $response = $this->put('/members/'.$member->id.'/send-sub-reminder');
 
     $response->assertStatus(403);
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 0);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        0
+    );
 })->with([1, 2, 3, 5, 6]);
 
 test('test that sub reminder sent', function () {
@@ -36,7 +41,10 @@ test('test that sub reminder sent', function () {
     $response = $this->put('/members/'.$member->id.'/send-sub-reminder');
 
     $response->assertStatus(302);
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 1);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        1
+    );
 });
 
 test('test user cannot send a reminder', function () {
@@ -50,7 +58,10 @@ test('test user cannot send a reminder', function () {
     $response = $this->put('/members/'.$member->id.'/send-sub-reminder');
 
     $response->assertStatus(403);
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 0);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        0
+    );
 });
 
 test('test other roles cannot send a reminder', function (string $role) {
@@ -67,7 +78,10 @@ test('test other roles cannot send a reminder', function (string $role) {
     $response = $this->put('/members/'.$member->id.'/send-sub-reminder');
 
     $response->assertStatus(403);
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 0);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        0
+    );
 })->with(['editor', 'executive']);
 
 test('test coordinator can send a reminder', function () {
@@ -86,7 +100,10 @@ test('test coordinator can send a reminder', function () {
     $response = $this->put('/members/'.$member->id.'/send-sub-reminder');
 
     $response->assertStatus(302);
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 1);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        1
+    );
 });
 
 test('test reminder is not sent to a deleted member account', function () {

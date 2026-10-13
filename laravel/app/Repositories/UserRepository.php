@@ -13,9 +13,12 @@ class UserRepository extends Repository
     {
         $now = Carbon::now();
 
-        // Fetch users who have not verified their email and are more than 2 days old
+        // Fetch users who have not verified their email and are more than 2
+        // days old
         return User::whereNull('email_verified_at')
-            ->where('created_at', $now->subDays(2))  // Users created more than 2 days ago
+            ->where('created_at', $now->subDays(
+                2
+            ))  // Users created more than 2 days ago
             ->get();
     }
 
@@ -26,7 +29,9 @@ class UserRepository extends Repository
 
         // Fetch users who have not verified their email for more than 2 days
         return User::whereNull('email_verified_at')
-            ->where('created_at', '<=', $now->subDays(7))  // Created more than 2 days ago
+            ->where('created_at', '<=', $now->subDays(
+                7
+            ))  // Created more than 2 days ago
             ->get();
     }
 

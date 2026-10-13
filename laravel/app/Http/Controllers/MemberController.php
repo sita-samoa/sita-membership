@@ -48,7 +48,9 @@ class MemberController extends Controller
 
         $validatedData = $request->validate([
             'search' => 'nullable|string|max:255',
-            'membership_status_id' => 'nullable|integer|exists:membership_statuses,id',
+            'membership_status_id' => [
+                'nullable', 'integer', 'exists:membership_statuses,id',
+            ],
         ]);
 
         $membership_status_ids = [];
@@ -93,7 +95,8 @@ class MemberController extends Controller
 
         return Inertia::render('Members/Signup', [
             'options' => [
-                'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
+                'membership_type_options' => MembershipType::all(['id',
+                    'code', 'title']),
             ],
         ]);
     }
@@ -144,10 +147,14 @@ class MemberController extends Controller
     {
         $this->authorize('submit', $member);
 
-        $this->memberRepository->updateMembershipStatus($member, MembershipStatus::SUBMITTED);
+        $this->memberRepository->updateMembershipStatus(
+            $member,
+            MembershipStatus::SUBMITTED
+        );
 
         // find any old rejection reasons and mark inactive
-        $mrs = MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first();
+        $mrs = MemberRejectionStatus::where(['member_id' => $member->id,
+            'status' => 1])->first();
         if ($mrs != null) {
             $mrs->status = false;
             $mrs->save();
@@ -169,8 +176,10 @@ class MemberController extends Controller
     /**
      * Mark Viewed Other Memberships or Mailing List as true.
      */
-    public function markOptionalFlagAsViewed(Member $member, Request $request): RedirectResponse
-    {
+    public function markOptionalFlagAsViewed(
+        Member $member,
+        Request $request
+    ): RedirectResponse {
         $validated = $request->validate([
             'flag_name' => 'required|string',
         ]);
@@ -188,7 +197,10 @@ class MemberController extends Controller
     {
         $this->authorize('endorse', $member);
 
-        $this->memberRepository->updateMembershipStatus($member, MembershipStatus::ENDORSED);
+        $this->memberRepository->updateMembershipStatus(
+            $member,
+            MembershipStatus::ENDORSED
+        );
 
         // add record to member membership status
         $this->memberRepository->recordAction($member, $request->user());
@@ -197,11 +209,15 @@ class MemberController extends Controller
         $users = $team->allUsers();
         foreach ($users as $user) {
             if ($team->userHasPermission($user, 'member:accept')) {
-                $user->notify(new EndorsedNotification($member, $this->sitaOnlineService));
+                $user->notify(new EndorsedNotification(
+                    $member,
+                    $this->sitaOnlineService
+                ));
             }
         }
 
-        $isFreeMembership = $this->sitaOnlineService->isMemberHasFreeMembership($member);
+        $isFreeMembership = $this->sitaOnlineService
+            ->isMemberHasFreeMembership($member);
         if (!$isFreeMembership) {
             // Generate Invoice in a queue.
             ProcessInvoice::dispatch($member);
@@ -217,7 +233,8 @@ class MemberController extends Controller
     {
         $this->authorize('accept', $member);
 
-        $isFreeMembership = $this->sitaOnlineService->isMemberHasFreeMembership($member);
+        $isFreeMembership = $this->sitaOnlineService
+            ->isMemberHasFreeMembership($member);
 
         if ($isFreeMembership) {
             $validated = $request->validate([
@@ -279,7 +296,8 @@ class MemberController extends Controller
         $this->memberRepository->recordAction($member, $request->user());
 
         // Send rejection notification.
-        $member->user?->notify(new RejectionNotification($member, $validated['reason']));
+        $member->user->notify(new RejectionNotification($member, $validated[
+            'reason']));
 
         return redirect()->back()->with('success', 'Application Rejected');
     }
@@ -289,7 +307,8 @@ class MemberController extends Controller
      */
     public function getRejectionReason(Member $member)
     {
-        $status = MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first();
+        $status = MemberRejectionStatus::where(['member_id' => $member->id,
+            'status' => 1])->first();
         if ($status['reason'] != null) {
             return $status['reason'];
         }
@@ -304,12 +323,18 @@ class MemberController extends Controller
     {
         $this->authorize('submit', $member);
 
-        if ($member->membership_status_id == MembershipStatus::REJECTED->value) {
+        if (
+            $member->membership_status_id
+                == MembershipStatus::REJECTED->value
+        ) {
             $member->membership_status_id = MembershipStatus::DRAFT->value;
             $member->save();
         }
 
-        return redirect()->back()->with('success', 'Appllication Status updated to DRAFT.');
+        return redirect()->back()->with(
+            'success',
+            'Appllication Status updated to DRAFT.'
+        );
     }
 
     /**
@@ -342,13 +367,22 @@ class MemberController extends Controller
 
         $end_grace_period = Carbon::now();
         $rep = new MemberMembershipStatusRepository();
-        $statuses = $rep->getByMemberIdAndStatusId($member->id, MembershipStatus::ACCEPTED->value);
-        if ($statuses->count()) {
-            $end_grace_period = Carbon::createFromFormat('Y-m-d', $statuses[0]->to_date);
+        $statuses = $rep->getByMemberIdAndStatusId(
+            $member->id,
+            MembershipStatus::ACCEPTED->value
+        );
+        if ($statuses->count() !== 0) {
+            $end_grace_period = Carbon::createFromFormat(
+                'Y-m-d',
+                $statuses[0]->to_date
+            );
         }
 
         // Email will be sent in a queue.
-        $member->user->notify(new PastDueSubReminder($member, $end_grace_period->addMonthsWithoutOverflow(6)));
+        $member->user->notify(new PastDueSubReminder(
+            $member,
+            $end_grace_period->addMonthsWithoutOverflow(6)
+        ));
 
         return redirect()->back()->with('success', 'Reminder scheduled.');
     }
@@ -356,8 +390,10 @@ class MemberController extends Controller
     /**
      * Toggle Member Subscription to Mailing List.
      */
-    public function toggleMailingListSubscription(Member $member, Request $request)
-    {
+    public function toggleMailingListSubscription(
+        Member $member,
+        Request $request
+    ) {
         $this->authorize('view', $member);
 
         $validated = $request->validate([
@@ -381,7 +417,9 @@ class MemberController extends Controller
         }
 
         return redirect()->back()
-            ->with('success', ($subscribe ? 'Subscribed to ' : 'Unsubscribed from ').$mailing_list->title);
+            ->with('success', ($subscribe
+                ? 'Subscribed to ' : 'Unsubscribed from ').$mailing_list
+                ->title);
     }
 
     /**
@@ -401,12 +439,18 @@ class MemberController extends Controller
         }
 
         $reason = null;
-        if (MemberRejectionStatus::where(['member_id' => $member->id, 'status' => 1])->first() != null) {
+        if (
+            MemberRejectionStatus::where(['member_id' => $member->id,
+                'status' => 1])->first() != null
+        ) {
             $reason = $this->getRejectionReason($member);
         }
 
         $rep = new MemberMembershipStatusRepository();
-        $statuses = $rep->getByMemberIdAndStatusId($member->id, MembershipStatus::ACCEPTED->value);
+        $statuses = $rep->getByMemberIdAndStatusId(
+            $member->id,
+            MembershipStatus::ACCEPTED->value
+        );
 
         $invoices = $member->invoices()->get();
 
@@ -450,7 +494,9 @@ class MemberController extends Controller
             'dob' => 'nullable|date',
             'gender_id' => 'required_with:membership_type_id|int|min:1',
             'job_title' => 'required_with:membership_type_id|string|max:255',
-            'current_employer' => 'required_with:membership_type_id|string|max:255',
+            'current_employer' => [
+                'required_with:membership_type_id', 'string', 'max:255',
+            ],
             'home_address' => 'nullable|max:255',
             'home_phone' => 'nullable|max:255',
             'home_mobile' => 'nullable|max:255',
@@ -490,7 +536,10 @@ class MemberController extends Controller
         $membership_status_id = $validated['membership_status_id'] ?? '';
         $search = $validated['search'] ?? '';
 
-        $export = $this->sitaOnlineService->getMembersExport($membership_status_id, $search);
+        $export = $this->sitaOnlineService->getMembersExport(
+            $membership_status_id,
+            $search
+        );
 
         $filename = 'members_'.date('YmdHis').'.xlsx';
 

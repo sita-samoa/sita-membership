@@ -9,9 +9,12 @@ beforeEach(function () {
     $this->seed(DatabaseSeeder::class);
 
     // Test data.
-    Member::factory()->count(3)->create(['membership_status_id' => MembershipStatus::ACCEPTED->value]);
-    Member::factory()->count(3)->create(['membership_status_id' => MembershipStatus::LAPSED->value]);
-    Member::factory()->count(1)->create(['membership_status_id' => MembershipStatus::DRAFT->value]);
+    Member::factory()->count(3)->create([
+        'membership_status_id' => MembershipStatus::ACCEPTED->value]);
+    Member::factory()->count(3)->create([
+        'membership_status_id' => MembershipStatus::LAPSED->value]);
+    Member::factory()->count(1)->create([
+        'membership_status_id' => MembershipStatus::DRAFT->value]);
 });
 
 test('test members list exists', function () {
@@ -30,7 +33,8 @@ test('test can filter by member_status_id and search', function () {
     ]);
 
     // Get only accepted members
-    $response = $this->get('/members-list?search=&membership_status_id='.$status)
+    $response = $this->get('/members-list?search=&membership_status_id='
+        .$status)
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('MembersList/Index')
@@ -41,7 +45,8 @@ test('test can filter by member_status_id and search', function () {
 
     // Get only lapsed members
     $lapsed = MembershipStatus::LAPSED->value;
-    $response = $this->get('/members-list?search=&membership_status_id='.$lapsed)
+    $response = $this->get('/members-list?search=&membership_status_id='
+        .$lapsed)
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('MembersList/Index')
@@ -51,7 +56,8 @@ test('test can filter by member_status_id and search', function () {
         );
 
     // Get accepted members with search
-    $response = $this->get('/members-list?search='.$search.'&membership_status_id='.$status)
+    $response = $this->get('/members-list?search='.$search
+        .'&membership_status_id='.$status)
         ->assertInertia(
             fn (Assert $page) => $page
                 ->component('MembersList/Index')
@@ -64,10 +70,12 @@ test('test can filter by member_status_id and search', function () {
 });
 
 test('test invalid searches', function ($status) {
-    // You can only search for Accepted and Lapsed members. All other types are invalid.
+    // You can only search for Accepted and Lapsed members. All other types are
+    // invalid.
     $search = '';
 
-    $response = $this->get('/members-list?search='.$search.'&membership_status_id='.$status);
+    $response = $this->get('/members-list?search='.$search
+        .'&membership_status_id='.$status);
     $response->assertInvalid();
 })->with([
     'hello',

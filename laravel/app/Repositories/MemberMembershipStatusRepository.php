@@ -12,8 +12,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 class MemberMembershipStatusRepository extends Repository
 {
-    public function getByMemberIdAndStatusId($member_id, $status_id, int $limit = 10): Collection
-    {
+    public function getByMemberIdAndStatusId(
+        $member_id,
+        $status_id,
+        int $limit = 10
+    ): Collection {
         return MemberMembershipStatus::where('membership_status_id', $status_id)
             ->where('member_id', $member_id)
             ->latest()
@@ -34,12 +37,16 @@ class MemberMembershipStatusRepository extends Repository
             ->get();
     }
 
-    public function getExpiringIn1Months(Carbon $current = null, int $limit = -1): Collection
-    {
+    public function getExpiringIn1Months(
+        ?Carbon $current = null,
+        int $limit = -1
+    ): Collection {
         if ($current == null) {
             $current = Carbon::now();
         }
-        $future_1_months = $current->toImmutable()->addMonthsWithoutOverflow(1)->toMutable();
+        $future_1_months = $current->toImmutable()
+            ->addMonthsWithoutOverflow(1)
+            ->toMutable();
 
         return $this->getByStatusIdExpiringBetween(
             MembershipStatus::ACCEPTED->value,
@@ -49,12 +56,16 @@ class MemberMembershipStatusRepository extends Repository
         );
     }
 
-    public function getExpiringIn3Months(Carbon $current = null, int $limit = -1): Collection
-    {
+    public function getExpiringIn3Months(
+        ?Carbon $current = null,
+        int $limit = -1
+    ): Collection {
         if ($current == null) {
             $current = Carbon::now();
         }
-        $future_3_months = $current->toImmutable()->addMonthsWithoutOverflow(3)->toMutable();
+        $future_3_months = $current->toImmutable()
+            ->addMonthsWithoutOverflow(3)
+            ->toMutable();
 
         return $this->getByStatusIdExpiringBetween(
             MembershipStatus::ACCEPTED->value,
@@ -64,22 +75,32 @@ class MemberMembershipStatusRepository extends Repository
         );
     }
 
-    public function getExpiredLessThan6Months(Carbon $current = null, int $limit = -1): Collection
-    {
+    public function getExpiredLessThan6Months(
+        ?Carbon $current = null,
+        int $limit = -1
+    ): Collection {
         if ($current == null) {
             $current = Carbon::now();
         }
-        $past_6_months = $current->toImmutable()->subMonthsNoOverflow(6)->toMutable();
+        $past_6_months = $current->toImmutable()
+            ->subMonthsNoOverflow(6)
+            ->toMutable();
 
-        return $this->getByStatusIdExpiringBetween(MembershipStatus::ACCEPTED->value, $past_6_months, $current, $limit);
+        return $this->getByStatusIdExpiringBetween(
+            MembershipStatus::ACCEPTED->value,
+            $past_6_months,
+            $current,
+            $limit
+        );
     }
 
     /**
-     * Send Past Due Sub Reminders to Members whose subs expired 6 months ago or less.
+     * Send Past Due Sub Reminders to Members whose subs expired 6 months ago or
+     * less.
      *
      * @return void
      */
-    public function sendPastDueSubReminders(Carbon $current = null)
+    public function sendPastDueSubReminders(?Carbon $current = null)
     {
         if ($current == null) {
             $current = Carbon::now();
@@ -95,7 +116,8 @@ class MemberMembershipStatusRepository extends Repository
             if ($status->member->membershipStatus->id === $lapsed_status) {
                 $id = $status->member->id;
 
-                // Make sure we dont have duplicate member ids (in case it was Activated twice)
+                // Make sure we dont have duplicate member ids (in case it was
+                // Activated twice)
                 if (!array_key_exists($id, $ids)) {
                     $ids[$id] = $status;
                 }
@@ -118,17 +140,30 @@ class MemberMembershipStatusRepository extends Repository
 
             // Cater for sqlite date format using github actions
             if (Carbon::canBeCreatedFromFormat($expiry_date, $mariadb_format)) {
-                $end_grace_period = Carbon::createFromFormat($mariadb_format, $expiry_date);
-            } elseif (Carbon::canBeCreatedFromFormat($expiry_date, $sqlite_format)) {
-                $end_grace_period = Carbon::createFromFormat($sqlite_format, $expiry_date);
+                $end_grace_period = Carbon::createFromFormat(
+                    $mariadb_format,
+                    $expiry_date
+                );
+            } elseif (
+                Carbon::canBeCreatedFromFormat(
+                    $expiry_date,
+                    $sqlite_format
+                )
+            ) {
+                $end_grace_period = Carbon::createFromFormat(
+                    $sqlite_format,
+                    $expiry_date
+                );
             }
 
-            $user->notify(new PastDueSubReminder($member, $end_grace_period->addMonthsWithoutOverflow(6)));
+            $user->notify(new PastDueSubReminder($member, $end_grace_period
+                ->addMonthsWithoutOverflow(6)));
 
             // @todo - Add to dash board list of members that will expire in 3
             //  months or less.
             // @todo - Add a button to send bulk remindrs to those on the list
-            // @todo - Perform bulk operations on the member list (e.g. send reminder)
+            // @todo - Perform bulk operations on the member list (e.g. send
+            // reminder)
         }
     }
 
@@ -138,8 +173,10 @@ class MemberMembershipStatusRepository extends Repository
      *
      * @return void
      */
-    public function sendExpiringMembershipReminders(int $months, Carbon $current = null)
-    {
+    public function sendExpiringMembershipReminders(
+        int $months,
+        ?Carbon $current = null
+    ) {
         if ($current == null) {
             $current = Carbon::now();
         }
@@ -161,7 +198,8 @@ class MemberMembershipStatusRepository extends Repository
             if ($status->member->membershipStatus->id === $accepted_status) {
                 $id = $status->member->id;
 
-                // Make sure we dont have duplicate member ids (in case it was Activated twice)
+                // Make sure we dont have duplicate member ids (in case it was
+                // Activated twice)
                 if (!array_key_exists($id, $ids)) {
                     $ids[$id] = $status;
                 }
@@ -184,7 +222,8 @@ class MemberMembershipStatusRepository extends Repository
             // @todo - Add to dash board list of members that will expire in 3
             //  months or less.
             // @todo - Add a button to send bulk remindrs to those on the list
-            // @todo - Perform bulk operations on the member list (e.g. send reminder)
+            // @todo - Perform bulk operations on the member list (e.g. send
+            // reminder)
         }
     }
 
@@ -193,7 +232,7 @@ class MemberMembershipStatusRepository extends Repository
      *
      * @return void
      */
-    public function markAsLapsed(Carbon $current = null)
+    public function markAsLapsed(?Carbon $current = null)
     {
         if ($current == null) {
             $current = Carbon::now();
@@ -206,9 +245,13 @@ class MemberMembershipStatusRepository extends Repository
         $statuses = $this->getExpiredLessThan6Months($current, -1);
         foreach ($statuses as $status) {
             $member = $status->member;
-            if ($member->membership_status_id === MembershipStatus::ACCEPTED->value) {
+            if (
+                $member->membership_status_id
+                    === MembershipStatus::ACCEPTED->value
+            ) {
                 $id = $member->id;
-                // Make sure we dont have duplicate member ids (in case it was Activated twice)
+                // Make sure we dont have duplicate member ids (in case it was
+                // Activated twice)
                 if (!array_key_exists($id, $ids)) {
                     $ids[$id] = $status;
                 }
@@ -218,7 +261,8 @@ class MemberMembershipStatusRepository extends Repository
         foreach ($ids as $status) {
             $member = $status->member;
             // Mark as lapsed.
-            // Note: Lapsed membership reminders will be sent by sendPastDueSubReminders().
+            // Note: Lapsed membership reminders will be sent by
+            // sendPastDueSubReminders().
             $rep->updateMembershipStatus($member, MembershipStatus::LAPSED);
 
             $rep->recordAction($member, $admin_user);

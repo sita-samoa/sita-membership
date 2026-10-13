@@ -70,7 +70,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getRoleAttribute()
     {
-        if (($role = $this->teamRole(Team::first())) instanceof \Laravel\Jetstream\Role) {
+        if (
+            ($role = $this->teamRole(Team::first(
+            ))) instanceof \Laravel\Jetstream\Role
+        ) {
             return [
                 'key' => $role->key,
                 'name' => $role->name,
@@ -96,9 +99,15 @@ class User extends Authenticatable implements MustVerifyEmail
                 'canAccept' => $this->can('accept', $member),
                 'canReject' => $this->can('reject', $member),
                 'canSendSubReminder' => $this->can('sendSubReminder', $member),
-                'canSendPastDueSubReminder' => $this->can('sendPastDueSubReminder', $member),
+                'canSendPastDueSubReminder' => $this->can(
+                    'sendPastDueSubReminder',
+                    $member
+                ),
                 'canManageUsers' => $this->can('viewAny', self::class),
-                'canUpdateMembershipStatus' => $this->can('updateMembershipStatus', $member),
+                'canUpdateMembershipStatus' => $this->can(
+                    'updateMembershipStatus',
+                    $member
+                ),
             ];
         }
 

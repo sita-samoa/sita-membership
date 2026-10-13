@@ -26,12 +26,16 @@ class SignupController extends Controller
             'member' => $member,
             'completion' => $member->getCompletionsAttribute(),
             'options' => [
-                'membership_type_options' => MembershipType::all(['id', 'code', 'title']),
+                'membership_type_options' => MembershipType::all(['id',
+                    'code', 'title']),
                 'gender_options' => Gender::all(['id', 'code', 'title']),
                 'title_options' => Title::all(['id', 'code', 'title']),
                 'mailing_options' => MailingList::all(['id', 'code', 'title']),
             ],
-            'qualifications' => $member->qualifications()->orderBy('year_attained', 'desc')->get(),
+            'qualifications' => $member->qualifications()->orderBy(
+                'year_attained',
+                'desc'
+            )->get(),
             'referees' => $member->referees()->get(),
             'memberWorkExperiences' => MemberWorkExperience::select(
                 'id',
@@ -48,7 +52,8 @@ class SignupController extends Controller
             'supportingDocuments' => $member->supportingDocuments()
                 ->where('to_delete', false)
                 ->get(['id', 'title', 'file_name', 'file_size']),
-            'memberMailingLists' => $member->mailingLists()->get(['mailing_list_id', 'subscribed']),
+            'memberMailingLists' => $member->mailingLists()->get([
+                'mailing_list_id', 'subscribed']),
             'countryList' => CountryListFacade::getList(),
             'tab' => $request->get('tab'),
         ]);

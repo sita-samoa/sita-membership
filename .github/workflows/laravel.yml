@@ -43,8 +43,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [8.2, 8.3, 8.4]
-        node: [22, 24]
+        php: [8.3, 8.4]
+        node: [24]
 
     name: PHP ${{ matrix.php }} / Node ${{ matrix.node }}
 

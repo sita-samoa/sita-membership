@@ -23,12 +23,15 @@ test('test supporting document uploaded and downloaded', function () {
 
     $supportingDocument = MemberSupportingDocument::latest()->first();
 
-    expect('supportingDocuments/'.$file->hashName())->toEqual($supportingDocument->file_path);
+    expect('supportingDocuments/'.$file->hashName())->toEqual(
+        $supportingDocument->file_path
+    );
     expect('random.jpg')->toEqual($supportingDocument->file_name);
 
     Storage::assertExists('supportingDocuments/'.$file->hashName());
 
-    $response = $this->get('/members/'.$member->id.'/documents/'.$supportingDocument->id.'/download');
+    $response = $this->get('/members/'.$member->id.'/documents/'
+        .$supportingDocument->id.'/download');
     $response->assertStatus(200);
 
     // Clean up
@@ -42,7 +45,9 @@ test('test supporting document upload limit', function () {
 
     // .env.testing is set to 5MB
     $response = $this->post('/members/'.$member->id.'/documents', [
-        'file' => $file = UploadedFile::fake()->image('random.jpg')->size(6 * 1024),
+        'file' => $file = UploadedFile::fake()->image('random.jpg')->size(
+            6 * 1024
+        ),
     ]);
 
     $response->assertInvalid(['file']);

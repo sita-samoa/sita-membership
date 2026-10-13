@@ -23,10 +23,12 @@ class MemberRepository extends Repository
     /**
      * Get Members by Membership Status Id.
      *
-     * @param  int  $limit - set to zero to remove limit
+     * @param  int  $limit  - set to zero to remove limit
      */
-    public function getByMembershipStatusId(int $membership_status_id, int $limit = 10): Collection
-    {
+    public function getByMembershipStatusId(
+        int $membership_status_id,
+        int $limit = 10
+    ): Collection {
         $query = Member::where('membership_status_id', $membership_status_id)
             ->latest();
 
@@ -37,7 +39,7 @@ class MemberRepository extends Repository
         return $query->get();
     }
 
-    public function generateEndDate(Carbon $current_dt = null)
+    public function generateEndDate(?Carbon $current_dt = null)
     {
         if ($current_dt == null) {
             $current_dt = Carbon::now();
@@ -56,14 +58,20 @@ class MemberRepository extends Repository
         return Carbon::create($current_dt->year, $month, $day);
     }
 
-    public function updateMembershipStatus(Member $member, MembershipStatus $status)
-    {
+    public function updateMembershipStatus(
+        Member $member,
+        MembershipStatus $status
+    ) {
         $member->membership_status_id = $status->value;
         $member->save();
     }
 
-    public function accept(Member $member, User $user, int $financial_year = 0, string $receipt_number = '')
-    {
+    public function accept(
+        Member $member,
+        User $user,
+        int $financial_year = 0,
+        string $receipt_number = ''
+    ) {
         $this->updateMembershipStatus($member, MembershipStatus::ACCEPTED);
 
         if ($financial_year === 0) {
@@ -85,23 +93,30 @@ class MemberRepository extends Repository
     {
         $this->updateMembershipStatus($member, MembershipStatus::REJECTED);
 
-        $member_rejected = new MemberRejectionStatus(['member_id' => $member->id, 'reason' => $reason]);
+        $member_rejected = new MemberRejectionStatus([
+            'member_id' => $member->id,
+            'reason' => $reason,
+        ]);
         $member_rejected->save();
     }
 
     public function markOptionalFlagAsViewed(Member $member, string $flag)
     {
-        if ($flag == 'viewed_other_memberships') {
+        if ($flag === 'viewed_other_memberships') {
             $member->viewed_other_memberships = true;
             $member->save();
-        } elseif ($flag == 'viewed_mailing_list') {
+        } elseif ($flag === 'viewed_mailing_list') {
             $member->viewed_mailing_list = true;
             $member->save();
         }
     }
 
-    public function recordAction(Member $member, User $user, $to_date = null, string $receipt_number = '')
-    {
+    public function recordAction(
+        Member $member,
+        User $user,
+        $to_date = null,
+        string $receipt_number = ''
+    ) {
         $membership_status = new MemberMembershipStatus([
             'member_id' => $member->id,
             'membership_status_id' => $member->membership_status_id,
@@ -127,21 +142,29 @@ class MemberRepository extends Repository
         return Member::orderBy('first_name')
             ->where(function ($query) use ($membership_status_id, $search) {
                 if ($membership_status_id !== [] && $search) {
-                    $query->whereIn('membership_status_id', $membership_status_id);
+                    $query->whereIn(
+                        'membership_status_id',
+                        $membership_status_id
+                    );
                     $query->where(function ($query) use ($search) {
                         $query->where('first_name', 'like', '%'.$search.'%')
                             ->orWhere('last_name', 'like', '%'.$search.'%')
                             ->orWhere('job_title', 'like', '%'.$search.'%')
-                            ->orWhere('current_employer', 'like', '%'.$search.'%');
+                            ->orWhere('current_employer', 'like', '%'.$search
+                                .'%');
                     });
                 } elseif ($membership_status_id !== []) {
-                    $query->whereIn('membership_status_id', $membership_status_id);
+                    $query->whereIn(
+                        'membership_status_id',
+                        $membership_status_id
+                    );
                 } elseif ($search !== '' && $search !== '0') {
                     $query->where(function ($query) use ($search) {
                         $query->where('first_name', 'like', '%'.$search.'%')
                             ->orWhere('last_name', 'like', '%'.$search.'%')
                             ->orWhere('job_title', 'like', '%'.$search.'%')
-                            ->orWhere('current_employer', 'like', '%'.$search.'%');
+                            ->orWhere('current_employer', 'like', '%'.$search
+                                .'%');
                     });
                 }
             });
@@ -150,7 +173,7 @@ class MemberRepository extends Repository
     /**
      * Generate Invoice for membership subscription.
      *
-     * @return \LaravelDaily\Invoices\Invoice
+     * @return Invoice
      */
     public function generateInvoice(Member $member)
     {
@@ -162,15 +185,20 @@ class MemberRepository extends Repository
             'name' => $member->first_name.' '.$member->last_name,
             // 'phone' => $member->home_mobile,
             'custom_fields' => [
-                'Occupation' => $member->job_title.', '.$member->current_employer,
+                'Occupation' => $member->job_title.', '
+                    .$member->current_employer,
                 'Email' => $member->home_email,
             ],
         ]);
 
-        $membership_type = MembershipType::where('id', $member->membership_type_id)->first();
+        $membership_type = MembershipType::where(
+            'id',
+            $member->membership_type_id
+        )->first();
         $annual_cost = $membership_type->annual_cost;
 
-        $item = (new InvoiceItem())->title('SITA Membership Subscription - '.$membership_type->title)
+        $item = (new InvoiceItem())->title('SITA Membership Subscription - '
+            .$membership_type->title)
             ->pricePerUnit($annual_cost);
 
         $weeks = 4;
@@ -178,7 +206,8 @@ class MemberRepository extends Repository
         $days_to_pay = $weeks * $days_per_week;
 
         $notes = [
-            'Account name: Samoa Information Technology Association, Bank account number 2001364583, Swift code: BOSPWSWS.',
+            'Account name: Samoa Information Technology Association, '
+                .'Bank account number 2001364583, Swift code: BOSPWSWS.',
             '',
             'Bank name:',
             'Bank South Pacific (Samoa) Limited',
@@ -205,7 +234,8 @@ class MemberRepository extends Repository
             ->dateFormat('d/m/Y')
             ->payUntilDays($days_to_pay)
             ->logo(public_path('imgs/logo.png'))
-            ->filename('SITA Invoice '.$customer->name.' '.Carbon::now()->format('d-m-Y'))
+            ->filename('SITA Invoice '.$customer->name.' '.Carbon::now()
+                ->format('d-m-Y'))
             ->buyer($customer)
             ->notes($notes)
             ->addItem($item);

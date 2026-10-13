@@ -154,7 +154,10 @@ test('send expiring membership reminders per 1 month', function () {
     $rep = new MemberMembershipStatusRepository();
     $rep->sendExpiringMembershipReminders(1, $this->current->toMutable());
 
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 2);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        2
+    );
 });
 test('send expiring membership reminders per 3 month', function () {
     Queue::fake();
@@ -162,7 +165,10 @@ test('send expiring membership reminders per 3 month', function () {
     $rep = new MemberMembershipStatusRepository();
     $rep->sendExpiringMembershipReminders(3, $this->current->toMutable());
 
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 3);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        3
+    );
 });
 
 test('get memberships expired less than 6 months', function () {
@@ -181,7 +187,10 @@ test('send past due sub reminders', function () {
     $rep->sendPastDueSubReminders($current->toMutable());
 
     // Only one of the 5 items is marked Lapsed and will be notified.
-    Queue::assertPushed(\Illuminate\Notifications\SendQueuedNotifications::class, 1);
+    Queue::assertPushed(
+        Illuminate\Notifications\SendQueuedNotifications::class,
+        1
+    );
 });
 
 test('membership marked as lapsed and recorded', function () {
@@ -192,13 +201,17 @@ test('membership marked as lapsed and recorded', function () {
     expect($statuses->count())->toEqual(count($this->data));
 
     $rep2 = new MemberRepository();
-    $members = $rep2->getByMembershipStatusId(EnumsMembershipStatus::LAPSED->value);
+    $members = $rep2->getByMembershipStatusId(
+        EnumsMembershipStatus::LAPSED->value
+    );
     expect($members->count())->toEqual(1);
 
     $rep->markAsLapsed($current->toMutable());
 
     // Members marked lapsed.
-    $members = $rep2->getByMembershipStatusId(EnumsMembershipStatus::LAPSED->value);
+    $members = $rep2->getByMembershipStatusId(
+        EnumsMembershipStatus::LAPSED->value
+    );
     expect($members->count())->toEqual(4);
 
     // Membership records created.

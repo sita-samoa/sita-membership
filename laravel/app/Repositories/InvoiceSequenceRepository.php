@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
@@ -10,9 +12,11 @@ class InvoiceSequenceRepository
     {
         $invoiceNumber = 0;
         DB::transaction(function () use (&$invoiceNumber) {
-            $sequence = DB::table('invoice_sequences')->lockForUpdate()->first();
+            $sequence = DB::table('invoice_sequences')->lockForUpdate()
+                ->first();
             $invoiceNumber = $sequence->current_number + 1;
-            DB::table('invoice_sequences')->update(['current_number' => $invoiceNumber]);
+            DB::table('invoice_sequences')->update([
+                'current_number' => $invoiceNumber]);
         });
 
         return $invoiceNumber;

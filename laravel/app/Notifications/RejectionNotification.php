@@ -40,10 +40,12 @@ class RejectionNotification extends Notification implements ShouldQueue
         return (new MailMessage())
             ->subject('SITA Membership Application Rejected')
             ->greeting("Tālofa {$this->member->user->name}!")
-            ->line('Your signup request has been rejected. Due to the following reason:')
+            ->line('Your signup request has been rejected. Due to '
+                .'the following reason:')
             ->line($this->reason)
             ->line('Your application status was reverted back to Draft.')
-            ->line('Please provide more information pertaining to the above reason.')
+            ->line('Please provide more information pertaining to '
+                .'the above reason.')
             ->action('View details', route('members.show', $this->member->id));
     }
 

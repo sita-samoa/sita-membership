@@ -18,8 +18,10 @@ class EndorsedNotification extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct(public Member $member, public SitaOnlineService $sitaOnlineService)
-    {
+    public function __construct(
+        public Member $member,
+        public SitaOnlineService $sitaOnlineService
+    ) {
         //
     }
 
@@ -44,7 +46,8 @@ class EndorsedNotification extends Notification implements ShouldQueue
             ->greeting('Tālofa!')
             ->line('A signup request has been Endorsed.');
 
-        $isPaidMembership = $this->sitaOnlineService->isMemberHasPaidMembership($this->member);
+        $isPaidMembership = $this->sitaOnlineService
+            ->isMemberHasPaidMembership($this->member);
         $message = 'Please review for your Acceptance.';
 
         if ($isPaidMembership) {
@@ -58,7 +61,10 @@ class EndorsedNotification extends Notification implements ShouldQueue
             $emailMessage->line($message);
         }
 
-        $emailMessage->action('View details', route('members.show', $this->member->id));
+        $emailMessage->action(
+            'View details',
+            route('members.show', $this->member->id)
+        );
 
         return $emailMessage;
     }

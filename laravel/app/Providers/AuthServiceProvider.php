@@ -4,9 +4,9 @@ namespace App\Providers;
 
 use App\Models\Team;
 use App\Policies\TeamPolicy;
-use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Foundation\Support\Providers as FoundationProviders;
 
-class AuthServiceProvider extends ServiceProvider
+class AuthServiceProvider extends FoundationProviders\AuthServiceProvider
 {
     /**
      * The policy mappings for the application.

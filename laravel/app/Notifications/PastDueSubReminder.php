@@ -25,8 +25,10 @@ class PastDueSubReminder extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct(public Member $member, public Carbon $grace_period)
-    {
+    public function __construct(
+        public Member $member,
+        public Carbon $grace_period
+    ) {
         //
     }
 

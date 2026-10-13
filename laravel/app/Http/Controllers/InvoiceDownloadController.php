@@ -13,8 +13,11 @@ class InvoiceDownloadController extends Controller
     /**
      * Download invoice for member.
      */
-    public function index(Request $request, Member $member, MemberInvoices $invoice): StreamedResponse
-    {
+    public function index(
+        Request $request,
+        Member $member,
+        MemberInvoices $invoice
+    ): StreamedResponse {
         $this->authorize('view', $member);
 
         return Storage::download($invoice->file_path, $invoice->file_name);

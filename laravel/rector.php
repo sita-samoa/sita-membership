@@ -19,7 +19,7 @@ return static function (RectorConfig $rectorConfig): void {
         // __DIR__ . '/tests',
 
         __DIR__.'/app/Enums',
-        __DIR__.'/app/Https/Controllers',
+        __DIR__.'/app/Http/Controllers',
         __DIR__.'/app/Models',
         __DIR__.'/app/Notifications',
         __DIR__.'/app/Policies',

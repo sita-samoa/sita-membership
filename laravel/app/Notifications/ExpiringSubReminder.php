@@ -17,8 +17,10 @@ class ExpiringSubReminder extends Notification implements ShouldQueue
     /**
      * Create a new notification instance.
      */
-    public function __construct(public Member $member, public int $days_until_expiry)
-    {
+    public function __construct(
+        public Member $member,
+        public int $days_until_expiry
+    ) {
         //
     }
 
