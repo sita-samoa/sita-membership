@@ -3,12 +3,19 @@ services:
     restart: unless-stopped
 
   php:
+    image: wodby/laravel-php:$PHP_TAG_PROD
     restart: unless-stopped
     environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
       LARAVEL_APP_DEBUG: "false"
+      PHP_EXTENSIONS_DISABLE: xhprof,spx,xdebug
 
   nginx:
     restart: unless-stopped
+    environment:
+      NGINX_STATIC_OPEN_FILE_CACHE: "on"
+      NGINX_ERROR_LOG_LEVEL: warn
 
   caddy:
     image: caddy:${CADDY_TAG}
@@ -42,9 +49,14 @@ services:
           cpus: "0.5"
 
   crond:
-    image: wodby/laravel-php:$PHP_TAG
+    image: wodby/laravel-php:$PHP_TAG_PROD
     container_name: "${PROJECT_NAME}_crond"
     environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: ${APP_URL}
+      LARAVEL_APP_DEBUG: "false"
+      PHP_EXTENSIONS_DISABLE: xhprof,spx,xdebug
       CRONTAB: |
         * * * * * php /var/www/html/laravel/artisan schedule:run >> /var/log/cron.log 2>&1
         */5 * * * * php /var/www/html/laravel/artisan queue:work database --tries=1 --max-time=30 --stop-when-empty >> /var/log/cron.log 2>&1
