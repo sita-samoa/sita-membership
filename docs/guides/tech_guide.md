@@ -4,10 +4,14 @@
 
 ### Dev environment with [docker4drupal](https://github.com/wodby/docker4drupal/releases)
 
-This repository has been set up to work with docker compose. You need docker
+This repository has been optimised to work with docker compose. You need docker
 and docker compose to use the commands below. You dont need to use docker.
 
 ```
+# setup dev
+cp compose.dev.yml compose.override.yml
+
+# now you can make changes to override.yml that are specific to your own env
 # start up containers
 make
 
@@ -44,6 +48,8 @@ Create test accounts and dummy data (see [Test Accounts](#test-accounts))
 ```
 make composer dev
 ```
+
+# todo - Add non docker compose setup steps
 
 ## Test Accounts
 
