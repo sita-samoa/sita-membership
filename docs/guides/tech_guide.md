@@ -4,15 +4,22 @@
 
 ### Dev environment with [docker4drupal](https://github.com/wodby/docker4drupal/releases)
 
-This repository has been set up to work with docker compose. You need docker
+This repository has been optimised to work with docker compose. You need docker
 and docker compose to use the commands below. You dont need to use docker.
 
 ```
+# setup dev
+cp compose.dev.yml compose.override.yml
+
+# now you can make changes to override.yml that are specific to your own env
 # start up containers
 make
 
 # install dependencies
 make composer install
+
+# for prod run
+make 'composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction'
 
 # cp env.dev and configure - verify db configs
 cp laravel/.env.dev laravel/.env
@@ -44,6 +51,8 @@ Create test accounts and dummy data (see [Test Accounts](#test-accounts))
 ```
 make composer dev
 ```
+
+# todo - Add non docker compose setup steps
 
 ## Test Accounts
 
@@ -187,6 +196,21 @@ cp .env.prod-sample .env.prod
 - `APP_ENV=production` - Required for production mode
 - `GOOGLE_ANALYTICS_GA4` - Ensures Google Analytics works correctly
 - `MAIL_BACKUPS_TO_ADDRESS` - To be notified of backup statuses
+
+### Build Frontend Assets
+
+From the repository root, build the frontend before starting production:
+
+```bash
+make assets
+make prod
+```
+
+`make assets` runs `npm ci && npm run build` in a temporary Node container and removes the container when it exits. It uses the `node` service from `compose.yml`, with image `wodby/node:${NODE_TAG}` configured by the root `.env`. Node does not need to be installed on the host.
+
+The build writes production assets to `laravel/public/build`. Run `make assets` again after changes to frontend source files, dependencies, or build-time `VITE_*` environment values in `laravel/.env`.
+
+The production Compose override places Node behind the `build` profile, so `make prod` does not start Node or build assets automatically. The `make assets` command uses the base Compose configuration and root `.env`; it does not load `.env.prod`.
 
 ### Caddy Configuration
 

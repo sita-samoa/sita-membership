@@ -3,3 +3,4 @@
 # Copies of the same false positive in historical generated reports.
 74678990516b4f5e6c6caf34ca61f2cc1d269d54:.gitleaks/findings.json:generic-api-key:10
 f21455f55bc943d762477668a40eb781e9ce5f46:.gitleaks/findings.json:generic-api-key:10
+a6f384957e02ca7c860bce94b344d2f37088bd0b:.gitleaks/findings.json:generic-api-key:10
