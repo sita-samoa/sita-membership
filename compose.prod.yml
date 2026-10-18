@@ -22,7 +22,6 @@ services:
   nginx:
     restart: unless-stopped
     environment:
-      NGINX_STATIC_OPEN_FILE_CACHE: "on"
       NGINX_ERROR_LOG_LEVEL: warn
 
   caddy:
@@ -85,3 +84,6 @@ services:
         condition: service_started
       php:
         condition: service_started
+
+  node:
+    command: sh -c 'npm install && npm run build'
