@@ -194,6 +194,15 @@ services:
   #      ZOO_SERVERS: server.1=zookeeper:2888:3888;2181
   #      ZOO_4LW_COMMANDS_WHITELIST: mntr, conf, ruok
 
+  node:
+    image: wodby/node:$NODE_TAG
+    container_name: "${PROJECT_NAME}_node"
+    environment:
+      APP_URL: ${APP_URL}
+    working_dir: /var/www/html/laravel/
+    volumes:
+      - ./:/var/www/html
+
   #  drupal-node:
   #    image: wodby/drupal-node:$DRUPAL_NODE_TAG
   #    container_name: "${PROJECT_NAME}_drupal_nodejs"
