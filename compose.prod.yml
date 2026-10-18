@@ -86,4 +86,4 @@ services:
         condition: service_started
 
   node:
-    command: sh -c 'npm ci && npm run build'
+    profiles: ["build"]

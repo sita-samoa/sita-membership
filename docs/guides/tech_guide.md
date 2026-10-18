@@ -194,6 +194,21 @@ cp .env.prod-sample .env.prod
 - `GOOGLE_ANALYTICS_GA4` - Ensures Google Analytics works correctly
 - `MAIL_BACKUPS_TO_ADDRESS` - To be notified of backup statuses
 
+### Build Frontend Assets
+
+From the repository root, build the frontend before starting production:
+
+```bash
+make assets
+make prod
+```
+
+`make assets` runs `npm ci && npm run build` in a temporary Node container and removes the container when it exits. It uses the `node` service from `compose.yml`, with image `wodby/node:${NODE_TAG}` configured by the root `.env`. Node does not need to be installed on the host.
+
+The build writes production assets to `laravel/public/build`. Run `make assets` again after changes to frontend source files, dependencies, or build-time `VITE_*` environment values in `laravel/.env`.
+
+The production Compose override places Node behind the `build` profile, so `make prod` does not start Node or build assets automatically. The `make assets` command uses the base Compose configuration and root `.env`; it does not load `.env.prod`.
+
 ### Caddy Configuration
 
 This project uses Caddy with automatic Let's Encrypt SSL for production (simpler configuration than Traefik).

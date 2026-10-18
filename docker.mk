@@ -45,8 +45,13 @@ ssl: dev
 .PHONY: prod
 prod:
 	@echo "Starting up containers for $(PROJECT_NAME) with Caddy..."
-	$(DOCKER_COMPOSE) pull
+	$(DOCKER_COMPOSE) -f compose.yml -f compose.prod.yml --env-file .env --env-file .env.prod pull
 	$(DOCKER_COMPOSE) -f compose.yml -f compose.prod.yml --env-file .env --env-file .env.prod up -d --remove-orphans
+
+## assets	:	Build frontend assets on demand using the configured Node image.
+.PHONY: assets
+assets:
+	$(DOCKER_COMPOSE) run --rm --no-deps node sh -c 'npm ci && npm run build'
 
 ## gitpod	:	Start up containers in gitpod.
 .PHONY: gitpod
