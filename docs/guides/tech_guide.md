@@ -18,6 +18,9 @@ make
 # install dependencies
 make composer install
 
+# for prod run
+make 'composer install --no-dev --prefer-dist --optimize-autoloader --no-interaction'
+
 # cp env.dev and configure - verify db configs
 cp laravel/.env.dev laravel/.env
 
