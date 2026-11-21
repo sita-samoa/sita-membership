@@ -47,11 +47,8 @@ jobs:
         with:
           node-version: 24
 
-      - name: Test npm audit exception filter
-        run: node --test ../scripts/npm-audit.test.cjs
-
       - name: Audit npm dependencies
-        run: npm run audit:security
+        run: npm run --silent audit:security > npm-audit-report.json
 
       - name: Upload npm audit report
         if: always()

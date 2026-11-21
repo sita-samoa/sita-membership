@@ -4,7 +4,7 @@
     "prepare": "cd ../ && husky install",
     "dev": "vite",
     "build": "vite build",
-    "audit:security": "node ../scripts/npm-audit.cjs",
+    "audit:security": "npm audit --json",
     "lint": "eslint --fix .",
     "format": "prettier 'resources/{js,vue}/**/*.{js,vue}' --write",
     "pre-commit": "npm run format && lint-staged && pretty-quick --staged",
@@ -50,6 +50,9 @@
     "vue-recaptcha-v3": "^2.0.1"
   },
   "overrides": {
+    "@tailwindcss/typography": {
+      "postcss-selector-parser": "^6.1.6"
+    },
     "flowbite-vue": {
       "nanoid": "^5.1.16"
     }
