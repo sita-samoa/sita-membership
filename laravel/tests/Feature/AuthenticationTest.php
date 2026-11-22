@@ -31,3 +31,15 @@ test('users cannot authenticate with invalid password', function () {
 
     $this->assertGuest();
 });
+
+test('soft deleted users cannot authenticate', function () {
+    $user = User::factory()->create();
+    $user->delete();
+
+    $this->post('/login', [
+        'email' => $user->email,
+        'password' => 'password',
+    ]);
+
+    $this->assertGuest();
+});
